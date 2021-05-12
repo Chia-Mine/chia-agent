@@ -1,0 +1,24 @@
+{
+  "name": "chia-agent",
+  "version": "0.0.1",
+  "author": "Admin ChiaMineJP <admin@chiamine.jp>",
+  "description": "chia rpc agent for local chia daemon",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Chia-Mine/chia-agent.git"
+  },
+  "bugs": "https://github.com/Chia-Mine/chia-agent/issues",
+  "main": "./index.js",
+  "bin": {
+    "chia-agent": "./bin/cli.js"
+  },
+  "keywords": [],
+  "engines": {
+    "node": ">=10.14.2"
+  },
+  "dependencies": {
+    "ws": "^7.4.5",
+    "yaml": "^1.10.2"
+  }
+}
