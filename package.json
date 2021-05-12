@@ -1,0 +1,38 @@
+{
+  "name": "chia-agent",
+  "version": "0.0.0",
+  "author": "Admin ChiaMineJP <admin@chiamine.jp>",
+  "description": "chia rpc agent for local chia daemon",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Chia-Mine/chia-agent.git"
+  },
+  "bugs": "https://github.com/Chia-Mine/chia-agent/issues",
+  "main": "./index.js",
+  "bin": {
+    "chia-client": "bin/index.js"
+  },
+  "scripts": {
+    "build": "node bin/pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./build"
+  },
+  "keywords": [],
+  "engines": {
+    "node": ">=10.14.2"
+  },
+  "dependencies": {
+    "ws": "^7.4.5",
+    "yaml": "^1.10.2"
+  },
+  "devDependencies": {
+    "@types/node": "^15.0.2",
+    "@types/ws": "^7.4.4",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "eslint": "^7.8.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsdoc": "^30.4.1",
+    "patch-package": "^6.4.7",
+    "typescript": "^4.2.4"
+  }
+}

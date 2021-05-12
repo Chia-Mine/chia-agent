@@ -1,0 +1,7 @@
+src/**/__tests__/**
+node_modules
+.eslintrc.js
+webpack.*.js
+test/
+bin/
+nyc.config.ts
