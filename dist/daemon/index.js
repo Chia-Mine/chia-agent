@@ -26,7 +26,7 @@ exports.getDaemon = getDaemon;
 class Daemon {
     constructor() {
         this._socket = null;
-        this._connected = false;
+        this._connectedUrl = "";
         this._responseQueue = {};
         this._openEventListeners = [];
         this._messageEventListeners = [];
@@ -39,7 +39,7 @@ class Daemon {
         this.onClose = this.onClose.bind(this);
     }
     get connected() {
-        return this._connected;
+        return Boolean(this._connectedUrl);
     }
     /**
      * Connect to local daemon via websocket.
@@ -53,12 +53,20 @@ class Daemon {
                 const daemonPort = config["/ui/daemon_port"];
                 url = `wss://${daemonHost}:${daemonPort}`;
             }
+            if (this._connectedUrl === url) {
+                logger_1.getLogger().warning(`Already connected to ${url}`);
+                return;
+            }
+            else if (this._connectedUrl) {
+                logger_1.getLogger().error(`Connection is still active. Please close living connection first`);
+                return;
+            }
             const result = yield connection_1.open(url);
             this._socket = result.ws;
             this._socket.onerror = this.onError;
             this._socket.onmessage = this.onMessage;
             this._socket.onclose = this.onClose;
-            this.onOpen(result.openEvent);
+            this.onOpen(result.openEvent, url);
         });
     }
     close() {
@@ -73,7 +81,7 @@ class Daemon {
     sendMessage(command, destination, data) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                if (!this._connected || !this._socket) {
+                if (!this.connected || !this._socket) {
                     logger_1.getLogger().error("Tried to send message without active connection");
                     reject("Not connected");
                     return;
@@ -177,9 +185,9 @@ class Daemon {
     clearAllMessageListeners() {
         this._messageListeners = {};
     }
-    onOpen(event) {
+    onOpen(event, url) {
         logger_1.getLogger().info("ws connection opened");
-        this._connected = true;
+        this._connectedUrl = url;
         this._openEventListeners.forEach(l => l(event));
     }
     onError(error) {
@@ -208,7 +216,7 @@ class Daemon {
     }
     onClose(event) {
         logger_1.getLogger().info(`Closing ws connection`);
-        this._connected = false;
+        this._connectedUrl = "";
         this._closeEventListeners.forEach(l => l(event));
     }
 }

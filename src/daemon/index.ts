@@ -39,7 +39,7 @@ export function getDaemon(){
 
 class Daemon {
   protected _socket: WS|null = null;
-  protected _connected: boolean = false;
+  protected _connectedUrl: string = "";
   protected _responseQueue: {[request_id: string]: (value: unknown) => void} = {};
   protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
@@ -48,7 +48,7 @@ class Daemon {
   protected _messageListeners: Record<string, Array<(e: MessageData) => unknown>> = {};
   
   public get connected(){
-    return this._connected;
+    return Boolean(this._connectedUrl);
   }
   
   public constructor() {
@@ -70,12 +70,21 @@ class Daemon {
       url = `wss://${daemonHost}:${daemonPort}`;
     }
     
+    if(this._connectedUrl === url){
+      getLogger().warning(`Already connected to ${url}`);
+      return;
+    }
+    else if(this._connectedUrl){
+      getLogger().error(`Connection is still active. Please close living connection first`);
+      return;
+    }
+    
     const result = await open(url);
     this._socket = result.ws;
     this._socket.onerror = this.onError;
     this._socket.onmessage = this.onMessage;
     this._socket.onclose = this.onClose;
-    this.onOpen(result.openEvent);
+    this.onOpen(result.openEvent, url);
   }
   
   public async close(){
@@ -89,7 +98,7 @@ class Daemon {
   
   public async sendMessage(command: string, destination: string, data?: Record<string, unknown>){
     return new Promise((resolve, reject) => {
-      if(!this._connected || !this._socket){
+      if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
         reject("Not connected");
         return;
@@ -205,9 +214,9 @@ class Daemon {
     this._messageListeners = {};
   }
   
-  protected onOpen(event: OpenEvent){
+  protected onOpen(event: OpenEvent, url: string){
     getLogger().info("ws connection opened");
-    this._connected = true;
+    this._connectedUrl = url;
     this._openEventListeners.forEach(l => l(event));
   }
   
@@ -242,7 +251,7 @@ class Daemon {
   
   protected onClose(event: CloseEvent){
     getLogger().info(`Closing ws connection`);
-    this._connected = false;
+    this._connectedUrl = "";
     this._closeEventListeners.forEach(l => l(event));
   }
 }

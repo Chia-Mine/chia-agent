@@ -16,7 +16,7 @@ export declare type MessageListener = (data: MessageData) => unknown;
 export declare function getDaemon(): Daemon;
 declare class Daemon {
     protected _socket: WS | null;
-    protected _connected: boolean;
+    protected _connectedUrl: string;
     protected _responseQueue: {
         [request_id: string]: (value: unknown) => void;
     };
@@ -54,7 +54,7 @@ declare class Daemon {
     addMessageListener(origin: string | undefined, listener: MessageListener): void;
     removeMessageListener(origin: string, listener: MessageListener): void;
     clearAllMessageListeners(): void;
-    protected onOpen(event: OpenEvent): void;
+    protected onOpen(event: OpenEvent, url: string): void;
     protected onError(error: ErrorEvent): void;
     protected onMessage(event: MessageEvent): void;
     protected onClose(event: CloseEvent): void;
