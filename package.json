@@ -11,11 +11,11 @@
   "bugs": "https://github.com/Chia-Mine/chia-agent/issues",
   "main": "./index.js",
   "bin": {
-    "chia-client": "bin/index.js"
+    "chia-agent": "bin/cli.js"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json --allowJS false",
-    "build:prod": "node bin/pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist"
+    "build": "node ./pre_publish.js && tsc --project tsconfig.json --allowJS false",
+    "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist"
   },
   "keywords": [],
   "engines": {

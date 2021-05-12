@@ -1,4 +1,4 @@
-export declare type TLogLevel = "error" | "warning" | "info" | "debug";
+export declare type TLogLevel = "error" | "warning" | "info" | "debug" | "none";
 export declare type TDestination = "console";
 export declare type Writer = {
     write: (message: string) => void;
@@ -12,6 +12,7 @@ declare class Logger {
     protected constructor(logLevel: TLogLevel, writer?: TDestination | Writer);
     static getLogger(logLevel: TLogLevel, writer?: TDestination): Logger;
     setLogLevel(level: TLogLevel): void;
+    shouldWrite(logLevel: TLogLevel): boolean;
     formatMessage(level: TLogLevel, body: string): string;
     debug(msg: string): void;
     info(msg: string): void;

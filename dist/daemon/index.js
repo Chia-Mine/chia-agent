@@ -13,6 +13,7 @@ exports.getDaemon = void 0;
 const crypto_1 = require("crypto");
 const logger_1 = require("../logger");
 const connection_1 = require("./connection");
+const index_1 = require("../config/index");
 const agentServiceName = "chia_agent";
 let socket = null;
 function getDaemon() {
@@ -31,7 +32,7 @@ class Daemon {
         this._messageEventListeners = [];
         this._errorEventListeners = [];
         this._closeEventListeners = [];
-        this._messageListeners = [];
+        this._messageListeners = {};
         this.onOpen = this.onOpen.bind(this);
         this.onError = this.onError.bind(this);
         this.onMessage = this.onMessage.bind(this);
@@ -40,8 +41,18 @@ class Daemon {
     get connected() {
         return this._connected;
     }
-    connect(url = "wss://localhost:55400") {
+    /**
+     * Connect to local daemon via websocket.
+     * @param url
+     */
+    connect(url) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!url) {
+                const config = index_1.getConfig();
+                const daemonHost = config["/ui/daemon_host"];
+                const daemonPort = config["/ui/daemon_port"];
+                url = `wss://${daemonHost}:${daemonPort}`;
+            }
             const result = yield connection_1.open(url);
             this._socket = result.ws;
             this._socket.onerror = this.onError;
@@ -63,6 +74,7 @@ class Daemon {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
                 if (!this._connected || !this._socket) {
+                    logger_1.getLogger().error("Tried to send message without active connection");
                     reject("Not connected");
                     return;
                 }
@@ -92,6 +104,7 @@ class Daemon {
                 return null;
             });
             if (error) {
+                logger_1.getLogger().error("Failed to register agent service to daemon");
                 throw new Error("Subscribe failed");
             }
             return result;
@@ -139,41 +152,62 @@ class Daemon {
         this._errorEventListeners = [];
         this._closeEventListeners = [];
     }
+    /**
+     * Add listener for message
+     * @param {string} origin - Can be chia_farmer, chia_full_node, chia_wallet, etc.
+     * @param listener - Triggered when a message arrives.
+     */
     addMessageListener(origin, listener) {
-        this._messageListeners.push(listener);
+        const o = origin || "all";
+        if (!this._messageListeners[o]) {
+            this._messageListeners[o] = [];
+        }
+        this._messageListeners[o].push(listener);
     }
     removeMessageListener(origin, listener) {
-        const index = this._messageListeners.findIndex(l => l === listener);
+        const listeners = this._messageListeners[origin];
+        if (!listeners) {
+            return;
+        }
+        const index = listeners.findIndex(l => l === listener);
         if (index > -1) {
-            this._messageListeners.splice(index, 1);
+            listeners.splice(index, 1);
         }
     }
     clearAllMessageListeners() {
-        this._messageListeners = [];
+        this._messageListeners = {};
     }
     onOpen(event) {
-        logger_1.getLogger().debug("ws connection opened");
+        logger_1.getLogger().info("ws connection opened");
         this._connected = true;
         this._openEventListeners.forEach(l => l(event));
     }
     onError(error) {
-        logger_1.getLogger().debug(`ws connection error: ${error.message}`);
+        logger_1.getLogger().error(`ws connection error: ${error.message}`);
         this._errorEventListeners.forEach(l => l(error));
     }
     onMessage(event) {
         const payload = JSON.parse(event.data);
-        const { request_id } = payload;
-        logger_1.getLogger().debug(`ws message arrived with id ${request_id}`);
+        const { request_id, origin, command } = payload;
+        logger_1.getLogger().debug(`ws message arrived. origin=${origin} command=${command}`);
         const resolver = this._responseQueue[request_id];
         if (resolver) {
             delete this._responseQueue[request_id];
             resolver(payload);
         }
         this._messageEventListeners.forEach(l => l(event));
-        this._messageListeners.forEach(l => l(payload));
+        for (const o in this._messageListeners) {
+            if (!this._messageListeners.hasOwnProperty(o)) {
+                continue;
+            }
+            const listeners = this._messageListeners[o];
+            if (origin === o || o === "all") {
+                listeners.forEach(l => l(payload));
+            }
+        }
     }
     onClose(event) {
-        logger_1.getLogger().debug(`Closing ws connection`);
+        logger_1.getLogger().info(`Closing ws connection`);
         this._connected = false;
         this._closeEventListeners.forEach(l => l(event));
     }

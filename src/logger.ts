@@ -1,7 +1,15 @@
-export type TLogLevel = "error"|"warning"|"info"|"debug";
+export type TLogLevel = "error"|"warning"|"info"|"debug"|"none";
 export type TDestination = "console";
 export type Writer = {
   write: (message: string) => void;
+};
+
+const logPriority: Record<TLogLevel, number> = {
+  "none": 9999,
+  "error": 4,
+  "warning": 3,
+  "info": 2,
+  "debug": 1,
 };
 
 class ConsoleWriter implements Writer {
@@ -53,24 +61,36 @@ class Logger {
     this.loglevel = level;
   }
   
+  public shouldWrite(logLevel: TLogLevel){
+    return logPriority[this.loglevel] <= logPriority[logLevel];
+  }
+  
   public formatMessage(level: TLogLevel, body: string){
     return `${(new Date()).toLocaleString()} [${level.toUpperCase()}] ${body}`;
   }
   
   public debug(msg: string){
-    this._writer.write(this.formatMessage("debug", msg));
+    if(this.shouldWrite("debug")){
+      this._writer.write(this.formatMessage("debug", msg));
+    }
   }
   
   public info(msg: string){
-    this._writer.write(this.formatMessage("info", msg));
+    if(this.shouldWrite("info")){
+      this._writer.write(this.formatMessage("info", msg));
+    }
   }
   
   public warning(msg: string){
-    this._writer.write(this.formatMessage("warning", msg));
+    if(this.shouldWrite("warning")){
+      this._writer.write(this.formatMessage("warning", msg));
+    }
   }
   
   public error(msg: string){
-    this._writer.write(this.formatMessage("error", msg));
+    if(this.shouldWrite("error")){
+      this._writer.write(this.formatMessage("error", msg));
+    }
   }
 }
 

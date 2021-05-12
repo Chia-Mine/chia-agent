@@ -3,6 +3,9 @@ import * as path from "path";
 import {readFileSync} from "fs";
 import {parse} from "yaml";
 
+// Suppress noisy YAML warning
+process.env.YAML_SILENCE_WARNINGS = "true";
+
 const defaultChiaRoot = path.resolve(homedir(), ".chia", "mainnet");
 
 export const chiaRoot = process.env.CHIA_ROOT ? path.resolve(process.env.CHIA_ROOT) : defaultChiaRoot;
@@ -31,7 +34,7 @@ let config: TConfig|undefined;
     '/daemon_port': 55400,
     '/farmer/network_overrides/config/testnet0/address_prefix': 'txch',
     ...
-    }
+   }
    ```
  */
 export function getConfig(configFilePath?: string): TConfig {
@@ -47,7 +50,7 @@ export function getConfig(configFilePath?: string): TConfig {
 }
 
 
-function buildConfigObj(
+export function buildConfigObj(
   config: Record<string, unknown>,
   currentPath: string[] = [],
   product: Record<string, any> = {},

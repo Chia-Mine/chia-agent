@@ -4,7 +4,14 @@ export declare type EventType = "open" | "message" | "error" | "close";
 export declare type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
 export declare type EventListener<T = Event> = (ev: T) => unknown;
 declare type EventListenerOf<T> = T extends "open" ? EventListener<OpenEvent> : T extends "message" ? EventListener<MessageEvent> : T extends "error" ? EventListener<ErrorEvent> : T extends "close" ? EventListener<CloseEvent> : never;
-export declare type MessageData = any;
+export declare type MessageData = {
+    command: string;
+    ack: boolean;
+    data: any;
+    request_id: string;
+    destination: string;
+    origin: string;
+};
 export declare type MessageListener = (data: MessageData) => unknown;
 export declare function getDaemon(): Daemon;
 declare class Daemon {
@@ -17,9 +24,13 @@ declare class Daemon {
     protected _messageEventListeners: Array<(e: MessageEvent) => unknown>;
     protected _errorEventListeners: Array<(e: ErrorEvent) => unknown>;
     protected _closeEventListeners: Array<(e: CloseEvent) => unknown>;
-    protected _messageListeners: Array<(e: MessageData) => unknown>;
+    protected _messageListeners: Record<string, Array<(e: MessageData) => unknown>>;
     get connected(): boolean;
     constructor();
+    /**
+     * Connect to local daemon via websocket.
+     * @param url
+     */
     connect(url?: string): Promise<void>;
     close(): Promise<void>;
     sendMessage(command: string, destination: string, data?: Record<string, unknown>): Promise<unknown>;
@@ -35,7 +46,12 @@ declare class Daemon {
     addEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>): void;
     removeEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>): void;
     clearAllEventListeners(): void;
-    addMessageListener(origin: string, listener: MessageListener): void;
+    /**
+     * Add listener for message
+     * @param {string} origin - Can be chia_farmer, chia_full_node, chia_wallet, etc.
+     * @param listener - Triggered when a message arrives.
+     */
+    addMessageListener(origin: string | undefined, listener: MessageListener): void;
     removeMessageListener(origin: string, listener: MessageListener): void;
     clearAllMessageListeners(): void;
     protected onOpen(event: OpenEvent): void;

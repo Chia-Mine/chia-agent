@@ -13,10 +13,11 @@ export declare type TConfig = Record<string, string | number | Array<string | nu
     '/daemon_port': 55400,
     '/farmer/network_overrides/config/testnet0/address_prefix': 'txch',
     ...
-    }
+   }
    ```
  */
 export declare function getConfig(configFilePath?: string): TConfig;
+export declare function buildConfigObj(config: Record<string, unknown>, currentPath?: string[], product?: Record<string, any>): Record<string, any>;
 export declare const defaultDaemonKeyPath: string;
 export declare const defaultDaemonCertPath: string;
 export declare function resolveFromChiaRoot(pathFromChiaRoot: string[]): string;

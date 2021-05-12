@@ -1,6 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLogger = exports.setLogLevel = exports.getLogLevel = void 0;
+const logPriority = {
+    "none": 9999,
+    "error": 4,
+    "warning": 3,
+    "info": 2,
+    "debug": 1,
+};
 class ConsoleWriter {
     write(message) {
         console.log(message);
@@ -41,19 +48,30 @@ class Logger {
     setLogLevel(level) {
         this.loglevel = level;
     }
+    shouldWrite(logLevel) {
+        return logPriority[this.loglevel] <= logPriority[logLevel];
+    }
     formatMessage(level, body) {
         return `${(new Date()).toLocaleString()} [${level.toUpperCase()}] ${body}`;
     }
     debug(msg) {
-        this._writer.write(this.formatMessage("debug", msg));
+        if (this.shouldWrite("debug")) {
+            this._writer.write(this.formatMessage("debug", msg));
+        }
     }
     info(msg) {
-        this._writer.write(this.formatMessage("info", msg));
+        if (this.shouldWrite("info")) {
+            this._writer.write(this.formatMessage("info", msg));
+        }
     }
     warning(msg) {
-        this._writer.write(this.formatMessage("warning", msg));
+        if (this.shouldWrite("warning")) {
+            this._writer.write(this.formatMessage("warning", msg));
+        }
     }
     error(msg) {
-        this._writer.write(this.formatMessage("error", msg));
+        if (this.shouldWrite("error")) {
+            this._writer.write(this.formatMessage("error", msg));
+        }
     }
 }

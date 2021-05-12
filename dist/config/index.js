@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPathFromConfig = exports.resolveFromChiaRoot = exports.defaultDaemonCertPath = exports.defaultDaemonKeyPath = exports.getConfig = exports.plotterDir = exports.logDir = exports.configPath = exports.chiaRoot = void 0;
+exports.getPathFromConfig = exports.resolveFromChiaRoot = exports.defaultDaemonCertPath = exports.defaultDaemonKeyPath = exports.buildConfigObj = exports.getConfig = exports.plotterDir = exports.logDir = exports.configPath = exports.chiaRoot = void 0;
 const os_1 = require("os");
 const path = require("path");
 const fs_1 = require("fs");
 const yaml_1 = require("yaml");
+// Suppress noisy YAML warning
+process.env.YAML_SILENCE_WARNINGS = "true";
 const defaultChiaRoot = path.resolve(os_1.homedir(), ".chia", "mainnet");
 exports.chiaRoot = process.env.CHIA_ROOT ? path.resolve(process.env.CHIA_ROOT) : defaultChiaRoot;
 // config 
@@ -25,7 +27,7 @@ let config;
     '/daemon_port': 55400,
     '/farmer/network_overrides/config/testnet0/address_prefix': 'txch',
     ...
-    }
+   }
    ```
  */
 function getConfig(configFilePath) {
@@ -57,6 +59,7 @@ function buildConfigObj(config, currentPath = [], product = {}) {
     }
     return product;
 }
+exports.buildConfigObj = buildConfigObj;
 exports.defaultDaemonKeyPath = path.resolve(exports.chiaRoot, "config", "ssl", "daemon", "private_daemon.key");
 exports.defaultDaemonCertPath = path.resolve(exports.chiaRoot, "config", "ssl", "daemon", "private_daemon.crt");
 function resolveFromChiaRoot(pathFromChiaRoot) {
