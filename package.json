@@ -14,7 +14,8 @@
     "chia-client": "bin/index.js"
   },
   "scripts": {
-    "build": "node bin/pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./build"
+    "build": "tsc --project tsconfig.json --allowJS false",
+    "build:prod": "node bin/pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist"
   },
   "keywords": [],
   "engines": {
