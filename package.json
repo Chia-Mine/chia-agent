@@ -1,6 +1,6 @@
 {
   "name": "chia-agent",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Admin ChiaMineJP <admin@chiamine.jp>",
   "description": "chia rpc agent for local chia daemon",
   "license": "MIT",
@@ -11,10 +11,11 @@
   "bugs": "https://github.com/Chia-Mine/chia-agent/issues",
   "main": "./index.js",
   "bin": {
-    "chia-client": "bin/index.js"
+    "chia-agent": "./bin/cli.js"
   },
   "scripts": {
-    "build": "node bin/pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./build"
+    "build": "node ./pre_publish.js && tsc --project tsconfig.json --allowJS false",
+    "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist"
   },
   "keywords": [],
   "engines": {
