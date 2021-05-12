@@ -11,7 +11,7 @@
   "bugs": "https://github.com/Chia-Mine/chia-agent/issues",
   "main": "./index.js",
   "bin": {
-    "chia-agent": "bin/cli.js"
+    "chia-agent": "./bin/cli.js"
   },
   "keywords": [],
   "engines": {
