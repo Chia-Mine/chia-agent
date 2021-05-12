@@ -55,7 +55,7 @@ const daemon = getDaemon();
       console.log(`${challenge_hash.substr(0, 32)}... ${passed_filter}/${total_plots} ${proofs} ${date.toLocaleTimeString()}`);
       
       if(proofs > 0){
-        // You can send mail here!
+        // You can implement some code here to send email.
       }
     }
   });
@@ -66,6 +66,8 @@ const daemon = getDaemon();
 process.addListener("SIGTERM", onTerminate);
 process.addListener("SIGINT", onTerminate);
 async function onTerminate(){
+  console.log("Terminating process. Please wait for a moment...");
+  
   // Do some closing stuff.
   
   let timer = null;

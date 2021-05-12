@@ -2,11 +2,11 @@
 
 ## Daemon
 
-A websocket client to connect chia daemon.  
+A websocket client for connecting to chia daemon.  
 This `Daemon` class is a singleton to prevent multiple useless connections being active.
 
 Please note that you cannot create multiple daemon clients connecting to different url in single nodejs process.  
-If you need to do it, please let me know. I'll check whether its merit is considerable than changing code base.
+If you need to do it, please let me know. I'll check whether its merit is considerable than changing entire code base.
 
 You can generate this `Daemon` client as below.
 ```js
@@ -32,7 +32,7 @@ await daemon.connect("wss://hostname:port");
 ## daemon.close
 
 Close active connection.  
-If no active connection found, it silently returns.
+If no active connection found, it silently returns without error.
 ```js
 daemon.close();
 ```
@@ -47,7 +47,7 @@ daemon.addEventListener("close", () => {
 ## daemon.sendMessage
 
 ```js
-await daemon.sendMessage(command, destination, data);
+await daemon.sendMessage(destination, command, data);
 ```
 
 Send message to chia daemon via websocket.  
