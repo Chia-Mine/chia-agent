@@ -68,8 +68,18 @@ process.addListener("SIGINT", onTerminate);
 async function onTerminate(){
   // Do some closing stuff.
   
+  let timer = null;
+  daemon.addEventListener("close", () => {
+    if(timer) clearTimeout(timer);
+    process.exit(0);
+  });
   await daemon.close();
-  process.exit(0);
+  
+  timer = setTimeout(() => {
+    console.error("Closing request timed out.");
+    timer = null;
+    process.exit(1);
+  }, 10*1000);
 }
 ```
 

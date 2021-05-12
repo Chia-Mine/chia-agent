@@ -50,8 +50,18 @@ if (command === "farm") {
                     console.log(`total_plots: ${sumTotalPlot}`);
                     console.log(`total passed filters(%): ${percentage}%`);
                     console.log(`total_proofs: ${sumTotalProof}`);
+                    let timer = null;
+                    daemon.addEventListener("close", () => {
+                        if (timer)
+                            clearTimeout(timer);
+                        process.exit(0);
+                    });
                     yield daemon.close();
-                    process.exit(0);
+                    timer = setTimeout(() => {
+                        console.error("Closing request timed out.");
+                        timer = null;
+                        process.exit(1);
+                    }, 15 * 1000);
                 });
                 process.addListener("SIGTERM", onTerminate);
                 process.addListener("SIGINT", onTerminate);
