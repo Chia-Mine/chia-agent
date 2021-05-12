@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import {getDaemon} from "../daemon/index";
 import {setLogLevel} from "../logger";
 
