@@ -78,7 +78,7 @@ class Daemon {
             this._socket = null;
         });
     }
-    sendMessage(command, destination, data) {
+    sendMessage(destination, command, data) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
                 if (!this.connected || !this._socket) {
@@ -107,7 +107,7 @@ class Daemon {
     subscribe(service) {
         return __awaiter(this, void 0, void 0, function* () {
             let error;
-            const result = yield this.sendMessage("register_service", "daemon", { service }).catch(e => {
+            const result = yield this.sendMessage("daemon", "register_service", { service }).catch(e => {
                 error = e;
                 return null;
             });

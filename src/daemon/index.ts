@@ -96,7 +96,7 @@ class Daemon {
     this._socket = null;
   }
   
-  public async sendMessage(command: string, destination: string, data?: Record<string, unknown>){
+  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>){
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -125,7 +125,7 @@ class Daemon {
   
   public async subscribe(service: string){
     let error: unknown;
-    const result = await this.sendMessage("register_service", "daemon", {service}).catch(e => {
+    const result = await this.sendMessage("daemon", "register_service", {service}).catch(e => {
       error = e;
       return null;
     });
@@ -255,4 +255,3 @@ class Daemon {
     this._closeEventListeners.forEach(l => l(event));
   }
 }
-
