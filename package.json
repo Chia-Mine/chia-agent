@@ -1,6 +1,6 @@
 {
   "name": "chia-agent",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Admin ChiaMineJP <admin@chiamine.jp>",
   "description": "chia rpc agent for local chia daemon",
   "license": "MIT",

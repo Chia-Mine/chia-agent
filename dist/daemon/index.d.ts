@@ -18,7 +18,7 @@ declare class Daemon {
     protected _socket: WS | null;
     protected _connectedUrl: string;
     protected _responseQueue: {
-        [request_id: string]: (value: unknown) => void;
+        [request_id: string]: (value: (MessageData | PromiseLike<MessageData>)) => void;
     };
     protected _openEventListeners: Array<(e: OpenEvent) => unknown>;
     protected _messageEventListeners: Array<(e: MessageEvent) => unknown>;
@@ -31,9 +31,9 @@ declare class Daemon {
      * Connect to local daemon via websocket.
      * @param url
      */
-    connect(url?: string): Promise<void>;
+    connect(url?: string): Promise<boolean>;
     close(): Promise<void>;
-    sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<unknown>;
+    sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<MessageData>;
     createMessageTemplate(command: string, destination: string, data: Record<string, unknown>): {
         command: string;
         data: Record<string, unknown>;
@@ -42,7 +42,7 @@ declare class Daemon {
         destination: string;
         request_id: string;
     };
-    subscribe(service: string): Promise<unknown>;
+    subscribe(service: string): Promise<MessageData | null>;
     addEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>): void;
     removeEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>): void;
     clearAllEventListeners(): void;
@@ -54,7 +54,7 @@ declare class Daemon {
     addMessageListener(origin: string | undefined, listener: MessageListener): void;
     removeMessageListener(origin: string, listener: MessageListener): void;
     clearAllMessageListeners(): void;
-    protected onOpen(event: OpenEvent, url: string): void;
+    protected onOpen(event: OpenEvent, url: string): Promise<MessageData | null>;
     protected onError(error: ErrorEvent): void;
     protected onMessage(event: MessageEvent): void;
     protected onClose(event: CloseEvent): void;

@@ -40,7 +40,7 @@ export function getDaemon(){
 class Daemon {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: {[request_id: string]: (value: unknown) => void} = {};
+  protected _responseQueue: {[request_id: string]: (value: (MessageData | PromiseLike<MessageData>)) => void} = {};
   protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
@@ -62,7 +62,7 @@ class Daemon {
    * Connect to local daemon via websocket.
    * @param url
    */
-  public async connect(url?: string) {
+  public async connect(url?: string): Promise<boolean> {
     if(!url){
       const config = getConfig();
       const daemonHost = config["/ui/daemon_host"];
@@ -71,22 +71,24 @@ class Daemon {
     }
     
     if(this._connectedUrl === url){
-      getLogger().warning(`Already connected to ${url}`);
-      return;
+      return true;
     }
     else if(this._connectedUrl){
       getLogger().error(`Connection is still active. Please close living connection first`);
-      return;
+      return false;
     }
+    
+    getLogger().debug(`Opening websocket connection to ${url}`);
     
     const result = await open(url);
     this._socket = result.ws;
     this._socket.onerror = this.onError;
     this._socket.onmessage = this.onMessage;
     this._socket.onclose = this.onClose;
-    this.onOpen(result.openEvent, url);
     
-    await this.subscribe(agentServiceName);
+    await this.onOpen(result.openEvent, url);
+    
+    return true;
   }
   
   public async close(){
@@ -94,11 +96,12 @@ class Daemon {
       return;
     }
     
+    getLogger().debug("Closing web socket connection");
     this._socket.close();
     this._socket = null;
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>){
+  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<MessageData> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -110,6 +113,8 @@ class Daemon {
       const message = this.createMessageTemplate(command, destination, data || {});
       const reqId = message.request_id;
       this._responseQueue[reqId] = resolve;
+      
+      getLogger().debug(`Sending message. dest=${destination} command=${command} reqId=${reqId}`);
       this._socket.send(JSON.stringify(message));
     });
   }
@@ -216,10 +221,12 @@ class Daemon {
     this._messageListeners = {};
   }
   
-  protected onOpen(event: OpenEvent, url: string){
+  protected async onOpen(event: OpenEvent, url: string){
     getLogger().info("ws connection opened");
     this._connectedUrl = url;
     this._openEventListeners.forEach(l => l(event));
+  
+    return this.subscribe(agentServiceName);
   }
   
   protected onError(error: ErrorEvent){
@@ -228,9 +235,9 @@ class Daemon {
   }
   
   protected onMessage(event: MessageEvent){
-    const payload = JSON.parse(event.data as string);
+    const payload = JSON.parse(event.data as string) as MessageData;
     const {request_id, origin, command} = payload;
-    getLogger().debug(`ws message arrived. origin=${origin} command=${command}`);
+    getLogger().debug(`Arrived message. origin=${origin} command=${command} reqId=${request_id}`);
   
     const resolver = this._responseQueue[request_id];
     if(resolver){
@@ -252,8 +259,8 @@ class Daemon {
   }
   
   protected onClose(event: CloseEvent){
-    getLogger().info(`Closing ws connection`);
     this._connectedUrl = "";
     this._closeEventListeners.forEach(l => l(event));
+    getLogger().info(`Closed ws connection`);
   }
 }
