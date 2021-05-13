@@ -1,5 +1,5 @@
 import {ConditionOpcode} from "./condition_opcodes";
-import {bytes} from "./unclassified_type";
+import {bytes} from "./_python_types_";
 
 export type ConditionWithArgs = {
   opcode: ConditionOpcode;

@@ -1,5 +1,5 @@
-import {uint32, uint64} from "./blockchain_format/ints";
 import {Coin} from "./blockchain_format/coin";
+import {uint32, uint64} from "./_python_types_";
 
 export type CoinRecord = {
   coin: Coin;

@@ -1,8 +1,8 @@
-import {bytes32} from "../blockchain_format/sized_bytes";
-import {ClassgroupElement} from "../blockchain_format/classgroup";
-import {Coin} from "../blockchain_format/coin";
-import {SubEpochSummary} from "../blockchain_format/sub_epoch_summary";
-import {uint128, uint32, uint64, uint8} from "../blockchain_format/ints";
+import {bytes32} from "../types/blockchain_format/sized_bytes";
+import {ClassgroupElement} from "../types/blockchain_format/classgroup";
+import {Coin} from "../types/blockchain_format/coin";
+import {SubEpochSummary} from "../types/blockchain_format/sub_epoch_summary";
+import {uint128, uint32, uint64, uint8} from "../types/_python_types_";
 
 export type BlockRecord = {
   header_hash: bytes32; // bytes32

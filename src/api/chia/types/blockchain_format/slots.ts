@@ -1,6 +1,6 @@
 import {VDFInfo, VDFProof} from "./vdf";
 import {bytes32} from "./sized_bytes";
-import {uint64, uint8} from "./ints";
+import {uint64, uint8} from "../_python_types_";
 
 export type ChallengeChainSubSlot = {
   challenge_chain_end_of_slot_vdf: VDFInfo;

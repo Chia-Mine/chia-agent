@@ -1,8 +1,7 @@
 import {PoolTarget} from "./pool_target";
-import {G2Element} from "../unclassified_type";
+import {G2Element, uint64} from "../_python_types_";
 import {Coin} from "./coin";
 import {bytes32} from "./sized_bytes";
-import {uint64} from "./ints";
 
 export type Foliage = {
   prev_block_hash: bytes32; // bytes32

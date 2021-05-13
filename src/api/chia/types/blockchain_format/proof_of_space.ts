@@ -1,6 +1,5 @@
 import {bytes32} from "./sized_bytes";
-import {bytes, G1Element} from "../unclassified_type";
-import {uint8} from "./ints";
+import {bytes, G1Element, uint8} from "../_python_types_";
 
 export type ProofOfSpace = {
   challenge: bytes32; // byte32

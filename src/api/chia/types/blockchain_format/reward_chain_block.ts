@@ -1,7 +1,6 @@
 import {ProofOfSpace} from "./proof_of_space";
 import {VDFInfo} from "./vdf";
-import {G2Element} from "../unclassified_type";
-import {uint128, uint32, uint8} from "./ints";
+import {G2Element, uint128, uint32, uint8} from "../_python_types_";
 import {bytes32} from "./sized_bytes";
 
 export type RewardChainBlockUnfinished = {
