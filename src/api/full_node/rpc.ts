@@ -1,6 +1,6 @@
-import {FullBlock} from "./types/full_block";
-import {BlockRecord} from "./types/consensus/block_record";
-import {uint128, uint32, uint64} from "./types/blockchain_format/ints";
+import {FullBlock} from "../types/full_block";
+import {BlockRecord} from "../types/consensus/block_record";
+import {uint128, uint32, uint64} from "../types/blockchain_format/ints";
 
 export const serviceName = "chia_full_node";
 
@@ -50,6 +50,15 @@ export type TGetBlocksResponse = {
 
 
 export const get_block_record_by_height = "get_block_record_by_height";
+export type TGetBlockRecordByHeightRequest = {
+  height: number;
+};
+export type TGetBlockRecordByHeightResponse = {
+  
+};
+
+
+
 export const get_block_record = "get_block_record";
 export const get_block_records = "get_block_records";
 export const get_unfinished_block_headers = "get_unfinished_block_headers";
