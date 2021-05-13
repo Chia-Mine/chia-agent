@@ -1,3 +1,7 @@
+## [0.0.4] - 2021-05-13
+### Fixed
+- Fixed an issue where some requests were not responded by chia daemon.
+
 ## [0.0.3] - 2021-05-13
 ### Changed
 - Changed argument order for `daemon.sendMessage` for previous one was not intuitive.
@@ -16,6 +20,7 @@ daemon.sendMessage(destination, command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[0.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/Chia-Mine/chia-agent/releases/tag/v0.0.1
