@@ -1,8 +1,7 @@
 # chia-agent
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Node.JS client for chia daemon.
-
+Websocket client for chia daemon for nodejs.
 
 ## What `chia-agent` can do.
 
