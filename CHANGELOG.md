@@ -1,3 +1,15 @@
+## [0.0.5] - 2021-05-13
+### Changed
+- Reorganized internal log level and locations.
+- `daemon.connect()` resolves to boolean value indicating whether connecting is success or failure.
+- Trying to re-connect to an url which is already active does not output warning anymore.
+
+### Added
+- Added types
+
+### Fixed
+- Fixed an issue where it could fail to catch response from chia daemon.
+
 ## [0.0.4] - 2021-05-13
 ### Fixed
 - Fixed an issue where some requests were not responded by chia daemon.
@@ -20,6 +32,7 @@ daemon.sendMessage(destination, command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[0.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2
