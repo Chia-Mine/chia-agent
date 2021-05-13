@@ -1,4 +1,4 @@
-import {TProofOfSpace} from "./common.type";
+import {ProofOfSpace} from "../types/blockchain_format/proof_of_space";
 
 export const serviceName = "chia_farmer";
 
@@ -15,7 +15,7 @@ export type TGetSignagePointResponse = {
     sub_slot_iters: number,
     signage_point_index: number,
   },
-  proofs: [string, TProofOfSpace],
+  proofs: [string, ProofOfSpace],
 };
 
 

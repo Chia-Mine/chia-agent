@@ -1,4 +1,4 @@
-import {TProofOfSpace} from "./common.type";
+import {ProofOfSpace} from "../types/blockchain_format/proof_of_space";
 
 export const new_farming_info = "new_farming_info";
 export type TNewFarmingInfo = {
@@ -12,7 +12,7 @@ export type TNewFarmingInfo = {
 
 export const new_signage_point = "new_signage_point";
 export type TNewSignagePoint = {
-  proofs: TProofOfSpace[];
+  proofs: ProofOfSpace[];
   signage_point: {
     challenge_chain_sp: string;
     challenge_hash: string;
