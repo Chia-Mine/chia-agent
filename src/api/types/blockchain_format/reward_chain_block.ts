@@ -4,6 +4,17 @@ import {G2Element} from "../unclassified_type";
 import {uint128, uint32, uint8} from "./ints";
 import {bytes32} from "./sized_bytes";
 
+export type RewardChainBlockUnfinished = {
+  total_iters: uint128
+  signage_point_index: uint8
+  pos_ss_cc_challenge_hash: bytes32
+  proof_of_space: ProofOfSpace
+  challenge_chain_sp_vdf?: VDFInfo; // Optional[VDFInfo]  # Not present for first sp in slot
+  challenge_chain_sp_signature: G2Element
+  reward_chain_sp_vdf?: VDFInfo; // Optional[VDFInfo]  # Not present for first sp in slot
+  reward_chain_sp_signature: G2Element
+};
+
 export type RewardChainBlock = {
   weight: uint128; // uint128
   height: uint32; // uint32
