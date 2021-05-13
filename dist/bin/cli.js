@@ -46,6 +46,7 @@ if (command === "farm") {
                     }
                 });
                 const onTerminate = () => __awaiter(this, void 0, void 0, function* () {
+                    console.log("Terminating process...");
                     const percentage = Math.round((sumPassedFilter / sumTotalPlot) * 10000) / 100;
                     console.log(`total passed_filters: ${sumPassedFilter}`);
                     console.log(`total_plots: ${sumTotalPlot}`);

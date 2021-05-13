@@ -33,7 +33,7 @@ declare class Daemon {
      */
     connect(url?: string): Promise<void>;
     close(): Promise<void>;
-    sendMessage(command: string, destination: string, data?: Record<string, unknown>): Promise<unknown>;
+    sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<unknown>;
     createMessageTemplate(command: string, destination: string, data: Record<string, unknown>): {
         command: string;
         data: Record<string, unknown>;
