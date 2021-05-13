@@ -54,20 +54,20 @@ class Daemon {
                 url = `wss://${daemonHost}:${daemonPort}`;
             }
             if (this._connectedUrl === url) {
-                logger_1.getLogger().warning(`Already connected to ${url}`);
-                return;
+                return true;
             }
             else if (this._connectedUrl) {
                 logger_1.getLogger().error(`Connection is still active. Please close living connection first`);
-                return;
+                return false;
             }
+            logger_1.getLogger().debug(`Opening websocket connection to ${url}`);
             const result = yield connection_1.open(url);
             this._socket = result.ws;
             this._socket.onerror = this.onError;
             this._socket.onmessage = this.onMessage;
             this._socket.onclose = this.onClose;
-            this.onOpen(result.openEvent, url);
-            yield this.subscribe(agentServiceName);
+            yield this.onOpen(result.openEvent, url);
+            return true;
         });
     }
     close() {
@@ -75,6 +75,7 @@ class Daemon {
             if (!this._socket) {
                 return;
             }
+            logger_1.getLogger().debug("Closing web socket connection");
             this._socket.close();
             this._socket = null;
         });
@@ -91,6 +92,7 @@ class Daemon {
                 const message = this.createMessageTemplate(command, destination, data || {});
                 const reqId = message.request_id;
                 this._responseQueue[reqId] = resolve;
+                logger_1.getLogger().debug(`Sending message. dest=${destination} command=${command} reqId=${reqId}`);
                 this._socket.send(JSON.stringify(message));
             });
         });
@@ -187,9 +189,12 @@ class Daemon {
         this._messageListeners = {};
     }
     onOpen(event, url) {
-        logger_1.getLogger().info("ws connection opened");
-        this._connectedUrl = url;
-        this._openEventListeners.forEach(l => l(event));
+        return __awaiter(this, void 0, void 0, function* () {
+            logger_1.getLogger().info("ws connection opened");
+            this._connectedUrl = url;
+            this._openEventListeners.forEach(l => l(event));
+            return this.subscribe(agentServiceName);
+        });
     }
     onError(error) {
         logger_1.getLogger().error(`ws connection error: ${error.message}`);
@@ -198,7 +203,7 @@ class Daemon {
     onMessage(event) {
         const payload = JSON.parse(event.data);
         const { request_id, origin, command } = payload;
-        logger_1.getLogger().debug(`ws message arrived. origin=${origin} command=${command}`);
+        logger_1.getLogger().debug(`Arrived message. origin=${origin} command=${command} reqId=${request_id}`);
         const resolver = this._responseQueue[request_id];
         if (resolver) {
             delete this._responseQueue[request_id];
@@ -216,8 +221,8 @@ class Daemon {
         }
     }
     onClose(event) {
-        logger_1.getLogger().info(`Closing ws connection`);
         this._connectedUrl = "";
         this._closeEventListeners.forEach(l => l(event));
+        logger_1.getLogger().info(`Closed ws connection`);
     }
 }
