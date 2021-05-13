@@ -67,6 +67,7 @@ class Daemon {
             this._socket.onmessage = this.onMessage;
             this._socket.onclose = this.onClose;
             this.onOpen(result.openEvent, url);
+            yield this.subscribe(agentServiceName);
         });
     }
     close() {
