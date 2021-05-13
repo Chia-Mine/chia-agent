@@ -1,3 +1,8 @@
+## [1.0.0]
+### Added
+- Added RPC client
+- Added RPC API
+
 ## [0.0.5] - 2021-05-13
 ### Changed
 - Reorganized internal log level and locations.
@@ -32,6 +37,7 @@ daemon.sendMessage(destination, command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0
 [0.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.2...v0.0.3
