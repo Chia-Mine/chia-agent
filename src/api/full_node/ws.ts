@@ -1,5 +1,5 @@
 import {BlockRecord} from "../chia/consensus/block_record";
-import {uint128, uint32, uint64} from "../chia/types/_python_types_";
+import {int, uint128, uint32, uint64} from "../chia/types/_python_types_";
 
 export const get_blockchain_state = "get_blockchain_state";
 export type TGetBlockchainState = {
@@ -15,6 +15,6 @@ export type TGetBlockchainState = {
     difficulty: uint64;
     sub_slot_iters: uint64;
     space: uint128;
-    mempool_size: number;
+    mempool_size: int;
   };
 };

@@ -1,6 +1,6 @@
 import {WalletInfo} from "../chia/wallet/wallet_info";
 import {Coin} from "../chia/types/blockchain_format/coin";
-import {bytes, uint128, uint32, uint64, uint8} from "../chia/types/_python_types_";
+import {bytes, int, str, True, uint128, uint32, uint64, uint8} from "../chia/types/_python_types_";
 import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
 import {TransactionRecord} from "../chia/wallet/transaction_record";
 
@@ -8,42 +8,47 @@ import {TransactionRecord} from "../chia/wallet/transaction_record";
 
 // chia-blockchain/chia/wallet/wallet_state_manager.py@986
 export type WalletBackupData = {
-  version: string;
-  fingerprint: number;
+  version: str;
+  fingerprint: int; // https://github.com/Chia-Network/bls-signatures/blob/main/python-impl/ec.py#L164
   timestamp: uint64;
   start_height?: uint32;
 };
 
 export type WalletBackupMetadata = {
   timestamp: uint64;
-  pubkey: string;
+  pubkey: str;
 };
 
 export type WalletBackup = {
   data: WalletBackupData;
   meta_data: WalletBackupMetadata;
-  signature: string;
+  signature: unknown; // chia/wallet/util/backup_utils.py@22
 };
 
 
 
 export type BackupInfo = Pick<WalletBackupData, "version" | "fingerprint" | "timestamp"> & {
   wallets: Array<WalletInfo & {
-    type_name: string;
+    type_name: str; // enum.name chia/wallet/util/backup_utils.py@22
   }>;
-  backup_host: string;
-  downloaded: boolean;
+  backup_host: str;
+  downloaded: True;
 };
 
 const log_in = "log_in";
 export type TLoginRequest = {
-  fingerprint: string;
-  type: "skip"|"restore_backup";
-  host: string;
-  file_path?: string;
+  fingerprint: int;
+  type: "skip";
+  host: str;
+} | {
+  fingerprint: int;
+  type: "restore_backup";
+  host: str;
+  file_path: str; // Union[str | PathLike[str]]
 };
+
 export type TLoginResponse = {
-  fingerprint: string;
+  fingerprint: int;
 } | {
   success: false;
   error: "not_initialized" | "Unknown Error";
@@ -51,7 +56,7 @@ export type TLoginResponse = {
   success: false;
   error: "not_initialized";
   backup_info: BackupInfo;
-  backup_path: string;
+  backup_path: str; // Union[str, PathLike[str]]
 };
 
 
@@ -61,21 +66,21 @@ const get_public_keys = "get_public_keys";
 export type TGetPublicKeysRequest = {
 };
 export type TGetPublicKeysResponse = {
-  public_key_fingerprints: number[];
+  public_key_fingerprints: int[];
 };
 
 
 
 const get_private_key = "get_private_key";
 export type TGetPrivateKeyRequest = {
-  fingerprint: number;
+  fingerprint: int; // https://github.com/Chia-Network/bls-signatures/blob/main/python-impl/ec.py#L164
 };
 export type TGetPrivateKeyResponse = {
   "private_key": {
-    fingerprint: number;
-    sk: string;
-    pk: string;
-    seed: string;
+    fingerprint: int;
+    sk: str;
+    pk: str;
+    seed: str;
   },
 };
 
@@ -86,7 +91,7 @@ const generate_mnemonic = "generate_mnemonic";
 export type TGenerateMnemonicRequest = {
 };
 export type TGenerateMnemonicResponse = {
-  mnemonic: string[];
+  mnemonic: str[];
 };
 
 
@@ -94,16 +99,20 @@ export type TGenerateMnemonicResponse = {
 
 const add_key = "add_key";
 export type TAddKeyRequest = {
-  mnemonic: string[];
-  type: "new_wallet" | "skip" | "restore_backup";
-  file_path?: string;
+  mnemonic: str[];
+  type: "new_wallet" | "skip";
+} | {
+  mnemonic: str[];
+  type: "restore_backup";
+  file_path: str;
 };
+
 export type TAddKeyResponse = {
   success: false;
-  error: string;
+  error: str;
   word: unknown; // e.args[0] where e = KeyError
 } | {
-  fingerprint: number;
+  fingerprint: int;
 };
 
 
@@ -111,7 +120,7 @@ export type TAddKeyResponse = {
 
 const delete_key = "delete_key";
 export type TDeleteKeyRequest = {
-  fingerprint: number;
+  fingerprint: int;
 };
 export type TDeleteKeyResponse = {
 };
@@ -153,7 +162,7 @@ export type TGetHeightInfoResponse = {
 
 const farm_block = "farm_block";
 export type TFarmBlockRequest = {
-  address: string;
+  address: str;
 };
 export type TFarmBlockResponse = {
 };
@@ -173,8 +182,8 @@ const get_network_info = "get_network_info";
 export type TGetNetworkInfoRequest = {
 };
 export type TGetNetworkInfoResponse = {
-  network_name: string;
-  network_prefix: string;
+  network_name: str;
+  network_prefix: str;
 };
 
 
@@ -196,16 +205,16 @@ export type Create_New_CC_WalletRequest = {
 } | {
   wallet_type: "cc_wallet"
   mode: "existing";
-  colour: string;
+  colour: str;
 };
 export type Create_New_RC_WalletRequest = {
   wallet_type: "rc_wallet";
   rl_type: "admin";
-  interval: number;
-  limit: number;
-  pubkey: string;
-  amount: number;
-  fee: number;
+  interval: int;
+  limit: int;
+  pubkey: str;
+  amount: int;
+  fee: int;
 } | {
   wallet_type: "rc_wallet";
   rl_type: "user";
@@ -213,18 +222,18 @@ export type Create_New_RC_WalletRequest = {
 export type Create_New_DID_WalletRequest = {
   wallet_type: "did_wallet";
   did_type: "new";
-  backup_dids: string[];
-  num_of_backup_ids_needed: number;
-  amount: number;
+  backup_dids: str[];
+  num_of_backup_ids_needed: uint64;
+  amount: int;
 } | {
   wallet_type: "did_wallet";
   did_type: "recovery";
-  filename: string;
+  filename: str;
 };
 
 export type Create_New_CC_WalletResponse = {
   type: uint8;
-  colour: string;
+  colour: str;
   wallet_id: uint32;
 } | {
   type: uint8;
@@ -235,34 +244,34 @@ export type Create_New_RC_WalletResponse = {
   id: uint32;
   type: uint8;
   origin?: Coin;
-  pubkey: string;
+  pubkey: str;
 } | {
   id: uint32;
   type: uint8;
-  pubkey: string;
+  pubkey: str;
 };
 
 export type Create_New_DID_WalletResponse = {
   success: true;
   type: uint8;
-  my_did: string;
+  my_did: str;
   wallet_id: uint32;
 } | {
   success: true;
   type: uint8;
-  my_did: string;
+  my_did: str;
   wallet_id: uint32;
   coin_name: bytes32;
   coin_list: [bytes32, bytes32, uint64];
-  newpuzhash: string;
-  pubkey: string;
+  newpuzhash: str;
+  pubkey: str;
   backup_dids: bytes[];
   num_verifications_required: uint64;
 };
 
 const create_new_wallet = "create_new_wallet";
 export type TCreateNewWalletRequest = {
-  host: string;
+  host: str;
 } & (Create_New_CC_WalletRequest | Create_New_RC_WalletRequest | Create_New_DID_WalletRequest);
 export type TCreateNewWalletResponse = Create_New_CC_WalletResponse | Create_New_RC_WalletResponse | Create_New_DID_WalletResponse;
 
@@ -271,7 +280,7 @@ export type TCreateNewWalletResponse = Create_New_CC_WalletResponse | Create_New
 // # Wallet
 const get_wallet_balance = "get_wallet_balance";
 export type TGetWalletBalanceRequest = {
-  wallet_id: number;
+  wallet_id: int;
 };
 export type TGetWalletBalanceResponse = {
   wallet_balance: {
@@ -281,7 +290,8 @@ export type TGetWalletBalanceResponse = {
     spendable_balance: uint128,
     pending_change: uint64,
     max_send_amount: uint64,
-    unspent_coin_count: number;
+    unspent_coin_count: int;
+    pending_coin_removal_count: int;
   };
 };
 
@@ -289,7 +299,7 @@ export type TGetWalletBalanceResponse = {
 
 const get_transaction = "get_transaction";
 export type TGetTransactionRequest = {
-  transaction_id: string;
+  transaction_id: bytes32;
 };
 export type TGetTransactionResponse = {
   transaction: TransactionRecord;
@@ -301,13 +311,13 @@ export type TGetTransactionResponse = {
 
 const get_transactions = "get_transactions";
 export type TGetTransactionsRequest = {
-  wallet_id: number;
-  start?: number;
-  end?: number;
+  wallet_id: int;
+  start?: int;
+  end?: int;
 };
 export type TGetTransactionsResponse = {
   transactions: Array<TransactionRecord & {to_address: string}>;
-  wallet_id: number;
+  wallet_id: int;
 };
 
 
@@ -316,11 +326,11 @@ export type TGetTransactionsResponse = {
 const get_next_address = "get_next_address";
 export type TGetNextAddressRequest = {
   new_address: boolean;
-  wallet_id: number;
+  wallet_id: int;
 };
 export type TGetNextAddressResponse = {
-  wallet_id: uint32;
-  address: string;
+  wallet_id: uint32; // wallet_id in request is int, but response is uint32
+  address: str;
 };
 
 
@@ -328,10 +338,10 @@ export type TGetNextAddressResponse = {
 
 const send_transaction = "send_transaction";
 export type TSendTransactionRequest = {
-  wallet_id: number;
-  amount: number;
-  fee: number;
-  address: string;
+  wallet_id: int;
+  amount: int;
+  fee: int;
+  address: str;
 };
 export type TSendTransactionResponse = {
   transaction: TransactionRecord;
@@ -343,11 +353,9 @@ export type TSendTransactionResponse = {
 
 const create_backup = "create_backup";
 export type TCreateBackupRequest = {
-  file_path: string;
+  file_path: str;
 };
 export type TCreateBackupResponse = {
-  wallet_id: number;
-  count: number;
 };
 
 
@@ -355,9 +363,11 @@ export type TCreateBackupResponse = {
 
 const get_transaction_count = "get_transaction_count";
 export type TGetTransactionCountRequest = {
-  wallet_id: number;
+  wallet_id: int;
 };
 export type TGetTransactionCountResponse = {
+  wallet_id: int;
+  count: int;
 };
 
 
@@ -365,14 +375,13 @@ export type TGetTransactionCountResponse = {
 
 const get_farmed_amount = "get_farmed_amount";
 export type TGetFarmedAmountRequest = {
-  wallet_id: number;
 };
 export type TGetFarmedAmountResponse = {
-  farmed_amount: number;
-  pool_reward_amount: number;
-  farmer_reward_amount: number;
-  fee_amount: number;
-  last_height_farmed: number;
+  farmed_amount: int;
+  pool_reward_amount: int;
+  farmer_reward_amount: int;
+  fee_amount: int;
+  last_height_farmed: int;
 };
 
 
