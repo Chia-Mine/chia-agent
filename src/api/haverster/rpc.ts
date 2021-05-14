@@ -1,15 +1,15 @@
-import {bytes, G1Element} from "../chia/types/_python_types_";
+import {bytes, float, G1Element, int, str} from "../chia/types/_python_types_";
 import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
 
 export type Plot = {
-  filename: string;
-  size: number;
+  filename: str;
+  size: int;
   "plot-seed": bytes;
   pool_public_key?: G1Element;
   pool_contract_puzzle_hash?: bytes32;
   plot_public_key: G1Element;
-  file_size: number; // int
-  time_modified: number; // float
+  file_size: int;
+  time_modified: float;
 };
 
 export const get_plots = "get_plots";
@@ -17,8 +17,8 @@ export type TGetPlotsRequest = {
 };
 export type TGetPlotsResponse = {
   plots: Plot[];
-  failed_to_open_filenames: string[];
-  not_found_filenames: string[];
+  failed_to_open_filenames: str[];
+  not_found_filenames: str[];
 };
 
 
@@ -35,7 +35,7 @@ export type TRefreshPlotsResponse = {
 
 export const delete_plot = "delete_plot";
 export type TDeletePlotRequest = {
-  filename: string;
+  filename: str;
 };
 export type TDeletePlotResponse = {
 };
@@ -45,7 +45,7 @@ export type TDeletePlotResponse = {
 
 export const add_plot_directory = "add_plot_directory";
 export type TAddPlotDirectoryRequest = {
-  dirname: string;
+  dirname: str;
 };
 export type TAddPlotDirectoryResponse = {
 };
@@ -57,7 +57,7 @@ export const get_plot_directories = "get_plot_directories";
 export type TGetPlotDirectoriesRequest = {
 };
 export type TGetPlotDirectoriesResponse = {
-  directories: string[];
+  directories: str[];
 };
 
 
@@ -65,7 +65,7 @@ export type TGetPlotDirectoriesResponse = {
 
 export const remove_plot_directory = "remove_plot_directory";
 export type TRemovePlotDirectoryRequest = {
-  dirname: string;
+  dirname: str;
 };
 export type TRemovePlotDirectoryResponse = {
 };

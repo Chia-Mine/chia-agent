@@ -1,6 +1,6 @@
 import {FullBlock} from "../chia/types/full_block";
 import {BlockRecord} from "../chia/consensus/block_record";
-import {uint128, uint32, uint64} from "../chia/types/_python_types_";
+import {int, str, uint128, uint32, uint64} from "../chia/types/_python_types_";
 import {UnfinishedHeaderBlock} from "../chia/types/unfinished_header_block";
 import {CoinRecord} from "../chia/types/coin_record";
 import {SpendBundle} from "../chia/types/spend_bundle";
@@ -25,7 +25,7 @@ export type TGetBlockchainStateResponse = {
     difficulty: uint64;
     sub_slot_iters: uint64;
     space: uint128;
-    mempool_size: number; // built-in int
+    mempool_size: int;
   };
 };
 
@@ -33,7 +33,7 @@ export type TGetBlockchainStateResponse = {
 
 export const get_block = "get_block";
 export type TGetBlockRequest = {
-  header_hash: string;
+  header_hash: str;
 };
 export type TGetBlockResponse = {
   block: FullBlock;
@@ -43,19 +43,19 @@ export type TGetBlockResponse = {
 
 export const get_blocks = "get_blocks";
 export type TGetBlocksRequest = {
-  start: number;
-  end: number;
+  start: int;
+  end: int;
   exclude_header_hash?: boolean;
 };
 export type TGetBlocksResponse = {
-  blocks: Array<FullBlock & {header_hash?: string;}>;
+  blocks: Array<FullBlock & {header_hash?: str;}>;
 }
 
 
 
 export const get_block_record_by_height = "get_block_record_by_height";
 export type TGetBlockRecordByHeightRequest = {
-  height: number;
+  height: int;
 };
 export type TGetBlockRecordByHeightResponse = {
   block_record?: BlockRecord;
@@ -65,7 +65,7 @@ export type TGetBlockRecordByHeightResponse = {
 
 export const get_block_record = "get_block_record";
 export type TGetBlockRecordRequest = {
-  header_hash: string;
+  header_hash: str;
 };
 export type TGetBlockRecordResponse = {
   block_record: BlockRecord;
@@ -75,8 +75,8 @@ export type TGetBlockRecordResponse = {
 
 export const get_block_records = "get_block_records";
 export type TGetBlockRecordsRequest = {
-  start: number;
-  end: number;
+  start: int;
+  end: int;
 };
 export type TGetBlockRecordsResponse = {
   block_records: BlockRecord[];
@@ -96,8 +96,8 @@ export type TGetUnfinishedBlockHeadersResponse = {
 
 export const get_network_space = "get_network_space";
 export type TGetNetworkSpaceRequest = {
-  newer_block_header_hash: string;
-  older_block_header_hash: string;
+  newer_block_header_hash: str;
+  older_block_header_hash: str;
 };
 export type TGetNetworkSpaceResponse = {
   space: uint128;
@@ -107,7 +107,7 @@ export type TGetNetworkSpaceResponse = {
 
 export const get_additions_and_removals = "get_additions_and_removals";
 export type TGetAdditionsAndRemovalsRequest = {
-  header_hash: string;
+  header_hash: str;
 };
 export type TGetAdditionsAndRemovalsResponse = {
   additions: CoinRecord[];
@@ -129,18 +129,18 @@ export const get_network_info = "get_network_info";
 export type TGetNetworkInfoRequest = {
 };
 export type TGetNetworkInfoResponse = {
-  network_name: string;
-  network_prefix: string;
+  network_name: str;
+  network_prefix: str;
 };
 
 
 
 export const get_coin_records_by_puzzle_hash = "get_coin_records_by_puzzle_hash";
 export type TGetCoinRecordsByPuzzleHashRequest = {
-  puzzle_hash: string;
-  start_height: number;
-  end_height: number;
-  include_spent_coins: number;
+  puzzle_hash: str;
+  start_height: uint32;
+  end_height: uint32;
+  include_spent_coins: boolean;
 };
 export type TGetCoinRecordsByPuzzleHashResponse = {
   coin_records: CoinRecord[];
@@ -150,10 +150,10 @@ export type TGetCoinRecordsByPuzzleHashResponse = {
 
 export const get_coin_records_by_puzzle_hashes = "get_coin_records_by_puzzle_hashes";
 export type TGetCoinRecordsByPuzzleHashesRequest = {
-  puzzle_hashes: string;
-  start_height: number;
-  end_height: number;
-  include_spent_coins: number;
+  puzzle_hashes: str[];
+  start_height: uint32;
+  end_height: uint32;
+  include_spent_coins: boolean;
 };
 export type TGetCoinRecordsByPuzzleHashesResponse = {
   coin_records: CoinRecord[];
@@ -163,7 +163,7 @@ export type TGetCoinRecordsByPuzzleHashesResponse = {
 
 export const get_coin_record_by_name = "get_coin_record_by_name";
 export type TGetCoinRecordByNameRequest = {
-  name: string;
+  name: str;
 };
 export type TGetCoinRecordByNameResponse = {
   coin_record: CoinRecord;
@@ -176,7 +176,7 @@ export type TPushTxRequest = {
   spend_bundle: SpendBundle;
 };
 export type TPushTxResponse = {
-  status: string;
+  status: str; // Enum.name
 };
 
 
@@ -201,7 +201,7 @@ export type TGetAllMempoolItemsResponse = {
 
 export const get_mempool_item_by_tx_id = "get_mempool_item_by_tx_id";
 export type TGetMempoolItemByTxIdRequest = {
-  tx_id: string;
+  tx_id: str;
 };
 export type TGetMempoolItemByTxIdResponse = {
   mempool_item: MempoolItem;
