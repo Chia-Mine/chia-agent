@@ -1,14 +1,14 @@
 import {BlockRecord} from "../chia/consensus/block_record";
-import {int, uint128, uint32, uint64} from "../chia/types/_python_types_";
+import {bool, int, uint128, uint32, uint64} from "../chia/types/_python_types_";
 
 export const get_blockchain_state = "get_blockchain_state";
 export type TGetBlockchainState = {
   blockchain_state: {
     peak: BlockRecord;
-    genesis_challenge_initialized: boolean;
+    genesis_challenge_initialized: bool;
     sync: {
-      sync_mode: boolean;
-      synced: boolean;
+      sync_mode: bool;
+      synced: bool;
       sync_tip_height: uint32;
       sync_progress_height: uint32;
     };

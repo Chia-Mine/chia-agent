@@ -1,6 +1,6 @@
 import {FullBlock} from "../chia/types/full_block";
 import {BlockRecord} from "../chia/consensus/block_record";
-import {int, str, uint128, uint32, uint64} from "../chia/types/_python_types_";
+import {bool, int, Optional, str, uint128, uint32, uint64} from "../chia/types/_python_types_";
 import {UnfinishedHeaderBlock} from "../chia/types/unfinished_header_block";
 import {CoinRecord} from "../chia/types/coin_record";
 import {SpendBundle} from "../chia/types/spend_bundle";
@@ -14,12 +14,12 @@ export type TGetBlockchainStateRequest = {
 };
 export type TGetBlockchainStateResponse = {
   blockchain_state: {
-    peak?: BlockRecord;
-    genesis_challenge_initialized: boolean;
+    peak: Optional<BlockRecord>;
+    genesis_challenge_initialized: bool;
     sync: {
-      sync_mode: boolean;
-      synced: boolean;
-      sync_tip_height?: uint32;
+      sync_mode: bool;
+      synced: bool;
+      sync_tip_height: Optional<uint32>;
       sync_progress_height: uint32;
     },
     difficulty: uint64;
@@ -45,10 +45,10 @@ export const get_blocks = "get_blocks";
 export type TGetBlocksRequest = {
   start: int;
   end: int;
-  exclude_header_hash?: boolean;
+  exclude_header_hash?: bool;
 };
 export type TGetBlocksResponse = {
-  blocks: Array<FullBlock & {header_hash?: str;}>;
+  blocks: FullBlock[] | Array<FullBlock & {header_hash: str}>;
 }
 
 
@@ -58,7 +58,7 @@ export type TGetBlockRecordByHeightRequest = {
   height: int;
 };
 export type TGetBlockRecordByHeightResponse = {
-  block_record?: BlockRecord;
+  block_record: Optional<BlockRecord>;
 };
 
 
@@ -140,7 +140,7 @@ export type TGetCoinRecordsByPuzzleHashRequest = {
   puzzle_hash: str;
   start_height: uint32;
   end_height: uint32;
-  include_spent_coins: boolean;
+  include_spent_coins: bool;
 };
 export type TGetCoinRecordsByPuzzleHashResponse = {
   coin_records: CoinRecord[];
@@ -153,7 +153,7 @@ export type TGetCoinRecordsByPuzzleHashesRequest = {
   puzzle_hashes: str[];
   start_height: uint32;
   end_height: uint32;
-  include_spent_coins: boolean;
+  include_spent_coins: bool;
 };
 export type TGetCoinRecordsByPuzzleHashesResponse = {
   coin_records: CoinRecord[];

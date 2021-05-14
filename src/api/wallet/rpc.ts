@@ -1,6 +1,6 @@
 import {WalletInfo} from "../chia/wallet/wallet_info";
 import {Coin} from "../chia/types/blockchain_format/coin";
-import {bytes, int, str, True, uint128, uint32, uint64, uint8} from "../chia/types/_python_types_";
+import {bool, bytes, int, Optional, str, True, uint128, uint32, uint64, uint8} from "../chia/types/_python_types_";
 import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
 import {TransactionRecord} from "../chia/wallet/transaction_record";
 
@@ -11,7 +11,7 @@ export type WalletBackupData = {
   version: str;
   fingerprint: int; // https://github.com/Chia-Network/bls-signatures/blob/main/python-impl/ec.py#L164
   timestamp: uint64;
-  start_height?: uint32;
+  start_height: Optional<uint32>;
 };
 
 export type WalletBackupMetadata = {
@@ -26,13 +26,14 @@ export type WalletBackup = {
 };
 
 
+export type WalletInfoWithTypeName = WalletInfo & {
+  type_name: str; // enum.name chia/wallet/util/backup_utils.py@22
+};
 
 export type BackupInfo = Pick<WalletBackupData, "version" | "fingerprint" | "timestamp"> & {
-  wallets: Array<WalletInfo & {
-    type_name: str; // enum.name chia/wallet/util/backup_utils.py@22
-  }>;
+  wallets: WalletInfoWithTypeName[];
   backup_host: str;
-  downloaded: True;
+  downloaded: bool;
 };
 
 const log_in = "log_in";
@@ -144,9 +145,9 @@ const get_sync_status = "get_sync_status";
 export type TGetSyncStatusRequest = {
 };
 export type TGetSyncStatusResponse = {
-  synced: boolean;
-  syncing: boolean;
-  genesis_initialized: true;
+  synced: bool;
+  syncing: bool;
+  genesis_initialized: bool;
 };
 
 
@@ -240,10 +241,10 @@ export type Create_New_CC_WalletResponse = {
 };
 
 export type Create_New_RC_WalletResponse = {
-  success: boolean;
+  success: bool;
   id: uint32;
   type: uint8;
-  origin?: Coin;
+  origin: Optional<Coin>;
   pubkey: str;
 } | {
   id: uint32;
@@ -325,7 +326,7 @@ export type TGetTransactionsResponse = {
 
 const get_next_address = "get_next_address";
 export type TGetNextAddressRequest = {
-  new_address: boolean;
+  new_address: bool;
   wallet_id: int;
 };
 export type TGetNextAddressResponse = {

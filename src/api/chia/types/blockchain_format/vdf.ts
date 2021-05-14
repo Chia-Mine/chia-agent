@@ -1,6 +1,6 @@
 import {ClassgroupElement} from "./classgroup";
 import {bytes32} from "./sized_bytes";
-import {bytes, uint64, uint8} from "../_python_types_";
+import {bool, bytes, uint64, uint8} from "../_python_types_";
 
 export type VDFInfo = {
   challenge: bytes32; // bytes32  # Used to generate the discriminant (VDF group)
@@ -11,5 +11,5 @@ export type VDFInfo = {
 export type VDFProof = {
   witness_type: uint8; // uint8
   witness: bytes; // bytes
-  normalized_to_identity: boolean; // bool
+  normalized_to_identity: bool; // bool
 };
