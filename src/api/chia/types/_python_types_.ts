@@ -1,7 +1,7 @@
 export type G1Element = unknown; 
 export type G2Element = unknown; // see https://pypi.org/project/blspy/
 
-export type bytes = unknown;
+export type bytes = string;
 
 export type int = number;
 export type int8 = number;
