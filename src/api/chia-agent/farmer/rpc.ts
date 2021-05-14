@@ -1,6 +1,6 @@
-import {ProofOfSpace} from "../chia/types/blockchain_format/proof_of_space";
-import {bool, None, str, uint64, uint8} from "../chia/types/_python_types_";
-import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
+import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
+import {bool, str, uint64, uint8} from "../../chia/types/_python_types_";
+import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 
 export const serviceName = "chia_farmer";
 
