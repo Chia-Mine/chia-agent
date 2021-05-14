@@ -3,7 +3,7 @@ import {RewardChainBlock} from "./blockchain_format/reward_chain_block";
 import {VDFProof} from "./blockchain_format/vdf";
 import {Foliage, FoliageTransactionBlock, TransactionsInfo} from "./blockchain_format/foliage";
 import {SerializedProgram} from "./blockchain_format/program";
-import {uint32} from "./blockchain_format/ints";
+import {uint32} from "./_python_types_";
 
 export type FullBlock = {
   finished_sub_slots: EndOfSubSlotBundle[]; // List[EndOfSubSlotBundle]  # If first sb

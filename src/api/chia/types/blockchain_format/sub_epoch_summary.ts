@@ -1,5 +1,5 @@
 import {bytes32} from "./sized_bytes";
-import {uint64, uint8} from "./ints";
+import {uint64, uint8} from "../_python_types_";
 
 export type SubEpochSummary = {
   prev_subepoch_summary_hash: bytes32; // bytes32

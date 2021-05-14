@@ -1,11 +1,11 @@
-import {FullBlock} from "../types/full_block";
-import {BlockRecord} from "../types/consensus/block_record";
-import {uint128, uint32, uint64} from "../types/blockchain_format/ints";
-import {UnfinishedHeaderBlock} from "../types/unfinished_header_block";
-import {CoinRecord} from "../types/coin_record";
-import {SpendBundle} from "../types/spend_bundle";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {MempoolItem} from "../types/mempool_item";
+import {FullBlock} from "../chia/types/full_block";
+import {BlockRecord} from "../chia/consensus/block_record";
+import {uint128, uint32, uint64} from "../chia/types/_python_types_";
+import {UnfinishedHeaderBlock} from "../chia/types/unfinished_header_block";
+import {CoinRecord} from "../chia/types/coin_record";
+import {SpendBundle} from "../chia/types/spend_bundle";
+import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
+import {MempoolItem} from "../chia/types/mempool_item";
 
 export const serviceName = "chia_full_node";
 

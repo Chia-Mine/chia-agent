@@ -1,8 +1,7 @@
-import {WalletInfo} from "../types/wallet_info";
-import {uint32, uint64, uint8} from "../types/blockchain_format/ints";
-import {Coin} from "../types/blockchain_format/coin";
-import {bytes} from "../types/unclassified_type";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
+import {WalletInfo} from "../chia/wallet/wallet_info";
+import {Coin} from "../chia/types/blockchain_format/coin";
+import {bytes, uint32, uint64, uint8} from "../chia/types/_python_types_";
+import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
 
 // # Key management
 

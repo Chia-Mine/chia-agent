@@ -1,7 +1,7 @@
 import {EndOfSubSlotBundle} from "./end_of_slot_bundle";
 import {VDFProof} from "./blockchain_format/vdf";
 import {Foliage, FoliageTransactionBlock} from "./blockchain_format/foliage";
-import {bytes} from "./unclassified_type";
+import {bytes} from "./_python_types_";
 import {RewardChainBlockUnfinished} from "./blockchain_format/reward_chain_block";
 
 export type UnfinishedHeaderBlock = {

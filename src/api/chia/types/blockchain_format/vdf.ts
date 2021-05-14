@@ -1,7 +1,6 @@
 import {ClassgroupElement} from "./classgroup";
 import {bytes32} from "./sized_bytes";
-import {uint64, uint8} from "./ints";
-import {bytes} from "../unclassified_type";
+import {bytes, uint64, uint8} from "../_python_types_";
 
 export type VDFInfo = {
   challenge: bytes32; // bytes32  # Used to generate the discriminant (VDF group)

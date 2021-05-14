@@ -1,4 +1,4 @@
-import {G2Element} from "./unclassified_type";
+import {G2Element} from "./_python_types_";
 import {CoinSolution} from "./coin_solution";
 
 export type SpendBundle = {

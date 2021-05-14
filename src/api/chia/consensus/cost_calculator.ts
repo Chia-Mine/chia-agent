@@ -1,5 +1,5 @@
-import {uint16, uint64} from "../blockchain_format/ints";
-import {NPC} from "./name_puzzle_condition";
+import {NPC} from "../types/name_puzzle_condition";
+import {uint16, uint64} from "../types/_python_types_";
 
 export type NPCResult = {
   error?: uint16;

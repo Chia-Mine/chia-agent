@@ -1,4 +1,4 @@
-import {ProofOfSpace} from "../types/blockchain_format/proof_of_space";
+import {ProofOfSpace} from "../chia/types/blockchain_format/proof_of_space";
 
 export const serviceName = "chia_farmer";
 

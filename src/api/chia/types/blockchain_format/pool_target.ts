@@ -1,5 +1,5 @@
-import {uint32} from "./ints";
 import {bytes32} from "./sized_bytes";
+import {uint32} from "../_python_types_";
 
 export type PoolTarget = {
   puzzle_hash: bytes32; // bytes32

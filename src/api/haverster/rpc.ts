@@ -1,5 +1,5 @@
-import {bytes, G1Element} from "../types/unclassified_type";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
+import {bytes, G1Element} from "../chia/types/_python_types_";
+import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
 
 export type Plot = {
   filename: string;
