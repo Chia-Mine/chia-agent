@@ -1,7 +1,8 @@
 import {WalletInfo} from "../chia/wallet/wallet_info";
 import {Coin} from "../chia/types/blockchain_format/coin";
-import {bytes, uint32, uint64, uint8} from "../chia/types/_python_types_";
+import {bytes, uint128, uint32, uint64, uint8} from "../chia/types/_python_types_";
 import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
+import {TransactionRecord} from "../chia/wallet/transaction_record";
 
 // # Key management
 
@@ -269,13 +270,114 @@ export type TCreateNewWalletResponse = Create_New_CC_WalletResponse | Create_New
 
 // # Wallet
 const get_wallet_balance = "get_wallet_balance";
+export type TGetWalletBalanceRequest = {
+  wallet_id: number;
+};
+export type TGetWalletBalanceResponse = {
+  wallet_balance: {
+    wallet_id: uint32;
+    confirmed_wallet_balance: uint128, // MEMO: cc_wallet, did_wallet ceclares `uint64`
+    unconfirmed_wallet_balance: uint128,
+    spendable_balance: uint128,
+    pending_change: uint64,
+    max_send_amount: uint64,
+    unspent_coin_count: number;
+  };
+};
+
+
+
 const get_transaction = "get_transaction";
+export type TGetTransactionRequest = {
+  transaction_id: string;
+};
+export type TGetTransactionResponse = {
+  transaction: TransactionRecord;
+  transaction_id: bytes32;
+};
+
+
+
+
 const get_transactions = "get_transactions";
+export type TGetTransactionsRequest = {
+  wallet_id: number;
+  start?: number;
+  end?: number;
+};
+export type TGetTransactionsResponse = {
+  transactions: Array<TransactionRecord & {to_address: string}>;
+  wallet_id: number;
+};
+
+
+
+
 const get_next_address = "get_next_address";
+export type TGetNextAddressRequest = {
+  new_address: boolean;
+  wallet_id: number;
+};
+export type TGetNextAddressResponse = {
+  wallet_id: uint32;
+  address: string;
+};
+
+
+
+
 const send_transaction = "send_transaction";
+export type TSendTransactionRequest = {
+  wallet_id: number;
+  amount: number;
+  fee: number;
+  address: string;
+};
+export type TSendTransactionResponse = {
+  transaction: TransactionRecord;
+  transaction_id: bytes32;
+};
+
+
+
+
 const create_backup = "create_backup";
+export type TCreateBackupRequest = {
+  file_path: string;
+};
+export type TCreateBackupResponse = {
+  wallet_id: number;
+  count: number;
+};
+
+
+
+
 const get_transaction_count = "get_transaction_count";
+export type TGetTransactionCountRequest = {
+  wallet_id: number;
+};
+export type TGetTransactionCountResponse = {
+};
+
+
+
+
 const get_farmed_amount = "get_farmed_amount";
+export type TGetFarmedAmountRequest = {
+  wallet_id: number;
+};
+export type TGetFarmedAmountResponse = {
+  farmed_amount: number;
+  pool_reward_amount: number;
+  farmer_reward_amount: number;
+  fee_amount: number;
+  last_height_farmed: number;
+};
+
+
+
+
 const create_signed_transaction = "create_signed_transaction";
 // # Coloured coins and trading
 const cc_set_name = "cc_set_name";
