@@ -1,5 +1,5 @@
-import {BlockRecord} from "../chia/consensus/block_record";
-import {bool, int, uint128, uint32, uint64} from "../chia/types/_python_types_";
+import {BlockRecord} from "../../chia/consensus/block_record";
+import {bool, int, uint128, uint32, uint64} from "../../chia/types/_python_types_";
 
 export const get_blockchain_state = "get_blockchain_state";
 export type TGetBlockchainState = {

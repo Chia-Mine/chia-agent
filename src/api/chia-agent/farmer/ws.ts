@@ -1,7 +1,7 @@
-import {ProofOfSpace} from "../chia/types/blockchain_format/proof_of_space";
-import {NewSignagePoint} from "../chia/protocols/farmer_protocol";
-import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
-import {uint32, uint64} from "../chia/types/_python_types_";
+import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
+import {NewSignagePoint} from "../../chia/protocols/farmer_protocol";
+import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
+import {uint32, uint64} from "../../chia/types/_python_types_";
 
 export const new_farming_info = "new_farming_info";
 export type TNewFarmingInfoData = {

@@ -1,5 +1,5 @@
-import {WalletInfo} from "../chia/wallet/wallet_info";
-import {Coin} from "../chia/types/blockchain_format/coin";
+import {WalletInfo} from "../../chia/wallet/wallet_info";
+import {Coin} from "../../chia/types/blockchain_format/coin";
 import {
   bool,
   bytes,
@@ -12,10 +12,10 @@ import {
   uint32,
   uint64,
   uint8
-} from "../chia/types/_python_types_";
-import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
-import {TransactionRecord} from "../chia/wallet/transaction_record";
-import {SpendBundle} from "../chia/types/spend_bundle";
+} from "../../chia/types/_python_types_";
+import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
+import {TransactionRecord} from "../../chia/wallet/transaction_record";
+import {SpendBundle} from "../../chia/types/spend_bundle";
 
 // # Key management
 
