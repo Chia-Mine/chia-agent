@@ -49,7 +49,7 @@ export type BackupInfo = Pick<WalletBackupData, "version" | "fingerprint" | "tim
   downloaded: bool;
 };
 
-const log_in = "log_in";
+export const log_in = "log_in";
 export type TLoginRequest = {
   fingerprint: int;
   type: "skip";
