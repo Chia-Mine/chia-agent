@@ -27,14 +27,14 @@ export type MessageListener = (data: MessageData) => unknown;
 
 const agentServiceName = "chia_agent";
 
-let socket: Daemon|null = null;
+let daemon: Daemon|null = null;
 
 export function getDaemon(){
-  if(socket){
-    return socket;
+  if(daemon){
+    return daemon;
   }
   
-  return socket = new Daemon();
+  return daemon = new Daemon();
 }
 
 class Daemon {
