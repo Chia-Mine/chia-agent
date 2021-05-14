@@ -1,20 +1,22 @@
 import {bytes, G1Element} from "../types/unclassified_type";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 
+export type Plot = {
+  filename: string;
+  size: number;
+  "plot-seed": bytes;
+  pool_public_key?: G1Element;
+  pool_contract_puzzle_hash?: bytes32;
+  plot_public_key: G1Element;
+  file_size: number; // int
+  time_modified: number; // float
+};
+
 export const get_plots = "get_plots";
 export type TGetPlotsRequest = {
 };
 export type TGetPlotsResponse = {
-  plots: Array<{
-    filename: string;
-    size: number;
-    "plot-seed": bytes;
-    pool_public_key?: G1Element;
-    pool_contract_puzzle_hash?: bytes32;
-    plot_public_key: G1Element;
-    file_size: number; // int
-    time_modified: number; // float
-  }>;
+  plots: Plot[];
   failed_to_open_filenames: string[];
   not_found_filenames: string[];
 };
