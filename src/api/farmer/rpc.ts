@@ -1,5 +1,5 @@
 import {ProofOfSpace} from "../chia/types/blockchain_format/proof_of_space";
-import {None, str, uint64, uint8} from "../chia/types/_python_types_";
+import {bool, None, str, uint64, uint8} from "../chia/types/_python_types_";
 import {bytes32} from "../chia/types/blockchain_format/sized_bytes";
 
 export const serviceName = "chia_farmer";
@@ -33,13 +33,13 @@ export type TGetSignagePointsResponse = {
 
 export const get_reward_targets = "get_reward_targets";
 export type TGetRewardTargetRequest = {
-  search_for_private_key: boolean;
+  search_for_private_key: bool;
 };
 export type TGetRewardTargetResponse = {
   farmer_target: str;
   pool_target: str;
-  have_farmer_sk: boolean;
-  have_pool_sk: boolean;
+  have_farmer_sk: bool;
+  have_pool_sk: bool;
 } | {
   farmer_target: str;
   pool_target: str;
@@ -49,8 +49,8 @@ export type TGetRewardTargetResponse = {
 
 export const set_reward_targets = "set_reward_targets";
 export type TSetRewardTargetRequest = {
-  farmer_target: str|None;
-  pool_target: str|None;
+  farmer_target?: str;
+  pool_target?: str;
 };
 export type TSetRewardTargetResponse = {
 };

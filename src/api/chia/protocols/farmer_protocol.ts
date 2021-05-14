@@ -1,4 +1,4 @@
-import {G2Element, uint32, uint64, uint8} from "../types/_python_types_";
+import {G2Element, Optional, uint32, uint64, uint8} from "../types/_python_types_";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 import {ProofOfSpace} from "../types/blockchain_format/proof_of_space";
 import {PoolTarget} from "../types/blockchain_format/pool_target";
@@ -21,8 +21,8 @@ export type DeclareProofOfSpace = {
   challenge_chain_sp_signature: G2Element;
   reward_chain_sp_signature: G2Element;
   farmer_puzzle_hash: bytes32;
-  pool_target?: PoolTarget;
-  pool_signature?: G2Element;
+  pool_target: Optional<PoolTarget>;
+  pool_signature: Optional<G2Element>;
 }
 
 export type RequestSignedValues = {

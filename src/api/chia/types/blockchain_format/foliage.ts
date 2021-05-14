@@ -1,5 +1,5 @@
 import {PoolTarget} from "./pool_target";
-import {G2Element, uint64} from "../_python_types_";
+import {G2Element, Optional, uint64} from "../_python_types_";
 import {Coin} from "./coin";
 import {bytes32} from "./sized_bytes";
 
@@ -8,14 +8,14 @@ export type Foliage = {
   reward_block_hash: bytes32; // bytes32
   foliage_block_data: FoliageBlockData; // FoliageBlockData
   foliage_block_data_signature: G2Element; // G2Element
-  foliage_transaction_block_hash?: bytes32; // Optional[bytes32]
-  foliage_transaction_block_signature?: G2Element; // Optional[G2Element]
+  foliage_transaction_block_hash: Optional<bytes32>; // Optional[bytes32]
+  foliage_transaction_block_signature: Optional<G2Element>; // Optional[G2Element]
 };
 
 export type FoliageBlockData = {
   unfinished_reward_block_hash: bytes32; // bytes32
   pool_target: PoolTarget; // PoolTarget
-  pool_signature?: G2Element; // Optional[G2Element]  # Iff ProofOfSpace has a pool pk
+  pool_signature: Optional<G2Element>; // Optional[G2Element]  # Iff ProofOfSpace has a pool pk
   farmer_reward_puzzle_hash: bytes32; // bytes32
   extension_data: bytes32; // bytes32  # Used for future updates. Can be any 32 byte value initially
 };
