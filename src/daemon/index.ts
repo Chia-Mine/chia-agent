@@ -4,6 +4,7 @@ import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
+import {IAgent, TMessage} from "../agent.type";
 
 export type EventType = "open" | "message" | "error" | "close";
 export type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
@@ -15,15 +16,7 @@ type EventListenerOf<T> =
       : T extends "error" ? EventListener<ErrorEvent>
         : T extends "close" ? EventListener<CloseEvent> : never;
 
-export type MessageData = {
-  command: string;
-  ack: boolean;
-  data: any;
-  request_id: string;
-  destination: string;
-  origin: string;
-};
-export type MessageListener = (data: MessageData) => unknown;
+export type MessageListener = (msg: TMessage) => unknown;
 
 const agentServiceName = "chia_agent";
 
@@ -37,15 +30,15 @@ export function getDaemon(){
   return daemon = new Daemon();
 }
 
-class Daemon {
+class Daemon implements IAgent {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: {[request_id: string]: (value: (MessageData | PromiseLike<MessageData>)) => void} = {};
+  protected _responseQueue: {[request_id: string]: (value: (TMessage | PromiseLike<TMessage>)) => void} = {};
   protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
   protected _closeEventListeners: Array<(e: CloseEvent) => unknown> = [];
-  protected _messageListeners: Record<string, Array<(e: MessageData) => unknown>> = {};
+  protected _messageListeners: Record<string, Array<(e: TMessage) => unknown>> = {};
   protected _closing: boolean = false;
   
   public get connected(){
@@ -102,7 +95,7 @@ class Daemon {
     this._closing = true;
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<MessageData> {
+  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -236,7 +229,7 @@ class Daemon {
   }
   
   protected onMessage(event: MessageEvent){
-    const payload = JSON.parse(event.data as string) as MessageData;
+    const payload = JSON.parse(event.data as string) as TMessage;
     const {request_id, origin, command} = payload;
     getLogger().debug(`Arrived message. origin=${origin} command=${command} reqId=${request_id}`);
   
