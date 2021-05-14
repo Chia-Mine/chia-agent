@@ -46,6 +46,7 @@ class Daemon {
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
   protected _closeEventListeners: Array<(e: CloseEvent) => unknown> = [];
   protected _messageListeners: Record<string, Array<(e: MessageData) => unknown>> = {};
+  protected _closing: boolean = false;
   
   public get connected(){
     return Boolean(this._connectedUrl);
@@ -92,13 +93,13 @@ class Daemon {
   }
   
   public async close(){
-    if(!this._socket){
+    if(this._closing || !this._socket){
       return;
     }
     
     getLogger().debug("Closing web socket connection");
     this._socket.close();
-    this._socket = null;
+    this._closing = true;
   }
   
   public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<MessageData> {
@@ -259,6 +260,14 @@ class Daemon {
   }
   
   protected onClose(event: CloseEvent){
+    if(this._socket){
+      this._socket.removeEventListener("error", this.onError);
+      this._socket.removeEventListener("message", this.onMessage);
+      this._socket.removeEventListener("close", this.onClose);
+      this._socket = null;
+    }
+    
+    this._closing = false;
     this._connectedUrl = "";
     this._closeEventListeners.forEach(l => l(event));
     getLogger().info(`Closed ws connection`);
