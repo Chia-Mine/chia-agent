@@ -1,7 +1,11 @@
 import {BlockRecord} from "../../chia/consensus/block_record";
 import {bool, int, uint128, uint32, uint64} from "../../chia/types/_python_types_";
 
-export const get_blockchain_state = "get_blockchain_state";
+export const chia_full_node_service = "chia_full_node";
+export type chia_full_node_service = typeof chia_full_node_service;
+
+export const get_blockchain_state_command = "get_blockchain_state";
+export type get_blockchain_state_command = typeof get_blockchain_state_command;
 export type TGetBlockchainStateBroadCast = {
   blockchain_state: {
     peak: BlockRecord;
