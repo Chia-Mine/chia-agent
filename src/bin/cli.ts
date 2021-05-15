@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import {getDaemon} from "../daemon/index";
 import {setLogLevel} from "../logger";
+import {TNewFarmingInfoBroadCast} from "../api/chia-agent/farmer/ws";
 
 setLogLevel("error");
 
@@ -29,7 +30,7 @@ if(command === "farm"){
       let sumTotalPlot = 0;
       let sumTotalProof = 0;
     
-      daemon.addMessageListener("chia_farmer", (e) => {
+      daemon.addMessageListener<TNewFarmingInfoBroadCast>("chia_farmer", (e) => {
         if(e.command === "new_farming_info"){
           const {farming_info} = e.data;
           const {challenge_hash, passed_filter, proofs, total_plots, timestamp} = farming_info;

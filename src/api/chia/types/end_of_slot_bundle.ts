@@ -4,6 +4,7 @@ import {
   RewardChainSubSlot,
   SubSlotProofs
 } from "./blockchain_format/slots";
+import {Optional} from "./_python_types_";
 
 export type EndOfSubSlotBundle = {
   challenge_chain: ChallengeChainSubSlot;

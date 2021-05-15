@@ -1,0 +1,30 @@
+import { ProofOfSpace } from "./proof_of_space";
+import { VDFInfo } from "./vdf";
+import { bool, G2Element, Optional, uint128, uint32, uint8 } from "../_python_types_";
+import { bytes32 } from "./sized_bytes";
+export declare type RewardChainBlockUnfinished = {
+    total_iters: uint128;
+    signage_point_index: uint8;
+    pos_ss_cc_challenge_hash: bytes32;
+    proof_of_space: ProofOfSpace;
+    challenge_chain_sp_vdf: Optional<VDFInfo>;
+    challenge_chain_sp_signature: G2Element;
+    reward_chain_sp_vdf: Optional<VDFInfo>;
+    reward_chain_sp_signature: G2Element;
+};
+export declare type RewardChainBlock = {
+    weight: uint128;
+    height: uint32;
+    total_iters: uint128;
+    signage_point_index: uint8;
+    pos_ss_cc_challenge_hash: bytes32;
+    proof_of_space: ProofOfSpace;
+    challenge_chain_sp_vdf: Optional<VDFInfo>;
+    challenge_chain_sp_signature: G2Element;
+    challenge_chain_ip_vdf: VDFInfo;
+    reward_chain_sp_vdf: Optional<VDFInfo>;
+    reward_chain_sp_signature: G2Element;
+    reward_chain_ip_vdf: VDFInfo;
+    infused_challenge_chain_ip_vdf: Optional<VDFInfo>;
+    is_transaction_block: bool;
+};
