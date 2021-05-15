@@ -7,6 +7,6 @@ export type TMessage<D = unknown> = {
   origin: string;
 };
 
-export interface IAgent<D = unknown> {
-  sendMessage: (destination: string, command: string, data?: Record<string, unknown>) => Promise<TMessage<D>>;
+export interface IAgent {
+  sendMessage: <D>(destination: string, command: string, data?: Record<string, unknown>) => Promise<TMessage<D>>;
 }
