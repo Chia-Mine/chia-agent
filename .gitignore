@@ -255,6 +255,6 @@ $RECYCLE.BIN/
 .history/
 
 .idea/
-test/build/
 .npmrc
 build/
+test/

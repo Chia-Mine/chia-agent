@@ -40,6 +40,7 @@ class Daemon implements IAgent {
   protected _closeEventListeners: Array<(e: CloseEvent) => unknown> = [];
   protected _messageListeners: Record<string, Array<(e: TMessage) => unknown>> = {};
   protected _closing: boolean = false;
+  protected _subscriptions: string[] = [];
   
   public get connected(){
     return Boolean(this._connectedUrl);
@@ -125,6 +126,11 @@ class Daemon implements IAgent {
   }
   
   public async subscribe(service: string){
+    if(this._subscriptions.findIndex(s => s === service) > -1){
+      // @todo return dummy successful response
+      return;
+    }
+    
     let error: unknown;
     const result = await this.sendMessage("daemon", "register_service", {service}).catch(e => {
       error = e;
@@ -135,6 +141,8 @@ class Daemon implements IAgent {
       getLogger().error("Failed to register agent service to daemon");
       throw new Error("Subscribe failed");
     }
+    
+    this._subscriptions.push(service);
     
     return result;
   }
@@ -199,7 +207,7 @@ class Daemon implements IAgent {
     this._messageListeners[o].push(listener as MessageListener<unknown>);
   }
   
-  public removeMessageListener(origin: string, listener: MessageListener){
+  public removeMessageListener<D=unknown>(origin: string, listener: MessageListener<D>){
     const listeners = this._messageListeners[origin];
     if(!listeners){
       return;
@@ -266,3 +274,5 @@ class Daemon implements IAgent {
     getLogger().info(`Closed ws connection`);
   }
 }
+
+export type TDaemon = InstanceType<typeof Daemon>;
