@@ -17,13 +17,16 @@ import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {BackupInfo} from "../../chia/wallet/util/backup_utils";
+import {IAgent} from "../../../agent.type";
+import {AsyncMessage} from "../types";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
 
 // # Key management
 
-export const log_in = "log_in";
+export const log_in_command = "log_in";
+export type log_in_command = typeof log_in_command;
 export type TLoginRequest = {
   fingerprint: int;
   type: "skip";
@@ -34,7 +37,6 @@ export type TLoginRequest = {
   host: str;
   file_path: str; // Union[str | PathLike[str]]
 };
-
 export type TLoginResponse = {
   fingerprint: int;
 } | {
@@ -46,20 +48,29 @@ export type TLoginResponse = {
   backup_info: BackupInfo;
   backup_path: str; // Union[str, PathLike[str]]
 };
+export async function log_in(agent: IAgent, data: TLoginRequest){
+  return agent.sendMessage(chia_wallet_service, log_in_command, data) as
+    AsyncMessage<chia_wallet_service, log_in_command, TLoginResponse>;
+}
 
 
 
-
-export const get_public_keys = "get_public_keys";
+export const get_public_keys_command = "get_public_keys";
+export type get_public_keys_command = typeof get_public_keys_command;
 export type TGetPublicKeysRequest = {
 };
 export type TGetPublicKeysResponse = {
   public_key_fingerprints: int[];
 };
+export async function get_public_keys(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, get_public_keys_command, {}) as
+    AsyncMessage<chia_wallet_service, get_public_keys_command, TGetPublicKeysResponse>;
+}
 
 
 
-export const get_private_key = "get_private_key";
+export const get_private_key_command = "get_private_key";
+export type get_private_key_command = typeof get_private_key_command;
 export type TGetPrivateKeyRequest = {
   fingerprint: int; // https://github.com/Chia-Network/bls-signatures/blob/main/python-impl/ec.py#L164
 };
@@ -71,21 +82,31 @@ export type TGetPrivateKeyResponse = {
     seed: str;
   },
 };
+export async function get_private_key(agent: IAgent, data: TGetPrivateKeyRequest){
+  return agent.sendMessage(chia_wallet_service, get_private_key_command, data) as
+    AsyncMessage<chia_wallet_service, get_private_key_command, TGetPrivateKeyResponse>;
+}
 
 
 
 
-export const generate_mnemonic = "generate_mnemonic";
+export const generate_mnemonic_command = "generate_mnemonic";
+export type generate_mnemonic_command = typeof generate_mnemonic_command;
 export type TGenerateMnemonicRequest = {
 };
 export type TGenerateMnemonicResponse = {
   mnemonic: str[];
 };
+export async function generate_mnemonic(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, generate_mnemonic_command, {}) as
+    AsyncMessage<chia_wallet_service, generate_mnemonic_command, TGenerateMnemonicResponse>;
+}
 
 
 
 
-export const add_key = "add_key";
+export const add_key_command = "add_key";
+export type add_key_command = typeof add_key_command;
 export type TAddKeyRequest = {
   mnemonic: str[];
   type: "new_wallet" | "skip";
@@ -94,7 +115,6 @@ export type TAddKeyRequest = {
   type: "restore_backup";
   file_path: str;
 };
-
 export type TAddKeyResponse = {
   success: false;
   error: str;
@@ -102,33 +122,48 @@ export type TAddKeyResponse = {
 } | {
   fingerprint: int;
 };
+export async function add_key(agent: IAgent, data: TAddKeyRequest){
+  return agent.sendMessage(chia_wallet_service, add_key_command, data) as
+    AsyncMessage<chia_wallet_service, add_key_command, TAddKeyResponse>;
+}
 
 
 
 
-export const delete_key = "delete_key";
+export const delete_key_command = "delete_key";
+export type delete_key_command = typeof delete_key_command;
 export type TDeleteKeyRequest = {
   fingerprint: int;
 };
 export type TDeleteKeyResponse = {
 };
+export async function delete_key(agent: IAgent, data: TDeleteKeyRequest){
+  return agent.sendMessage(chia_wallet_service, delete_key_command, data) as
+    AsyncMessage<chia_wallet_service, delete_key_command, TDeleteKeyResponse>;
+}
 
 
 
 
-export const delete_all_keys = "delete_all_keys";
+export const delete_all_keys_command = "delete_all_keys";
+export type delete_all_keys_command = typeof delete_all_keys_command;
 export type TDeleteAllKeysRequest = {
   // no input
 };
 export type TDeleteAllKeysResponse = {
   // no output
 };
+export async function delete_all_keys(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, delete_all_keys_command, {}) as
+    AsyncMessage<chia_wallet_service, delete_all_keys_command, TDeleteAllKeysResponse>;
+}
 
 
 
 
 // # Wallet node
-export const get_sync_status = "get_sync_status";
+export const get_sync_status_command = "get_sync_status";
+export type get_sync_status_command = typeof get_sync_status_command;
 export type TGetSyncStatusRequest = {
 };
 export type TGetSyncStatusResponse = {
@@ -136,53 +171,82 @@ export type TGetSyncStatusResponse = {
   syncing: bool;
   genesis_initialized: bool;
 };
+export async function get_sync_status(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, get_sync_status_command) as
+    AsyncMessage<chia_wallet_service, get_sync_status_command, TGetSyncStatusResponse>;
+}
 
 
 
-export const get_height_info = "get_height_info";
+export const get_height_info_command = "get_height_info";
+export type get_height_info_command = typeof get_height_info_command;
 export type TGetHeightInfoRequest = {
 };
 export type TGetHeightInfoResponse = {
   height: uint32;
 };
+export async function get_height_info(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, get_height_info_command) as
+    AsyncMessage<chia_wallet_service, get_height_info_command, TGetHeightInfoResponse>;
+}
 
 
 
-export const farm_block = "farm_block";
+export const farm_block_command = "farm_block";
+export type farm_block_command = typeof farm_block_command;
 export type TFarmBlockRequest = {
   address: str;
 };
 export type TFarmBlockResponse = {
 };
+export async function farm_block(agent: IAgent, data: TFarmBlockRequest){
+  return agent.sendMessage(chia_wallet_service, farm_block_command, data) as
+    AsyncMessage<chia_wallet_service, farm_block_command, TFarmBlockResponse>;
+}
 
 
 
-export const get_initial_freeze_period = "get_initial_freeze_period";
+export const get_initial_freeze_period_command = "get_initial_freeze_period";
+export type get_initial_freeze_period_command = typeof get_initial_freeze_period_command;
 export type TGetInitialFreezePeriodRequest = {
 };
 export type TGetInitialFreezePeriodResponse = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
+export async function get_initial_freeze_period(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, get_initial_freeze_period_command, {}) as
+    AsyncMessage<chia_wallet_service, get_initial_freeze_period_command, TGetInitialFreezePeriodResponse>;
+}
 
 
 
-export const get_network_info = "get_network_info";
+export const get_network_info_command = "get_network_info";
+export type get_network_info_command = typeof get_network_info_command;
 export type TGetNetworkInfoRequest = {
 };
 export type TGetNetworkInfoResponse = {
   network_name: str;
   network_prefix: str;
 };
+export async function get_network_info(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, get_network_info_command, {}) as
+    AsyncMessage<chia_wallet_service, get_network_info_command, TGetNetworkInfoResponse>;
+}
 
 
 
 // # Wallet management
-export const get_wallets = "get_wallets";
+export const get_wallets_command = "get_wallets";
+export type get_wallets_command = typeof get_wallets_command;
 export type TGetWalletsRequest = {
 };
 export type TGetWalletsResponse = {
   wallets: WalletInfo[];
 };
+export async function get_wallets(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, get_wallets_command, {}) as
+    AsyncMessage<chia_wallet_service, get_wallets_command, TGetWalletsResponse>;
+}
 
 
 
@@ -257,16 +321,21 @@ export type Create_New_DID_WalletResponse = {
   num_verifications_required: uint64;
 };
 
-export const create_new_wallet = "create_new_wallet";
+export const create_new_wallet_command = "create_new_wallet";
+export type create_new_wallet_command = typeof create_new_wallet;
 export type TCreateNewWalletRequest = {
   host: str;
 } & (Create_New_CC_WalletRequest | Create_New_RC_WalletRequest | Create_New_DID_WalletRequest);
 export type TCreateNewWalletResponse = Create_New_CC_WalletResponse | Create_New_RC_WalletResponse | Create_New_DID_WalletResponse;
-
+export async function create_new_wallet(agent: IAgent, data: TCreateNewWalletRequest){
+  return agent.sendMessage(chia_wallet_service, create_new_wallet_command, data) as
+    AsyncMessage<chia_wallet_service, create_new_wallet_command, TCreateNewWalletResponse>;
+}
 
 
 // # Wallet
-export const get_wallet_balance = "get_wallet_balance";
+export const get_wallet_balance_command = "get_wallet_balance";
+export type get_wallet_balance_command = typeof get_wallet_balance_command;
 export type TGetWalletBalanceRequest = {
   wallet_id: int;
 };
@@ -282,10 +351,15 @@ export type TGetWalletBalanceResponse = {
     pending_coin_removal_count: int;
   };
 };
+export async function get_wallet_balance(agent: IAgent, data: TGetWalletBalanceRequest){
+  return agent.sendMessage(chia_wallet_service, get_wallet_balance_command, data) as
+    AsyncMessage<chia_wallet_service, get_wallet_balance_command, TGetWalletBalanceResponse>;
+}
 
 
 
-export const get_transaction = "get_transaction";
+export const get_transaction_command = "get_transaction";
+export type get_transaction_command = typeof get_transaction_command;
 export type TGetTransactionRequest = {
   transaction_id: bytes32;
 };
@@ -293,11 +367,16 @@ export type TGetTransactionResponse = {
   transaction: TransactionRecord;
   transaction_id: TransactionRecord["name"];
 };
+export async function get_transaction(agent: IAgent, data: TGetTransactionRequest){
+  return agent.sendMessage(chia_wallet_service, get_transaction_command, data) as
+    AsyncMessage<chia_wallet_service, get_transaction_command, TGetTransactionResponse>;
+}
 
 
 
 
-export const get_transactions = "get_transactions";
+export const get_transactions_command = "get_transactions";
+export type get_transactions_command = typeof get_transactions_command;
 export type TGetTransactionsRequest = {
   wallet_id: int;
   start?: int;
@@ -307,11 +386,16 @@ export type TGetTransactionsResponse = {
   transactions: Array<TransactionRecord & {to_address: string}>;
   wallet_id: int;
 };
+export async function get_transactions(agent: IAgent, data: TGetTransactionsRequest){
+  return agent.sendMessage(chia_wallet_service, get_transactions_command, data) as
+    AsyncMessage<chia_wallet_service, get_transactions_command, TGetTransactionsResponse>;
+}
 
 
 
 
-export const get_next_address = "get_next_address";
+export const get_next_address_command = "get_next_address";
+export type get_next_address_command = typeof get_next_address_command;
 export type TGetNextAddressRequest = {
   new_address: bool;
   wallet_id: int;
@@ -320,11 +404,16 @@ export type TGetNextAddressResponse = {
   wallet_id: uint32; // wallet_id in request is int, but response is uint32
   address: str;
 };
+export async function get_next_address(agent: IAgent, data: TGetNextAddressRequest){
+  return agent.sendMessage(chia_wallet_service, get_next_address_command, data) as
+    AsyncMessage<chia_wallet_service, get_next_address_command, TGetNextAddressResponse>;
+}
 
 
 
 
-export const send_transaction = "send_transaction";
+export const send_transaction_command = "send_transaction";
+export type send_transaction_command = typeof send_transaction_command;
 export type TSendTransactionRequest = {
   wallet_id: int;
   amount: int;
@@ -335,21 +424,31 @@ export type TSendTransactionResponse = {
   transaction: TransactionRecord;
   transaction_id: TransactionRecord["name"];
 };
+export async function send_transaction(agent: IAgent, data: TSendTransactionRequest){
+  return agent.sendMessage(chia_wallet_service, send_transaction_command, data) as
+    AsyncMessage<chia_wallet_service, send_transaction_command, TSendTransactionResponse>;
+}
 
 
 
 
-export const create_backup = "create_backup";
+export const create_backup_command = "create_backup";
+export type create_backup_command = typeof create_backup_command;
 export type TCreateBackupRequest = {
   file_path: str;
 };
 export type TCreateBackupResponse = {
 };
+export async function create_backup(agent: IAgent, data: TCreateBackupRequest){
+  return agent.sendMessage(chia_wallet_service, create_backup_command, data) as
+    AsyncMessage<chia_wallet_service, create_backup_command, TCreateBackupResponse>;
+}
 
 
 
 
-export const get_transaction_count = "get_transaction_count";
+export const get_transaction_count_command = "get_transaction_count";
+export type get_transaction_count_command = typeof get_transaction_count_command;
 export type TGetTransactionCountRequest = {
   wallet_id: int;
 };
@@ -357,11 +456,16 @@ export type TGetTransactionCountResponse = {
   wallet_id: int;
   count: int;
 };
+export async function get_transaction_count(agent: IAgent, data: TGetTransactionCountRequest){
+  return agent.sendMessage(chia_wallet_service, get_transaction_count_command, data) as
+    AsyncMessage<chia_wallet_service, get_transaction_command, TGetTransactionCountResponse>;
+}
 
 
 
 
-export const get_farmed_amount = "get_farmed_amount";
+export const get_farmed_amount_command = "get_farmed_amount";
+export type get_farmed_amount_command = typeof get_farmed_amount_command;
 export type TGetFarmedAmountRequest = {
 };
 export type TGetFarmedAmountResponse = {
@@ -371,6 +475,10 @@ export type TGetFarmedAmountResponse = {
   fee_amount: int;
   last_height_farmed: int;
 };
+export async function get_farmed_amount(agent: IAgent){
+  return agent.sendMessage(chia_wallet_service, get_farmed_amount_command, {}) as
+    AsyncMessage<chia_wallet_service, get_farmed_amount_command, TGetFarmedAmountResponse>;
+}
 
 
 
@@ -379,7 +487,8 @@ export type TAdditions = {
   amount: uint64;
   puzzle_hash: str;
 };
-export const create_signed_transaction = "create_signed_transaction";
+export const create_signed_transaction_command = "create_signed_transaction";
+export type create_signed_transaction_command = typeof create_signed_transaction_command;
 export type TCreateSignedTransactionRequest = {
   additions: TAdditions[];
   fee?: uint64;
@@ -388,12 +497,17 @@ export type TCreateSignedTransactionRequest = {
 export type TCreateSignedTransactionResponse = {
   signed_tx: TransactionRecord;
 };
+export async function create_signed_transaction(agent: IAgent, data: TCreateSignedTransactionRequest){
+  return agent.sendMessage(chia_wallet_service, create_signed_transaction_command, data) as
+    AsyncMessage<chia_wallet_service, create_signed_transaction_command, TCreateSignedTransactionResponse>;
+}
 
 
 
 
 // # Coloured coins and trading
-export const cc_set_name = "cc_set_name";
+export const cc_set_name_command = "cc_set_name";
+export type cc_set_name_command = typeof cc_set_name_command;
 export type TCcSetNameRequest = {
   wallet_id: int;
   name: str;
@@ -401,6 +515,10 @@ export type TCcSetNameRequest = {
 export type TCcSetNameResponse = {
   wallet_id: int;
 };
+export async function cc_set_name(agent: IAgent, data: TCcSetNameRequest){
+  return agent.sendMessage(chia_wallet_service, cc_set_name_command, data) as
+    AsyncMessage<chia_wallet_service, cc_set_name_command, TCcSetNameResponse>;
+}
 
 
 
