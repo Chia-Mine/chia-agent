@@ -6,10 +6,10 @@ import {CoinRecord} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {MempoolItem} from "../../chia/types/mempool_item";
+import {IAgent} from "../../../agent.type";
 
 export const serviceName = "chia_full_node";
 
-export const get_blockchain_state = "get_blockchain_state";
 export type TGetBlockchainStateRequest = {
 };
 export type TGetBlockchainStateResponse = {
@@ -28,20 +28,26 @@ export type TGetBlockchainStateResponse = {
     mempool_size: int;
   };
 };
+export async function get_blockchain_state(agent: IAgent) {
+  const command = "get_blockchain_state";
+  return agent.sendMessage<TGetBlockchainStateResponse>(serviceName, command, {});
+}
 
 
 
-export const get_block = "get_block";
 export type TGetBlockRequest = {
   header_hash: str;
 };
 export type TGetBlockResponse = {
   block: FullBlock;
 }
+export async function get_block(agent: IAgent, data: TGetBlockRequest) {
+  const command = "get_block";
+  return agent.sendMessage<TGetBlockResponse>(serviceName, command, data);
+}
 
 
 
-export const get_blocks = "get_blocks";
 export type TGetBlocksRequest = {
   start: int;
   end: int;
@@ -50,30 +56,39 @@ export type TGetBlocksRequest = {
 export type TGetBlocksResponse = {
   blocks: FullBlock[] | Array<FullBlock & {header_hash: str}>;
 }
+export async function get_blocks(agent: IAgent, data: TGetBlocksRequest) {
+  const command = "get_blocks";
+  return agent.sendMessage<TGetBlocksResponse>(serviceName, command, data);
+}
 
 
 
-export const get_block_record_by_height = "get_block_record_by_height";
 export type TGetBlockRecordByHeightRequest = {
   height: int;
 };
 export type TGetBlockRecordByHeightResponse = {
   block_record: Optional<BlockRecord>;
 };
+export async function get_block_record_by_height(agent: IAgent, data: TGetBlockRecordByHeightRequest) {
+  const command = "get_block_record_by_height";
+  return agent.sendMessage<TGetBlockRecordByHeightResponse>(serviceName, command, data);
+}
 
 
 
-export const get_block_record = "get_block_record";
 export type TGetBlockRecordRequest = {
   header_hash: str;
 };
 export type TGetBlockRecordResponse = {
   block_record: BlockRecord;
 };
+export async function get_block_record(agent: IAgent, data: TGetBlockRecordRequest) {
+  const command = "get_block_record";
+  return agent.sendMessage<TGetBlockRecordResponse>(serviceName, command, data);
+}
 
 
 
-export const get_block_records = "get_block_records";
 export type TGetBlockRecordsRequest = {
   start: int;
   end: int;
@@ -81,20 +96,25 @@ export type TGetBlockRecordsRequest = {
 export type TGetBlockRecordsResponse = {
   block_records: BlockRecord[];
 };
+export async function get_block_records(agent: IAgent, data: TGetBlockRecordsRequest) {
+  const command = "get_block_records";
+  return agent.sendMessage<TGetBlockRecordsResponse>(serviceName, command, data);
+}
 
 
 
-
-export const get_unfinished_block_headers = "get_unfinished_block_headers";
 export type TGetUnfinishedBlockHeadersRequest = {
 };
 export type TGetUnfinishedBlockHeadersResponse = {
   headers: UnfinishedHeaderBlock[];
 };
+export async function get_unfinished_block_headers(agent: IAgent) {
+  const command = "get_unfinished_block_headers";
+  return agent.sendMessage<TGetUnfinishedBlockHeadersResponse>(serviceName, command, {});
+}
 
 
 
-export const get_network_space = "get_network_space";
 export type TGetNetworkSpaceRequest = {
   newer_block_header_hash: str;
   older_block_header_hash: str;
@@ -102,10 +122,13 @@ export type TGetNetworkSpaceRequest = {
 export type TGetNetworkSpaceResponse = {
   space: uint128;
 };
+export async function get_network_space(agent: IAgent, data: TGetNetworkSpaceRequest) {
+  const command = "get_network_space";
+  return agent.sendMessage<TGetNetworkSpaceResponse>(serviceName, command, data);
+}
 
 
 
-export const get_additions_and_removals = "get_additions_and_removals";
 export type TGetAdditionsAndRemovalsRequest = {
   header_hash: str;
 };
@@ -113,29 +136,38 @@ export type TGetAdditionsAndRemovalsResponse = {
   additions: CoinRecord[];
   removals: CoinRecord[];
 };
+export async function get_additions_and_removals(agent: IAgent, data: TGetAdditionsAndRemovalsRequest) {
+  const command = "get_additions_and_removals";
+  return agent.sendMessage<TGetAdditionsAndRemovalsResponse>(serviceName, command, data);
+}
 
 
 
-export const get_initial_freeze_period = "get_initial_freeze_period";
 export type TGetInitialFreezePeriodRequest = {
 };
 export type TGetInitialFreezePeriodResponse = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
+export async function get_initial_freeze_period(agent: IAgent, data: TGetInitialFreezePeriodRequest) {
+  const command = "get_initial_freeze_period";
+  return agent.sendMessage<TGetInitialFreezePeriodResponse>(serviceName, command, data);
+}
 
 
 
-export const get_network_info = "get_network_info";
 export type TGetNetworkInfoRequest = {
 };
 export type TGetNetworkInfoResponse = {
   network_name: str;
   network_prefix: str;
 };
+export async function get_network_info(agent: IAgent, data: TGetNetworkInfoRequest) {
+  const command = "get_network_info";
+  return agent.sendMessage<TGetNetworkInfoResponse>(serviceName, command, data);
+}
 
 
 
-export const get_coin_records_by_puzzle_hash = "get_coin_records_by_puzzle_hash";
 export type TGetCoinRecordsByPuzzleHashRequest = {
   puzzle_hash: str;
   start_height: uint32;
@@ -145,10 +177,13 @@ export type TGetCoinRecordsByPuzzleHashRequest = {
 export type TGetCoinRecordsByPuzzleHashResponse = {
   coin_records: CoinRecord[];
 };
+export async function get_coin_records_by_puzzle_hash(agent: IAgent, data: TGetCoinRecordsByPuzzleHashRequest) {
+  const command = "get_coin_records_by_puzzle_hash";
+  return agent.sendMessage<TGetCoinRecordsByPuzzleHashResponse>(serviceName, command, data);
+}
 
 
 
-export const get_coin_records_by_puzzle_hashes = "get_coin_records_by_puzzle_hashes";
 export type TGetCoinRecordsByPuzzleHashesRequest = {
   puzzle_hashes: str[];
   start_height: uint32;
@@ -158,51 +193,70 @@ export type TGetCoinRecordsByPuzzleHashesRequest = {
 export type TGetCoinRecordsByPuzzleHashesResponse = {
   coin_records: CoinRecord[];
 };
+export async function get_coin_records_by_puzzle_hashes(agent: IAgent, data: TGetCoinRecordsByPuzzleHashesRequest) {
+  const command = "get_coin_records_by_puzzle_hashes";
+  return agent.sendMessage<TGetCoinRecordsByPuzzleHashesResponse>(serviceName, command, data);
+}
 
 
 
-export const get_coin_record_by_name = "get_coin_record_by_name";
 export type TGetCoinRecordByNameRequest = {
   name: str;
 };
 export type TGetCoinRecordByNameResponse = {
   coin_record: CoinRecord;
 };
+export async function get_coin_record_by_name(agent: IAgent, data: TGetCoinRecordByNameRequest) {
+  const command = "get_coin_record_by_name";
+  return agent.sendMessage<TGetCoinRecordByNameResponse>(serviceName, command, data);
+}
 
 
 
-export const push_tx = "push_tx";
 export type TPushTxRequest = {
   spend_bundle: SpendBundle;
 };
 export type TPushTxResponse = {
   status: str; // Enum.name
 };
+export async function push_tx(agent: IAgent, data: TPushTxRequest) {
+  const command = "push_tx";
+  return agent.sendMessage<TPushTxResponse>(serviceName, command, data);
+}
 
 
 
-export const get_all_mempool_tx_ids = "get_all_mempool_tx_ids";
 export type TGetAllMempoolTxIdsRequest = {
 };
 export type TGetAllMempoolTxIdsResponse = {
   tx_ids: bytes32[];
 };
+export async function get_all_mempool_tx_ids(agent: IAgent, data: TGetAllMempoolTxIdsRequest) {
+  const command = "get_all_mempool_tx_ids";
+  return agent.sendMessage<TGetAllMempoolTxIdsResponse>(serviceName, command, data);
+}
 
 
 
-export const get_all_mempool_items = "get_all_mempool_items";
 export type TGetAllMempoolItemsRequest = {
 };
 export type TGetAllMempoolItemsResponse = {
   mempool_items: Record<string, MempoolItem>;
 };
+export async function get_all_mempool_items(agent: IAgent) {
+  const command = "get_all_mempool_items";
+  return agent.sendMessage<TGetAllMempoolItemsResponse>(serviceName, command, {});
+}
 
 
 
-export const get_mempool_item_by_tx_id = "get_mempool_item_by_tx_id";
 export type TGetMempoolItemByTxIdRequest = {
   tx_id: str;
 };
 export type TGetMempoolItemByTxIdResponse = {
   mempool_item: MempoolItem;
 };
+export async function get_mempool_item_by_tx_id(agent: IAgent, data: TGetMempoolItemByTxIdRequest) {
+  const command = "get_mempool_item_by_tx_id";
+  return agent.sendMessage<TGetMempoolItemByTxIdResponse>(serviceName, command, data);
+}

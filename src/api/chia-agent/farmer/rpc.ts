@@ -30,9 +30,9 @@ export type TGetSignagePointsRequest = {
 export type TGetSignagePointsResponse = {
   signage_points: TGetSignagePointResponse[];
 };
-export async function get_signage_points(agent: IAgent, data: TGetSignagePointsRequest){
+export async function get_signage_points(agent: IAgent){
   const command = "get_signage_points";
-  return agent.sendMessage<TGetSignagePointsResponse>(serviceName, command, data);
+  return agent.sendMessage<TGetSignagePointsResponse>(serviceName, command, {});
 }
 
 
