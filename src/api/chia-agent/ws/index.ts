@@ -16,6 +16,11 @@ import type {
   get_plots_command,
   TGetPlotsBroadCast,
 } from "./harvester";
+import type {
+  chia_wallet_service,
+  state_changed_command,
+  TStateChangedBroadCast,
+} from "./wallet";
 
 export type WsFarmerMessage =
   GetMessageType<chia_farmer_service, new_farming_info_command, TNewFarmingInfoBroadCast>
@@ -29,4 +34,7 @@ export type WsFullNodeMessage =
 export type WsHarvesterMessage =
   GetMessageType<chia_harvester_service, get_plots_command, TGetPlotsBroadCast>;
 
-export type WsMessage = WsFarmerMessage | WsFullNodeMessage | WsHarvesterMessage;
+export type WsWalletMessage =
+  GetMessageType<chia_wallet_service, state_changed_command, TStateChangedBroadCast>;
+
+export type WsMessage = WsFarmerMessage | WsFullNodeMessage | WsHarvesterMessage | WsWalletMessage;
