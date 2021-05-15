@@ -19,9 +19,9 @@ export type TGetSignagePointResponse = {
   },
   proofs: [string, ProofOfSpace],
 };
-export async function get_signage_point(agent: IAgent<TGetSignagePointResponse>, data: TGetSignagePointRequest){
+export async function get_signage_point(agent: IAgent, data: TGetSignagePointRequest) {
   const command = "get_signage_point";
-  return agent.sendMessage(serviceName, command, data);
+  return agent.sendMessage<TGetSignagePointResponse>(serviceName, command, data);
 }
 
 
@@ -30,9 +30,9 @@ export type TGetSignagePointsRequest = {
 export type TGetSignagePointsResponse = {
   signage_points: TGetSignagePointResponse[];
 };
-export async function get_signage_points(agent: IAgent<TGetSignagePointsResponse>, data: TGetSignagePointsRequest){
+export async function get_signage_points(agent: IAgent, data: TGetSignagePointsRequest){
   const command = "get_signage_points";
-  return agent.sendMessage(serviceName, command, data);
+  return agent.sendMessage<TGetSignagePointsResponse>(serviceName, command, data);
 }
 
 
@@ -49,9 +49,9 @@ export type TGetRewardTargetResponse = {
   farmer_target: str;
   pool_target: str;
 };
-export async function get_reward_targets(agent: IAgent<TGetRewardTargetResponse>, data: TGetRewardTargetRequest){
+export async function get_reward_targets(agent: IAgent, data: TGetRewardTargetRequest){
   const command = "get_reward_targets";
-  return agent.sendMessage(serviceName, command, data);
+  return agent.sendMessage<TGetRewardTargetResponse>(serviceName, command, data);
 }
 
 
@@ -62,7 +62,7 @@ export type TSetRewardTargetRequest = {
 };
 export type TSetRewardTargetResponse = {
 };
-export async function set_reward_targets(agent: IAgent<TSetRewardTargetResponse>, data: TSetRewardTargetRequest){
+export async function set_reward_targets(agent: IAgent, data: TSetRewardTargetRequest){
   const command = "set_reward_targets";
-  return agent.sendMessage(serviceName, command, data);
+  return agent.sendMessage<TSetRewardTargetResponse>(serviceName, command, data);
 }

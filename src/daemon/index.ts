@@ -33,7 +33,7 @@ export function getDaemon(){
 class Daemon implements IAgent {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: {[request_id: string]: (value: (TMessage | PromiseLike<TMessage>)) => void} = {};
+  protected _responseQueue: {[request_id: string]: (value: (TMessage<any> | PromiseLike<TMessage<any>>)) => void} = {};
   protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
@@ -95,7 +95,7 @@ class Daemon implements IAgent {
     this._closing = true;
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage> {
+  public async sendMessage<D=unknown>(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage<D>> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
