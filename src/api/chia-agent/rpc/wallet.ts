@@ -16,38 +16,12 @@ import {
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
+import {BackupInfo} from "../../chia/wallet/util/backup_utils";
+
+export const chia_wallet_service = "chia_wallet";
+export type chia_wallet_service = typeof chia_wallet_service;
 
 // # Key management
-
-// chia-blockchain/chia/wallet/wallet_state_manager.py@986
-export type WalletBackupData = {
-  version: str;
-  fingerprint: int; // https://github.com/Chia-Network/bls-signatures/blob/main/python-impl/ec.py#L164
-  timestamp: uint64;
-  start_height: Optional<uint32>;
-};
-
-export type WalletBackupMetadata = {
-  timestamp: uint64;
-  pubkey: str;
-};
-
-export type WalletBackup = {
-  data: WalletBackupData;
-  meta_data: WalletBackupMetadata;
-  signature: unknown; // chia/wallet/util/backup_utils.py@22
-};
-
-
-export type WalletInfoWithTypeName = WalletInfo & {
-  type_name: str; // enum.name chia/wallet/util/backup_utils.py@22
-};
-
-export type BackupInfo = Pick<WalletBackupData, "version" | "fingerprint" | "timestamp"> & {
-  wallets: WalletInfoWithTypeName[];
-  backup_host: str;
-  downloaded: bool;
-};
 
 export const log_in = "log_in";
 export type TLoginRequest = {
