@@ -16,7 +16,7 @@ type EventListenerOf<T> =
       : T extends "error" ? EventListener<ErrorEvent>
         : T extends "close" ? EventListener<CloseEvent> : never;
 
-export type MessageListener = (msg: TMessage) => unknown;
+export type MessageListener<D=unknown> = (msg: TMessage<D>) => unknown;
 
 const agentServiceName = "chia_agent";
 
@@ -190,13 +190,13 @@ class Daemon implements IAgent {
    * @param {string} origin - Can be chia_farmer, chia_full_node, chia_wallet, etc.
    * @param listener - Triggered when a message arrives.
    */
-  public addMessageListener(origin: string|undefined, listener: MessageListener){
+  public addMessageListener<D=unknown>(origin: string|undefined, listener: MessageListener<D>){
     const o = origin || "all";
     if(!this._messageListeners[o]){
       this._messageListeners[o] = [];
     }
     
-    this._messageListeners[o].push(listener);
+    this._messageListeners[o].push(listener as MessageListener<unknown>);
   }
   
   public removeMessageListener(origin: string, listener: MessageListener){

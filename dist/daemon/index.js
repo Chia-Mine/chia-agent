@@ -15,12 +15,12 @@ const logger_1 = require("../logger");
 const connection_1 = require("./connection");
 const index_1 = require("../config/index");
 const agentServiceName = "chia_agent";
-let socket = null;
+let daemon = null;
 function getDaemon() {
-    if (socket) {
-        return socket;
+    if (daemon) {
+        return daemon;
     }
-    return socket = new Daemon();
+    return daemon = new Daemon();
 }
 exports.getDaemon = getDaemon;
 class Daemon {
@@ -33,6 +33,7 @@ class Daemon {
         this._errorEventListeners = [];
         this._closeEventListeners = [];
         this._messageListeners = {};
+        this._closing = false;
         this.onOpen = this.onOpen.bind(this);
         this.onError = this.onError.bind(this);
         this.onMessage = this.onMessage.bind(this);
@@ -72,12 +73,12 @@ class Daemon {
     }
     close() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this._socket) {
+            if (this._closing || !this._socket) {
                 return;
             }
             logger_1.getLogger().debug("Closing web socket connection");
             this._socket.close();
-            this._socket = null;
+            this._closing = true;
         });
     }
     sendMessage(destination, command, data) {
@@ -221,6 +222,13 @@ class Daemon {
         }
     }
     onClose(event) {
+        if (this._socket) {
+            this._socket.removeEventListener("error", this.onError);
+            this._socket.removeEventListener("message", this.onMessage);
+            this._socket.removeEventListener("close", this.onClose);
+            this._socket = null;
+        }
+        this._closing = false;
         this._connectedUrl = "";
         this._closeEventListeners.forEach(l => l(event));
         logger_1.getLogger().info(`Closed ws connection`);

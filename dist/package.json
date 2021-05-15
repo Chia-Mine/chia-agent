@@ -13,7 +13,16 @@
   "bin": {
     "chia-agent": "./bin/cli.js"
   },
-  "keywords": [],
+  "keywords": [
+    "chia",
+    "xch",
+    "crypto",
+    "coin",
+    "mining",
+    "websocket",
+    "typescript",
+    "monitor"
+  ],
   "engines": {
     "node": ">=10.14.2"
   },
