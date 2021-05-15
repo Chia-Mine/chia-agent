@@ -22,11 +22,12 @@
 ## [0.0.3] - 2021-05-13
 ### Changed
 - Changed argument order for `daemon.sendMessage` for previous one was not intuitive.
+
 ```js
 // Old
-daemon.sendMessage(command, destination, data);
+daemon.sendMessage(get_block_record_by_height_command, destination, data);
 // Now
-daemon.sendMessage(destination, command, data);
+daemon.sendMessage(destination, get_block_record_by_height_command, data);
 ```
 
 ## [0.0.2] - 2021-05-13

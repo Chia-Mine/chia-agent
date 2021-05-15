@@ -4,7 +4,8 @@ import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
-import {IAgent, TMessage} from "../agent.type";
+import {IAgent} from "../agent.type";
+import {TMessage} from "../api/chia-agent/";
 
 export type EventType = "open" | "message" | "error" | "close";
 export type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
@@ -16,9 +17,9 @@ type EventListenerOf<T> =
       : T extends "error" ? EventListener<ErrorEvent>
         : T extends "close" ? EventListener<CloseEvent> : never;
 
-export type MessageListener<D=unknown> = (msg: TMessage<D>) => unknown;
+export type MessageListener<D=unknown> = (msg: TMessage) => unknown;
 
-const agentServiceName = "chia_agent";
+const chia_agent_service = "chia_agent";
 
 let daemon: Daemon|null = null;
 
@@ -33,7 +34,7 @@ export function getDaemon(){
 class Daemon implements IAgent {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: {[request_id: string]: (value: (TMessage<any> | PromiseLike<TMessage<any>>)) => void} = {};
+  protected _responseQueue: {[request_id: string]: (value: (TMessage | PromiseLike<TMessage>)) => void} = {};
   protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
@@ -96,7 +97,7 @@ class Daemon implements IAgent {
     this._closing = true;
   }
   
-  public async sendMessage<D=unknown>(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage<D>> {
+  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -119,7 +120,7 @@ class Daemon implements IAgent {
       command,
       data,
       ack: false,
-      origin: agentServiceName,
+      origin: chia_agent_service,
       destination,
       request_id: randomBytes(32).toString("hex"),
     };
@@ -228,7 +229,7 @@ class Daemon implements IAgent {
     this._connectedUrl = url;
     this._openEventListeners.forEach(l => l(event));
   
-    return this.subscribe(agentServiceName);
+    return this.subscribe(chia_agent_service);
   }
   
   protected onError(error: ErrorEvent){

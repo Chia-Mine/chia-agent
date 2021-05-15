@@ -47,7 +47,7 @@ daemon.addEventListener("close", () => {
 ## daemon.sendMessage
 
 ```js
-await daemon.sendMessage(destination, command, data);
+await daemon.sendMessage(destination, get_block_record_by_height_command, data);
 ```
 
 Send message to chia daemon via websocket.  

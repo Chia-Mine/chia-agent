@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import {getDaemon} from "../daemon/index";
 import {setLogLevel} from "../logger";
-import {TNewFarmingInfoBroadCast} from "../api/chia-agent/farmer/ws";
+import {TNewFarmingInfoBroadCast} from "../api/chia-agent/ws/farmer";
 
 setLogLevel("error");
 
