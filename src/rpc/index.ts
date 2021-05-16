@@ -189,6 +189,8 @@ export class RPCAgent implements IAgent {
       
       const transporter = this._protocol === "https" ? httpsRequest : httpRequest;
       
+      getLogger().debug(`Requesting to ${options.protocol}//${options.hostname}:${options.port}${options.path}`);
+      
       const req = transporter(options, (res) => {
         if(!res.statusCode || res.statusCode < 200 || res.statusCode >= 300){
           getLogger().error(`Status not ok: ${res.statusCode}`);
