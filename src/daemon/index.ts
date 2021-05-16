@@ -5,7 +5,7 @@ import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
 import {IAgent} from "../agent.type";
-import {TMessage} from "../api/chia-agent/";
+import {WsMessage} from "../api/chia-agent/";
 
 export type EventType = "open" | "message" | "error" | "close";
 export type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
@@ -17,7 +17,7 @@ type EventListenerOf<T> =
       : T extends "error" ? EventListener<ErrorEvent>
         : T extends "close" ? EventListener<CloseEvent> : never;
 
-export type MessageListener<D=unknown> = (msg: TMessage) => unknown;
+export type MessageListener<D=unknown> = (msg: WsMessage) => unknown;
 
 const chia_agent_service = "chia_agent";
 
@@ -31,15 +31,15 @@ export function getDaemon(){
   return daemon = new Daemon();
 }
 
-class Daemon implements IAgent {
+class Daemon {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: {[request_id: string]: (value: (TMessage | PromiseLike<TMessage>)) => void} = {};
+  protected _responseQueue: {[request_id: string]: (value: (WsMessage | PromiseLike<WsMessage>)) => void} = {};
   protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
   protected _closeEventListeners: Array<(e: CloseEvent) => unknown> = [];
-  protected _messageListeners: Record<string, Array<(e: TMessage) => unknown>> = {};
+  protected _messageListeners: Record<string, Array<(e: WsMessage) => unknown>> = {};
   protected _closing: boolean = false;
   protected _subscriptions: string[] = [];
   
@@ -97,7 +97,7 @@ class Daemon implements IAgent {
     this._closing = true;
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage> {
+  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<WsMessage> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -238,7 +238,7 @@ class Daemon implements IAgent {
   }
   
   protected onMessage(event: MessageEvent){
-    const payload = JSON.parse(event.data as string) as TMessage;
+    const payload = JSON.parse(event.data as string) as WsMessage;
     const {request_id, origin, command} = payload;
     getLogger().debug(`Arrived message. origin=${origin} command=${command} reqId=${request_id}`);
   

@@ -4,7 +4,7 @@ import {existsSync, readFileSync} from "fs";
 import {IAgent} from "../agent.type";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
-import {TMessage} from "../api/chia-agent";
+import {RpcMessage} from "../api/chia-agent/rpc/index";
 
 type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"daemon"
 
@@ -158,7 +158,7 @@ export class RPCAgent implements IAgent {
     return {clientCert, clientKey, caCert};
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage> {
+  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<RpcMessage> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     
@@ -166,7 +166,7 @@ export class RPCAgent implements IAgent {
   }
   
   public post(path: string, data: any){
-    return new Promise((resolve: (v: TMessage) => void, reject) => {
+    return new Promise((resolve: (v: RpcMessage) => void, reject) => {
       const body = data ? JSON.stringify(data) : "{}";
       
       const pathname = `/${path.replace(/^\/+/, "")}`;

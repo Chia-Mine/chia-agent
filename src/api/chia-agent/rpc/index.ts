@@ -360,30 +360,6 @@ export {
   send_transaction,
 } from "./wallet";
 
-import {
-  daemon_service,
-  exit_command,
-  get_status_command,
-  is_running_command,
-  ping_command,
-  register_service_command,
-  start_plotting_command,
-  start_service_command,
-  stop_plotting_command,
-  stop_service_command,
-  TExitResponse,
-  TGetStatusResponse,
-  TIsRunningResponse,
-  TPingResponse,
-  TRegisterServiceResponse,
-  TStartPlottingResponse,
-  TStartServiceResponse,
-  TStopPlottingResponse,
-  TStopServiceResponse,
-} from "./daemon";
-
-export * from "./daemon";
-
 export type RpcFarmerMessage =
   GetMessageType<chia_farmer_service, get_reward_targets_command, TGetRewardTargetResponse>
   | GetMessageType<chia_farmer_service, get_signage_point_command, TGetSignagePointResponse>
@@ -469,16 +445,4 @@ export type RpcWalletMessage =
   | GetMessageType<chia_wallet_service, send_transaction_command, TSendTransactionResponse>
 ;
 
-export type RpcDaemonMessage =
-  GetMessageType<daemon_service, exit_command, TExitResponse>
-  | GetMessageType<daemon_service, get_status_command, TGetStatusResponse>
-  | GetMessageType<daemon_service, is_running_command, TIsRunningResponse>
-  | GetMessageType<daemon_service, ping_command, TPingResponse>
-  | GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>
-  | GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>
-  | GetMessageType<daemon_service, start_service_command, TStartServiceResponse>
-  | GetMessageType<daemon_service, stop_plotting_command, TStopPlottingResponse>
-  | GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>;
-
-export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage
-  | RpcDaemonMessage;
+export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage;
