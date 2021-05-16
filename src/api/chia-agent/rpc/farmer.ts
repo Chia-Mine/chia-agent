@@ -37,7 +37,7 @@ export type TGetSignagePointsResponse = {
   signage_points: TGetSignagePointResponse[];
 };
 export async function get_signage_points(agent: IAgent){
-  return agent.sendMessage(chia_farmer_service, get_signage_points_command, {}) as
+  return agent.sendMessage(chia_farmer_service, get_signage_points_command) as
     AsyncMessage<chia_farmer_service, get_signage_points_command, TGetSignagePointsResponse>;
 }
 

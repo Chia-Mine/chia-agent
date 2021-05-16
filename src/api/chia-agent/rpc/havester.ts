@@ -16,7 +16,7 @@ export type TGetPlotsResponse = {
   not_found_filenames: str[];
 };
 export async function get_plots(agent: IAgent) {
-  return agent.sendMessage(chia_harvester_service, get_plots_command, {}) as
+  return agent.sendMessage(chia_harvester_service, get_plots_command) as
     AsyncMessage<chia_harvester_service, get_plots_command, TGetPlotsResponse>;
 }
 
@@ -30,7 +30,7 @@ export type TRefreshPlotsRequest = {
 export type TRefreshPlotsResponse = {
 };
 export async function refresh_plots(agent: IAgent) {
-  return agent.sendMessage(chia_harvester_service, refresh_plots_command, {}) as
+  return agent.sendMessage(chia_harvester_service, refresh_plots_command) as
     AsyncMessage<chia_harvester_service, refresh_plots_command, TRefreshPlotsResponse>;
 }
 
@@ -75,7 +75,7 @@ export type TGetPlotDirectoriesResponse = {
   directories: str[];
 };
 export async function get_plot_directories(agent: IAgent) {
-  return agent.sendMessage(chia_harvester_service, get_plot_directories_command, {}) as
+  return agent.sendMessage(chia_harvester_service, get_plot_directories_command) as
     AsyncMessage<chia_harvester_service, get_plot_directories_command, TGetPlotDirectoriesResponse>;
 }
 
