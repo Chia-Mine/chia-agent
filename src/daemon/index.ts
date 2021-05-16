@@ -56,17 +56,17 @@ class Daemon implements IAgent {
   
   /**
    * Connect to local daemon via websocket.
-   * @param url
+   * @param daemonServerURL
    */
-  public async connect(url?: string): Promise<boolean> {
-    if(!url){
+  public async connect(daemonServerURL?: string): Promise<boolean> {
+    if(!daemonServerURL){
       const config = getConfig();
       const daemonHost = config["/ui/daemon_host"];
       const daemonPort = config["/ui/daemon_port"];
-      url = `wss://${daemonHost}:${daemonPort}`;
+      daemonServerURL = `wss://${daemonHost}:${daemonPort}`;
     }
     
-    if(this._connectedUrl === url){
+    if(this._connectedUrl === daemonServerURL){
       return true;
     }
     else if(this._connectedUrl){
@@ -74,15 +74,15 @@ class Daemon implements IAgent {
       return false;
     }
     
-    getLogger().debug(`Opening websocket connection to ${url}`);
+    getLogger().debug(`Opening websocket connection to ${daemonServerURL}`);
     
-    const result = await open(url);
+    const result = await open(daemonServerURL);
     this._socket = result.ws;
     this._socket.onerror = this.onError;
     this._socket.onmessage = this.onMessage;
     this._socket.onclose = this.onClose;
     
-    await this.onOpen(result.openEvent, url);
+    await this.onOpen(result.openEvent, daemonServerURL);
     
     return true;
   }
