@@ -101,6 +101,8 @@ export class RPCAgent implements IAgent {
   
       const config = this._getConfig("configPath" in props ? props.configPath : undefined);
       const {hostname, port} = getConnectionInfoFromConfig(props.destination, config);
+      getLogger().debug(`Picked ${hostname}:${port} for ${props.destination}`);
+      
       this._hostname = hostname;
       this._port = port;
   
@@ -134,6 +136,10 @@ export class RPCAgent implements IAgent {
     const clientCertPath = resolveFromChiaRoot([config["/daemon_ssl/private_crt"]] as string[]);
     const clientKeyPath = resolveFromChiaRoot([config["/daemon_ssl/private_key"]] as string[]);
     const caCertPath = resolveFromChiaRoot([config["/private_ssl_ca/crt"]] as string[]);
+    
+    getLogger().debug(`Loading client cert file from ${clientCertPath}`);
+    getLogger().debug(`Loading client key file from ${clientKeyPath}`);
+    getLogger().debug(`Loading ca cert file from ${caCertPath}`);
   
     const getCertOrKey = (path: string) => {
       if (!existsSync(path)) {
@@ -151,7 +157,9 @@ export class RPCAgent implements IAgent {
   }
   
   public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<TMessage> {
-    // parameter `destination` is not used because connecting rpc server is determined by url.
+    // parameter `destination` is not used because target rpc server is determined by url.
+    getLogger().debug(`Sending message. dest=${destination} command=${command}`);
+    
     return this.post(command, data);
   }
   
@@ -169,11 +177,8 @@ export class RPCAgent implements IAgent {
         pathname,
         method: "POST",
         agent: this._agent,
-        maxBodyLength: 10485760,
-        maxRedirects: 21,
         headers: {
           Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json;charset=utf-8",
           "User-Agent": "chia-agent/1.0.0",
         } as OutgoingHttpHeaders,
       };

@@ -63,7 +63,7 @@ export type TGetPublicKeysResponse = {
   public_key_fingerprints: int[];
 };
 export async function get_public_keys(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, get_public_keys_command, {}) as
+  return agent.sendMessage(chia_wallet_service, get_public_keys_command) as
     AsyncMessage<chia_wallet_service, get_public_keys_command, TGetPublicKeysResponse>;
 }
 
@@ -98,7 +98,7 @@ export type TGenerateMnemonicResponse = {
   mnemonic: str[];
 };
 export async function generate_mnemonic(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, generate_mnemonic_command, {}) as
+  return agent.sendMessage(chia_wallet_service, generate_mnemonic_command) as
     AsyncMessage<chia_wallet_service, generate_mnemonic_command, TGenerateMnemonicResponse>;
 }
 
@@ -154,7 +154,7 @@ export type TDeleteAllKeysResponse = {
   // no output
 };
 export async function delete_all_keys(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, delete_all_keys_command, {}) as
+  return agent.sendMessage(chia_wallet_service, delete_all_keys_command) as
     AsyncMessage<chia_wallet_service, delete_all_keys_command, TDeleteAllKeysResponse>;
 }
 
@@ -214,7 +214,7 @@ export type TGetInitialFreezePeriodResponse = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
 export async function get_initial_freeze_period(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, get_initial_freeze_period_command, {}) as
+  return agent.sendMessage(chia_wallet_service, get_initial_freeze_period_command) as
     AsyncMessage<chia_wallet_service, get_initial_freeze_period_command, TGetInitialFreezePeriodResponse>;
 }
 
@@ -229,7 +229,7 @@ export type TGetNetworkInfoResponse = {
   network_prefix: str;
 };
 export async function get_network_info(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, get_network_info_command, {}) as
+  return agent.sendMessage(chia_wallet_service, get_network_info_command) as
     AsyncMessage<chia_wallet_service, get_network_info_command, TGetNetworkInfoResponse>;
 }
 
@@ -244,7 +244,7 @@ export type TGetWalletsResponse = {
   wallets: WalletInfo[];
 };
 export async function get_wallets(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, get_wallets_command, {}) as
+  return agent.sendMessage(chia_wallet_service, get_wallets_command) as
     AsyncMessage<chia_wallet_service, get_wallets_command, TGetWalletsResponse>;
 }
 
@@ -476,7 +476,7 @@ export type TGetFarmedAmountResponse = {
   last_height_farmed: int;
 };
 export async function get_farmed_amount(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, get_farmed_amount_command, {}) as
+  return agent.sendMessage(chia_wallet_service, get_farmed_amount_command) as
     AsyncMessage<chia_wallet_service, get_farmed_amount_command, TGetFarmedAmountResponse>;
 }
 
@@ -726,7 +726,7 @@ export type TDidGetPubkeyResponse = {
   pubkey: str;
 };
 export async function did_get_pubkey(agent: IAgent){
-  return agent.sendMessage(chia_wallet_service, did_get_pubkey_command, {}) as
+  return agent.sendMessage(chia_wallet_service, did_get_pubkey_command) as
     AsyncMessage<chia_wallet_service, did_get_pubkey_command, TDidGetPubkeyResponse>;
 }
 

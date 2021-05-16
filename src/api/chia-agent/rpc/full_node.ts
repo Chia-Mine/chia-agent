@@ -33,7 +33,7 @@ export type TGetBlockchainStateResponse = {
   };
 };
 export async function get_blockchain_state(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_blockchain_state_command, {}) as
+  return agent.sendMessage(chia_full_node_service, get_blockchain_state_command) as
     AsyncMessage<chia_full_node_service, get_blockchain_state_command, TGetBlockchainStateResponse>;
 }
 
@@ -125,7 +125,7 @@ export type TGetUnfinishedBlockHeadersResponse = {
   headers: UnfinishedHeaderBlock[];
 };
 export async function get_unfinished_block_headers(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_network_space_command, {}) as
+  return agent.sendMessage(chia_full_node_service, get_network_space_command) as
     AsyncMessage<chia_full_node_service, get_unfinished_block_headers_command, TGetUnfinishedBlockHeadersResponse>;
 }
 
@@ -280,7 +280,7 @@ export type TGetAllMempoolItemsResponse = {
   mempool_items: Record<string, MempoolItem>;
 };
 export async function get_all_mempool_items(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_all_mempool_items_command, {}) as
+  return agent.sendMessage(chia_full_node_service, get_all_mempool_items_command) as
     AsyncMessage<chia_full_node_service, get_all_mempool_items_command, TGetAllMempoolItemsResponse>;
 }
 
