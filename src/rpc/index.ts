@@ -54,6 +54,8 @@ export type TRPCAgentProps = {
   configPath?: string;
 };
 
+const userAgent = "chia-agent/1.0.0";
+
 export class RPCAgent implements IAgent {
   protected _protocol: "http"|"https";
   protected _hostname: string;
@@ -180,7 +182,7 @@ export class RPCAgent implements IAgent {
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json;charset=utf-8",
-          "User-Agent": "chia-agent/1.0.0",
+          "User-Agent": userAgent,
           "Content-Length": body.length,
         } as OutgoingHttpHeaders,
       };
@@ -189,12 +191,14 @@ export class RPCAgent implements IAgent {
       
       const req = transporter(options, (res) => {
         if(!res.statusCode || res.statusCode < 200 || res.statusCode >= 300){
+          getLogger().error(`Status not ok: ${res.statusCode}`);
           return reject(new Error(`Status not ok: ${res.statusCode}`));
         }
         
         const chunks: any[] = [];
         res.on("data", chunk => {
           chunks.push(chunk);
+          getLogger().debug(`Response chunk data arrived`);
         });
         
         res.on("end", () => {
@@ -207,6 +211,7 @@ export class RPCAgent implements IAgent {
             // RPC Server should return response like
             // {origin: string; destination: string; request_id: string; data: any; ...}
             // If no such response is returned, reject it.
+            getLogger().error(`RPC Server returned no data. This is not expected.`);
             reject(new Error("Server responded without expected data"));
           }
           catch (e) {
@@ -222,6 +227,7 @@ export class RPCAgent implements IAgent {
       });
       
       req.on("error", error => {
+        getLogger().error(JSON.stringify(error));
         reject(error);
       });
       
