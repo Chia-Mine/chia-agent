@@ -165,7 +165,7 @@ export class RPCAgent implements IAgent {
   
   public post(path: string, data: any){
     return new Promise((resolve: (v: TMessage) => void, reject) => {
-      const body = data ? JSON.stringify(data) : undefined;
+      const body = data ? JSON.stringify(data) : "{}";
       
       const pathname = `/${path.replace(/^\/+/, "")}`;
       
@@ -179,17 +179,11 @@ export class RPCAgent implements IAgent {
         agent: this._agent,
         headers: {
           Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json;charset=utf-8",
           "User-Agent": "chia-agent/1.0.0",
+          "Content-Length": body.length,
         } as OutgoingHttpHeaders,
       };
-      
-      if(body){
-        options.headers = {
-          ...options.headers,
-          "Content-Type": "application/json;charset=utf-8",
-          "Content-Length": body.length,
-        };
-      }
       
       const transporter = this._protocol === "https" ? httpsRequest : httpRequest;
       
@@ -198,15 +192,15 @@ export class RPCAgent implements IAgent {
           return reject(new Error(`Status not ok: ${res.statusCode}`));
         }
         
-        const body: any[] = [];
+        const chunks: any[] = [];
         res.on("data", chunk => {
-          body.push(chunk);
+          chunks.push(chunk);
         });
         
         res.on("end", () => {
           try{
-            if(body.length > 0){
-              const data = JSON.parse(Buffer.concat(body).toString());
+            if(chunks.length > 0){
+              const data = JSON.parse(Buffer.concat(chunks).toString());
               return resolve(data);
             }
             
@@ -218,7 +212,7 @@ export class RPCAgent implements IAgent {
           catch (e) {
             getLogger().error(`Failed to parse response data`);
             try{
-              getLogger().error(Buffer.concat(body).toString());
+              getLogger().error(Buffer.concat(chunks).toString());
             }
             catch(_){}
   
