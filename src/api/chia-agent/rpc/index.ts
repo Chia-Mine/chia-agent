@@ -404,14 +404,14 @@ export {
   TradeRecordInJson,
 } from "./wallet";
 
-export type RpcFarmerMessageType =
+export type RpcFarmerMessage =
   GetMessageType<chia_farmer_service, get_reward_targets_command, TGetRewardTargetResponse>
   | GetMessageType<chia_farmer_service, get_signage_point_command, TGetSignagePointResponse>
   | GetMessageType<chia_farmer_service, get_signage_points_command, TGetSignagePointsResponse>
   | GetMessageType<chia_farmer_service, set_reward_targets_command, TSetRewardTargetResponse>
 ;
 
-export type RpcFullNodeMessageType =
+export type RpcFullNodeMessage =
   GetMessageType<chia_full_node_service, get_additions_and_removals_command, TGetAdditionsAndRemovalsResponse>
   | GetMessageType<chia_full_node_service, get_all_mempool_items_command, TGetAllMempoolItemsResponse>
   | GetMessageType<chia_full_node_service, get_all_mempool_tx_ids_command, TGetAllMempoolTxIdsResponse>
@@ -432,7 +432,7 @@ export type RpcFullNodeMessageType =
   | GetMessageType<chia_full_node_service, push_tx_command, TPushTxResponse>
 ;
 
-export type RpcHarvesterMessageType =
+export type RpcHarvesterMessage =
   GetMessageType<chia_harvester_service, add_plot_directory_command, TAddPlotDirectoryResponse>
   | GetMessageType<chia_harvester_service, delete_plot_command, TDeletePlotResponse>
   | GetMessageType<chia_harvester_service, get_plot_directories_command, TGetPlotDirectoriesResponse>
@@ -441,7 +441,7 @@ export type RpcHarvesterMessageType =
   | GetMessageType<chia_harvester_service, remove_plot_directory_command, TRemovePlotDirectoryResponse>
 ;
 
-export type RpcWalletMessageType =
+export type RpcWalletMessage =
   GetMessageType<chia_wallet_service, add_key_command, TAddKeyResponse>
   | GetMessageType<chia_wallet_service, add_rate_limited_funds_command, TAddRateLimitedFundsResponse>
   | GetMessageType<chia_wallet_service, cancel_trade_command, TCancelTradeResponse>
@@ -489,4 +489,4 @@ export type RpcWalletMessageType =
   | GetMessageType<chia_wallet_service, send_transaction_command, TSendTransactionResponse>
 ;
 
-export type RpcMessageType = RpcFarmerMessageType | RpcFullNodeMessageType | RpcHarvesterMessageType | RpcWalletMessageType;
+export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage;

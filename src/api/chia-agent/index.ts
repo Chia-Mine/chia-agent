@@ -1,4 +1,4 @@
 import {WsMessage} from "./ws";
-import {RpcMessageType} from "./rpc";
+import {RpcMessage} from "./rpc";
 
-export type TMessage = WsMessage | RpcMessageType;
+export type TMessage = WsMessage | RpcMessage;
