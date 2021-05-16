@@ -12,21 +12,7 @@ import type {
   TSetRewardTargetResponse,
 } from "./farmer";
 
-export {
-  chia_farmer_service,
-  get_reward_targets_command,
-  get_signage_point_command,
-  get_signage_points_command,
-  set_reward_targets_command,
-  TGetRewardTargetRequest,
-  TGetRewardTargetResponse,
-  TGetSignagePointRequest,
-  TGetSignagePointResponse,
-  TGetSignagePointsRequest,
-  TGetSignagePointsResponse,
-  TSetRewardTargetRequest,
-  TSetRewardTargetResponse,
-} from "./farmer";
+export * from "./farmer";
 
 import type {
   chia_full_node_service,
@@ -68,63 +54,7 @@ import type {
   TPushTxResponse,
 } from "./full_node";
 
-export {
-  chia_full_node_service,
-  get_additions_and_removals_command,
-  get_all_mempool_items_command,
-  get_all_mempool_tx_ids_command,
-  get_block_command,
-  get_block_record_by_height_command,
-  get_block_record_command,
-  get_block_records_command,
-  get_blockchain_state_command,
-  get_blocks_command,
-  get_coin_record_by_name_command,
-  get_coin_records_by_puzzle_hash_command,
-  get_coin_records_by_puzzle_hashes_command,
-  get_initial_freeze_period_command,
-  get_mempool_item_by_tx_id_command,
-  get_network_info_command,
-  get_network_space_command,
-  get_unfinished_block_headers_command,
-  push_tx_command,
-  TGetAdditionsAndRemovalsRequest,
-  TGetAdditionsAndRemovalsResponse,
-  TGetAllMempoolItemsRequest,
-  TGetAllMempoolItemsResponse,
-  TGetAllMempoolTxIdsRequest,
-  TGetAllMempoolTxIdsResponse,
-  TGetBlockRecordByHeightRequest,
-  TGetBlockRecordByHeightResponse,
-  TGetBlockRecordRequest,
-  TGetBlockRecordResponse,
-  TGetBlockRecordsRequest,
-  TGetBlockRecordsResponse,
-  TGetBlockRequest,
-  TGetBlockResponse,
-  TGetBlockchainStateRequest,
-  TGetBlockchainStateResponse,
-  TGetBlocksRequest,
-  TGetBlocksResponse,
-  TGetCoinRecordByNameRequest,
-  TGetCoinRecordByNameResponse,
-  TGetCoinRecordsByPuzzleHashRequest,
-  TGetCoinRecordsByPuzzleHashResponse,
-  TGetCoinRecordsByPuzzleHashesRequest,
-  TGetCoinRecordsByPuzzleHashesResponse,
-  TGetInitialFreezePeriodRequest,
-  TGetInitialFreezePeriodResponse,
-  TGetMempoolItemByTxIdRequest,
-  TGetMempoolItemByTxIdResponse,
-  TGetNetworkInfoRequest,
-  TGetNetworkInfoResponse,
-  TGetNetworkSpaceRequest,
-  TGetNetworkSpaceResponse,
-  TGetUnfinishedBlockHeadersRequest,
-  TGetUnfinishedBlockHeadersResponse,
-  TPushTxRequest,
-  TPushTxResponse,
-} from "./full_node";
+export * from "./full_node";
 
 import type {
   chia_harvester_service,
@@ -142,27 +72,7 @@ import type {
   TRemovePlotDirectoryResponse,
 } from "./havester";
 
-export {
-  chia_harvester_service,
-  add_plot_directory_command,
-  delete_plot_command,
-  get_plot_directories_command,
-  get_plots_command,
-  refresh_plots_command,
-  remove_plot_directory_command,
-  TAddPlotDirectoryRequest,
-  TAddPlotDirectoryResponse,
-  TDeletePlotRequest,
-  TDeletePlotResponse,
-  TGetPlotDirectoriesRequest,
-  TGetPlotDirectoriesResponse,
-  TGetPlotsRequest,
-  TGetPlotsResponse,
-  TRefreshPlotsRequest,
-  TRefreshPlotsResponse,
-  TRemovePlotDirectoryRequest,
-  TRemovePlotDirectoryResponse,
-} from "./havester";
+export * from "./havester";
 
 import type {
   chia_wallet_service,
@@ -402,7 +312,77 @@ export {
   TSendTransactionRequest,
   TSendTransactionResponse,
   TradeRecordInJson,
+  chia_wallet_service,
+  get_initial_freeze_period,
+  get_network_info,
+  add_key,
+  add_rate_limited_funds,
+  cancel_trade,
+  cc_get_colour,
+  cc_get_name,
+  cc_set_name,
+  cc_spend,
+  create_backup,
+  create_new_wallet,
+  create_offer_for_ids,
+  create_signed_transaction,
+  delete_all_keys,
+  delete_key,
+  did_create_attest,
+  did_create_backup_file,
+  did_get_did,
+  did_get_information_needed_for_recovery,
+  did_get_pubkey,
+  did_get_recovery_list,
+  did_recovery_spend,
+  did_spend,
+  did_update_recovery_ids,
+  farm_block,
+  generate_mnemonic,
+  get_all_trades,
+  get_discrepancies_for_offer,
+  get_farmed_amount,
+  get_height_info,
+  get_next_address,
+  get_private_key,
+  get_public_keys,
+  get_sync_status,
+  get_trade,
+  get_transaction,
+  get_transaction_count,
+  get_transactions,
+  get_wallet_balance,
+  get_wallets,
+  log_in,
+  respond_to_offer,
+  rl_set_user_info,
+  send_clawback_transaction,
+  send_transaction,
 } from "./wallet";
+
+import {
+  daemon_service,
+  exit_command,
+  get_status_command,
+  is_running_command,
+  ping_command,
+  register_service_command,
+  start_plotting_command,
+  start_service_command,
+  stop_plotting_command,
+  stop_service_command,
+  TExitResponse,
+  TGetStatusResponse,
+  TIsRunningResponse,
+  TPingResponse,
+  TRegisterServiceResponse,
+  TStartPlottingResponse,
+  TStartServiceResponse,
+  TStopPlottingResponse,
+  TStopServiceResponse,
+} from "./daemon";
+
+export * from "./daemon";
 
 export type RpcFarmerMessage =
   GetMessageType<chia_farmer_service, get_reward_targets_command, TGetRewardTargetResponse>
@@ -489,4 +469,16 @@ export type RpcWalletMessage =
   | GetMessageType<chia_wallet_service, send_transaction_command, TSendTransactionResponse>
 ;
 
-export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage;
+export type RpcDaemonMessage =
+  GetMessageType<daemon_service, exit_command, TExitResponse>
+  | GetMessageType<daemon_service, get_status_command, TGetStatusResponse>
+  | GetMessageType<daemon_service, is_running_command, TIsRunningResponse>
+  | GetMessageType<daemon_service, ping_command, TPingResponse>
+  | GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>
+  | GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>
+  | GetMessageType<daemon_service, start_service_command, TStartServiceResponse>
+  | GetMessageType<daemon_service, stop_plotting_command, TStopPlottingResponse>
+  | GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>;
+
+export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage
+  | RpcDaemonMessage;
