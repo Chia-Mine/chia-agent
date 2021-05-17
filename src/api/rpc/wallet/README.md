@@ -517,3 +517,362 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   name: str;
 }
 ```
+
+---
+
+## `cc_spend(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  inner_address: str;
+  amount: int;
+  fee?: uint64;
+}
+```
+### response
+```typescript
+{
+  transaction: TransactionRecord;
+  transaction_id: TransactionRecord["name"];
+}
+```
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `cc_get_colour(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+}
+```
+### response
+```typescript
+{
+  colour: str;
+  wallet_id: int;
+}
+```
+
+---
+
+## `create_offer_for_ids(agent, params)`
+### params:
+```typescript
+{
+  ids: Record<int, int>;
+  filename: str;
+}
+```
+### response
+```typescript
+{
+  discrepancies: Optional<Record<str, int>>;
+}
+```
+
+---
+
+## `get_discrepancies_for_offer(agent, params)`
+### params:
+```typescript
+{
+  filename: str;
+}
+```
+### response
+```typescript
+{}
+```
+
+---
+
+## `respond_to_offer(agent, params)`
+### params:
+```typescript
+{
+  filename: str;
+}
+```
+### response
+```typescript
+{}
+```
+
+---
+
+## `get_trade(agent, params)`
+### params:
+```typescript
+{
+  trade_id: bytes;
+}
+```
+### response
+```typescript
+{
+  trade: {
+    trade_id: str;
+    sent: uint32;
+    my_offer: bool;
+    created_at_time: uint64;
+    accepted_at_time: Optional<uint64>;
+    confirmed_at_index: uint32;
+    status: str;
+    offer_dict: Optional<Record<str, int>>;
+  }
+}
+```
+
+---
+
+## `get_all_trades(agent)`
+### response
+```typescript
+{
+  trades: Array<{
+    trade_id: str;
+    sent: uint32;
+    my_offer: bool;
+    created_at_time: uint64;
+    accepted_at_time: Optional<uint64>;
+    confirmed_at_index: uint32;
+    status: str;
+    offer_dict: Optional<Record<str, int>>;
+  }>;
+}
+```
+
+---
+
+## `cancel_trade(agent, params)`
+### params:
+```typescript
+{
+  secure: bool;
+  trade_id: str;
+}
+```
+### response
+```typescript
+{}
+```
+
+---
+
+## `did_update_recovery_ids(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  new_list: str[];
+  num_verifications_required?: uint64;
+}
+```
+### response
+```typescript
+{}
+```
+
+---
+
+## `did_spend(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  puzzlehash: bytes32;
+}
+```
+### response
+```typescript
+{}
+```
+
+---
+
+## `did_get_pubkey(agent, params)`
+### response
+```typescript
+{
+  pubkey: str;
+}
+```
+
+---
+
+## `did_get_did(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+}
+```
+### response
+```typescript
+{
+  wallet_id: int;
+  my_did: str;
+  coin_id?: bytes32;
+}
+```
+
+---
+
+## `did_recovery_spend(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  attest_filenames: str[];
+  pubkey: str;
+  puzhash: str;
+}
+```
+### response
+```typescript
+{
+  success: SpendBundle;
+}
+```
+For content of `SpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+
+---
+
+## `did_get_recovery_list(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+}
+```
+### response
+```typescript
+{
+  wallet_id: int;
+  recover_list: str[];
+  num_required: uint64;
+}
+```
+
+---
+
+## `did_create_attest(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  coin_name: str;
+  puzhash: str;
+  filename: str;
+}
+```
+### response
+```typescript
+{
+  message_spend_bundle: str;
+  info: [str, str, uint64];
+} | {}
+```
+
+---
+
+## `did_get_information_needed_for_recovery(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+}
+```
+### response
+```typescript
+{
+  wallet_id: int;
+  my_did: str;
+  coin_name: str;
+  newpuzhash: Optional<bytes32>;
+  pubkey: Optional<bytes>;
+  backup_dids: bytes[];
+}
+```
+
+---
+
+## `did_create_backup_file(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  filename: str;
+}
+```
+### response
+```typescript
+{
+  wallet_id: int;
+}
+```
+
+---
+
+## `rl_set_user_info(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  origin: {
+    parent_coin_info: str;
+    puzzle_hash: str;
+    amount: uint64;
+  };
+  interval: uint64;
+  limit: uint64;
+  admin_pubkey: str;
+}
+```
+### response
+```typescript
+{}
+```
+
+---
+
+## `send_clawback_transaction(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: int;
+  fee: int;
+}
+```
+### response
+```typescript
+{
+  transaction: TransactionRecord;
+  transaction_id: TransactionRecord["name"];
+}
+```
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `add_rate_limited_funds(agent, params)`
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  amount: uint64;
+  fee: uint64;
+}
+```
+### response
+```typescript
+{
+  status: "SUCCESS";
+}
+```
