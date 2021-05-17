@@ -7,7 +7,7 @@ Please remember that all rpc API is provided as an async function.
 const {RPCAgent} = require("chia-agent");
 const {get_block} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({
-  destination: "full_node", // connect to local farmer service using config file.
+  destination: "full_node", // connect to local full_node service using config file.
 });
 // Then call RPC function
 const response = await get_block(agent, {...});
@@ -33,6 +33,7 @@ const agent = new RPCAgent({
 ## `get_blockchain_state(agent)`
 ### response:
 ```typescript
+{
   blockchain_state: {
     peak: Optional<BlockRecord>;
     genesis_challenge_initialized: bool;
@@ -47,6 +48,7 @@ const agent = new RPCAgent({
     space: uint128;
     mempool_size: int;
   };
+}
 ```
 For content of `BlockRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/block_record.ts
