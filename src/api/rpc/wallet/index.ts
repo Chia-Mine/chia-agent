@@ -40,10 +40,10 @@ export type TLoginRequest = {
 export type TLoginResponse = {
   fingerprint: int;
 } | {
-  success: false;
+  success: False;
   error: "not_initialized" | "Unknown Error";
 } | {
-  success: false;
+  success: False;
   error: "not_initialized";
   backup_info: BackupInfo;
   backup_path: str; // Union[str, PathLike[str]]
@@ -75,12 +75,12 @@ export type TGetPrivateKeyRequest = {
   fingerprint: int; // https://github.com/Chia-Network/bls-signatures/blob/main/python-impl/ec.py#L164
 };
 export type TGetPrivateKeyResponse = {
-  "private_key": {
+  private_key: {
     fingerprint: int;
     sk: str;
     pk: str;
     seed: str;
-  },
+  };
 };
 export async function get_private_key(agent: IAgent, data: TGetPrivateKeyRequest){
   return agent.sendMessage(chia_wallet_service, get_private_key_command, data) as
@@ -251,15 +251,18 @@ export async function get_wallets(agent: IAgent){
 
 
 export type TCreate_New_CC_WalletRequest = {
+  host: str;
   wallet_type: "cc_wallet"
   mode: "new";
   amount: uint64;
 } | {
+  host: str;
   wallet_type: "cc_wallet"
   mode: "existing";
   colour: str;
 };
 export type TCreate_New_RC_WalletRequest = {
+  host: str;
   wallet_type: "rc_wallet";
   rl_type: "admin";
   interval: int;
@@ -268,16 +271,19 @@ export type TCreate_New_RC_WalletRequest = {
   amount: int;
   fee: int;
 } | {
+  host: str;
   wallet_type: "rc_wallet";
   rl_type: "user";
 };
 export type TCreate_New_DID_WalletRequest = {
+  host: str;
   wallet_type: "did_wallet";
   did_type: "new";
   backup_dids: str[];
   num_of_backup_ids_needed: uint64;
   amount: int;
 } | {
+  host: str;
   wallet_type: "did_wallet";
   did_type: "recovery";
   filename: str;
@@ -323,9 +329,7 @@ export type TCreate_New_DID_WalletResponse = {
 
 export const create_new_wallet_command = "create_new_wallet";
 export type create_new_wallet_command = typeof create_new_wallet_command;
-export type TCreateNewWalletRequest = {
-  host: str;
-} & (TCreate_New_CC_WalletRequest | TCreate_New_RC_WalletRequest | TCreate_New_DID_WalletRequest);
+export type TCreateNewWalletRequest = TCreate_New_CC_WalletRequest | TCreate_New_RC_WalletRequest | TCreate_New_DID_WalletRequest;
 export type TCreateNewWalletResponse = TCreate_New_CC_WalletResponse | TCreate_New_RC_WalletResponse | TCreate_New_DID_WalletResponse;
 export async function create_new_wallet(agent: IAgent, data: TCreateNewWalletRequest){
   return agent.sendMessage(chia_wallet_service, create_new_wallet_command, data) as
@@ -342,11 +346,11 @@ export type TGetWalletBalanceRequest = {
 export type TGetWalletBalanceResponse = {
   wallet_balance: {
     wallet_id: uint32;
-    confirmed_wallet_balance: uint128, // MEMO: cc_wallet, did_wallet ceclares `uint64`
-    unconfirmed_wallet_balance: uint128,
-    spendable_balance: uint128,
-    pending_change: uint64,
-    max_send_amount: uint64,
+    confirmed_wallet_balance: uint128; // MEMO: cc_wallet, did_wallet ceclares `uint64`
+    unconfirmed_wallet_balance: uint128;
+    spendable_balance: uint128;
+    pending_change: uint64;
+    max_send_amount: uint64;
     unspent_coin_count: int;
     pending_coin_removal_count: int;
   };
