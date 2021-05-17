@@ -1,4 +1,4 @@
-import {TPlotQueue} from "../rpc/daemon";
+import {TPlotQueue} from "./daemon";
 
 export const chia_plots_create_service = "chia plots create";
 export type chia_plots_create_service = typeof chia_plots_create_service;

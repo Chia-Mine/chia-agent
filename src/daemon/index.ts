@@ -4,8 +4,8 @@ import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
-import {IAgent} from "../agent.type";
-import {WsMessage} from "../api/chia-agent/";
+import {daemon_service, register_service_command, TRegisterServiceResponse, WsMessage} from "../api/chia-agent/ws";
+import {GetMessageType} from "../api/chia-agent/types";
 
 export type EventType = "open" | "message" | "error" | "close";
 export type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
@@ -126,10 +126,17 @@ class Daemon {
     };
   }
   
-  public async subscribe(service: string){
+  public async subscribe(service: string): Promise<GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>> {
     if(this._subscriptions.findIndex(s => s === service) > -1){
-      // @todo return dummy successful response
-      return;
+      // return dummy successful response
+      return {
+        command: "register_service",
+        data: { success: true },
+        ack: true,
+        origin: "daemon",
+        destination: chia_agent_service,
+        request_id: "",
+      };
     }
     
     let error: unknown;
@@ -138,14 +145,14 @@ class Daemon {
       return null;
     });
     
-    if(error){
+    if(error || !result){
       getLogger().error("Failed to register agent service to daemon");
       throw new Error("Subscribe failed");
     }
     
     this._subscriptions.push(service);
     
-    return result;
+    return result as GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>;
   }
   
   public addEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>){

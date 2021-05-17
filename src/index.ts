@@ -4,5 +4,4 @@ export * from "./rpc/index";
 export * from "./config/index";
 export {WsMessage} from "./api/chia-agent/ws/index";
 export {RpcMessage} from "./api/chia-agent/rpc/index";
-export {TMessage} from "./api/chia-agent";
 export {GetMessageType} from "./api/chia-agent/types";
