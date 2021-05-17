@@ -1,7 +1,7 @@
 # chia-agent
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Websocket/RCP client for chia running for NodeJS.  
+Websocket/RPC client for chia running on NodeJS.  
 `chia-agent` supports all available RPC/Websocket API which chia service/daemon return.  
 \* API available at chia 1.1.x is supported for now.  
 
@@ -16,6 +16,7 @@ yarn add chia-agent
 ## What `chia-agent` can do.
 
 For example, you can develop your own nodejs script to:
+- Request internal data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
 - Send email when proof is found.
 - Get customizable stats report.
 - Trigger your scripts when target event is observed.
@@ -31,7 +32,7 @@ There are 2 kinds of APIs in chia.
 `Websocket API` and `RPC API`.
 
 ### Websocket API
-Used to connect to chia daemon.  
+Used to connect to chia `daemon`.  
 With websocket API, you can request chia daemon to start/stop plotting or other services.
 
 Additionally, Websocket API can be used to capture broadcast messages like:  

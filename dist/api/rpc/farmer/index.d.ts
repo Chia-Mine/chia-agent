@@ -20,7 +20,7 @@ export declare type TGetSignagePointResponse = {
     };
     proofs: [string, ProofOfSpace];
 };
-export declare function get_signage_point(agent: IAgent, data: TGetSignagePointRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "get_signage_point", TGetSignagePointResponse>>;
+export declare function get_signage_point(agent: IAgent, params: TGetSignagePointRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "get_signage_point", TGetSignagePointResponse>>;
 export declare const get_signage_points_command = "get_signage_points";
 export declare type get_signage_points_command = typeof get_signage_points_command;
 export declare type TGetSignagePointsRequest = {};
@@ -42,7 +42,7 @@ export declare type TGetRewardTargetResponse = {
     farmer_target: str;
     pool_target: str;
 };
-export declare function get_reward_targets(agent: IAgent, data: TGetRewardTargetRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "get_reward_targets", TGetRewardTargetResponse>>;
+export declare function get_reward_targets(agent: IAgent, params: TGetRewardTargetRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "get_reward_targets", TGetRewardTargetResponse>>;
 export declare const set_reward_targets_command = "set_reward_targets";
 export declare type set_reward_targets_command = typeof set_reward_targets_command;
 export declare type TSetRewardTargetRequest = {
@@ -50,4 +50,4 @@ export declare type TSetRewardTargetRequest = {
     pool_target?: str;
 };
 export declare type TSetRewardTargetResponse = {};
-export declare function set_reward_targets(agent: IAgent, data: TSetRewardTargetRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "set_reward_targets", TSetRewardTargetResponse>>;
+export declare function set_reward_targets(agent: IAgent, params: TSetRewardTargetRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "set_reward_targets", TSetRewardTargetResponse>>;
