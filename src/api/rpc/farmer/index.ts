@@ -14,17 +14,17 @@ export type TGetSignagePointRequest = {
 };
 export type TGetSignagePointResponse = {
   signage_point: {
-    challenge_hash: bytes32,
-    challenge_chain_sp: bytes32,
-    reward_chain_sp: bytes32,
-    difficulty: uint64,
-    sub_slot_iters: uint64,
-    signage_point_index: uint8,
-  },
-  proofs: [string, ProofOfSpace],
+    challenge_hash: bytes32;
+    challenge_chain_sp: bytes32;
+    reward_chain_sp: bytes32;
+    difficulty: uint64;
+    sub_slot_iters: uint64;
+    signage_point_index: uint8;
+  };
+  proofs: [string, ProofOfSpace];
 };
-export async function get_signage_point(agent: IAgent, data: TGetSignagePointRequest) {
-  return agent.sendMessage(chia_farmer_service, get_signage_point_command, data) as
+export async function get_signage_point(agent: IAgent, params: TGetSignagePointRequest) {
+  return agent.sendMessage(chia_farmer_service, get_signage_point_command, params) as
     AsyncMessage<chia_farmer_service, get_signage_point_command, TGetSignagePointResponse>;
 }
 
@@ -57,8 +57,8 @@ export type TGetRewardTargetResponse = {
   farmer_target: str;
   pool_target: str;
 };
-export async function get_reward_targets(agent: IAgent, data: TGetRewardTargetRequest){
-  return agent.sendMessage(chia_farmer_service, get_reward_targets_command, data) as
+export async function get_reward_targets(agent: IAgent, params: TGetRewardTargetRequest){
+  return agent.sendMessage(chia_farmer_service, get_reward_targets_command, params) as
     AsyncMessage<chia_farmer_service, get_reward_targets_command, TGetRewardTargetResponse>;
 }
 
@@ -72,7 +72,7 @@ export type TSetRewardTargetRequest = {
 };
 export type TSetRewardTargetResponse = {
 };
-export async function set_reward_targets(agent: IAgent, data: TSetRewardTargetRequest){
-  return agent.sendMessage(chia_farmer_service, set_reward_targets_command, data) as
+export async function set_reward_targets(agent: IAgent, params: TSetRewardTargetRequest){
+  return agent.sendMessage(chia_farmer_service, set_reward_targets_command, params) as
     AsyncMessage<chia_farmer_service, set_reward_targets_command, TSetRewardTargetResponse>;
 }
