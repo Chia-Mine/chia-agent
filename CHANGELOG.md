@@ -1,7 +1,9 @@
 ## [1.0.0]
 ### Added
-- Added RPC client
-- Added RPC API
+- Added new RPC client
+- Added new RPC API
+- Added new Websocket API
+- Added API type definitions
 
 ## [0.0.5] - 2021-05-13
 ### Changed
