@@ -1,7 +1,10 @@
 import { BlockRecord } from "../../chia/consensus/block_record";
 import { bool, int, uint128, uint32, uint64 } from "../../chia/types/_python_types_";
-export declare const get_blockchain_state = "get_blockchain_state";
-export declare type TGetBlockchainState = {
+export declare const chia_full_node_service = "chia_full_node";
+export declare type chia_full_node_service = typeof chia_full_node_service;
+export declare const get_blockchain_state_command = "get_blockchain_state";
+export declare type get_blockchain_state_command = typeof get_blockchain_state_command;
+export declare type TGetBlockchainStateBroadCast = {
     blockchain_state: {
         peak: BlockRecord;
         genesis_challenge_initialized: bool;

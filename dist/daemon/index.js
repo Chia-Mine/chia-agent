@@ -14,7 +14,7 @@ const crypto_1 = require("crypto");
 const logger_1 = require("../logger");
 const connection_1 = require("./connection");
 const index_1 = require("../config/index");
-const agentServiceName = "chia_agent";
+const chia_agent_service = "chia_agent";
 let daemon = null;
 function getDaemon() {
     if (daemon) {
@@ -34,6 +34,7 @@ class Daemon {
         this._closeEventListeners = [];
         this._messageListeners = {};
         this._closing = false;
+        this._subscriptions = [];
         this.onOpen = this.onOpen.bind(this);
         this.onError = this.onError.bind(this);
         this.onMessage = this.onMessage.bind(this);
@@ -44,30 +45,30 @@ class Daemon {
     }
     /**
      * Connect to local daemon via websocket.
-     * @param url
+     * @param daemonServerURL
      */
-    connect(url) {
+    connect(daemonServerURL) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!url) {
+            if (!daemonServerURL) {
                 const config = index_1.getConfig();
                 const daemonHost = config["/ui/daemon_host"];
                 const daemonPort = config["/ui/daemon_port"];
-                url = `wss://${daemonHost}:${daemonPort}`;
+                daemonServerURL = `wss://${daemonHost}:${daemonPort}`;
             }
-            if (this._connectedUrl === url) {
+            if (this._connectedUrl === daemonServerURL) {
                 return true;
             }
             else if (this._connectedUrl) {
                 logger_1.getLogger().error(`Connection is still active. Please close living connection first`);
                 return false;
             }
-            logger_1.getLogger().debug(`Opening websocket connection to ${url}`);
-            const result = yield connection_1.open(url);
+            logger_1.getLogger().debug(`Opening websocket connection to ${daemonServerURL}`);
+            const result = yield connection_1.open(daemonServerURL);
             this._socket = result.ws;
             this._socket.onerror = this.onError;
             this._socket.onmessage = this.onMessage;
             this._socket.onclose = this.onClose;
-            yield this.onOpen(result.openEvent, url);
+            yield this.onOpen(result.openEvent, daemonServerURL);
             return true;
         });
     }
@@ -103,22 +104,34 @@ class Daemon {
             command,
             data,
             ack: false,
-            origin: agentServiceName,
+            origin: chia_agent_service,
             destination,
             request_id: crypto_1.randomBytes(32).toString("hex"),
         };
     }
     subscribe(service) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this._subscriptions.findIndex(s => s === service) > -1) {
+                // return dummy successful response
+                return {
+                    command: "register_service",
+                    data: { success: true },
+                    ack: true,
+                    origin: "daemon",
+                    destination: chia_agent_service,
+                    request_id: "",
+                };
+            }
             let error;
             const result = yield this.sendMessage("daemon", "register_service", { service }).catch(e => {
                 error = e;
                 return null;
             });
-            if (error) {
+            if (error || !result) {
                 logger_1.getLogger().error("Failed to register agent service to daemon");
                 throw new Error("Subscribe failed");
             }
+            this._subscriptions.push(service);
             return result;
         });
     }
@@ -194,7 +207,7 @@ class Daemon {
             logger_1.getLogger().info("ws connection opened");
             this._connectedUrl = url;
             this._openEventListeners.forEach(l => l(event));
-            return this.subscribe(agentServiceName);
+            return this.subscribe(chia_agent_service);
         });
     }
     onError(error) {

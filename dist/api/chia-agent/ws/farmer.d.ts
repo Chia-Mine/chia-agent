@@ -2,7 +2,10 @@ import { ProofOfSpace } from "../../chia/types/blockchain_format/proof_of_space"
 import { NewSignagePoint } from "../../chia/protocols/farmer_protocol";
 import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
 import { uint32, uint64 } from "../../chia/types/_python_types_";
-export declare const new_farming_info = "new_farming_info";
+export declare const chia_farmer_service = "chia_farmer";
+export declare type chia_farmer_service = typeof chia_farmer_service;
+export declare const new_farming_info_command = "new_farming_info";
+export declare type new_farming_info_command = typeof new_farming_info_command;
 export declare type TNewFarmingInfoBroadCast = {
     farming_info: {
         challenge_hash: bytes32;
@@ -13,7 +16,8 @@ export declare type TNewFarmingInfoBroadCast = {
         timestamp: uint64;
     };
 };
-export declare const new_signage_point = "new_signage_point";
+export declare const new_signage_point_command = "new_signage_point";
+export declare type new_signage_point_command = typeof new_signage_point_command;
 export declare type TNewSignagePointBroadCast = {
     proofs: ProofOfSpace[];
     signage_point: NewSignagePoint;
