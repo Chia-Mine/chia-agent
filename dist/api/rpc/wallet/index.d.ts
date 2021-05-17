@@ -23,10 +23,10 @@ export declare type TLoginRequest = {
 export declare type TLoginResponse = {
     fingerprint: int;
 } | {
-    success: false;
+    success: False;
     error: "not_initialized" | "Unknown Error";
 } | {
-    success: false;
+    success: False;
     error: "not_initialized";
     backup_info: BackupInfo;
     backup_path: str;
@@ -45,7 +45,7 @@ export declare type TGetPrivateKeyRequest = {
     fingerprint: int;
 };
 export declare type TGetPrivateKeyResponse = {
-    "private_key": {
+    private_key: {
         fingerprint: int;
         sk: str;
         pk: str;
@@ -136,15 +136,18 @@ export declare type TGetWalletsResponse = {
 };
 export declare function get_wallets(agent: IAgent): Promise<import("../../types").GetMessageType<"chia_wallet", "get_wallets", TGetWalletsResponse>>;
 export declare type TCreate_New_CC_WalletRequest = {
+    host: str;
     wallet_type: "cc_wallet";
     mode: "new";
     amount: uint64;
 } | {
+    host: str;
     wallet_type: "cc_wallet";
     mode: "existing";
     colour: str;
 };
 export declare type TCreate_New_RC_WalletRequest = {
+    host: str;
     wallet_type: "rc_wallet";
     rl_type: "admin";
     interval: int;
@@ -153,16 +156,19 @@ export declare type TCreate_New_RC_WalletRequest = {
     amount: int;
     fee: int;
 } | {
+    host: str;
     wallet_type: "rc_wallet";
     rl_type: "user";
 };
 export declare type TCreate_New_DID_WalletRequest = {
+    host: str;
     wallet_type: "did_wallet";
     did_type: "new";
     backup_dids: str[];
     num_of_backup_ids_needed: uint64;
     amount: int;
 } | {
+    host: str;
     wallet_type: "did_wallet";
     did_type: "recovery";
     filename: str;
@@ -204,9 +210,7 @@ export declare type TCreate_New_DID_WalletResponse = {
 };
 export declare const create_new_wallet_command = "create_new_wallet";
 export declare type create_new_wallet_command = typeof create_new_wallet_command;
-export declare type TCreateNewWalletRequest = {
-    host: str;
-} & (TCreate_New_CC_WalletRequest | TCreate_New_RC_WalletRequest | TCreate_New_DID_WalletRequest);
+export declare type TCreateNewWalletRequest = TCreate_New_CC_WalletRequest | TCreate_New_RC_WalletRequest | TCreate_New_DID_WalletRequest;
 export declare type TCreateNewWalletResponse = TCreate_New_CC_WalletResponse | TCreate_New_RC_WalletResponse | TCreate_New_DID_WalletResponse;
 export declare function create_new_wallet(agent: IAgent, data: TCreateNewWalletRequest): Promise<import("../../types").GetMessageType<"chia_wallet", "create_new_wallet", TCreateNewWalletResponse>>;
 export declare const get_wallet_balance_command = "get_wallet_balance";
