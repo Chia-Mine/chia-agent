@@ -4,7 +4,7 @@ import {existsSync, readFileSync} from "fs";
 import {IAgent} from "../agent.type";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
-import {RpcMessage} from "../api/chia-agent/rpc/index";
+import {RpcMessage} from "../api/rpc/index";
 
 type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"daemon"
 

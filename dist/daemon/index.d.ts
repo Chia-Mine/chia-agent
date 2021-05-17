@@ -1,7 +1,7 @@
 import type { CloseEvent, ErrorEvent, MessageEvent, OpenEvent } from "ws";
 import * as WS from "ws";
-import { daemon_service, register_service_command, TRegisterServiceResponse, WsMessage } from "../api/chia-agent/ws";
-import { GetMessageType } from "../api/chia-agent/types";
+import { daemon_service, register_service_command, TRegisterServiceResponse, WsMessage } from "../api/ws";
+import { GetMessageType } from "../api/types";
 export declare type EventType = "open" | "message" | "error" | "close";
 export declare type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
 export declare type EventListener<T = Event> = (ev: T) => unknown;

@@ -4,8 +4,8 @@ import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
-import {daemon_service, register_service_command, TRegisterServiceResponse, WsMessage} from "../api/chia-agent/ws";
-import {GetMessageType} from "../api/chia-agent/types";
+import {daemon_service, register_service_command, TRegisterServiceResponse, WsMessage} from "../api/ws";
+import {GetMessageType} from "../api/types";
 
 export type EventType = "open" | "message" | "error" | "close";
 export type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
