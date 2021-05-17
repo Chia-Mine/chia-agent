@@ -56,7 +56,7 @@ exports.get_block_records = get_block_records;
 exports.get_unfinished_block_headers_command = "get_unfinished_block_headers";
 function get_unfinished_block_headers(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.sendMessage(exports.chia_full_node_service, exports.get_network_space_command);
+        return agent.sendMessage(exports.chia_full_node_service, exports.get_unfinished_block_headers_command);
     });
 }
 exports.get_unfinished_block_headers = get_unfinished_block_headers;
@@ -75,16 +75,16 @@ function get_additions_and_removals(agent, data) {
 }
 exports.get_additions_and_removals = get_additions_and_removals;
 exports.get_initial_freeze_period_command = "get_initial_freeze_period";
-function get_initial_freeze_period(agent, data) {
+function get_initial_freeze_period(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.sendMessage(exports.chia_full_node_service, exports.get_initial_freeze_period_command, data);
+        return agent.sendMessage(exports.chia_full_node_service, exports.get_initial_freeze_period_command);
     });
 }
 exports.get_initial_freeze_period = get_initial_freeze_period;
 exports.get_network_info_command = "get_network_info";
-function get_network_info(agent, data) {
+function get_network_info(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.sendMessage(exports.chia_full_node_service, exports.get_network_info_command, data);
+        return agent.sendMessage(exports.chia_full_node_service, exports.get_network_info_command);
     });
 }
 exports.get_network_info = get_network_info;
@@ -117,9 +117,9 @@ function push_tx(agent, data) {
 }
 exports.push_tx = push_tx;
 exports.get_all_mempool_tx_ids_command = "get_all_mempool_tx_ids";
-function get_all_mempool_tx_ids(agent, data) {
+function get_all_mempool_tx_ids(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.sendMessage(exports.chia_full_node_service, exports.get_all_mempool_tx_ids_command, data);
+        return agent.sendMessage(exports.chia_full_node_service, exports.get_all_mempool_tx_ids_command);
     });
 }
 exports.get_all_mempool_tx_ids = get_all_mempool_tx_ids;

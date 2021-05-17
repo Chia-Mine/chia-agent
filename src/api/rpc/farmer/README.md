@@ -5,11 +5,14 @@ You need to create RPC connection before actually sending rpc request to the ser
 Please remember that all rpc API is provided as an async function.
 ```js
 const {RPCAgent} = require("chia-agent");
+const {get_signage_point} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({
   destination: "farmer", // connect to local farmer service using config file.
 });
 // Then call RPC function
 const response = await get_signage_point(agent, {...});
+
+// Once agent is instantiated, you can re-use it everytime you want to request farmer API.
 
 
 

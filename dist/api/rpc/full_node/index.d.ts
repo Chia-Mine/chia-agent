@@ -112,7 +112,7 @@ export declare type TGetInitialFreezePeriodRequest = {};
 export declare type TGetInitialFreezePeriodResponse = {
     INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export declare function get_initial_freeze_period(agent: IAgent, data: TGetInitialFreezePeriodRequest): Promise<import("../../types").GetMessageType<"chia_full_node", "get_initial_freeze_period", TGetInitialFreezePeriodResponse>>;
+export declare function get_initial_freeze_period(agent: IAgent): Promise<import("../../types").GetMessageType<"chia_full_node", "get_initial_freeze_period", TGetInitialFreezePeriodResponse>>;
 export declare const get_network_info_command = "get_network_info";
 export declare type get_network_info_command = typeof get_network_info_command;
 export declare type TGetNetworkInfoRequest = {};
@@ -120,7 +120,7 @@ export declare type TGetNetworkInfoResponse = {
     network_name: str;
     network_prefix: str;
 };
-export declare function get_network_info(agent: IAgent, data: TGetNetworkInfoRequest): Promise<import("../../types").GetMessageType<"chia_full_node", "get_network_info", TGetNetworkInfoResponse>>;
+export declare function get_network_info(agent: IAgent): Promise<import("../../types").GetMessageType<"chia_full_node", "get_network_info", TGetNetworkInfoResponse>>;
 export declare const get_coin_records_by_puzzle_hash_command = "get_coin_records_by_puzzle_hash";
 export declare type get_coin_records_by_puzzle_hash_command = typeof get_coin_records_by_puzzle_hash_command;
 export declare type TGetCoinRecordsByPuzzleHashRequest = {
@@ -169,7 +169,7 @@ export declare type TGetAllMempoolTxIdsRequest = {};
 export declare type TGetAllMempoolTxIdsResponse = {
     tx_ids: bytes32[];
 };
-export declare function get_all_mempool_tx_ids(agent: IAgent, data: TGetAllMempoolTxIdsRequest): Promise<import("../../types").GetMessageType<"chia_full_node", "get_all_mempool_tx_ids", TGetAllMempoolTxIdsResponse>>;
+export declare function get_all_mempool_tx_ids(agent: IAgent): Promise<import("../../types").GetMessageType<"chia_full_node", "get_all_mempool_tx_ids", TGetAllMempoolTxIdsResponse>>;
 export declare const get_all_mempool_items_command = "get_all_mempool_items";
 export declare type get_all_mempool_items_command = typeof get_all_mempool_items_command;
 export declare type TGetAllMempoolItemsRequest = {};

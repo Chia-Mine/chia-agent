@@ -125,7 +125,7 @@ export type TGetUnfinishedBlockHeadersResponse = {
   headers: UnfinishedHeaderBlock[];
 };
 export async function get_unfinished_block_headers(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_network_space_command) as
+  return agent.sendMessage(chia_full_node_service, get_unfinished_block_headers_command) as
     AsyncMessage<chia_full_node_service, get_unfinished_block_headers_command, TGetUnfinishedBlockHeadersResponse>;
 }
 
@@ -170,8 +170,8 @@ export type TGetInitialFreezePeriodRequest = {
 export type TGetInitialFreezePeriodResponse = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export async function get_initial_freeze_period(agent: IAgent, data: TGetInitialFreezePeriodRequest) {
-  return agent.sendMessage(chia_full_node_service, get_initial_freeze_period_command, data) as
+export async function get_initial_freeze_period(agent: IAgent) {
+  return agent.sendMessage(chia_full_node_service, get_initial_freeze_period_command) as
     AsyncMessage<chia_full_node_service, get_initial_freeze_period_command, TGetInitialFreezePeriodResponse>;
 }
 
@@ -185,8 +185,8 @@ export type TGetNetworkInfoResponse = {
   network_name: str;
   network_prefix: str;
 };
-export async function get_network_info(agent: IAgent, data: TGetNetworkInfoRequest) {
-  return agent.sendMessage(chia_full_node_service, get_network_info_command, data) as
+export async function get_network_info(agent: IAgent) {
+  return agent.sendMessage(chia_full_node_service, get_network_info_command) as
     AsyncMessage<chia_full_node_service, get_network_info_command, TGetNetworkInfoResponse>;
 }
 
@@ -265,8 +265,8 @@ export type TGetAllMempoolTxIdsRequest = {
 export type TGetAllMempoolTxIdsResponse = {
   tx_ids: bytes32[];
 };
-export async function get_all_mempool_tx_ids(agent: IAgent, data: TGetAllMempoolTxIdsRequest) {
-  return agent.sendMessage(chia_full_node_service, get_all_mempool_tx_ids_command, data) as
+export async function get_all_mempool_tx_ids(agent: IAgent) {
+  return agent.sendMessage(chia_full_node_service, get_all_mempool_tx_ids_command) as
     AsyncMessage<chia_full_node_service, get_all_mempool_tx_ids_command, TGetAllMempoolTxIdsResponse>;
 }
 
