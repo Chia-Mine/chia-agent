@@ -17,7 +17,7 @@ type EventListenerOf<T> =
       : T extends "error" ? EventListener<ErrorEvent>
         : T extends "close" ? EventListener<CloseEvent> : never;
 
-export type MessageListener<D=unknown> = (msg: WsMessage) => unknown;
+export type MessageListener<D extends WsMessage> = (msg: D) => unknown;
 
 const chia_agent_service = "chia_agent";
 
@@ -127,8 +127,12 @@ class Daemon {
   }
   
   public async subscribe(service: string): Promise<GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>> {
+    if(!this.connected || !this._socket){
+      getLogger().error(`Tried to subscribe '${service}' without active connection`);
+      throw new Error("Not connected");
+    }
+    
     if(this._subscriptions.findIndex(s => s === service) > -1){
-      // return dummy successful response
       return {
         command: "register_service",
         data: { success: true },
@@ -206,16 +210,21 @@ class Daemon {
    * @param {string} origin - Can be chia_farmer, chia_full_node, chia_wallet, etc.
    * @param listener - Triggered when a message arrives.
    */
-  public addMessageListener<D=unknown>(origin: string|undefined, listener: MessageListener<D>){
+  public addMessageListener<D extends WsMessage>(origin: string|undefined, listener: MessageListener<D>){
     const o = origin || "all";
     if(!this._messageListeners[o]){
       this._messageListeners[o] = [];
     }
     
-    this._messageListeners[o].push(listener as MessageListener<unknown>);
+    this._messageListeners[o].push(listener as MessageListener<WsMessage>);
+    
+    // Returns removeMessageListener function.
+    return () => {
+      this.removeMessageListener(o, listener);
+    };
   }
   
-  public removeMessageListener<D=unknown>(origin: string, listener: MessageListener<D>){
+  public removeMessageListener<D extends WsMessage>(origin: string, listener: MessageListener<D>){
     const listeners = this._messageListeners[origin];
     if(!listeners){
       return;
@@ -278,6 +287,7 @@ class Daemon {
     
     this._closing = false;
     this._connectedUrl = "";
+    this._subscriptions = [];
     this._closeEventListeners.forEach(l => l(event));
     getLogger().info(`Closed ws connection`);
   }
