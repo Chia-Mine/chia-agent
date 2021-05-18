@@ -361,88 +361,88 @@ export {
 } from "./wallet/index";
 
 export type RpcFarmerMessage =
-  GetMessageType<chia_farmer_service, get_reward_targets_command, TGetRewardTargetResponse>
-  | GetMessageType<chia_farmer_service, get_signage_point_command, TGetSignagePointResponse>
-  | GetMessageType<chia_farmer_service, get_signage_points_command, TGetSignagePointsResponse>
-  | GetMessageType<chia_farmer_service, set_reward_targets_command, TSetRewardTargetResponse>
+  TGetRewardTargetResponse
+  | TGetSignagePointResponse
+  | TGetSignagePointsResponse
+  | TSetRewardTargetResponse
 ;
 
 export type RpcFullNodeMessage =
-  GetMessageType<chia_full_node_service, get_additions_and_removals_command, TGetAdditionsAndRemovalsResponse>
-  | GetMessageType<chia_full_node_service, get_all_mempool_items_command, TGetAllMempoolItemsResponse>
-  | GetMessageType<chia_full_node_service, get_all_mempool_tx_ids_command, TGetAllMempoolTxIdsResponse>
-  | GetMessageType<chia_full_node_service, get_block_command, TGetBlockResponse>
-  | GetMessageType<chia_full_node_service, get_block_record_by_height_command, TGetBlockRecordByHeightResponse>
-  | GetMessageType<chia_full_node_service, get_block_record_command, TGetBlockRecordResponse>
-  | GetMessageType<chia_full_node_service, get_block_records_command, TGetBlockRecordsResponse>
-  | GetMessageType<chia_full_node_service, get_blockchain_state_command, TGetBlockchainStateResponse>
-  | GetMessageType<chia_full_node_service, get_blocks_command, TGetBlocksResponse>
-  | GetMessageType<chia_full_node_service, get_coin_record_by_name_command, TGetCoinRecordByNameResponse>
-  | GetMessageType<chia_full_node_service, get_coin_records_by_puzzle_hash_command, TGetCoinRecordsByPuzzleHashResponse>
-  | GetMessageType<chia_full_node_service, get_coin_records_by_puzzle_hashes_command, TGetCoinRecordsByPuzzleHashesResponse>
-  | GetMessageType<chia_full_node_service, get_initial_freeze_period_command, TGetInitialFreezePeriodResponse>
-  | GetMessageType<chia_full_node_service, get_mempool_item_by_tx_id_command, TGetMempoolItemByTxIdResponse>
-  | GetMessageType<chia_full_node_service, get_network_info_command, TGetNetworkInfoResponse>
-  | GetMessageType<chia_full_node_service, get_network_space_command, TGetNetworkSpaceResponse>
-  | GetMessageType<chia_full_node_service, get_unfinished_block_headers_command, TGetUnfinishedBlockHeadersResponse>
-  | GetMessageType<chia_full_node_service, push_tx_command, TPushTxResponse>
+  TGetAdditionsAndRemovalsResponse
+  | TGetAllMempoolItemsResponse
+  | TGetAllMempoolTxIdsResponse
+  | TGetBlockResponse
+  | TGetBlockRecordByHeightResponse
+  | TGetBlockRecordResponse
+  | TGetBlockRecordsResponse
+  | TGetBlockchainStateResponse
+  | TGetBlocksResponse
+  | TGetCoinRecordByNameResponse
+  | TGetCoinRecordsByPuzzleHashResponse
+  | TGetCoinRecordsByPuzzleHashesResponse
+  | TGetInitialFreezePeriodResponse
+  | TGetMempoolItemByTxIdResponse
+  | TGetNetworkInfoResponse
+  | TGetNetworkSpaceResponse
+  | TGetUnfinishedBlockHeadersResponse
+  | TPushTxResponse
 ;
 
 export type RpcHarvesterMessage =
-  GetMessageType<chia_harvester_service, add_plot_directory_command, TAddPlotDirectoryResponse>
-  | GetMessageType<chia_harvester_service, delete_plot_command, TDeletePlotResponse>
-  | GetMessageType<chia_harvester_service, get_plot_directories_command, TGetPlotDirectoriesResponse>
-  | GetMessageType<chia_harvester_service, get_plots_command, TGetPlotsResponse>
-  | GetMessageType<chia_harvester_service, refresh_plots_command, TRefreshPlotsResponse>
-  | GetMessageType<chia_harvester_service, remove_plot_directory_command, TRemovePlotDirectoryResponse>
+  TAddPlotDirectoryResponse
+  | TDeletePlotResponse
+  | TGetPlotDirectoriesResponse
+  | TGetPlotsResponse
+  | TRefreshPlotsResponse
+  | TRemovePlotDirectoryResponse
 ;
 
 export type RpcWalletMessage =
-  GetMessageType<chia_wallet_service, add_key_command, TAddKeyResponse>
-  | GetMessageType<chia_wallet_service, add_rate_limited_funds_command, TAddRateLimitedFundsResponse>
-  | GetMessageType<chia_wallet_service, cancel_trade_command, TCancelTradeResponse>
-  | GetMessageType<chia_wallet_service, cc_get_colour_command, TCcGetColourResponse>
-  | GetMessageType<chia_wallet_service, cc_get_name_command, TCcGetNameResponse>
-  | GetMessageType<chia_wallet_service, cc_set_name_command, TCcSetNameResponse>
-  | GetMessageType<chia_wallet_service, cc_spend_command, TCcSpendResponse>
-  | GetMessageType<chia_wallet_service, create_backup_command, TCreateBackupResponse>
-  | GetMessageType<chia_wallet_service, create_new_wallet_command, TCreateNewWalletResponse>
-  | GetMessageType<chia_wallet_service, create_offer_for_ids_command, TCreateOfferForIdsResponse>
-  | GetMessageType<chia_wallet_service, create_signed_transaction_command, TCreateSignedTransactionResponse>
-  | GetMessageType<chia_wallet_service, delete_all_keys_command, TDeleteAllKeysResponse>
-  | GetMessageType<chia_wallet_service, delete_key_command, TDeleteKeyResponse>
-  | GetMessageType<chia_wallet_service, did_create_attest_command, TDidCreateAttestResponse>
-  | GetMessageType<chia_wallet_service, did_create_backup_file_command, TDidCreateBackupFileResponse>
-  | GetMessageType<chia_wallet_service, did_get_did_command, TDidGetDidResponse>
-  | GetMessageType<chia_wallet_service, did_get_information_needed_for_recovery_command, TDidGetInformationNeededForRecoveryResponse>
-  | GetMessageType<chia_wallet_service, did_get_pubkey_command, TDidGetPubkeyResponse>
-  | GetMessageType<chia_wallet_service, did_get_recovery_list_command, TDidGetRecoveryListResponse>
-  | GetMessageType<chia_wallet_service, did_recovery_spend_command, TDidRecoverySpendResponse>
-  | GetMessageType<chia_wallet_service, did_spend_command, TDidSpendResponse>
-  | GetMessageType<chia_wallet_service, did_update_recovery_ids_command, TDidUpdateRecoveryIdsResponse>
-  | GetMessageType<chia_wallet_service, farm_block_command, TFarmBlockResponse>
-  | GetMessageType<chia_wallet_service, generate_mnemonic_command, TGenerateMnemonicResponse>
-  | GetMessageType<chia_wallet_service, get_all_trades_command, TGetAllTradesResponse>
-  | GetMessageType<chia_wallet_service, get_discrepancies_for_offer_command, TGetDiscrepanciesForOfferResponse>
-  | GetMessageType<chia_wallet_service, get_farmed_amount_command, TGetFarmedAmountResponse>
-  | GetMessageType<chia_wallet_service, get_height_info_command, TGetHeightInfoResponse>
-  | GetMessageType<chia_wallet_service, get_initial_freeze_period_command_of_wallet, TGetInitialFreezePeriodResponse_of_wallet>
-  | GetMessageType<chia_wallet_service, get_network_info_command_of_wallet, TGetNetworkInfoResponse_of_wallet>
-  | GetMessageType<chia_wallet_service, get_next_address_command, TGetNextAddressResponse>
-  | GetMessageType<chia_wallet_service, get_private_key_command, TGetPrivateKeyResponse>
-  | GetMessageType<chia_wallet_service, get_public_keys_command, TGetPublicKeysResponse>
-  | GetMessageType<chia_wallet_service, get_sync_status_command, TGetSyncStatusResponse>
-  | GetMessageType<chia_wallet_service, get_trade_command, TGetTradeResponse>
-  | GetMessageType<chia_wallet_service, get_transaction_command, TGetTransactionResponse>
-  | GetMessageType<chia_wallet_service, get_transaction_count_command, TGetTransactionCountResponse>
-  | GetMessageType<chia_wallet_service, get_transactions_command, TGetTransactionsResponse>
-  | GetMessageType<chia_wallet_service, get_wallet_balance_command, TGetWalletBalanceResponse>
-  | GetMessageType<chia_wallet_service, get_wallets_command, TGetWalletsResponse>
-  | GetMessageType<chia_wallet_service, log_in_command, TLoginResponse>
-  | GetMessageType<chia_wallet_service, respond_to_offer_command, TResponseToOfferResponse>
-  | GetMessageType<chia_wallet_service, rl_set_user_info_command, TRlSetUserInfoResponse>
-  | GetMessageType<chia_wallet_service, send_clawback_transaction_command, TSendClawbackTransactionResponse>
-  | GetMessageType<chia_wallet_service, send_transaction_command, TSendTransactionResponse>
+  TAddKeyResponse
+  | TAddRateLimitedFundsResponse
+  | TCancelTradeResponse
+  | TCcGetColourResponse
+  | TCcGetNameResponse
+  | TCcSetNameResponse
+  | TCcSpendResponse
+  | TCreateBackupResponse
+  | TCreateNewWalletResponse
+  | TCreateOfferForIdsResponse
+  | TCreateSignedTransactionResponse
+  | TDeleteAllKeysResponse
+  | TDeleteKeyResponse
+  | TDidCreateAttestResponse
+  | TDidCreateBackupFileResponse
+  | TDidGetDidResponse
+  | TDidGetInformationNeededForRecoveryResponse
+  | TDidGetPubkeyResponse
+  | TDidGetRecoveryListResponse
+  | TDidRecoverySpendResponse
+  | TDidSpendResponse
+  | TDidUpdateRecoveryIdsResponse
+  | TFarmBlockResponse
+  | TGenerateMnemonicResponse
+  | TGetAllTradesResponse
+  | TGetDiscrepanciesForOfferResponse
+  | TGetFarmedAmountResponse
+  | TGetHeightInfoResponse
+  | TGetInitialFreezePeriodResponse_of_wallet
+  | TGetNetworkInfoResponse_of_wallet
+  | TGetNextAddressResponse
+  | TGetPrivateKeyResponse
+  | TGetPublicKeysResponse
+  | TGetSyncStatusResponse
+  | TGetTradeResponse
+  | TGetTransactionResponse
+  | TGetTransactionCountResponse
+  | TGetTransactionsResponse
+  | TGetWalletBalanceResponse
+  | TGetWalletsResponse
+  | TLoginResponse
+  | TResponseToOfferResponse
+  | TRlSetUserInfoResponse
+  | TSendClawbackTransactionResponse
+  | TSendTransactionResponse
 ;
 
 export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage;

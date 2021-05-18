@@ -6,8 +6,7 @@ import {CoinRecord} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {MempoolItem} from "../../chia/types/mempool_item";
-import {IAgent} from "../../../agent.type";
-import {AsyncMessage} from "../../types";
+import {TRPCAgent} from "../../../rpc";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -32,9 +31,8 @@ export type TGetBlockchainStateResponse = {
     mempool_size: int;
   };
 };
-export async function get_blockchain_state(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_blockchain_state_command) as
-    AsyncMessage<chia_full_node_service, get_blockchain_state_command, TGetBlockchainStateResponse>;
+export async function get_blockchain_state(agent: TRPCAgent) {
+  return agent.sendMessage<TGetBlockchainStateResponse>(chia_full_node_service, get_blockchain_state_command);
 }
 
 
@@ -47,9 +45,8 @@ export type TGetBlockRequest = {
 export type TGetBlockResponse = {
   block: FullBlock;
 }
-export async function get_block(agent: IAgent, data: TGetBlockRequest) {
-  return agent.sendMessage(chia_full_node_service, get_block_command, data) as
-    AsyncMessage<chia_full_node_service, get_block_command, TGetBlockResponse>;
+export async function get_block(agent: TRPCAgent, data: TGetBlockRequest) {
+  return agent.sendMessage<TGetBlockResponse>(chia_full_node_service, get_block_command, data);
 }
 
 
@@ -64,9 +61,8 @@ export type TGetBlocksRequest = {
 export type TGetBlocksResponse = {
   blocks: FullBlock[] | Array<FullBlock & {header_hash: str}>;
 }
-export async function get_blocks(agent: IAgent, data: TGetBlocksRequest) {
-  return agent.sendMessage(chia_full_node_service, get_blocks_command, data) as
-    AsyncMessage<chia_full_node_service, get_blocks_command, TGetBlocksResponse>;
+export async function get_blocks(agent: TRPCAgent, data: TGetBlocksRequest) {
+  return agent.sendMessage<TGetBlocksResponse>(chia_full_node_service, get_blocks_command, data);
 }
 
 
@@ -79,9 +75,8 @@ export type TGetBlockRecordByHeightRequest = {
 export type TGetBlockRecordByHeightResponse = {
   block_record: Optional<BlockRecord>;
 };
-export async function get_block_record_by_height(agent: IAgent, data: TGetBlockRecordByHeightRequest) {
-  return agent.sendMessage(chia_full_node_service, get_block_record_by_height_command, data) as
-    AsyncMessage<chia_full_node_service, get_block_record_by_height_command, TGetBlockRecordByHeightResponse>;
+export async function get_block_record_by_height(agent: TRPCAgent, data: TGetBlockRecordByHeightRequest) {
+  return agent.sendMessage<TGetBlockRecordByHeightResponse>(chia_full_node_service, get_block_record_by_height_command, data);
 }
 
 
@@ -94,9 +89,8 @@ export type TGetBlockRecordRequest = {
 export type TGetBlockRecordResponse = {
   block_record: BlockRecord;
 };
-export async function get_block_record(agent: IAgent, data: TGetBlockRecordRequest) {
-  return agent.sendMessage(chia_full_node_service, get_block_record_command, data) as
-    AsyncMessage<chia_full_node_service, get_block_record_command, TGetBlockRecordResponse>;
+export async function get_block_record(agent: TRPCAgent, data: TGetBlockRecordRequest) {
+  return agent.sendMessage<TGetBlockRecordResponse>(chia_full_node_service, get_block_record_command, data);
 }
 
 
@@ -110,9 +104,8 @@ export type TGetBlockRecordsRequest = {
 export type TGetBlockRecordsResponse = {
   block_records: BlockRecord[];
 };
-export async function get_block_records(agent: IAgent, data: TGetBlockRecordsRequest) {
-  return agent.sendMessage(chia_full_node_service, get_block_records_command, data) as
-    AsyncMessage<chia_full_node_service, get_block_records_command, TGetBlockRecordsResponse>;
+export async function get_block_records(agent: TRPCAgent, data: TGetBlockRecordsRequest) {
+  return agent.sendMessage<TGetBlockRecordsResponse>(chia_full_node_service, get_block_records_command, data);
 }
 
 
@@ -124,9 +117,8 @@ export type TGetUnfinishedBlockHeadersRequest = {
 export type TGetUnfinishedBlockHeadersResponse = {
   headers: UnfinishedHeaderBlock[];
 };
-export async function get_unfinished_block_headers(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_unfinished_block_headers_command) as
-    AsyncMessage<chia_full_node_service, get_unfinished_block_headers_command, TGetUnfinishedBlockHeadersResponse>;
+export async function get_unfinished_block_headers(agent: TRPCAgent) {
+  return agent.sendMessage<TGetUnfinishedBlockHeadersResponse>(chia_full_node_service, get_unfinished_block_headers_command);
 }
 
 
@@ -140,9 +132,8 @@ export type TGetNetworkSpaceRequest = {
 export type TGetNetworkSpaceResponse = {
   space: uint128;
 };
-export async function get_network_space(agent: IAgent, data: TGetNetworkSpaceRequest) {
-  return agent.sendMessage(chia_full_node_service, get_network_space_command, data) as
-    AsyncMessage<chia_full_node_service, get_network_space_command, TGetNetworkSpaceResponse>;
+export async function get_network_space(agent: TRPCAgent, data: TGetNetworkSpaceRequest) {
+  return agent.sendMessage<TGetNetworkSpaceResponse>(chia_full_node_service, get_network_space_command, data);
 }
 
 
@@ -156,9 +147,8 @@ export type TGetAdditionsAndRemovalsResponse = {
   additions: CoinRecord[];
   removals: CoinRecord[];
 };
-export async function get_additions_and_removals(agent: IAgent, data: TGetAdditionsAndRemovalsRequest) {
-  return agent.sendMessage(chia_full_node_service, get_additions_and_removals_command, data) as
-    AsyncMessage<chia_full_node_service, get_additions_and_removals_command, TGetAdditionsAndRemovalsResponse>;
+export async function get_additions_and_removals(agent: TRPCAgent, data: TGetAdditionsAndRemovalsRequest) {
+  return agent.sendMessage<TGetAdditionsAndRemovalsResponse>(chia_full_node_service, get_additions_and_removals_command, data);
 }
 
 
@@ -170,9 +160,8 @@ export type TGetInitialFreezePeriodRequest = {
 export type TGetInitialFreezePeriodResponse = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export async function get_initial_freeze_period(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_initial_freeze_period_command) as
-    AsyncMessage<chia_full_node_service, get_initial_freeze_period_command, TGetInitialFreezePeriodResponse>;
+export async function get_initial_freeze_period(agent: TRPCAgent) {
+  return agent.sendMessage<TGetInitialFreezePeriodResponse>(chia_full_node_service, get_initial_freeze_period_command);
 }
 
 
@@ -185,9 +174,8 @@ export type TGetNetworkInfoResponse = {
   network_name: str;
   network_prefix: str;
 };
-export async function get_network_info(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_network_info_command) as
-    AsyncMessage<chia_full_node_service, get_network_info_command, TGetNetworkInfoResponse>;
+export async function get_network_info(agent: TRPCAgent) {
+  return agent.sendMessage<TGetNetworkInfoResponse>(chia_full_node_service, get_network_info_command);
 }
 
 
@@ -203,9 +191,8 @@ export type TGetCoinRecordsByPuzzleHashRequest = {
 export type TGetCoinRecordsByPuzzleHashResponse = {
   coin_records: CoinRecord[];
 };
-export async function get_coin_records_by_puzzle_hash(agent: IAgent, data: TGetCoinRecordsByPuzzleHashRequest) {
-  return agent.sendMessage(chia_full_node_service, get_coin_records_by_puzzle_hash_command, data) as
-    AsyncMessage<chia_full_node_service, get_coin_records_by_puzzle_hash_command, TGetCoinRecordsByPuzzleHashResponse>;
+export async function get_coin_records_by_puzzle_hash(agent: TRPCAgent, data: TGetCoinRecordsByPuzzleHashRequest) {
+  return agent.sendMessage<TGetCoinRecordsByPuzzleHashResponse>(chia_full_node_service, get_coin_records_by_puzzle_hash_command, data);
 }
 
 
@@ -221,9 +208,8 @@ export type TGetCoinRecordsByPuzzleHashesRequest = {
 export type TGetCoinRecordsByPuzzleHashesResponse = {
   coin_records: CoinRecord[];
 };
-export async function get_coin_records_by_puzzle_hashes(agent: IAgent, data: TGetCoinRecordsByPuzzleHashesRequest) {
-  return agent.sendMessage(chia_full_node_service, get_coin_records_by_puzzle_hashes_command, data) as
-    AsyncMessage<chia_full_node_service, get_coin_records_by_puzzle_hashes_command, TGetCoinRecordsByPuzzleHashesResponse>;
+export async function get_coin_records_by_puzzle_hashes(agent: TRPCAgent, data: TGetCoinRecordsByPuzzleHashesRequest) {
+  return agent.sendMessage<TGetCoinRecordsByPuzzleHashesResponse>(chia_full_node_service, get_coin_records_by_puzzle_hashes_command, data);
 }
 
 
@@ -236,9 +222,8 @@ export type TGetCoinRecordByNameRequest = {
 export type TGetCoinRecordByNameResponse = {
   coin_record: CoinRecord;
 };
-export async function get_coin_record_by_name(agent: IAgent, data: TGetCoinRecordByNameRequest) {
-  return agent.sendMessage(chia_full_node_service, get_coin_record_by_name_command, data) as
-    AsyncMessage<chia_full_node_service, get_coin_record_by_name_command, TGetCoinRecordByNameResponse>;
+export async function get_coin_record_by_name(agent: TRPCAgent, data: TGetCoinRecordByNameRequest) {
+  return agent.sendMessage<TGetCoinRecordByNameResponse>(chia_full_node_service, get_coin_record_by_name_command, data);
 }
 
 
@@ -251,9 +236,8 @@ export type TPushTxRequest = {
 export type TPushTxResponse = {
   status: str; // Enum.name
 };
-export async function push_tx(agent: IAgent, data: TPushTxRequest) {
-  return agent.sendMessage(chia_full_node_service, push_tx_command, data) as
-    AsyncMessage<chia_full_node_service, push_tx_command, TPushTxResponse>;
+export async function push_tx(agent: TRPCAgent, data: TPushTxRequest) {
+  return agent.sendMessage<TPushTxResponse>(chia_full_node_service, push_tx_command, data);
 }
 
 
@@ -265,9 +249,8 @@ export type TGetAllMempoolTxIdsRequest = {
 export type TGetAllMempoolTxIdsResponse = {
   tx_ids: bytes32[];
 };
-export async function get_all_mempool_tx_ids(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_all_mempool_tx_ids_command) as
-    AsyncMessage<chia_full_node_service, get_all_mempool_tx_ids_command, TGetAllMempoolTxIdsResponse>;
+export async function get_all_mempool_tx_ids(agent: TRPCAgent) {
+  return agent.sendMessage<TGetAllMempoolTxIdsResponse>(chia_full_node_service, get_all_mempool_tx_ids_command);
 }
 
 
@@ -279,9 +262,8 @@ export type TGetAllMempoolItemsRequest = {
 export type TGetAllMempoolItemsResponse = {
   mempool_items: Record<string, MempoolItem>;
 };
-export async function get_all_mempool_items(agent: IAgent) {
-  return agent.sendMessage(chia_full_node_service, get_all_mempool_items_command) as
-    AsyncMessage<chia_full_node_service, get_all_mempool_items_command, TGetAllMempoolItemsResponse>;
+export async function get_all_mempool_items(agent: TRPCAgent) {
+  return agent.sendMessage<TGetAllMempoolItemsResponse>(chia_full_node_service, get_all_mempool_items_command);
 }
 
 
@@ -294,7 +276,6 @@ export type TGetMempoolItemByTxIdRequest = {
 export type TGetMempoolItemByTxIdResponse = {
   mempool_item: MempoolItem;
 };
-export async function get_mempool_item_by_tx_id(agent: IAgent, data: TGetMempoolItemByTxIdRequest) {
-  return agent.sendMessage(chia_full_node_service, get_mempool_item_by_tx_id_command, data) as
-    AsyncMessage<chia_full_node_service, get_mempool_item_by_tx_id_command, TGetMempoolItemByTxIdResponse>;
+export async function get_mempool_item_by_tx_id(agent: TRPCAgent, data: TGetMempoolItemByTxIdRequest) {
+  return agent.sendMessage<TGetMempoolItemByTxIdResponse>(chia_full_node_service, get_mempool_item_by_tx_id_command, data);
 }
