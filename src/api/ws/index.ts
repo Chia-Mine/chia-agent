@@ -24,17 +24,27 @@ export * from "./harvester/index";
 
 import type {
   chia_wallet_service,
-  state_changed_command,
-  TStateChangedBroadCast,
+  state_changed_command_of_wallet,
+  TStateChangedBroadCastOfWallet,
 } from "./wallet/index";
-export * from "./wallet/index";
+export {
+  chia_wallet_service,
+  on_state_changed_of_wallet,
+  state_changed_command_of_wallet,
+  TStateChangedBroadCastOfWallet,
+} from "./wallet/index";
 
 import type {
   chia_plots_create_service,
-  state_changed_command as state_change_command_of_plots,
-  TStateChangedBroadCast as TStateChangedOfPlotsBroadCast,
+  state_changed_command_of_plots,
+  TStateChangedBroadCastOfPlots,
 } from "./chia_plots_create/index";
-export * from "./wallet/index";
+export {
+  chia_plots_create_service,
+  state_changed_command_of_plots,
+  TStateChangedBroadCastOfPlots,
+  on_state_changed_of_plots,
+} from "./chia_plots_create/index";
 
 import type {
   daemon_service,
@@ -72,10 +82,10 @@ export type WsHarvesterMessage =
   GetMessageType<chia_harvester_service, get_plots_command, TGetPlotsBroadCast>;
 
 export type WsWalletMessage =
-  GetMessageType<chia_wallet_service, state_changed_command, TStateChangedBroadCast>;
+  GetMessageType<chia_wallet_service, state_changed_command_of_wallet, TStateChangedBroadCastOfWallet>;
 
 export type WsPlotsMessage =
-  GetMessageType<chia_plots_create_service, state_change_command_of_plots, TStateChangedOfPlotsBroadCast>;
+  GetMessageType<chia_plots_create_service, state_changed_command_of_plots, TStateChangedBroadCastOfPlots>;
 
 export type WsDaemonMessage =
   GetMessageType<daemon_service, exit_command, TExitResponse>
