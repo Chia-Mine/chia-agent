@@ -195,29 +195,29 @@ export async function farm_block(agent: TRPCAgent, data: TFarmBlockRequest){
 
 
 
-export const get_initial_freeze_period_command = "get_initial_freeze_period";
-export type get_initial_freeze_period_command = typeof get_initial_freeze_period_command;
-export type TGetInitialFreezePeriodRequest = {
+export const get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";
+export type get_initial_freeze_period_command_of_wallet = typeof get_initial_freeze_period_command_of_wallet;
+export type TGetInitialFreezePeriodRequestOfWallet = {
 };
-export type TGetInitialFreezePeriodResponse = {
+export type TGetInitialFreezePeriodResponseOfWallet = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export async function get_initial_freeze_period(agent: TRPCAgent){
-  return agent.sendMessage<TGetInitialFreezePeriodResponse>(chia_wallet_service, get_initial_freeze_period_command);
+export async function get_initial_freeze_period_of_wallet(agent: TRPCAgent){
+  return agent.sendMessage<TGetInitialFreezePeriodResponseOfWallet>(chia_wallet_service, get_initial_freeze_period_command_of_wallet);
 }
 
 
 
-export const get_network_info_command = "get_network_info";
-export type get_network_info_command = typeof get_network_info_command;
-export type TGetNetworkInfoRequest = {
+export const get_network_info_command_of_wallet = "get_network_info";
+export type get_network_info_command_of_wallet = typeof get_network_info_command_of_wallet;
+export type TGetNetworkInfoRequestOfWallet = {
 };
-export type TGetNetworkInfoResponse = {
+export type TGetNetworkInfoResponseOfWallet = {
   network_name: str;
   network_prefix: str;
 };
-export async function get_network_info(agent: TRPCAgent){
-  return agent.sendMessage<TGetNetworkInfoResponse>(chia_wallet_service, get_network_info_command);
+export async function get_network_info_of_wallet(agent: TRPCAgent){
+  return agent.sendMessage<TGetNetworkInfoResponseOfWallet>(chia_wallet_service, get_network_info_command_of_wallet);
 }
 
 

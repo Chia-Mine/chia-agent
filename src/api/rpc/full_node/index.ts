@@ -153,29 +153,29 @@ export async function get_additions_and_removals(agent: TRPCAgent, data: TGetAdd
 
 
 
-export const get_initial_freeze_period_command = "get_initial_freeze_period";
-export type get_initial_freeze_period_command = typeof get_initial_freeze_period_command;
-export type TGetInitialFreezePeriodRequest = {
+export const get_initial_freeze_period_command_of_full_node = "get_initial_freeze_period";
+export type get_initial_freeze_period_command_of_full_node = typeof get_initial_freeze_period_command_of_full_node;
+export type TGetInitialFreezePeriodRequestOfFullNode = {
 };
-export type TGetInitialFreezePeriodResponse = {
+export type TGetInitialFreezePeriodResponseOfFullNode = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export async function get_initial_freeze_period(agent: TRPCAgent) {
-  return agent.sendMessage<TGetInitialFreezePeriodResponse>(chia_full_node_service, get_initial_freeze_period_command);
+export async function get_initial_freeze_period_of_full_node(agent: TRPCAgent) {
+  return agent.sendMessage<TGetInitialFreezePeriodResponseOfFullNode>(chia_full_node_service, get_initial_freeze_period_command_of_full_node);
 }
 
 
 
-export const get_network_info_command = "get_network_info";
-export type get_network_info_command = typeof get_network_info_command;
-export type TGetNetworkInfoRequest = {
+export const get_network_info_command_of_full_node = "get_network_info";
+export type get_network_info_command_of_full_node = typeof get_network_info_command_of_full_node;
+export type TGetNetworkInfoRequestOfFullNode = {
 };
-export type TGetNetworkInfoResponse = {
+export type TGetNetworkInfoResponseOfFullNode = {
   network_name: str;
   network_prefix: str;
 };
-export async function get_network_info(agent: TRPCAgent) {
-  return agent.sendMessage<TGetNetworkInfoResponse>(chia_full_node_service, get_network_info_command);
+export async function get_network_info_of_full_node(agent: TRPCAgent) {
+  return agent.sendMessage<TGetNetworkInfoResponseOfFullNode>(chia_full_node_service, get_network_info_command_of_full_node);
 }
 
 

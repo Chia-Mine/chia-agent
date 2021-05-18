@@ -6,21 +6,41 @@ import type {
   TNewFarmingInfoBroadCast,
   TNewSignagePointBroadCast,
 } from "./farmer/index";
-export * from "./farmer/index";
+export {
+  chia_farmer_service,
+  TChiaFarmerBroadcast,
+  TNewSignagePointBroadCast,
+  TNewFarmingInfoBroadCast,
+  on_message_from_farmer,
+  on_new_farming_info,
+  on_new_signage_point,
+} from "./farmer/index";
 
 import type {
   chia_full_node_service,
   get_blockchain_state_command,
   TGetBlockchainStateBroadCast,
 } from "./full_node/index";
-export * from "./full_node/index";
+export {
+  chia_full_node_service,
+  TChiaFullNodeBroadcast,
+  TGetBlockchainStateBroadCast,
+  on_message_from_full_node,
+  on_get_blockchain_state, 
+} from "./full_node/index";
 
 import type {
   chia_harvester_service,
   get_plots_command,
   TGetPlotsBroadCast,
 } from "./harvester/index";
-export * from "./harvester/index";
+export {
+  chia_harvester_service,
+  TChiaHarvesterBroadcast,
+  TGetPlotsBroadCast,
+  on_message_from_harvester,
+  on_get_plots, 
+} from "./harvester/index";
 
 import type {
   chia_wallet_service,
@@ -29,9 +49,10 @@ import type {
 } from "./wallet/index";
 export {
   chia_wallet_service,
-  on_state_changed_of_wallet,
-  state_changed_command_of_wallet,
+  TChiaWalletBroadcast,
   TStateChangedBroadCastOfWallet,
+  on_message_from_wallet,
+  on_state_changed_of_wallet,
 } from "./wallet/index";
 
 import type {
@@ -67,7 +88,39 @@ import type {
   TStopPlottingResponse,
   TStopServiceResponse,
 } from "./daemon/index";
-export * from "./daemon/index";
+export {
+  daemon_service,
+  TRegisterServiceResponse, 
+  TStartPlottingResponse, 
+  TStartServiceResponse, 
+  TStopPlottingResponse, 
+  TStopServiceResponse,
+  TExitResponse,
+  TGetStatusResponse,
+  TIsRunningResponse,
+  TPingResponse,
+  TStopPlottingRequest,
+  TRegisterServiceRequest,
+  TPlotQueue,
+  TPingRequest,
+  TGetStatusRequest,
+  TStartServiceRequest,
+  TStartPlottingRequest,
+  TStopServiceRequest,
+  TIsRunningRequest,
+  TExitRequest,
+  get_status, 
+  ping_command, 
+  stop_service, 
+  stop_plotting, 
+  start_service, 
+  exit_command, 
+  start_plotting, 
+  register_service, 
+  ping, 
+  is_running, 
+  exit, 
+} from "./daemon/index";
 
 
 export type WsFarmerMessage =
