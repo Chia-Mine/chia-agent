@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import {getDaemon} from "../daemon/index";
 import {setLogLevel} from "../logger";
-import {on_new_farming_info, TNewFarmingInfoBroadCast} from "../api/ws/farmer/index";
+import {on_new_farming_info} from "../api/ws/farmer/index";
 
 setLogLevel("error");
 
