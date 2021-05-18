@@ -1,0 +1,12 @@
+{
+  "name": "proof-found-notify-sample",
+  "version": "0.0.0",
+  "author": "Admin ChiaMineJP<admin@chiamine.jp>",
+  "license": "MIT",
+  "description": "",
+  "keywords": [],
+  "dependencies": {
+    "encoding-japanese": "^1.0.30",
+    "googleapis": "39"
+  }
+}
