@@ -29,13 +29,45 @@ For example, you can develop your own nodejs script to:
 ## API
 
 There are 2 kinds of APIs in chia.  
-`Websocket API` and `RPC API`.
+`RPC API` and `Websocket API`.
+
+### RPC API
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
+
+RPC API is just an async function with a traditional request/response style.
+
+```js
+const {RPCAgent, setLogLevel} = require("chia-agent");
+const {get_plots} = require("chia-agent/api/rpc");
+setLogLevel("debug");
+
+const agent = new RPCAgent({
+  destination: "harvester",
+});
+
+const res = await get_plots(agent);
+console.log(res.plots[0]);
+
+/*
+// sample output
+{
+  file_size: 108875876912,
+  filename: 'M:\\plot-k32-yyyy-mm-dd-xx-xx-xxxxxxxxxxxxxxxxxxxxxxxxx.plot',
+  'plot-seed': '0x3098da093...',
+  plot_public_key: '0x934a93489...',
+  pool_contract_puzzle_hash: null,
+  pool_public_key: '0xb0aa9485c0d...',
+  size: 32,
+  time_modified: 1619540745.1640463
+}
+*/
+```
 
 ### Websocket API
-Used to connect to chia `daemon`.  
-With websocket API, you can request chia daemon to start/stop plotting or other services.
+Websocket API is used to connect to chia `daemon`.
 
-Additionally, Websocket API can be used to capture broadcast messages like:  
+With websocket API, you can request chia daemon to start/stop plotting or other services,  
+or capture various broadcast messages like:
 - Plotting progress
 - Farming info such as passed filter, proofs found, etc.
 
@@ -74,40 +106,8 @@ setTimeout(() => {
  */
 ```
 
-
-### RPC API
-Unlike Websocket API, RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
-
-```js
-const {RPCAgent, setLogLevel} = require("chia-agent");
-const {get_plots} = require("chia-agent/api/rpc");
-setLogLevel("debug");
-
-const agent = new RPCAgent({
-  destination: "harvester",
-});
-
-const res = await get_plots(agent);
-console.log(res.plots[0]);
-
-/*
-// sample output
-{
-  file_size: 108875876912,
-  filename: 'M:\\plot-k32-yyyy-mm-dd-xx-xx-xxxxxxxxxxxxxxxxxxxxxxxxx.plot',
-  'plot-seed': '0x3098da093...',
-  plot_public_key: '0x934a93489...',
-  pool_contract_puzzle_hash: null,
-  pool_public_key: '0xb0aa9485c0d...',
-  size: 32,
-  time_modified: 1619540745.1640463
-}
-*/
-```
+## API Reference
+[See Documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/api)
 
 ## Examples
 [See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
-
-
-## API Reference
-[See Documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/api)
