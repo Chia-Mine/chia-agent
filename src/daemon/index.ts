@@ -31,6 +31,31 @@ export function getDaemon(){
   return daemon = new Daemon();
 }
 
+// Gracefully disconnect from remote daemon server on Ctrl+C.
+const onProcessExit = () => {
+  if(!daemon){
+    process.removeListener("SIGINT", onProcessExit);
+    process.kill(process.pid, "SIGINT");
+    return;
+  }
+  
+  setTimeout(async () => {
+    try{
+      if(daemon && daemon.connected && !daemon.closing){
+        await daemon.close();
+        
+        process.removeListener("SIGINT", onProcessExit);
+        process.kill(process.pid, "SIGINT");
+      }
+    }
+    catch(e){
+      process.stderr.write(JSON.stringify(e));
+      process.exit(1);
+    }
+  }, 67);
+};
+process.addListener("SIGINT", onProcessExit);
+
 class Daemon {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
@@ -41,10 +66,15 @@ class Daemon {
   protected _closeEventListeners: Array<(e: CloseEvent) => unknown> = [];
   protected _messageListeners: Record<string, Array<(e: WsMessage) => unknown>> = {};
   protected _closing: boolean = false;
+  protected _onClosePromise: (() => unknown)|undefined;
   protected _subscriptions: string[] = [];
   
   public get connected(){
     return Boolean(this._connectedUrl);
+  }
+  
+  public get closing(){
+    return this._closing;
   }
   
   public constructor() {
@@ -88,13 +118,16 @@ class Daemon {
   }
   
   public async close(){
-    if(this._closing || !this._socket){
-      return;
-    }
-    
-    getLogger().debug("Closing web socket connection");
-    this._socket.close();
-    this._closing = true;
+    return new Promise(((resolve) => {
+      if(this._closing || !this._socket){
+        return;
+      }
+  
+      getLogger().debug("Closing web socket connection");
+      this._socket.close();
+      this._closing = true;
+      this._onClosePromise = resolve as () => unknown; // Resolved in onClose function.
+    }));
   }
   
   public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<WsMessage> {
@@ -203,6 +236,7 @@ class Daemon {
     this._messageEventListeners = [];
     this._errorEventListeners = [];
     this._closeEventListeners = [];
+    this._messageListeners = {};
   }
   
   /**
@@ -289,7 +323,14 @@ class Daemon {
     this._connectedUrl = "";
     this._subscriptions = [];
     this._closeEventListeners.forEach(l => l(event));
+    this.clearAllEventListeners();
+    
     getLogger().info(`Closed ws connection`);
+    
+    if(this._onClosePromise){
+      this._onClosePromise();
+      this._onClosePromise = undefined;
+    }
   }
 }
 
