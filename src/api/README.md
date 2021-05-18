@@ -1,18 +1,12 @@
 # API
 
 There are 2 kinds of APIs in chia.  
-`Websocket API` and `RPC API`.
-
-### Websocket API
-Used to connect to chia `daemon`.  
-With websocket API, you can request chia daemon to start/stop plotting or other services.
-
-Additionally, Websocket API can be used to capture broadcast messages like:
-- Plotting progress
-- Farming info such as passed filter, proofs found, etc.
+`RPC API` and `Websocket API`
 
 ### RPC API
-Unlike Websocket API, RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
+
+RPC API is just an async function with a traditional request/response style.
 
 #### [Farmer RPC API](./rpc/farmer/README.md#usage)
 - [`get_signage_point`](./rpc/farmer/README.md#get_signage_pointagent-params)
@@ -94,3 +88,43 @@ Unlike Websocket API, RPC API is used to send message directly to chia services 
 - [`rl_set_user_info`](./rpc/wallet/README.md#rl_set_user_infoagent-params)
 - [`send_clawback_transaction`](./rpc/wallet/README.md#send_clawback_transactionagent-params)
 - [`add_rate_limited_funds`](./rpc/wallet/README.md#add_rate_limited_fundsagent-params)
+
+### Websocket API
+Websocket API is used to connect to chia `daemon`.  
+
+With websocket API, you can request chia daemon to start/stop plotting or other services,  
+or capture various broadcast messages like:  
+- Plotting progress
+- Farming info such as passed filter, proofs found, etc.
+
+#### [daemon](./ws/daemon/README.md#usage) 
+- [`ping`](./ws/daemon/README.md#pingagent)
+- [`start_service`](./ws/daemon/README.md#start_serviceagent-params)
+- [`start_plotting`](./ws/daemon/README.md#start_plottingagent-params)
+- [`stop_plotting`](./ws/daemon/README.md#stop_plottingagent-params)
+- [`stop_service`](./ws/daemon/README.md#stop_serviceagent-params)
+- [`is_running`](./ws/daemon/README.md#is_runningagent-params)
+- [`exit`](./ws/daemon/README.md#exitagent)
+- [`register_service`](./ws/daemon/README.md#register_serviceagent-params)
+- [`get_status`](./ws/daemon/README.md#get_statusagent)
+
+Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
+You cannot ask services to reply requested data immediately.  
+After subscribing message channels like `wallet_ui` or `chia plots create`,
+you need to wait messages in the channel are arrived to your message listener.
+
+#### [chia_plots_create](./ws/chia_plots_create/README.md#usage)
+- [`state_changed`](./ws/chia_plots_create/README.md#command-state_changed)
+
+#### [farmer](./ws/farmer/README.md#usage)
+- [`new_farming_info`](./ws/farmer/README.md#command-new_farming_info)
+- [`new_signage_point`](./ws/farmer/README.md#command-new_signage_point)
+
+#### [full_node](./ws/full_node/README.md#usage)
+- [`get_blockchain_state`](./ws/full_node/README.md#command-get_blockchain_state)
+
+#### [harvester](./ws/harvester/README.md#usage)
+- [`get_plots`](./ws/harvester/README.md#command-get_plots)
+
+#### [wallet](./ws/wallet/README.md#usage)
+- [`state_changed`](./ws/wallet/README.md#command-state_changed)
