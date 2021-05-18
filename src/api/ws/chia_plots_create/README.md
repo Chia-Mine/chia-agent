@@ -4,10 +4,12 @@
 You need to create Websocket connection before subscribing websocket messages.  
 ```js
 const {getDaemon} = require("chia-agent");
-const {on_state_changed} = require("chia-agent/api/ws");
+const {on_state_changed_of_plots} = require("chia-agent/api/ws");
+
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
-const unsubscribe = await on_state_changed(daemon, (event) => {
+
+const unsubscribe = await on_state_changed_of_plots(daemon, (event) => {
   console.log(e.data);
 
   // Close connection if you don't need it anymore.
@@ -15,13 +17,6 @@ const unsubscribe = await on_state_changed(daemon, (event) => {
     unsubscribe(); // stop listening to this ws message.
   }
 });
-// Once daemon is instantiated, you don't need to re-create it.
-
-/*
- * You can connect to other than localhost when you specify websocket server url.
- */
-daemon.connect("wss://host.name:1234");
-await daemon.subscribe(chia_plots_create_service);
 ...
 ```
 
@@ -32,7 +27,10 @@ await daemon.subscribe(chia_plots_create_service);
 ```typescript
 const {getDaemon} = require("chia-agent");
 const {on_state_changed_of_plots} = require("chia-agent/api/ws");
-const unsubscribe = on_state_changed_of_plots(daemon, (event) => {
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_state_changed_of_plots(daemon, (event) => {
   // Format of `event` object is desribed below.
   ...
 });
