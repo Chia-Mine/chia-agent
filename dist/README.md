@@ -104,3 +104,11 @@ setTimeout(() => {
 
 ## Examples
 [See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
+
+## API Compatibility Memo
+When RPC/Websocket server API changes, those changes must be applied to this repository.  
+To check API update, check the link below.  
+If you notice `rpc/*.py` and/or `daemon/server.py` are listed in the link, please let me know.  
+
+https://github.com/Chia-Network/chia-blockchain/compare/1c808b6c2910ed32fdbfdfc576ba1bc5a5adeac9...main  
+If 
