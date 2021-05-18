@@ -65,20 +65,18 @@ or capture various broadcast messages like:
 
 ```js
 const {getDaemon, setLogLevel} = require("chia-agent");
-const {new_farming_info_command, chia_farmer_service} = require("chia-agent/api/ws/farmer");
+const {on_new_farming_info} = require("chia-agent/api/ws/");
 
 setLogLevel("debug");
 
 const daemon = getDaemon();
-await daemon.connect();
-await daemon.subscribe("wallet_ui"); // Capture messages sent to GUI (wallet_ui).
-daemon.addMessageListener("all", (e) => {
-  if(e.origin === chia_farmer_service && e.command === new_farming_info_command){
-    console.log(e.data);
-  }
-});
+await daemon.connect(); // connect to local farm service using config file.
+const unsubscribe = await on_new_farming_info(daemon, (e) => {
+  console.log(e.data);
+})
 
-setTimeout(() => {
+setTimeout(async () => {
+  unsubscribe(); // Stop capturing message
   daemon.close();
 }, 30*1000); // Disconnect after 30s passed.
 
@@ -110,4 +108,3 @@ To check API update, check the link below.
 If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the link, please let me know.  
 
 https://github.com/Chia-Network/chia-blockchain/compare/1c808b6c2910ed32fdbfdfc576ba1bc5a5adeac9...main  
-If 

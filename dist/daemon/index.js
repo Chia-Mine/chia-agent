@@ -23,6 +23,28 @@ function getDaemon() {
     return daemon = new Daemon();
 }
 exports.getDaemon = getDaemon;
+// Gracefully disconnect from remote daemon server on Ctrl+C.
+const onProcessExit = () => {
+    if (!daemon) {
+        process.removeListener("SIGINT", onProcessExit);
+        process.kill(process.pid, "SIGINT");
+        return;
+    }
+    setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            if (daemon && daemon.connected && !daemon.closing) {
+                yield daemon.close();
+                process.removeListener("SIGINT", onProcessExit);
+                process.kill(process.pid, "SIGINT");
+            }
+        }
+        catch (e) {
+            process.stderr.write(JSON.stringify(e));
+            process.exit(1);
+        }
+    }), 67);
+};
+process.addListener("SIGINT", onProcessExit);
 class Daemon {
     constructor() {
         this._socket = null;
@@ -42,6 +64,9 @@ class Daemon {
     }
     get connected() {
         return Boolean(this._connectedUrl);
+    }
+    get closing() {
+        return this._closing;
     }
     /**
      * Connect to local daemon via websocket.
@@ -74,12 +99,15 @@ class Daemon {
     }
     close() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this._closing || !this._socket) {
-                return;
-            }
-            logger_1.getLogger().debug("Closing web socket connection");
-            this._socket.close();
-            this._closing = true;
+            return new Promise(((resolve) => {
+                if (this._closing || !this._socket) {
+                    return;
+                }
+                logger_1.getLogger().debug("Closing web socket connection");
+                this._socket.close();
+                this._closing = true;
+                this._onClosePromise = resolve; // Resolved in onClose function.
+            }));
         });
     }
     sendMessage(destination, command, data) {
@@ -111,8 +139,11 @@ class Daemon {
     }
     subscribe(service) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!this.connected || !this._socket) {
+                logger_1.getLogger().error(`Tried to subscribe '${service}' without active connection`);
+                throw new Error("Not connected");
+            }
             if (this._subscriptions.findIndex(s => s === service) > -1) {
-                // return dummy successful response
                 return {
                     command: "register_service",
                     data: { success: true },
@@ -176,6 +207,7 @@ class Daemon {
         this._messageEventListeners = [];
         this._errorEventListeners = [];
         this._closeEventListeners = [];
+        this._messageListeners = {};
     }
     /**
      * Add listener for message
@@ -188,6 +220,10 @@ class Daemon {
             this._messageListeners[o] = [];
         }
         this._messageListeners[o].push(listener);
+        // Returns removeMessageListener function.
+        return () => {
+            this.removeMessageListener(o, listener);
+        };
     }
     removeMessageListener(origin, listener) {
         const listeners = this._messageListeners[origin];
@@ -243,7 +279,13 @@ class Daemon {
         }
         this._closing = false;
         this._connectedUrl = "";
+        this._subscriptions = [];
         this._closeEventListeners.forEach(l => l(event));
+        this.clearAllEventListeners();
         logger_1.getLogger().info(`Closed ws connection`);
+        if (this._onClosePromise) {
+            this._onClosePromise();
+            this._onClosePromise = undefined;
+        }
     }
 }

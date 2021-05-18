@@ -6,7 +6,7 @@ export declare type EventType = "open" | "message" | "error" | "close";
 export declare type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
 export declare type EventListener<T = Event> = (ev: T) => unknown;
 declare type EventListenerOf<T> = T extends "open" ? EventListener<OpenEvent> : T extends "message" ? EventListener<MessageEvent> : T extends "error" ? EventListener<ErrorEvent> : T extends "close" ? EventListener<CloseEvent> : never;
-export declare type MessageListener<D = unknown> = (msg: WsMessage) => unknown;
+export declare type MessageListener<D extends WsMessage> = (msg: D) => unknown;
 export declare function getDaemon(): Daemon;
 declare class Daemon {
     protected _socket: WS | null;
@@ -20,15 +20,17 @@ declare class Daemon {
     protected _closeEventListeners: Array<(e: CloseEvent) => unknown>;
     protected _messageListeners: Record<string, Array<(e: WsMessage) => unknown>>;
     protected _closing: boolean;
+    protected _onClosePromise: (() => unknown) | undefined;
     protected _subscriptions: string[];
     get connected(): boolean;
+    get closing(): boolean;
     constructor();
     /**
      * Connect to local daemon via websocket.
      * @param daemonServerURL
      */
     connect(daemonServerURL?: string): Promise<boolean>;
-    close(): Promise<void>;
+    close(): Promise<unknown>;
     sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<WsMessage>;
     createMessageTemplate(command: string, destination: string, data: Record<string, unknown>): {
         command: string;
@@ -47,8 +49,8 @@ declare class Daemon {
      * @param {string} origin - Can be chia_farmer, chia_full_node, chia_wallet, etc.
      * @param listener - Triggered when a message arrives.
      */
-    addMessageListener<D = unknown>(origin: string | undefined, listener: MessageListener<D>): void;
-    removeMessageListener<D = unknown>(origin: string, listener: MessageListener<D>): void;
+    addMessageListener<D extends WsMessage>(origin: string | undefined, listener: MessageListener<D>): () => void;
+    removeMessageListener<D extends WsMessage>(origin: string, listener: MessageListener<D>): void;
     clearAllMessageListeners(): void;
     protected onOpen(event: OpenEvent, url: string): Promise<GetMessageType<"daemon", "register_service", TRegisterServiceResponse>>;
     protected onError(error: ErrorEvent): void;
