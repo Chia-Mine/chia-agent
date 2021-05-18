@@ -2,16 +2,15 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-`chia-agent` supports all RPC/Websocket API available at chia 1.1.x.  
+Supports all RPC/Websocket API available at `chia 1.1.x`.  
 
 you can develop your own nodejs script with `chia-agent` to:
-- Retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
-- Send email when proof is found.
-- Get customizable stats report.
-- Trigger your scripts when target event is observed.
+- retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
+- send email when proof is found.
+- trigger scripts when target event is observed.
 - start/stop services.
-- program plotting with javascript.
-- etc
+- write program to schedule plotting with javascript.
+- etc, etc, etc
 
 ## Install
 ```
@@ -27,7 +26,7 @@ There are 2 kinds of APIs in chia.
 ### RPC API
 RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
 
-RPC API is just an async function with a traditional request/response style.
+RPC API is just an async function in a traditional request/response style.
 
 ```js
 const {RPCAgent, setLogLevel} = require("chia-agent");
@@ -106,9 +105,9 @@ setTimeout(() => {
 [See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
 
 ## API Compatibility Memo
-When RPC/Websocket server API changes, those changes must be applied to this repository.  
+When original RPC/Websocket server API changes, those changes must be imported to this repository.  
 To check API update, check the link below.  
-If you notice `rpc/*.py` and/or `daemon/server.py` are listed in the link, please let me know.  
+If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the link, please let me know.  
 
 https://github.com/Chia-Network/chia-blockchain/compare/1c808b6c2910ed32fdbfdfc576ba1bc5a5adeac9...main  
 If 

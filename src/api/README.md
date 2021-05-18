@@ -8,6 +8,10 @@ RPC API is used to send message directly to chia services like `farmer`, `harves
 
 RPC API is just an async function with a traditional request/response style.
 
+### [RPCAgent](../rpc/README.md)
+See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/README.md).
+
+
 #### [Farmer RPC API](./rpc/farmer/README.md#usage)
 - [`get_signage_point`](./rpc/farmer/README.md#get_signage_pointagent-params)
 - [`get_signage_points`](./rpc/farmer/README.md#get_signage_pointsagent)
@@ -97,6 +101,10 @@ or capture various broadcast messages like:
 - Plotting progress
 - Farming info such as passed filter, proofs found, etc.
 
+### [Daemon](../daemon/README.md)
+See how to get Daemon instance before requesting Websocket API [**>>here**](../daemon/README.md).
+
+
 #### [daemon](./ws/daemon/README.md#usage) 
 - [`ping`](./ws/daemon/README.md#pingagent)
 - [`start_service`](./ws/daemon/README.md#start_serviceagent-params)
@@ -128,3 +136,18 @@ you need to wait messages in the channel are arrived to your message listener.
 
 #### [wallet](./ws/wallet/README.md#usage)
 - [`state_changed`](./ws/wallet/README.md#command-state_changed)
+
+### Log
+
+You can change log level to suppress/output various internal logs.
+```js
+// Log level can be: "error", "warning", "info", "debug", "none"
+// Default log level is "error"
+const {setLogLevel} = require("chia-agent");
+
+setLogLevel("debug"); // show all available logs.
+setLogLevel("info"); // show except for debug logs.
+setLogLevel("warning"); // show warning and error logs.
+setLogLevel("error"); // show only error logs.
+setLogLevel("none"); // don't show any logs.
+```

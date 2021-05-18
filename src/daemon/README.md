@@ -1,6 +1,4 @@
-# API
-
-## Daemon
+# Daemon
 
 A websocket client for connecting to chia daemon.  
 This `Daemon` class is a singleton to prevent multiple useless connections being active at once.
@@ -44,21 +42,6 @@ daemon.addEventListener("close", () => {
 });
 ```
 
-## daemon.sendMessage
-
-```js
-await daemon.sendMessage(destination, get_block_record_by_height_command, data);
-```
-
-Send message to chia daemon via websocket.  
-You can send message to:
-- start/stop/ping services
-- schedule plotting
-
-The last one is very powerful.  
-You can control plot schedule with monitoring plot creation status precisely in script.  
-e.g. Dispatch plot creation just after current plotting goes to phase 2/3/4.
-
 ## daemon.subscribe
 
 Start to monitor message channel via websocket.
@@ -95,21 +78,4 @@ The format of incoming `message` is:
   destination: string;
   origin: string;
 }
-```
-
-
-
-## Log
-
-You can change log level to suppress/output various internal logs.
-```js
-// Log level can be: "error", "warning", "info", "debug", "none"
-// Default log level is "error"
-const {setLogLevel} = require("chia-agent");
-
-setLogLevel("debug"); // show all available logs.
-setLogLevel("info"); // show except for debug logs.
-setLogLevel("warning"); // show warning and error logs.
-setLogLevel("error"); // show only error logs.
-setLogLevel("none"); // don't show any logs.
 ```
