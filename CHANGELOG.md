@@ -4,6 +4,7 @@
 - Added new RPC API
 - Added new Websocket API
 - Added API type definitions
+- Added a code sample
 
 ## [0.0.5] - 2021-05-13
 ### Changed
