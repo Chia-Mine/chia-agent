@@ -323,11 +323,11 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
   wallet_balance: {
     wallet_id: uint32;
     confirmed_wallet_balance: uint128;
-      unconfirmed_wallet_balance: uint128;
-      spendable_balance: uint128;
-      pending_change: uint64;
-      max_send_amount: uint64;
-      unspent_coin_count: int;
+    unconfirmed_wallet_balance: uint128;
+    spendable_balance: uint128;
+    pending_change: uint64;
+    max_send_amount: uint64;
+    unspent_coin_count: int;
     pending_coin_removal_count: int;
   }
 }
