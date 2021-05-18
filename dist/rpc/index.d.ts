@@ -1,7 +1,6 @@
 /// <reference types="node" />
 import { Agent as HttpsAgent } from "https";
 import { Agent as HttpAgent } from "http";
-import { IAgent } from "../agent.type";
 import { TConfig } from "../config/index";
 import { RpcMessage } from "../api/rpc/index";
 declare type TDestination = "farmer" | "harvester" | "full_node" | "wallet" | "daemon";
@@ -29,7 +28,7 @@ export declare type TRPCAgentProps = {
     service: TDestination;
     configPath?: string;
 };
-export declare class RPCAgent implements IAgent {
+export declare class RPCAgent {
     protected _protocol: "http" | "https";
     protected _hostname: string;
     protected _port: number;
@@ -44,7 +43,70 @@ export declare class RPCAgent implements IAgent {
         clientKey: Buffer;
         caCert: Buffer;
     };
-    sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<RpcMessage>;
-    post(path: string, data: any): Promise<import("..").GetMessageType<"chia_farmer", "get_reward_targets", import("../api/rpc/farmer").TGetRewardTargetResponse> | import("..").GetMessageType<"chia_farmer", "get_signage_point", import("../api/rpc/farmer").TGetSignagePointResponse> | import("..").GetMessageType<"chia_farmer", "get_signage_points", import("../api/rpc/farmer").TGetSignagePointsResponse> | import("..").GetMessageType<"chia_farmer", "set_reward_targets", import("../api/rpc/farmer").TSetRewardTargetResponse> | import("..").GetMessageType<"chia_full_node", "get_additions_and_removals", import("../api/rpc/full_node").TGetAdditionsAndRemovalsResponse> | import("..").GetMessageType<"chia_full_node", "get_all_mempool_items", import("../api/rpc/full_node").TGetAllMempoolItemsResponse> | import("..").GetMessageType<"chia_full_node", "get_all_mempool_tx_ids", import("../api/rpc/full_node").TGetAllMempoolTxIdsResponse> | import("..").GetMessageType<"chia_full_node", "get_block", import("../api/rpc/full_node").TGetBlockResponse> | import("..").GetMessageType<"chia_full_node", "get_block_record_by_height", import("../api/rpc/full_node").TGetBlockRecordByHeightResponse> | import("..").GetMessageType<"chia_full_node", "get_block_record", import("../api/rpc/full_node").TGetBlockRecordResponse> | import("..").GetMessageType<"chia_full_node", "get_block_records", import("../api/rpc/full_node").TGetBlockRecordsResponse> | import("..").GetMessageType<"chia_full_node", "get_blockchain_state", import("../api/rpc/full_node").TGetBlockchainStateResponse> | import("..").GetMessageType<"chia_full_node", "get_blocks", import("../api/rpc/full_node").TGetBlocksResponse> | import("..").GetMessageType<"chia_full_node", "get_coin_record_by_name", import("../api/rpc/full_node").TGetCoinRecordByNameResponse> | import("..").GetMessageType<"chia_full_node", "get_coin_records_by_puzzle_hash", import("../api/rpc/full_node").TGetCoinRecordsByPuzzleHashResponse> | import("..").GetMessageType<"chia_full_node", "get_coin_records_by_puzzle_hashes", import("../api/rpc/full_node").TGetCoinRecordsByPuzzleHashesResponse> | import("..").GetMessageType<"chia_full_node", "get_initial_freeze_period", import("../api/rpc/full_node").TGetInitialFreezePeriodResponse> | import("..").GetMessageType<"chia_full_node", "get_mempool_item_by_tx_id", import("../api/rpc/full_node").TGetMempoolItemByTxIdResponse> | import("..").GetMessageType<"chia_full_node", "get_network_info", import("../api/rpc/full_node").TGetNetworkInfoResponse> | import("..").GetMessageType<"chia_full_node", "get_network_space", import("../api/rpc/full_node").TGetNetworkSpaceResponse> | import("..").GetMessageType<"chia_full_node", "get_unfinished_block_headers", import("../api/rpc/full_node").TGetUnfinishedBlockHeadersResponse> | import("..").GetMessageType<"chia_full_node", "push_tx", import("../api/rpc/full_node").TPushTxResponse> | import("..").GetMessageType<"chia_harvester", "add_plot_directory", import("../api/rpc/harvester").TAddPlotDirectoryResponse> | import("..").GetMessageType<"chia_harvester", "delete_plot", import("../api/rpc/harvester").TDeletePlotResponse> | import("..").GetMessageType<"chia_harvester", "get_plot_directories", import("../api/rpc/harvester").TGetPlotDirectoriesResponse> | import("..").GetMessageType<"chia_harvester", "get_plots", import("../api/rpc/harvester").TGetPlotsResponse> | import("..").GetMessageType<"chia_harvester", "refresh_plots", import("../api/rpc/harvester").TRefreshPlotsResponse> | import("..").GetMessageType<"chia_harvester", "remove_plot_directory", import("../api/rpc/harvester").TRemovePlotDirectoryResponse> | import("..").GetMessageType<"chia_wallet", "add_key", import("../api/rpc/wallet").TAddKeyResponse> | import("..").GetMessageType<"chia_wallet", "add_rate_limited_funds:", import("../api/rpc/wallet").TAddRateLimitedFundsResponse> | import("..").GetMessageType<"chia_wallet", "cancel_trade", import("../api/rpc/wallet").TCancelTradeResponse> | import("..").GetMessageType<"chia_wallet", "cc_get_colour", import("../api/rpc/wallet").TCcGetColourResponse> | import("..").GetMessageType<"chia_wallet", "cc_get_name", import("../api/rpc/wallet").TCcGetNameResponse> | import("..").GetMessageType<"chia_wallet", "cc_set_name", import("../api/rpc/wallet").TCcSetNameResponse> | import("..").GetMessageType<"chia_wallet", "cc_spend", import("../api/rpc/wallet").TCcSpendResponse> | import("..").GetMessageType<"chia_wallet", "create_backup", import("../api/rpc/wallet").TCreateBackupResponse> | import("..").GetMessageType<"chia_wallet", "create_new_wallet", import("../api/rpc/wallet").TCreateNewWalletResponse> | import("..").GetMessageType<"chia_wallet", "create_offer_for_ids", import("../api/rpc/wallet").TCreateOfferForIdsResponse> | import("..").GetMessageType<"chia_wallet", "create_signed_transaction", import("../api/rpc/wallet").TCreateSignedTransactionResponse> | import("..").GetMessageType<"chia_wallet", "delete_all_keys", import("../api/rpc/wallet").TDeleteAllKeysResponse> | import("..").GetMessageType<"chia_wallet", "delete_key", import("../api/rpc/wallet").TDeleteKeyResponse> | import("..").GetMessageType<"chia_wallet", "did_create_attest", import("../api/rpc/wallet").TDidCreateAttestResponse> | import("..").GetMessageType<"chia_wallet", "did_create_backup_file", import("../api/rpc/wallet").TDidCreateBackupFileResponse> | import("..").GetMessageType<"chia_wallet", "did_get_did", import("../api/rpc/wallet").TDidGetDidResponse> | import("..").GetMessageType<"chia_wallet", "did_get_information_needed_for_recovery", import("../api/rpc/wallet").TDidGetInformationNeededForRecoveryResponse> | import("..").GetMessageType<"chia_wallet", "did_get_pubkey", import("../api/rpc/wallet").TDidGetPubkeyResponse> | import("..").GetMessageType<"chia_wallet", "did_get_recovery_list", import("../api/rpc/wallet").TDidGetRecoveryListResponse> | import("..").GetMessageType<"chia_wallet", "did_recovery_spend", import("../api/rpc/wallet").TDidRecoverySpendResponse> | import("..").GetMessageType<"chia_wallet", "did_spend", import("../api/rpc/wallet").TDidSpendResponse> | import("..").GetMessageType<"chia_wallet", "did_update_recovery_ids", import("../api/rpc/wallet").TDidUpdateRecoveryIdsResponse> | import("..").GetMessageType<"chia_wallet", "farm_block", import("../api/rpc/wallet").TFarmBlockResponse> | import("..").GetMessageType<"chia_wallet", "generate_mnemonic", import("../api/rpc/wallet").TGenerateMnemonicResponse> | import("..").GetMessageType<"chia_wallet", "get_all_trades", import("../api/rpc/wallet").TGetAllTradesResponse> | import("..").GetMessageType<"chia_wallet", "get_discrepancies_for_offer", import("../api/rpc/wallet").TGetDiscrepanciesForOfferResponse> | import("..").GetMessageType<"chia_wallet", "get_farmed_amount", import("../api/rpc/wallet").TGetFarmedAmountResponse> | import("..").GetMessageType<"chia_wallet", "get_height_info", import("../api/rpc/wallet").TGetHeightInfoResponse> | import("..").GetMessageType<"chia_wallet", "get_initial_freeze_period", import("../api/rpc/wallet").TGetInitialFreezePeriodResponse> | import("..").GetMessageType<"chia_wallet", "get_network_info", import("../api/rpc/wallet").TGetNetworkInfoResponse> | import("..").GetMessageType<"chia_wallet", "get_next_address", import("../api/rpc/wallet").TGetNextAddressResponse> | import("..").GetMessageType<"chia_wallet", "get_private_key", import("../api/rpc/wallet").TGetPrivateKeyResponse> | import("..").GetMessageType<"chia_wallet", "get_public_keys", import("../api/rpc/wallet").TGetPublicKeysResponse> | import("..").GetMessageType<"chia_wallet", "get_sync_status", import("../api/rpc/wallet").TGetSyncStatusResponse> | import("..").GetMessageType<"chia_wallet", "get_trade", import("../api/rpc/wallet").TGetTradeResponse> | import("..").GetMessageType<"chia_wallet", "get_transaction", import("../api/rpc/wallet").TGetTransactionResponse> | import("..").GetMessageType<"chia_wallet", "get_transaction_count", import("../api/rpc/wallet").TGetTransactionCountResponse> | import("..").GetMessageType<"chia_wallet", "get_transactions", import("../api/rpc/wallet").TGetTransactionsResponse> | import("..").GetMessageType<"chia_wallet", "get_wallet_balance", import("../api/rpc/wallet").TGetWalletBalanceResponse> | import("..").GetMessageType<"chia_wallet", "get_wallets", import("../api/rpc/wallet").TGetWalletsResponse> | import("..").GetMessageType<"chia_wallet", "log_in", import("../api/rpc/wallet").TLoginResponse> | import("..").GetMessageType<"chia_wallet", "respond_to_offer", import("../api/rpc/wallet").TResponseToOfferResponse> | import("..").GetMessageType<"chia_wallet", "rl_set_user_info", import("../api/rpc/wallet").TRlSetUserInfoResponse> | import("..").GetMessageType<"chia_wallet", "send_clawback_transaction:", import("../api/rpc/wallet").TSendClawbackTransactionResponse> | import("..").GetMessageType<"chia_wallet", "send_transaction", import("../api/rpc/wallet").TSendTransactionResponse>>;
+    sendMessage<M extends RpcMessage = RpcMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M>;
+    post(path: string, data: any): Promise<import("../api/rpc/farmer").TGetSignagePointResponse | {
+        farmer_target: string;
+        pool_target: string;
+        have_farmer_sk: boolean;
+        have_pool_sk: boolean;
+    } | {
+        farmer_target: string;
+        pool_target: string;
+    } | import("../api/rpc/farmer").TGetSignagePointsResponse | import("../api/rpc/farmer").TSetRewardTargetResponse | import("../api/rpc/full_node").TGetAdditionsAndRemovalsResponse | import("../api/rpc/full_node").TGetAllMempoolItemsResponse | import("../api/rpc/full_node").TGetAllMempoolTxIdsResponse | import("../api/rpc/full_node").TGetBlockResponse | import("../api/rpc/full_node").TGetBlockRecordByHeightResponse | import("../api/rpc/full_node").TGetBlockRecordResponse | import("../api/rpc/full_node").TGetBlockRecordsResponse | import("../api/rpc/full_node").TGetBlockchainStateResponse | import("../api/rpc/full_node").TGetBlocksResponse | import("../api/rpc/full_node").TGetCoinRecordByNameResponse | import("../api/rpc/full_node").TGetCoinRecordsByPuzzleHashResponse | import("../api/rpc/full_node").TGetCoinRecordsByPuzzleHashesResponse | import("../api/rpc/full_node").TGetInitialFreezePeriodResponse | import("../api/rpc/full_node").TGetMempoolItemByTxIdResponse | import("../api/rpc/full_node").TGetNetworkInfoResponse | import("../api/rpc/full_node").TGetNetworkSpaceResponse | import("../api/rpc/full_node").TGetUnfinishedBlockHeadersResponse | import("../api/rpc/full_node").TPushTxResponse | import("../api/rpc/harvester").TAddPlotDirectoryResponse | import("../api/rpc/harvester").TDeletePlotResponse | import("../api/rpc/harvester").TGetPlotDirectoriesResponse | import("../api/rpc/harvester").TGetPlotsResponse | import("../api/rpc/harvester").TRefreshPlotsResponse | import("../api/rpc/harvester").TRemovePlotDirectoryResponse | {
+        success: false;
+        error: string;
+        word: unknown;
+    } | {
+        fingerprint: number;
+    } | import("../api/rpc/wallet").TAddRateLimitedFundsResponse | import("../api/rpc/wallet").TCancelTradeResponse | import("../api/rpc/wallet").TCcGetColourResponse | import("../api/rpc/wallet").TCcGetNameResponse | import("../api/rpc/wallet").TCcSetNameResponse | import("../api/rpc/wallet").TCcSpendResponse | import("../api/rpc/wallet").TCreateBackupResponse | {
+        type: number;
+        colour: string;
+        wallet_id: number;
+    } | {
+        type: number;
+    } | {
+        success: boolean;
+        id: number;
+        type: number;
+        origin: import("../api/chia/types/_python_types_").Optional<import("../api/chia/types/blockchain_format/coin").Coin>;
+        pubkey: string;
+    } | {
+        id: number;
+        type: number;
+        pubkey: string;
+    } | {
+        success: true;
+        type: number;
+        my_did: string;
+        wallet_id: number;
+    } | {
+        success: true;
+        type: number;
+        my_did: string;
+        wallet_id: number;
+        coin_name: string;
+        coin_list: [string, string, number];
+        newpuzhash: string;
+        pubkey: string;
+        backup_dids: string[];
+        num_verifications_required: number;
+    } | import("../api/rpc/wallet").TCreateOfferForIdsResponse | import("../api/rpc/wallet").TCreateSignedTransactionResponse | import("../api/rpc/wallet").TDeleteAllKeysResponse | import("../api/rpc/wallet").TDeleteKeyResponse | {
+        success: true;
+        message_spend_bundle: string;
+        info: [string, string, number];
+    } | {
+        success: false;
+    } | import("../api/rpc/wallet").TDidCreateBackupFileResponse | import("../api/rpc/wallet").TDidGetDidResponse | import("../api/rpc/wallet").TDidGetInformationNeededForRecoveryResponse | import("../api/rpc/wallet").TDidGetPubkeyResponse | import("../api/rpc/wallet").TDidGetRecoveryListResponse | import("../api/rpc/wallet").TDidRecoverySpendResponse | import("../api/rpc/wallet").TDidSpendResponse | import("../api/rpc/wallet").TDidUpdateRecoveryIdsResponse | import("../api/rpc/wallet").TFarmBlockResponse | import("../api/rpc/wallet").TGenerateMnemonicResponse | import("../api/rpc/wallet").TGetAllTradesResponse | import("../api/rpc/wallet").TGetDiscrepanciesForOfferResponse | import("../api/rpc/wallet").TGetFarmedAmountResponse | import("../api/rpc/wallet").TGetHeightInfoResponse | import("../api/rpc/wallet").TGetInitialFreezePeriodResponse | import("../api/rpc/wallet").TGetNetworkInfoResponse | import("../api/rpc/wallet").TGetNextAddressResponse | import("../api/rpc/wallet").TGetPrivateKeyResponse | import("../api/rpc/wallet").TGetPublicKeysResponse | import("../api/rpc/wallet").TGetSyncStatusResponse | import("../api/rpc/wallet").TGetTradeResponse | import("../api/rpc/wallet").TGetTransactionResponse | import("../api/rpc/wallet").TGetTransactionCountResponse | import("../api/rpc/wallet").TGetTransactionsResponse | import("../api/rpc/wallet").TGetWalletBalanceResponse | import("../api/rpc/wallet").TGetWalletsResponse | {
+        fingerprint: number;
+    } | {
+        success: false;
+        error: "not_initialized" | "Unknown Error";
+    } | {
+        success: false;
+        error: "not_initialized";
+        backup_info: import("../api/chia/wallet/util/backup_utils").BackupInfo;
+        backup_path: string;
+    } | import("../api/rpc/wallet").TResponseToOfferResponse | import("../api/rpc/wallet").TRlSetUserInfoResponse | import("../api/rpc/wallet").TSendClawbackTransactionResponse | import("../api/rpc/wallet").TSendTransactionResponse>;
 }
+export declare type TRPCAgent = InstanceType<typeof RPCAgent>;
 export {};
