@@ -65,7 +65,7 @@ or capture various broadcast messages like:
 
 ```js
 const {getDaemon, setLogLevel} = require("chia-agent");
-const {on_new_farming_info} = require("chia-agent/api/ws/");
+const {on_new_farming_info} = require("chia-agent/api/ws");
 
 setLogLevel("debug");
 
