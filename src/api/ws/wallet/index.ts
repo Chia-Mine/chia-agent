@@ -21,3 +21,16 @@ export async function on_state_changed_of_wallet(daemon: TDaemon, callback: (e: 
   };
   return daemon.addMessageListener(state_changed_command_of_wallet, messageListener);
 }
+
+// Whole commands for the service
+export type chia_wallet_commands = state_changed_command_of_wallet;
+export type TChiaWalletBroadcast = TStateChangedBroadCastOfWallet;
+export async function on_message_from_wallet(daemon: TDaemon, callback: (e: GetMessageType<chia_wallet_service, chia_wallet_commands, TChiaWalletBroadcast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_wallet_service){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(state_changed_command_of_wallet, messageListener);
+}

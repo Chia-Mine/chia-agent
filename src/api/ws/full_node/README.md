@@ -1,15 +1,19 @@
 # Websocket Message from Full Node service
 
-## Usage
+### `on_message_from_full_node`
+Capture all broadcast messages coming from `chia_full_node` service.
+
+#### Usage
 You need to create Websocket connection before subscribing websocket messages.
 ```js
 const {getDaemon} = require("chia-agent");
-const {on_get_blockchain_state} = require("chia-agent/api/ws");
+const {on_message_from_full_node} = require("chia-agent/api/ws");
 
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
 
-const unsubscribe = await on_get_blockchain_state(daemon, (event) => {
+// Capture all messages from `chia_full_node`
+const unsubscribe = await on_message_from_full_node(daemon, (event) => {
   console.log(e.data);
 
   // Close connection if you don't need it anymore.
@@ -22,8 +26,10 @@ const unsubscribe = await on_get_blockchain_state(daemon, (event) => {
 
 ---
 
-## `on_get_blockchain_state`
-###Usage
+### `on_get_blockchain_state`
+Capture broadcast message of command `get_blockchain_state` from `chia_full_node` service.
+
+#### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
 const {on_get_blockchain_state} = require("chia-agent/api/ws");
@@ -38,7 +44,7 @@ const unsubscribe = await on_get_blockchain_state(daemon, (event) => {
 unsubscribe(); // Stop subscribing messages
 ```
 
-### event:
+#### event:
 ```typescript
 {
   origin: "chia_full_node";
@@ -49,7 +55,7 @@ unsubscribe(); // Stop subscribing messages
   destination: string;
 }
 ```
-### data:
+#### data:
 ```typescript
 {
   blockchain_state: {

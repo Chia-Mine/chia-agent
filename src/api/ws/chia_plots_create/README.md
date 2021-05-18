@@ -1,15 +1,19 @@
 # Websocket Message from Plotting service
 
-## Usage
+### `on_message_from_chia_plots_create`
+Capture all broadcast messages coming from `chia_plots_create` service.
+
+#### Usage
 You need to create Websocket connection before subscribing websocket messages.  
 ```js
 const {getDaemon} = require("chia-agent");
-const {on_state_changed_of_plots} = require("chia-agent/api/ws");
+const {on_message_from_chia_plots_create} = require("chia-agent/api/ws");
 
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
 
-const unsubscribe = await on_state_changed_of_plots(daemon, (event) => {
+// Capture all messages from `chia_plots_create`
+const unsubscribe = await on_message_from_chia_plots_create(daemon, (event) => {
   console.log(e.data);
 
   // Close connection if you don't need it anymore.
@@ -22,8 +26,10 @@ const unsubscribe = await on_state_changed_of_plots(daemon, (event) => {
 
 ---
 
-## `on_state_change_of_plots`
-###Usage
+### `on_state_change_of_plots`
+Capture broadcast message of command `state_change` from `chia_plots_create` service.
+
+#### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
 const {on_state_changed_of_plots} = require("chia-agent/api/ws");
@@ -37,7 +43,7 @@ const unsubscribe = await on_state_changed_of_plots(daemon, (event) => {
 ...
 unsubscribe(); // Stop subscribing messages
 ```
-### event:
+#### event:
 ```typescript
 {
   origin: "chia plots create";
@@ -48,7 +54,7 @@ unsubscribe(); // Stop subscribing messages
   destination: string;
 }
 ```
-### data:
+#### data:
 ```typescript
 {
   state: "log_changed"|"state_changed";

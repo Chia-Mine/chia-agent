@@ -22,3 +22,16 @@ export async function on_get_plots(daemon: TDaemon, callback: (e: GetMessageType
   };
   return daemon.addMessageListener(chia_harvester_service, messageListener);
 }
+
+// Whole commands for the service
+export type chia_harvester_commands = get_plots_command;
+export type TChiaHarvesterBroadcast = TGetPlotsBroadCast;
+export async function on_message_from_harvester(daemon: TDaemon, callback: (e: GetMessageType<chia_harvester_service, chia_harvester_commands, TChiaHarvesterBroadcast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_harvester_service){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_harvester_service, messageListener);
+}

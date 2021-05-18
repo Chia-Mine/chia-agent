@@ -34,3 +34,16 @@ export async function on_get_blockchain_state(daemon: TDaemon, callback: (e: Get
   };
   return daemon.addMessageListener(chia_full_node_service, messageListener);
 }
+
+// Whole commands for the service
+export type chia_full_node_commands = get_blockchain_state_command;
+export type TChiaFullNodeBroadcast = TGetBlockchainStateBroadCast;
+export async function on_message_from_full_node(daemon: TDaemon, callback: (e: GetMessageType<chia_full_node_service, chia_full_node_commands, TChiaFullNodeBroadcast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_full_node_service){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_full_node_service, messageListener);
+}

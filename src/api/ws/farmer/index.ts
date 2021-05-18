@@ -46,3 +46,16 @@ export async function on_new_signage_point(daemon: TDaemon, callback: (e: GetMes
   };
   return daemon.addMessageListener(chia_farmer_service, messageListener);
 }
+
+// Whole commands for the service
+export type chia_farmer_commands = new_farming_info_command | new_signage_point_command;
+export type TChiaFarmerBroadcast = TNewFarmingInfoBroadCast | TNewSignagePointBroadCast;
+export async function on_message_from_farmer(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, chia_farmer_commands, TChiaFarmerBroadcast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_farmer_service){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
