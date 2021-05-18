@@ -7,7 +7,7 @@
 npm install
 ```
 ### Prepare Gmail API credentials
-Read below to create Gmail API credential.
+Read below to create Gmail API credential.  
 https://developers.google.com/gmail/api/quickstart/nodejs
 
 Put the credential file (names `creadential.json`) under `./gmail/` directory.
