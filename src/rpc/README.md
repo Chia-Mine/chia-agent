@@ -19,8 +19,10 @@ const agent = new RPCAgent({...});
 ```
 
 Instantiate rpc agent with connection option.  
-There are several way to specify connection info.
+There are several ways to specify connection info.
+
 ---
+
 **Case 1** Connect to local rpc server by a service name.  
 If `configPath` is omitted, `chia-agent` tries to search from default config file path.
 ```typescript
