@@ -131,7 +131,7 @@ class Daemon {
     }));
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<WsMessage> {
+  public async sendMessage<M extends WsMessage = WsMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -142,7 +142,7 @@ class Daemon {
       let timer: ReturnType<typeof setTimeout>|null = null;
       const message = this.createMessageTemplate(command, destination, data || {});
       const reqId = message.request_id;
-      this._responseQueue[reqId] = resolve;
+      this._responseQueue[reqId] = resolve as (v: WsMessage|PromiseLike<WsMessage>) => unknown;
       
       getLogger().debug(`Sending message. dest=${destination} command=${command} reqId=${reqId}`);
       this._socket.send(JSON.stringify(message));
