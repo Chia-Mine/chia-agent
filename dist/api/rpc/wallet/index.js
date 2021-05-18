@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cc_get_name_command = exports.cc_set_name = exports.cc_set_name_command = exports.create_signed_transaction = exports.create_signed_transaction_command = exports.get_farmed_amount = exports.get_farmed_amount_command = exports.get_transaction_count = exports.get_transaction_count_command = exports.create_backup = exports.create_backup_command = exports.send_transaction = exports.send_transaction_command = exports.get_next_address = exports.get_next_address_command = exports.get_transactions = exports.get_transactions_command = exports.get_transaction = exports.get_transaction_command = exports.get_wallet_balance = exports.get_wallet_balance_command = exports.create_new_wallet = exports.create_new_wallet_command = exports.get_wallets = exports.get_wallets_command = exports.get_network_info = exports.get_network_info_command = exports.get_initial_freeze_period = exports.get_initial_freeze_period_command = exports.farm_block = exports.farm_block_command = exports.get_height_info = exports.get_height_info_command = exports.get_sync_status = exports.get_sync_status_command = exports.delete_all_keys = exports.delete_all_keys_command = exports.delete_key = exports.delete_key_command = exports.add_key = exports.add_key_command = exports.generate_mnemonic = exports.generate_mnemonic_command = exports.get_private_key = exports.get_private_key_command = exports.get_public_keys = exports.get_public_keys_command = exports.log_in = exports.log_in_command = exports.chia_wallet_service = void 0;
+exports.cc_get_name_command = exports.cc_set_name = exports.cc_set_name_command = exports.create_signed_transaction = exports.create_signed_transaction_command = exports.get_farmed_amount = exports.get_farmed_amount_command = exports.get_transaction_count = exports.get_transaction_count_command = exports.create_backup = exports.create_backup_command = exports.send_transaction = exports.send_transaction_command = exports.get_next_address = exports.get_next_address_command = exports.get_transactions = exports.get_transactions_command = exports.get_transaction = exports.get_transaction_command = exports.get_wallet_balance = exports.get_wallet_balance_command = exports.create_new_wallet = exports.create_new_wallet_command = exports.get_wallets = exports.get_wallets_command = exports.get_network_info_of_wallet = exports.get_network_info_command_of_wallet = exports.get_initial_freeze_period_of_wallet = exports.get_initial_freeze_period_command_of_wallet = exports.farm_block = exports.farm_block_command = exports.get_height_info = exports.get_height_info_command = exports.get_sync_status = exports.get_sync_status_command = exports.delete_all_keys = exports.delete_all_keys_command = exports.delete_key = exports.delete_key_command = exports.add_key = exports.add_key_command = exports.generate_mnemonic = exports.generate_mnemonic_command = exports.get_private_key = exports.get_private_key_command = exports.get_public_keys = exports.get_public_keys_command = exports.log_in = exports.log_in_command = exports.chia_wallet_service = void 0;
 exports.add_rate_limited_funds = exports.add_rate_limited_funds_command = exports.send_clawback_transaction = exports.send_clawback_transaction_command = exports.rl_set_user_info = exports.rl_set_user_info_command = exports.did_create_backup_file = exports.did_create_backup_file_command = exports.did_get_information_needed_for_recovery = exports.did_get_information_needed_for_recovery_command = exports.did_create_attest = exports.did_create_attest_command = exports.did_get_recovery_list = exports.did_get_recovery_list_command = exports.did_recovery_spend = exports.did_recovery_spend_command = exports.did_get_did = exports.did_get_did_command = exports.did_get_pubkey = exports.did_get_pubkey_command = exports.did_spend = exports.did_spend_command = exports.did_update_recovery_ids = exports.did_update_recovery_ids_command = exports.cancel_trade = exports.cancel_trade_command = exports.get_all_trades = exports.get_all_trades_command = exports.get_trade = exports.get_trade_command = exports.respond_to_offer = exports.respond_to_offer_command = exports.get_discrepancies_for_offer = exports.get_discrepancies_for_offer_command = exports.create_offer_for_ids = exports.create_offer_for_ids_command = exports.cc_get_colour = exports.cc_get_colour_command = exports.cc_spend = exports.cc_spend_command = exports.cc_get_name = void 0;
 exports.chia_wallet_service = "chia_wallet";
 // # Key management
@@ -84,20 +84,20 @@ function farm_block(agent, data) {
     });
 }
 exports.farm_block = farm_block;
-exports.get_initial_freeze_period_command = "get_initial_freeze_period";
-function get_initial_freeze_period(agent) {
+exports.get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";
+function get_initial_freeze_period_of_wallet(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.sendMessage(exports.chia_wallet_service, exports.get_initial_freeze_period_command);
+        return agent.sendMessage(exports.chia_wallet_service, exports.get_initial_freeze_period_command_of_wallet);
     });
 }
-exports.get_initial_freeze_period = get_initial_freeze_period;
-exports.get_network_info_command = "get_network_info";
-function get_network_info(agent) {
+exports.get_initial_freeze_period_of_wallet = get_initial_freeze_period_of_wallet;
+exports.get_network_info_command_of_wallet = "get_network_info";
+function get_network_info_of_wallet(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.sendMessage(exports.chia_wallet_service, exports.get_network_info_command);
+        return agent.sendMessage(exports.chia_wallet_service, exports.get_network_info_command_of_wallet);
     });
 }
-exports.get_network_info = get_network_info;
+exports.get_network_info_of_wallet = get_network_info_of_wallet;
 // # Wallet management
 exports.get_wallets_command = "get_wallets";
 function get_wallets(agent) {
