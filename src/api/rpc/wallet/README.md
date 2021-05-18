@@ -7,7 +7,7 @@ Please remember that all rpc API is provided as an async function.
 const {RPCAgent} = require("chia-agent");
 const {get_public_keys} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({
-  destination: "wallet", // connect to local wallet service using config file.
+  service: "wallet", // connect to local wallet service using config file.
 });
 // Then call RPC function
 const response = await get_public_keys(agent, {...});

@@ -7,7 +7,7 @@ Please remember that all rpc API is provided as an async function.
 const {RPCAgent} = require("chia-agent");
 const {add_plot_directory} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({
-  destination: "harvester", // connect to local harvester mservice using config file.
+  service: "harvester", // connect to local harvester mservice using config file.
 });
 // Then call RPC function
 const response = await add_plot_directory(agent, {...});
