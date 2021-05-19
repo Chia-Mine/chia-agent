@@ -106,21 +106,21 @@ export declare type TGetAdditionsAndRemovalsResponse = {
     removals: CoinRecord[];
 };
 export declare function get_additions_and_removals(agent: TRPCAgent, data: TGetAdditionsAndRemovalsRequest): Promise<TGetAdditionsAndRemovalsResponse>;
-export declare const get_initial_freeze_period_command = "get_initial_freeze_period";
-export declare type get_initial_freeze_period_command = typeof get_initial_freeze_period_command;
-export declare type TGetInitialFreezePeriodRequest = {};
-export declare type TGetInitialFreezePeriodResponse = {
+export declare const get_initial_freeze_period_command_of_full_node = "get_initial_freeze_period";
+export declare type get_initial_freeze_period_command_of_full_node = typeof get_initial_freeze_period_command_of_full_node;
+export declare type TGetInitialFreezePeriodRequestOfFullNode = {};
+export declare type TGetInitialFreezePeriodResponseOfFullNode = {
     INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export declare function get_initial_freeze_period(agent: TRPCAgent): Promise<TGetInitialFreezePeriodResponse>;
-export declare const get_network_info_command = "get_network_info";
-export declare type get_network_info_command = typeof get_network_info_command;
-export declare type TGetNetworkInfoRequest = {};
-export declare type TGetNetworkInfoResponse = {
+export declare function get_initial_freeze_period_of_full_node(agent: TRPCAgent): Promise<TGetInitialFreezePeriodResponseOfFullNode>;
+export declare const get_network_info_command_of_full_node = "get_network_info";
+export declare type get_network_info_command_of_full_node = typeof get_network_info_command_of_full_node;
+export declare type TGetNetworkInfoRequestOfFullNode = {};
+export declare type TGetNetworkInfoResponseOfFullNode = {
     network_name: str;
     network_prefix: str;
 };
-export declare function get_network_info(agent: TRPCAgent): Promise<TGetNetworkInfoResponse>;
+export declare function get_network_info_of_full_node(agent: TRPCAgent): Promise<TGetNetworkInfoResponseOfFullNode>;
 export declare const get_coin_records_by_puzzle_hash_command = "get_coin_records_by_puzzle_hash";
 export declare type get_coin_records_by_puzzle_hash_command = typeof get_coin_records_by_puzzle_hash_command;
 export declare type TGetCoinRecordsByPuzzleHashRequest = {

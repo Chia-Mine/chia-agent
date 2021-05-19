@@ -154,12 +154,19 @@ class RPCAgent {
             const req = transporter(options, (res) => {
                 if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
                     logger_1.getLogger().error(`Status not ok: ${res.statusCode}`);
+                    if (res.statusCode === 404) {
+                        logger_1.getLogger().error(`Maybe the RPCAgent is connecting to different service against target rpc command.`);
+                        logger_1.getLogger().error(`For example, this happens when invoking 'new_farming_info' rpc command to 'full_node' service, which 'farm' service is correct`);
+                        logger_1.getLogger().error(`Check invoking command is correct and connecting service/host is right for the command`);
+                    }
                     return reject(new Error(`Status not ok: ${res.statusCode}`));
                 }
                 const chunks = [];
                 res.on("data", chunk => {
                     chunks.push(chunk);
-                    logger_1.getLogger().debug(`Response chunk data arrived`);
+                    if (chunks.length === 0) {
+                        logger_1.getLogger().debug(`The first response chunk data arrived`);
+                    }
                 });
                 res.on("end", () => {
                     try {

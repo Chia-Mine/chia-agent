@@ -1,6 +1,7 @@
 import type { CloseEvent, ErrorEvent, MessageEvent, OpenEvent } from "ws";
 import * as WS from "ws";
-import { daemon_service, register_service_command, TRegisterServiceResponse, WsMessage } from "../api/ws";
+import { daemon_service, TRegisterServiceResponse, WsMessage } from "../api/ws";
+import { register_service_command } from "../api/ws/daemon";
 import { GetMessageType } from "../api/types";
 export declare type EventType = "open" | "message" | "error" | "close";
 export declare type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
@@ -31,7 +32,7 @@ declare class Daemon {
      */
     connect(daemonServerURL?: string): Promise<boolean>;
     close(): Promise<unknown>;
-    sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<WsMessage>;
+    sendMessage<M extends WsMessage = WsMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M>;
     createMessageTemplate(command: string, destination: string, data: Record<string, unknown>): {
         command: string;
         data: Record<string, unknown>;

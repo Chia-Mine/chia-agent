@@ -113,21 +113,21 @@ export declare type TFarmBlockRequest = {
 };
 export declare type TFarmBlockResponse = {};
 export declare function farm_block(agent: TRPCAgent, data: TFarmBlockRequest): Promise<TFarmBlockResponse>;
-export declare const get_initial_freeze_period_command = "get_initial_freeze_period";
-export declare type get_initial_freeze_period_command = typeof get_initial_freeze_period_command;
-export declare type TGetInitialFreezePeriodRequest = {};
-export declare type TGetInitialFreezePeriodResponse = {
+export declare const get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";
+export declare type get_initial_freeze_period_command_of_wallet = typeof get_initial_freeze_period_command_of_wallet;
+export declare type TGetInitialFreezePeriodRequestOfWallet = {};
+export declare type TGetInitialFreezePeriodResponseOfWallet = {
     INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export declare function get_initial_freeze_period(agent: TRPCAgent): Promise<TGetInitialFreezePeriodResponse>;
-export declare const get_network_info_command = "get_network_info";
-export declare type get_network_info_command = typeof get_network_info_command;
-export declare type TGetNetworkInfoRequest = {};
-export declare type TGetNetworkInfoResponse = {
+export declare function get_initial_freeze_period_of_wallet(agent: TRPCAgent): Promise<TGetInitialFreezePeriodResponseOfWallet>;
+export declare const get_network_info_command_of_wallet = "get_network_info";
+export declare type get_network_info_command_of_wallet = typeof get_network_info_command_of_wallet;
+export declare type TGetNetworkInfoRequestOfWallet = {};
+export declare type TGetNetworkInfoResponseOfWallet = {
     network_name: str;
     network_prefix: str;
 };
-export declare function get_network_info(agent: TRPCAgent): Promise<TGetNetworkInfoResponse>;
+export declare function get_network_info_of_wallet(agent: TRPCAgent): Promise<TGetNetworkInfoResponseOfWallet>;
 export declare const get_wallets_command = "get_wallets";
 export declare type get_wallets_command = typeof get_wallets_command;
 export declare type TGetWalletsRequest = {};
