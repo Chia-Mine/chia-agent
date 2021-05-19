@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import {getDaemon} from "../daemon/index";
 import {setLogLevel} from "../logger";
+import {on_new_farming_info} from "../api/ws/farmer/index";
 
 setLogLevel("error");
 
@@ -29,13 +30,13 @@ if(command === "farm"){
       let sumTotalPlot = 0;
       let sumTotalProof = 0;
     
-      daemon.addMessageListener("chia_farmer", (e) => {
+      const unsubscribe = await on_new_farming_info(daemon, (e) => {
         if(e.command === "new_farming_info"){
           const {farming_info} = e.data;
           const {challenge_hash, passed_filter, proofs, total_plots, timestamp} = farming_info;
           const date = new Date(timestamp*1000);
           console.log(`${challenge_hash.substr(0, 32)}... ${passed_filter}/${total_plots} ${proofs} ${date.toLocaleTimeString()}`);
-        
+    
           sumPassedFilter += passed_filter;
           sumTotalPlot += total_plots;
           sumTotalProof += proofs;
@@ -44,6 +45,8 @@ if(command === "farm"){
     
       const onTerminate = async () => {
         console.log("Terminating process...");
+  
+        unsubscribe();
         
         const percentage = Math.round((sumPassedFilter/sumTotalPlot)*10000)/100;
         console.log(`total passed_filters: ${sumPassedFilter}`);

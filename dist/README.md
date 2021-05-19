@@ -1,88 +1,114 @@
 # chia-agent
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Websocket client for chia daemon for nodejs.
+chia rpc/websocket client library for NodeJS.  
+Supports all RPC/Websocket API available at `chia 1.1.x`.  
 
-## What `chia-agent` can do.
-
-`chia-agent` connects to chia daemon via websocket and monitor realtime chia status.  
-
-For example, you can develop your own nodejs script to:  
-- Send email when proof is found.
-- Get customizable stats report.
-- Trigger your scripts when target event is observed.
+you can develop your own nodejs script with `chia-agent` to:
+- retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
+- send email when proof is found.
+- trigger scripts when target event is observed.
 - start/stop services.
-- etc, etc
-
-**I'm working on additional api documentation. Please be patient.**
-
+- write program to schedule plotting with javascript.
+- etc, etc, etc
 
 ## Install
-
 ```
 npm install chia-agent
 # or
 yarn add chia-agent
 ```
 
+## API
+There are 2 kinds of APIs in chia.  
+`RPC API` and `Websocket API`.
 
+### RPC API
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
 
-## Sample Node.js script for sending email when proof is found.
-**\*chia daemon must be started in advance.**
-Chia daemon automatically starts up when running GUI or 
+RPC API is just an async function in a traditional request/response style.
 
 ```js
-// sample.js
-const {getDaemon, setLogLevel} = require("chia-agent");
-setLogLevel("debug"); // none/error/warning/info/debug is avaiable.
+const {RPCAgent, setLogLevel} = require("chia-agent");
+const {get_plots} = require("chia-agent/api/rpc");
+setLogLevel("debug");
 
-const daemon = getDaemon();
+const agent = new RPCAgent({
+  service: "harvester",
+});
 
-(async function(){
-  await daemon.connect();
-  // By subscribing "wallet_ui", you can monitor messages sent for GUI.
-  // Available subscription will be provided later.
-  await daemon.subscribe("wallet_ui");
+const res = await get_plots(agent);
+console.log(res.plots[0]);
 
-  // Detailed API specification will be provided later.
-  daemon.addMessageListener("chia_farmer", (e) => {
-    if(e.command === "new_farming_info"){
-      const {farming_info} = e.data;
-      const {challenge_hash, passed_filter, proofs, total_plots, timestamp} = farming_info;
-      const date = new Date(timestamp*1000);
-
-      console.log(`${challenge_hash.substr(0, 32)}... ${passed_filter}/${total_plots} ${proofs} ${date.toLocaleTimeString()}`);
-      
-      if(proofs > 0){
-        // You can implement some code here to send email.
-      }
-    }
-  });
-
-})();
-
-//  You can implement onClose event handler.
-process.addListener("SIGTERM", onTerminate);
-process.addListener("SIGINT", onTerminate);
-async function onTerminate(){
-  console.log("Terminating process. Please wait for a moment...");
-  
-  // Do some closing stuff.
-  
-  let timer = null;
-  daemon.addEventListener("close", () => {
-    if(timer) clearTimeout(timer);
-    process.exit(0);
-  });
-  await daemon.close();
-  
-  timer = setTimeout(() => {
-    console.error("Closing request timed out.");
-    timer = null;
-    process.exit(1);
-  }, 15*1000);
+/*
+// sample output
+{
+  file_size: 108875876912,
+  filename: 'M:\\plot-k32-yyyy-mm-dd-xx-xx-xxxxxxxxxxxxxxxxxxxxxxxxx.plot',
+  'plot-seed': '0x3098da093...',
+  plot_public_key: '0x934a93489...',
+  pool_contract_puzzle_hash: null,
+  pool_public_key: '0xb0aa9485c0d...',
+  size: 32,
+  time_modified: 1619540745.1640463
 }
+*/
 ```
 
-## API
-[See Document here](https://github.com/Chia-Mine/chia-agent/blob/main/API.md)
+### Websocket API
+Websocket API is used to connect to chia `daemon`.
+
+With websocket API, you can request chia daemon to start/stop plotting or other services,  
+or capture various broadcast messages like:
+- Plotting progress
+- Farming info such as passed filter, proofs found, etc.
+
+```js
+const {getDaemon, setLogLevel} = require("chia-agent");
+const {on_new_farming_info} = require("chia-agent/api/ws");
+
+setLogLevel("debug");
+
+const daemon = getDaemon();
+await daemon.connect(); // connect to local farm service using config file.
+const unsubscribe = await on_new_farming_info(daemon, (e) => {
+  console.log(e.data);
+})
+
+setTimeout(async () => {
+  unsubscribe(); // Stop capturing message
+  daemon.close();
+}, 30*1000); // Disconnect after 30s passed.
+
+/*
+// sample output
+{
+  farming_info: {
+    challenge_hash: '0x07228cf04e8877797adc1e0605018007def282548f009564b00286886e23e88b',
+    passed_filter: 0,
+    proofs: 0,
+    signage_point: '0xfe1272a8e6659c0a3875cac37f8b170f1f85d47fecfee36d825dfae0b2a73a31',
+    timestamp: 1621255822,
+    total_plots: 299
+  },
+  success: true
+}
+ */
+```
+
+## API Reference
+[See Documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/api)
+
+## Examples
+[See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
+
+## API Compatibility Memo
+When original RPC/Websocket server API changes, those changes must be imported to this repository.  
+To check API update, check the link below.  
+If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the link, please let me know.  
+
+https://github.com/Chia-Network/chia-blockchain/compare/1c808b6c2910ed32fdbfdfc576ba1bc5a5adeac9...main  
+
+## Donation
+For continuous development, please support me with donation
+`xch1wqpcvquv98qmeh9hg6wqpzhzmgs73lgvd8a7v5240nxgyat4p0sq4gdzyy`

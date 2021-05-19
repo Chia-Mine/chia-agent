@@ -4,6 +4,9 @@ import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
+import {daemon_service, TRegisterServiceResponse, WsMessage} from "../api/ws";
+import {register_service_command} from "../api/ws/daemon";
+import {GetMessageType} from "../api/types";
 
 export type EventType = "open" | "message" | "error" | "close";
 export type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
@@ -15,40 +18,65 @@ type EventListenerOf<T> =
       : T extends "error" ? EventListener<ErrorEvent>
         : T extends "close" ? EventListener<CloseEvent> : never;
 
-export type MessageData = {
-  command: string;
-  ack: boolean;
-  data: any;
-  request_id: string;
-  destination: string;
-  origin: string;
-};
-export type MessageListener = (data: MessageData) => unknown;
+export type MessageListener<D extends WsMessage> = (msg: D) => unknown;
 
-const agentServiceName = "chia_agent";
+const chia_agent_service = "chia_agent";
 
-let socket: Daemon|null = null;
+let daemon: Daemon|null = null;
 
 export function getDaemon(){
-  if(socket){
-    return socket;
+  if(daemon){
+    return daemon;
   }
   
-  return socket = new Daemon();
+  return daemon = new Daemon();
 }
+
+// Gracefully disconnect from remote daemon server on Ctrl+C.
+const onProcessExit = () => {
+  if(!daemon){
+    process.removeListener("SIGINT", onProcessExit);
+    process.kill(process.pid, "SIGINT");
+    return;
+  }
+  
+  setTimeout(async () => {
+    try{
+      if(daemon && daemon.connected && !daemon.closing){
+        getLogger().debug("Detected Ctrl+C. Initiating shutdown...");
+        await daemon.close();
+        
+        process.removeListener("SIGINT", onProcessExit);
+        process.kill(process.pid, "SIGINT");
+      }
+    }
+    catch(e){
+      process.stderr.write(JSON.stringify(e));
+      process.exit(1);
+    }
+  }, 67);
+};
+process.addListener("SIGINT", onProcessExit);
 
 class Daemon {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: {[request_id: string]: (value: (MessageData | PromiseLike<MessageData>)) => void} = {};
+  protected _responseQueue: {[request_id: string]: (value: (WsMessage | PromiseLike<WsMessage>)) => void} = {};
   protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
   protected _closeEventListeners: Array<(e: CloseEvent) => unknown> = [];
-  protected _messageListeners: Record<string, Array<(e: MessageData) => unknown>> = {};
+  protected _messageListeners: Record<string, Array<(e: WsMessage) => unknown>> = {};
+  protected _closing: boolean = false;
+  protected _onClosePromise: (() => unknown)|undefined;
+  protected _subscriptions: string[] = [];
   
   public get connected(){
     return Boolean(this._connectedUrl);
+  }
+  
+  public get closing(){
+    return this._closing;
   }
   
   public constructor() {
@@ -60,17 +88,17 @@ class Daemon {
   
   /**
    * Connect to local daemon via websocket.
-   * @param url
+   * @param daemonServerURL
    */
-  public async connect(url?: string): Promise<boolean> {
-    if(!url){
+  public async connect(daemonServerURL?: string): Promise<boolean> {
+    if(!daemonServerURL){
       const config = getConfig();
       const daemonHost = config["/ui/daemon_host"];
       const daemonPort = config["/ui/daemon_port"];
-      url = `wss://${daemonHost}:${daemonPort}`;
+      daemonServerURL = `wss://${daemonHost}:${daemonPort}`;
     }
     
-    if(this._connectedUrl === url){
+    if(this._connectedUrl === daemonServerURL){
       return true;
     }
     else if(this._connectedUrl){
@@ -78,30 +106,33 @@ class Daemon {
       return false;
     }
     
-    getLogger().debug(`Opening websocket connection to ${url}`);
+    getLogger().debug(`Opening websocket connection to ${daemonServerURL}`);
     
-    const result = await open(url);
+    const result = await open(daemonServerURL);
     this._socket = result.ws;
     this._socket.onerror = this.onError;
     this._socket.onmessage = this.onMessage;
     this._socket.onclose = this.onClose;
     
-    await this.onOpen(result.openEvent, url);
+    await this.onOpen(result.openEvent, daemonServerURL);
     
     return true;
   }
   
   public async close(){
-    if(!this._socket){
-      return;
-    }
-    
-    getLogger().debug("Closing web socket connection");
-    this._socket.close();
-    this._socket = null;
+    return new Promise(((resolve) => {
+      if(this._closing || !this._socket){
+        return;
+      }
+  
+      getLogger().debug("Closing web socket connection");
+      this._socket.close();
+      this._closing = true;
+      this._onClosePromise = resolve as () => unknown; // Resolved in onClose function.
+    }));
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<MessageData> {
+  public async sendMessage<M extends WsMessage = WsMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -112,7 +143,7 @@ class Daemon {
       let timer: ReturnType<typeof setTimeout>|null = null;
       const message = this.createMessageTemplate(command, destination, data || {});
       const reqId = message.request_id;
-      this._responseQueue[reqId] = resolve;
+      this._responseQueue[reqId] = resolve as (v: WsMessage|PromiseLike<WsMessage>) => unknown;
       
       getLogger().debug(`Sending message. dest=${destination} command=${command} reqId=${reqId}`);
       this._socket.send(JSON.stringify(message));
@@ -124,25 +155,43 @@ class Daemon {
       command,
       data,
       ack: false,
-      origin: agentServiceName,
+      origin: chia_agent_service,
       destination,
       request_id: randomBytes(32).toString("hex"),
     };
   }
   
-  public async subscribe(service: string){
+  public async subscribe(service: string): Promise<GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>> {
+    if(!this.connected || !this._socket){
+      getLogger().error(`Tried to subscribe '${service}' without active connection`);
+      throw new Error("Not connected");
+    }
+    
+    if(this._subscriptions.findIndex(s => s === service) > -1){
+      return {
+        command: "register_service",
+        data: { success: true },
+        ack: true,
+        origin: "daemon",
+        destination: chia_agent_service,
+        request_id: "",
+      };
+    }
+    
     let error: unknown;
     const result = await this.sendMessage("daemon", "register_service", {service}).catch(e => {
       error = e;
       return null;
     });
     
-    if(error){
+    if(error || !result){
       getLogger().error("Failed to register agent service to daemon");
       throw new Error("Subscribe failed");
     }
     
-    return result;
+    this._subscriptions.push(service);
+    
+    return result as GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>;
   }
   
   public addEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>){
@@ -189,6 +238,7 @@ class Daemon {
     this._messageEventListeners = [];
     this._errorEventListeners = [];
     this._closeEventListeners = [];
+    this._messageListeners = {};
   }
   
   /**
@@ -196,16 +246,21 @@ class Daemon {
    * @param {string} origin - Can be chia_farmer, chia_full_node, chia_wallet, etc.
    * @param listener - Triggered when a message arrives.
    */
-  public addMessageListener(origin: string|undefined, listener: MessageListener){
+  public addMessageListener<D extends WsMessage>(origin: string|undefined, listener: MessageListener<D>){
     const o = origin || "all";
     if(!this._messageListeners[o]){
       this._messageListeners[o] = [];
     }
     
-    this._messageListeners[o].push(listener);
+    this._messageListeners[o].push(listener as MessageListener<WsMessage>);
+    
+    // Returns removeMessageListener function.
+    return () => {
+      this.removeMessageListener(o, listener);
+    };
   }
   
-  public removeMessageListener(origin: string, listener: MessageListener){
+  public removeMessageListener<D extends WsMessage>(origin: string, listener: MessageListener<D>){
     const listeners = this._messageListeners[origin];
     if(!listeners){
       return;
@@ -226,7 +281,7 @@ class Daemon {
     this._connectedUrl = url;
     this._openEventListeners.forEach(l => l(event));
   
-    return this.subscribe(agentServiceName);
+    return this.subscribe(chia_agent_service);
   }
   
   protected onError(error: ErrorEvent){
@@ -235,7 +290,7 @@ class Daemon {
   }
   
   protected onMessage(event: MessageEvent){
-    const payload = JSON.parse(event.data as string) as MessageData;
+    const payload = JSON.parse(event.data as string) as WsMessage;
     const {request_id, origin, command} = payload;
     getLogger().debug(`Arrived message. origin=${origin} command=${command} reqId=${request_id}`);
   
@@ -259,8 +314,26 @@ class Daemon {
   }
   
   protected onClose(event: CloseEvent){
+    if(this._socket){
+      this._socket.removeEventListener("error", this.onError);
+      this._socket.removeEventListener("message", this.onMessage);
+      this._socket.removeEventListener("close", this.onClose);
+      this._socket = null;
+    }
+    
+    this._closing = false;
     this._connectedUrl = "";
+    this._subscriptions = [];
     this._closeEventListeners.forEach(l => l(event));
+    this.clearAllEventListeners();
+    
     getLogger().info(`Closed ws connection`);
+    
+    if(this._onClosePromise){
+      this._onClosePromise();
+      this._onClosePromise = undefined;
+    }
   }
 }
+
+export type TDaemon = InstanceType<typeof Daemon>;

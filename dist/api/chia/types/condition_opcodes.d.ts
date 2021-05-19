@@ -1,0 +1,20 @@
+export declare const ConditionOpcodes: {
+    readonly UNKNOWN: "0";
+    readonly AGG_SIG_UNSAFE: "1";
+    readonly AGG_SIG_ME: "2";
+    readonly CREATE_COIN: "3";
+    readonly RESERVE_FEE: "4";
+    readonly CREATE_COIN_ANNOUNCEMENT: "12";
+    readonly ASSERT_COIN_ANNOUNCEMENT: "13";
+    readonly CREATE_PUZZLE_ANNOUNCEMENT: "14";
+    readonly ASSERT_PUZZLE_ANNOUNCEMENT: "15";
+    readonly ASSERT_MY_COIN_ID: "22";
+    readonly ASSERT_MY_PARENT_ID: "23";
+    readonly ASSERT_MY_PUZZLEHASH: "24";
+    readonly ASSERT_MY_AMOUNT: "25";
+    readonly ASSERT_SECONDS_RELATIVE: "32";
+    readonly ASSERT_SECONDS_ABSOLUTE: "33";
+    readonly ASSERT_HEIGHT_RELATIVE: "34";
+    readonly ASSERT_HEIGHT_ABSOLUTE: "35";
+};
+export declare type ConditionOpcode = typeof ConditionOpcodes[keyof typeof ConditionOpcodes];
