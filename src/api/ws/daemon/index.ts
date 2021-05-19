@@ -1,5 +1,5 @@
 // The daemon service currently does not provide state_change event as of v1.1.5.
-import {AsyncMessage} from "../../types";
+import {GetMessageType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
 import {bool, int, Optional, str, True} from "../../chia/types/_python_types_";
 
@@ -15,8 +15,7 @@ export type TPingResponse = {
   value: str;
 };
 export async function ping(daemon: TDaemon) {
-  return daemon.sendMessage(daemon_service, ping_command) as
-    AsyncMessage<daemon_service, ping_command, TPingResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, ping_command, TPingResponse>>(daemon_service, ping_command);
 }
 
 
@@ -33,8 +32,7 @@ export type TStartServiceResponse = {
   error: Optional<str>;
 };
 export async function start_service(daemon: TDaemon, data: TStartServiceRequest) {
-  return daemon.sendMessage(daemon_service, start_service_command, data) as
-    AsyncMessage<daemon_service, start_service_command, TStartServiceResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, start_service_command, TStartServiceResponse>>(daemon_service, start_service_command, data);
 }
 
 
@@ -67,8 +65,7 @@ export type TStartPlottingResponse = {
   service_name: str; // should be 'chia plots create'
 };
 export async function start_plotting(daemon: TDaemon, data: TStartPlottingRequest) {
-  return daemon.sendMessage(daemon_service, start_plotting_command, data) as
-    AsyncMessage<daemon_service, start_plotting_command, TStartPlottingResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>>(daemon_service, start_plotting_command, data);
 }
 
 
@@ -82,8 +79,7 @@ export type TStopPlottingResponse = {
   success: bool;
 };
 export async function stop_plotting(daemon: TDaemon, data: TStopPlottingRequest) {
-  return daemon.sendMessage(daemon_service, stop_plotting_command, data) as
-    AsyncMessage<daemon_service, stop_plotting_command, TStopPlottingResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, stop_plotting_command, TStopPlottingResponse>>(daemon_service, stop_plotting_command, data);
 }
 
 
@@ -96,8 +92,7 @@ export type TStopServiceRequest = {
 export type TStopServiceResponse = {
 };
 export async function stop_service(daemon: TDaemon, data: TStopServiceRequest) {
-  return daemon.sendMessage(daemon_service, stop_service_command, data) as
-    AsyncMessage<daemon_service, stop_service_command, TStopServiceResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>>(daemon_service, stop_service_command, data);
 }
 
 
@@ -113,8 +108,7 @@ export type TIsRunningResponse = {
   is_running: bool;
 };
 export async function is_running(daemon: TDaemon, data: TIsRunningRequest) {
-  return daemon.sendMessage(daemon_service, is_running_command, data) as
-    AsyncMessage<daemon_service, is_running_command, TIsRunningResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, is_running_command, TIsRunningResponse>>(daemon_service, is_running_command, data);
 }
 
 
@@ -127,8 +121,7 @@ export type TExitResponse = {
   success: bool;
 };
 export async function exit(daemon: TDaemon) {
-  return daemon.sendMessage(daemon_service, exit_command) as
-    AsyncMessage<daemon_service, exit_command, TExitResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, exit_command, TExitResponse>>(daemon_service, exit_command);
 }
 
 
@@ -158,8 +151,7 @@ export type TRegisterServiceResponse = {
   queue: TPlotQueue[];
 };
 export async function register_service(daemon: TDaemon, data: TRegisterServiceRequest) {
-  return daemon.sendMessage(daemon_service, register_service_command, data) as
-    AsyncMessage<daemon_service, register_service_command, TRegisterServiceResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>>(daemon_service, register_service_command, data);
 }
 
 
@@ -173,6 +165,5 @@ export type TGetStatusResponse = {
   genesis_initialized: True;
 };
 export async function get_status(daemon: TDaemon) {
-  return daemon.sendMessage(daemon_service, get_status_command) as
-    AsyncMessage<daemon_service, get_status_command, TGetStatusResponse>;
+  return daemon.sendMessage<GetMessageType<daemon_service, get_status_command, TGetStatusResponse>>(daemon_service, get_status_command);
 }
