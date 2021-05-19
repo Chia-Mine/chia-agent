@@ -1,7 +1,6 @@
 import {Agent as HttpsAgent, request as httpsRequest} from "https";
 import {Agent as HttpAgent, OutgoingHttpHeaders, request as httpRequest} from "http";
 import {existsSync, readFileSync} from "fs";
-import {IAgent} from "../agent.type";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
 import {RpcMessage} from "../api/rpc/index";
@@ -56,7 +55,7 @@ export type TRPCAgentProps = {
 
 const userAgent = "chia-agent/1.0.0";
 
-export class RPCAgent implements IAgent {
+export class RPCAgent {
   protected _protocol: "http"|"https";
   protected _hostname: string;
   protected _port: number;
@@ -158,11 +157,11 @@ export class RPCAgent implements IAgent {
     return {clientCert, clientKey, caCert};
   }
   
-  public async sendMessage(destination: string, command: string, data?: Record<string, unknown>): Promise<RpcMessage> {
+  public async sendMessage<M extends RpcMessage = RpcMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     
-    return this.post(command, data);
+    return this.post(command, data) as Promise<M>;
   }
   
   public post(path: string, data: any){
@@ -240,3 +239,5 @@ export class RPCAgent implements IAgent {
     });
   }
 }
+
+export type TRPCAgent = InstanceType<typeof RPCAgent>;

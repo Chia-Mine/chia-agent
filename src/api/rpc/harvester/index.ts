@@ -1,6 +1,5 @@
 import {str} from "../../chia/types/_python_types_";
-import {IAgent} from "../../../agent.type";
-import {AsyncMessage} from "../../types";
+import {TRPCAgent} from "../../../rpc";
 import {Plot} from "../../chia/harvester/harvester";
 
 export const chia_harvester_service = "chia_harvester";
@@ -15,9 +14,8 @@ export type TGetPlotsResponse = {
   failed_to_open_filenames: str[];
   not_found_filenames: str[];
 };
-export async function get_plots(agent: IAgent) {
-  return agent.sendMessage(chia_harvester_service, get_plots_command) as
-    AsyncMessage<chia_harvester_service, get_plots_command, TGetPlotsResponse>;
+export async function get_plots(agent: TRPCAgent) {
+  return agent.sendMessage<TGetPlotsResponse>(chia_harvester_service, get_plots_command);
 }
 
 
@@ -29,9 +27,8 @@ export type TRefreshPlotsRequest = {
 };
 export type TRefreshPlotsResponse = {
 };
-export async function refresh_plots(agent: IAgent) {
-  return agent.sendMessage(chia_harvester_service, refresh_plots_command) as
-    AsyncMessage<chia_harvester_service, refresh_plots_command, TRefreshPlotsResponse>;
+export async function refresh_plots(agent: TRPCAgent) {
+  return agent.sendMessage<TRefreshPlotsResponse>(chia_harvester_service, refresh_plots_command);
 }
 
 
@@ -44,9 +41,8 @@ export type TDeletePlotRequest = {
 };
 export type TDeletePlotResponse = {
 };
-export async function delete_plot(agent: IAgent, data: TDeletePlotRequest) {
-  return agent.sendMessage(chia_harvester_service, delete_plot_command, data) as
-    AsyncMessage<chia_harvester_service, delete_plot_command, TDeletePlotResponse>;
+export async function delete_plot(agent: TRPCAgent, data: TDeletePlotRequest) {
+  return agent.sendMessage<TDeletePlotResponse>(chia_harvester_service, delete_plot_command, data);
 }
 
 
@@ -59,9 +55,8 @@ export type TAddPlotDirectoryRequest = {
 };
 export type TAddPlotDirectoryResponse = {
 };
-export async function add_plot_directory(agent: IAgent, data: TAddPlotDirectoryRequest) {
-  return agent.sendMessage(chia_harvester_service, add_plot_directory_command, data) as
-    AsyncMessage<chia_harvester_service, add_plot_directory_command, TAddPlotDirectoryResponse>;
+export async function add_plot_directory(agent: TRPCAgent, data: TAddPlotDirectoryRequest) {
+  return agent.sendMessage<TAddPlotDirectoryResponse>(chia_harvester_service, add_plot_directory_command, data);
 }
 
 
@@ -74,9 +69,8 @@ export type TGetPlotDirectoriesRequest = {
 export type TGetPlotDirectoriesResponse = {
   directories: str[];
 };
-export async function get_plot_directories(agent: IAgent) {
-  return agent.sendMessage(chia_harvester_service, get_plot_directories_command) as
-    AsyncMessage<chia_harvester_service, get_plot_directories_command, TGetPlotDirectoriesResponse>;
+export async function get_plot_directories(agent: TRPCAgent) {
+  return agent.sendMessage<TGetPlotDirectoriesResponse>(chia_harvester_service, get_plot_directories_command);
 }
 
 
@@ -89,7 +83,6 @@ export type TRemovePlotDirectoryRequest = {
 };
 export type TRemovePlotDirectoryResponse = {
 };
-export async function remove_plot_directory(agent: IAgent, data: TRemovePlotDirectoryRequest) {
-  return agent.sendMessage(chia_harvester_service, remove_plot_directory_command, data) as
-    AsyncMessage<chia_harvester_service, remove_plot_directory_command, TRemovePlotDirectoryResponse>;
+export async function remove_plot_directory(agent: TRPCAgent, data: TRemovePlotDirectoryRequest) {
+  return agent.sendMessage<TRemovePlotDirectoryResponse>(chia_harvester_service, remove_plot_directory_command, data);
 }

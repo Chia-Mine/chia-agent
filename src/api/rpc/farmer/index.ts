@@ -1,8 +1,7 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
 import {bool, str, uint64, uint8} from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {IAgent} from "../../../agent.type";
-import {AsyncMessage} from "../../types";
+import {TRPCAgent} from "../../../rpc/index";
 
 export const chia_farmer_service = "chia_farmer";
 export type chia_farmer_service = typeof chia_farmer_service;
@@ -23,9 +22,8 @@ export type TGetSignagePointResponse = {
   };
   proofs: [string, ProofOfSpace];
 };
-export async function get_signage_point(agent: IAgent, params: TGetSignagePointRequest) {
-  return agent.sendMessage(chia_farmer_service, get_signage_point_command, params) as
-    AsyncMessage<chia_farmer_service, get_signage_point_command, TGetSignagePointResponse>;
+export async function get_signage_point(agent: TRPCAgent, params: TGetSignagePointRequest) {
+  return agent.sendMessage<TGetSignagePointResponse>(chia_farmer_service, get_signage_point_command, params);
 }
 
 
@@ -36,9 +34,8 @@ export type TGetSignagePointsRequest = {
 export type TGetSignagePointsResponse = {
   signage_points: TGetSignagePointResponse[];
 };
-export async function get_signage_points(agent: IAgent){
-  return agent.sendMessage(chia_farmer_service, get_signage_points_command) as
-    AsyncMessage<chia_farmer_service, get_signage_points_command, TGetSignagePointsResponse>;
+export async function get_signage_points(agent: TRPCAgent){
+  return agent.sendMessage<TGetSignagePointsResponse>(chia_farmer_service, get_signage_points_command);
 }
 
 
@@ -57,9 +54,8 @@ export type TGetRewardTargetResponse = {
   farmer_target: str;
   pool_target: str;
 };
-export async function get_reward_targets(agent: IAgent, params: TGetRewardTargetRequest){
-  return agent.sendMessage(chia_farmer_service, get_reward_targets_command, params) as
-    AsyncMessage<chia_farmer_service, get_reward_targets_command, TGetRewardTargetResponse>;
+export async function get_reward_targets(agent: TRPCAgent, params: TGetRewardTargetRequest){
+  return agent.sendMessage<TGetRewardTargetResponse>(chia_farmer_service, get_reward_targets_command, params);
 }
 
 
@@ -72,7 +68,6 @@ export type TSetRewardTargetRequest = {
 };
 export type TSetRewardTargetResponse = {
 };
-export async function set_reward_targets(agent: IAgent, params: TSetRewardTargetRequest){
-  return agent.sendMessage(chia_farmer_service, set_reward_targets_command, params) as
-    AsyncMessage<chia_farmer_service, set_reward_targets_command, TSetRewardTargetResponse>;
+export async function set_reward_targets(agent: TRPCAgent, params: TSetRewardTargetRequest){
+  return agent.sendMessage<TSetRewardTargetResponse>(chia_farmer_service, set_reward_targets_command, params);
 }
