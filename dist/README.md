@@ -97,7 +97,7 @@ setTimeout(async () => {
 ```
 
 ## API Reference
-[See Documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/api)
+[See Documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/src/api/README.md)
 
 ## Examples
 [See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
