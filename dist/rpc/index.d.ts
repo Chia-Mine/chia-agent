@@ -26,7 +26,7 @@ export declare type TRPCAgentProps = {
     host: string;
     port: number;
 } | {
-    destination: TDestination;
+    service: TDestination;
     configPath?: string;
 };
 export declare class RPCAgent implements IAgent {

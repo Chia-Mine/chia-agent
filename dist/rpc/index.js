@@ -78,8 +78,8 @@ class RPCAgent {
         else {
             this._protocol = "https";
             const config = this._getConfig("configPath" in props ? props.configPath : undefined);
-            const { hostname, port } = getConnectionInfoFromConfig(props.destination, config);
-            logger_1.getLogger().debug(`Picked ${hostname}:${port} for ${props.destination}`);
+            const { hostname, port } = getConnectionInfoFromConfig(props.service, config);
+            logger_1.getLogger().debug(`Picked ${hostname}:${port} for ${props.service}`);
             this._hostname = hostname;
             this._port = port;
             const certs = this._loadCertFilesFromConfig(config);
