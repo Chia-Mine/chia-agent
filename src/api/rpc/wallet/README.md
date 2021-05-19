@@ -31,6 +31,13 @@ const agent = new RPCAgent({
 ---
 
 ## `log_in(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {log_in} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await log_in(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -64,7 +71,14 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/b
 ---
 
 ## `get_public_keys(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_public_keys} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_public_keys(agent);
+```
+### response:
 ```typescript
 {
   public_key_fingerprints: int[];
@@ -74,13 +88,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/b
 ---
 
 ## `get_private_key(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_private_key} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_private_key(agent, {fingerpring: 12345678});
+```
 ### params:
 ```typescript
 {
   fingerprint: int;
 }
 ```
-### response
+### response:
 ```typescript
 private_key: {
   fingerprint: int;
@@ -93,7 +114,14 @@ private_key: {
 ---
 
 ## `generate_mnemonic(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {generate_mnemonic} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await generate_mnemonic(agent);
+```
+### response:
 ```typescript
 {
   mnemonic: str[];
@@ -103,6 +131,13 @@ private_key: {
 ---
 
 ## `add_key(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {add_key} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await add_key(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -114,7 +149,7 @@ private_key: {
   file_path: str;
 }
 ```
-### response
+### response:
 ```typescript
 {
   success: false;
@@ -128,13 +163,20 @@ private_key: {
 ---
 
 ## `delete_key(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {delete_key} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await delete_key(agent, {fingerprint: 12345678});
+```
 ### params:
 ```typescript
 {
   fingerprint: int;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -142,16 +184,30 @@ private_key: {
 ---
 
 ## `delete_all_keys(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {delete_all_keys} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await delete_all_keys(agent);
+```
+### response:
 ```typescript
 {}
 ```
-No input nor response 
+No params nor response 
 
 ---
 
 ## `get_sync_status(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_sync_status} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_sync_status(agent);
+```
+### response:
 ```typescript
 {
   synced: bool;
@@ -163,7 +219,14 @@ No input nor response
 ---
 
 ## `get_height_info(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_height_info} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_height_info(agent);
+```
+### response:
 ```typescript
 {
   height: uint32;
@@ -173,13 +236,20 @@ No input nor response
 ---
 
 ## `farm_block(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {farm_block} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await farm_block(agent, {address: "..."});
+```
 ### params:
 ```typescript
 {
   address: str;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -187,7 +257,14 @@ No input nor response
 ---
 
 ## `get_initial_freeze_period_of_wallet(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_initial_freeze_period_of_wallet} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_initial_freeze_period_of_wallet(agent);
+```
+### response:
 ```typescript
 {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
@@ -197,7 +274,14 @@ No input nor response
 ---
 
 ## `get_network_info_of_wallet(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_network_info_of_wallet} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_network_info_of_wallet(agent);
+```
+### response:
 ```typescript
 {
   network_name: str;
@@ -208,7 +292,14 @@ No input nor response
 ---
 
 ## `get_wallets(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_wallets} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_wallets(agent);
+```
+### response:
 ```typescript
 {
   wallets: WalletInfo[];
@@ -220,6 +311,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet
 ---
 
 ## `create_new_wallet(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {create_new_wallet} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await create_new_wallet(agent, {...});
+```
 ### params:
 One of `TCreate_New_CC_WalletRequest`, `TCreate_New_RC_WalletRequest`, `TCreate_New_DID_WalletRequest`
 ```typescript
@@ -264,7 +362,7 @@ type TCreate_New_DID_WalletRequest = {
   filename: str;
 };
 ```
-### response
+### response:
 One of `TCreate_New_CC_WalletResponse`, `TCreate_New_RC_WalletResponse`, `TCreate_New_DID_WalletResponse`
 ```typescript
 type TCreate_New_CC_WalletResponse = {
@@ -311,13 +409,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ---
 
 ## `get_wallet_balance(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_wallet_balance} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_wallet_balance(agent, {wallet_id: ...});
+```
 ### params:
 ```typescript
 {
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_balance: {
@@ -336,13 +441,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ---
 
 ## `get_transaction(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_transaction} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_transaction(agent, {transaction_id: "..."});
+```
 ### params:
 ```typescript
 {
   transaction_id: bytes32;
 }
 ```
-### response
+### response:
 ```typescript
 {
   transaction: TransactionRecord;
@@ -355,6 +467,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `get_transactions(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_transactions} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_transactions(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -363,7 +482,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   end?: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   transactions: Array<TransactionRecord & {to_address: string}>;
@@ -376,6 +495,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `get_next_address(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_next_address} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_next_address(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -383,7 +509,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: uint32;
@@ -394,6 +520,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `send_transaction(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {send_transaction} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await send_transaction(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -403,7 +536,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   address: str;
 }
 ```
-### response
+### response:
 ```typescript
 {
   transaction: TransactionRecord;
@@ -416,13 +549,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `create_backup(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {create_backup} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await create_backup(agent, {file_path: "..."});
+```
 ### params:
 ```typescript
 {
   file_path: str;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -430,13 +570,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `get_transaction_count(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_transaction_count} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_transaction_count(agent, {wallet_id: ...});
+```
 ### params:
 ```typescript
 {
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: int;
@@ -447,7 +594,14 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `get_farmed_amount(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_farmed_amount} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_farmed_amount(agent);
+```
+### response:
 ```typescript
 {
   farmed_amount: int;
@@ -461,6 +615,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `create_signed_transaction(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {create_signed_transaction} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await create_signed_transaction(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -472,7 +633,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   coins?: Coin[];
 }
 ```
-### response
+### response:
 ```typescript
 {
   signed_tx: TransactionRecord;
@@ -487,6 +648,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `cc_set_name(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {cc_set_name} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await cc_set_name(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -494,7 +662,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   name: str;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: int;
@@ -504,13 +672,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `cc_get_name(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {cc_get_name} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await cc_get_name(agent, {...});
+```
 ### params:
 ```typescript
 {
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: int;
@@ -521,6 +696,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `cc_spend(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {cc_spend} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await cc_spend(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -530,7 +712,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   fee?: uint64;
 }
 ```
-### response
+### response:
 ```typescript
 {
   transaction: TransactionRecord;
@@ -543,13 +725,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `cc_get_colour(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {cc_get_colour} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await cc_get_colour(agent, {wallet_id: ...});
+```
 ### params:
 ```typescript
 {
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   colour: str;
@@ -560,6 +749,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `create_offer_for_ids(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {create_offer_for_ids} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await create_offer_for_ids(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -567,7 +763,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   filename: str;
 }
 ```
-### response
+### response:
 ```typescript
 {
   discrepancies: Optional<Record<str, int>>;
@@ -577,13 +773,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `get_discrepancies_for_offer(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_discrepancies_for_offer} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_discrepancies_for_offer(agent, {filename: "..."});
+```
 ### params:
 ```typescript
 {
   filename: str;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -591,13 +794,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `respond_to_offer(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {respond_to_offer} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await respond_to_offer(agent, {filename: "..."});
+```
 ### params:
 ```typescript
 {
   filename: str;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -605,13 +815,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `get_trade(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_trade} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_trade(agent, {trade_id: "..."});
+```
 ### params:
 ```typescript
 {
   trade_id: bytes;
 }
 ```
-### response
+### response:
 ```typescript
 {
   trade: {
@@ -630,7 +847,14 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `get_all_trades(agent)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_all_trades} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_all_trades(agent);
+```
+### response:
 ```typescript
 {
   trades: Array<{
@@ -649,6 +873,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `cancel_trade(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {cancel_trade} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await cancel_trade(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -656,7 +887,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   trade_id: str;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -664,6 +895,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `did_update_recovery_ids(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_update_recovery_ids} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_update_recovery_ids(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -672,7 +910,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   num_verifications_required?: uint64;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -680,6 +918,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `did_spend(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_spend} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_spend(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -687,7 +932,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   puzzlehash: bytes32;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -695,7 +940,14 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `did_get_pubkey(agent, params)`
-### response
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_get_pubkey} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_get_pubkey(agent);
+```
+### response:
 ```typescript
 {
   pubkey: str;
@@ -705,13 +957,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `did_get_did(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_get_did} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_get_did(agent, {wallet_id: ...});
+```
 ### params:
 ```typescript
 {
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: int;
@@ -723,6 +982,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `did_recovery_spend(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_recovery_spend} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_recovery_spend(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -732,7 +998,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   puzhash: str;
 }
 ```
-### response
+### response:
 ```typescript
 {
   success: SpendBundle;
@@ -744,13 +1010,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ---
 
 ## `did_get_recovery_list(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_get_recovery_list} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_get_recovery_list(agent, {wallet_id: ...});
+```
 ### params:
 ```typescript
 {
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: int;
@@ -762,6 +1035,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ---
 
 ## `did_create_attest(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_create_attest} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_create_attest(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -771,7 +1051,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
   filename: str;
 }
 ```
-### response
+### response:
 ```typescript
 {
   message_spend_bundle: str;
@@ -782,13 +1062,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ---
 
 ## `did_get_information_needed_for_recovery(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_get_information_needed_for_recovery} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_get_information_needed_for_recovery(agent, {wallet_id: ...});
+```
 ### params:
 ```typescript
 {
   wallet_id: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: int;
@@ -803,6 +1090,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ---
 
 ## `did_create_backup_file(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_create_backup_file} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_create_backup_file(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -810,7 +1104,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
   filename: str;
 }
 ```
-### response
+### response:
 ```typescript
 {
   wallet_id: int;
@@ -820,6 +1114,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ---
 
 ## `rl_set_user_info(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {rl_set_user_info} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await rl_set_user_info(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -834,7 +1135,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
   admin_pubkey: str;
 }
 ```
-### response
+### response:
 ```typescript
 {}
 ```
@@ -842,6 +1143,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ---
 
 ## `send_clawback_transaction(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {send_clawback_transaction} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await send_clawback_transaction(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -849,7 +1157,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
   fee: int;
 }
 ```
-### response
+### response:
 ```typescript
 {
   transaction: TransactionRecord;
@@ -862,6 +1170,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `add_rate_limited_funds(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {add_rate_limited_funds} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await add_rate_limited_funds(agent, {...});
+```
 ### params:
 ```typescript
 {
@@ -870,7 +1185,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
   fee: uint64;
 }
 ```
-### response
+### response:
 ```typescript
 {
   status: "SUCCESS";
