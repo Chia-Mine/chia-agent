@@ -7,7 +7,7 @@ Please remember that all rpc API is provided as an async function.
 const {RPCAgent} = require("chia-agent");
 const {get_block} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({
-  destination: "full_node", // connect to local full_node service using config file.
+  service: "full_node", // connect to local full_node service using config file.
 });
 // Then call RPC function
 const response = await get_block(agent, {...});

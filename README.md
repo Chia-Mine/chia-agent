@@ -34,7 +34,7 @@ const {get_plots} = require("chia-agent/api/rpc");
 setLogLevel("debug");
 
 const agent = new RPCAgent({
-  destination: "harvester",
+  service: "harvester",
 });
 
 const res = await get_plots(agent);

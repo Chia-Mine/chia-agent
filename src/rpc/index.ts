@@ -50,7 +50,7 @@ export type TRPCAgentProps = {
   host: string;
   port: number;
 } | {
-  destination: TDestination;
+  service: TDestination;
   configPath?: string;
 };
 

@@ -7,7 +7,7 @@ Please remember that all rpc API is provided as an async function.
 const {RPCAgent} = require("chia-agent");
 const {get_signage_point} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({
-  destination: "farmer", // connect to local farmer service using config file.
+  service: "farmer", // connect to local farmer service using config file.
 });
 // Then call RPC function
 const response = await get_signage_point(agent, {...});

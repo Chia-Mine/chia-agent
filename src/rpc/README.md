@@ -27,13 +27,13 @@ There are several ways to specify connection info.
 If `configPath` is omitted, `chia-agent` tries to search from default config file path.
 ```typescript
 options = {
-  destination: "farmer"|"harvester"|"full_node"|"wallet"|"daemon";
+  service: "farmer"|"harvester"|"full_node"|"wallet"|"daemon";
   configPath?: string;
 }
 ```
 example
 ```js
-const agent = new RPCAgent({destination: "full_node"});
+const agent = new RPCAgent({service: "full_node"});
 ```
 
 ---
