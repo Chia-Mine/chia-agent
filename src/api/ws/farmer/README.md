@@ -1,15 +1,19 @@
 # Websocket Message from Farmer service
 
-## Usage
+### `on_message_from_farmer`
+Capture all broadcast messages coming from `chia_farmer` service.
+
+#### Usage
 You need to create Websocket connection before subscribing websocket messages.
 ```js
 const {getDaemon} = require("chia-agent");
-const {on_new_farming_info} = require("chia-agent/api/ws");
+const {on_message_from_farmer} = require("chia-agent/api/ws");
 
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
 
-const unsubscribe = await on_new_farming_info(daemon, (event) => {
+// Capture all messages from `chia_farmer`
+const unsubscribe = await on_message_from_farmer(daemon, (event) => {
   console.log(e.data);
 
   // Close connection if you don't need it anymore.
@@ -22,8 +26,10 @@ const unsubscribe = await on_new_farming_info(daemon, (event) => {
 
 ---
 
-## `on_new_farming_info`
-###Usage
+### `on_new_farming_info`
+Capture broadcast message of command `new_farming_info` from `chia_farmer` service.
+
+#### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
 const {on_new_farming_info} = require("chia-agent/api/ws");
@@ -38,7 +44,7 @@ const unsubscribe = await on_new_farming_info(daemon, (event) => {
 unsubscribe(); // Stop subscribing messages
 ```
 
-### event:
+#### event:
 ```typescript
 {
   origin: "chia_farmer";
@@ -49,7 +55,7 @@ unsubscribe(); // Stop subscribing messages
   destination: string;
 }
 ```
-### data:
+#### data:
 ```typescript
 {
   farming_info: {
@@ -65,8 +71,10 @@ unsubscribe(); // Stop subscribing messages
 
 ---
 
-## `on_new_signage_point`
-###Usage
+### `on_new_signage_point`
+Capture broadcast message of command `new_signage_point` from `chia_farmer` service.
+
+####Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
 const {on_new_signage_point} = require("chia-agent/api/ws");
@@ -81,7 +89,7 @@ const unsubscribe = await on_new_signage_point(daemon, (event) => {
 unsubscribe(); // Stop subscribing messages
 ```
 
-### event:
+#### event:
 ```typescript
 {
   origin: "chia_farmer";
@@ -92,7 +100,7 @@ unsubscribe(); // Stop subscribing messages
   destination: string;
 }
 ```
-### data:
+#### data:
 ```typescript
 {
   proofs: ProofOfSpace[];

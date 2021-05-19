@@ -21,3 +21,17 @@ export async function on_state_changed_of_plots(daemon: TDaemon, callback: (e: G
   };
   return daemon.addMessageListener(chia_plots_create_service, messageListener);
 }
+
+// Whole commands for the service
+export type chia_plots_create_commands = state_changed_command_of_plots;
+export type TChiaPlotsCreateBroadcast = TStateChangedBroadCastOfPlots;
+export async function on_message_from_chia_plots_create(daemon: TDaemon, callback: (e: GetMessageType<chia_plots_create_service, chia_plots_create_commands, TChiaPlotsCreateBroadcast>) => unknown){
+  await daemon.subscribe(chia_plots_create_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_plots_create_service){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_plots_create_service, messageListener);
+}
+
