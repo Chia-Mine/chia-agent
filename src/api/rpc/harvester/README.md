@@ -31,6 +31,13 @@ const agent = new RPCAgent({
 ---
 
 ## `get_plots(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_plots} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "harvester"});
+const response = await get_plots(agent);
+```
 ### response:
 ```typescript
 {
@@ -45,6 +52,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/harvester/har
 ---
 
 ## `refresh_plots(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {refresh_plots} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "harvester"});
+const response = await refresh_plots(agent);
+```
 ### response
 ```typescript
 {}
@@ -53,6 +67,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/harvester/har
 ---
 
 ## `delete_plot(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {delete_plot} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "harvester"});
+const response = await delete_plot(agent, {filename: "..."});
+```
 ### params:
 ```typescript
 {
@@ -67,6 +88,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/harvester/har
 ---
 
 ## `add_plot_directory(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {add_plot_directory} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "harvester"});
+const response = await add_plot_directory(agent, {dirname: "..."});
+```
 ### params:
 ```typescript
 {
@@ -81,6 +109,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/harvester/har
 ---
 
 ## `get_plot_directories(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_plot_directories} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "harvester"});
+const response = await get_plot_directories(agent);
+```
 ### response
 ```typescript
 {
@@ -91,6 +126,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/harvester/har
 ---
 
 ## `remove_plot_directory(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {remove_plot_directory} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "harvester"});
+const response = await remove_plot_directory(agent, {dirname: "..."});
+```
 ### params
 ```typescript
 {

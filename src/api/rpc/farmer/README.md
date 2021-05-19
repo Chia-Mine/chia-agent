@@ -33,6 +33,13 @@ const agent = new RPCAgent({
 ---
 
 ## `get_signage_point(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_signage_point} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_signage_point(agent, {sp_hash: "..."});
+```
 ### params:
 ```typescript
 {
@@ -59,6 +66,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ---
 
 ## `get_signage_points(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_signage_points} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_signage_points(agent);
+```
 ### response:
 ```typescript
 {
@@ -69,6 +83,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ---
 
 ## `get_reward_targets(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_reward_targets} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_reward_targets(agent, {search_for_private_key: true});
+```
 ### params:
 ```typescript
 {
@@ -91,6 +112,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ---
 
 ## `set_reward_targets(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {set_reward_targets} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "farmer"});
+const response = await set_reward_targets(agent, {...});
+```
 ### params:
 ```typescript
 {
