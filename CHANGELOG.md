@@ -1,4 +1,8 @@
-## [1.0.0]
+## [1.0.1] - 2021-05-19
+### Fixed
+- Only fixed typo in README.md
+
+## [1.0.0] - 2021-05-19
 ### Added
 - Added new RPC client
 - Added new RPC API
@@ -41,6 +45,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[1.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0
 [0.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.3...v0.0.4
