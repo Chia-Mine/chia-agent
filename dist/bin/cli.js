@@ -12,6 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../daemon/index");
 const logger_1 = require("../logger");
+const index_2 = require("../api/ws/farmer/index");
 logger_1.setLogLevel("error");
 const exeCommand = "npx chia-agent";
 const argv = process.argv.slice(2);
@@ -34,7 +35,7 @@ if (command === "farm") {
                 let sumPassedFilter = 0;
                 let sumTotalPlot = 0;
                 let sumTotalProof = 0;
-                daemon.addMessageListener("chia_farmer", (e) => {
+                const unsubscribe = yield index_2.on_new_farming_info(daemon, (e) => {
                     if (e.command === "new_farming_info") {
                         const { farming_info } = e.data;
                         const { challenge_hash, passed_filter, proofs, total_plots, timestamp } = farming_info;
@@ -47,6 +48,7 @@ if (command === "farm") {
                 });
                 const onTerminate = () => __awaiter(this, void 0, void 0, function* () {
                     console.log("Terminating process...");
+                    unsubscribe();
                     const percentage = Math.round((sumPassedFilter / sumTotalPlot) * 10000) / 100;
                     console.log(`total passed_filters: ${sumPassedFilter}`);
                     console.log(`total_plots: ${sumTotalPlot}`);
