@@ -52,7 +52,7 @@ const response = await start_service(daemon, {service: "farmer"});
 ### params:
 ```typescript
 {
-  service: str;
+  service: str; // "chia_farmer", "chia_full_node", "chia_harvester", "chia_wallet"
   testing?: bool;
 }
 ```
@@ -142,7 +142,7 @@ const response = await stop_service(daemon, {service: "..."});
 ### params:
 ```typescript
 {
-  service: str;
+  service: str; // "chia_farmer", "chia_full_node", "chia_harvester", "chia_wallet"
 }
 ```
 ### response:
@@ -164,7 +164,7 @@ const response = await is_running(daemon, {service: "farmer"});
 ### params:
 ```typescript
 {
-  service: str;
+  service: str; // "chia_farmer", "chia_full_node", "chia_harvester", "chia_wallet"
 }
 ```
 ### response:
