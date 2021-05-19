@@ -186,7 +186,7 @@ No input nor response
 
 ---
 
-## `get_initial_freeze_period(agent)`
+## `get_initial_freeze_period_of_wallet(agent)`
 ### response
 ```typescript
 {
@@ -196,7 +196,7 @@ No input nor response
 
 ---
 
-## `get_network_info(agent)`
+## `get_network_info_of_wallet(agent)`
 ### response
 ```typescript
 {
