@@ -22,7 +22,15 @@ await daemon.connect("wss://host.name:1234");
 ---
 
 
-## `ping(agent)`
+## `ping(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {ping} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await ping(daemon);
+```
 ### response:
 ```typescript
 {
@@ -32,7 +40,15 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `start_service(agent, params)`
+## `start_service(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {start_service} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await start_service(daemon, {service: "farmer"});
+```
 ### params:
 ```typescript
 {
@@ -50,7 +66,15 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `start_plotting(agent, params)`
+## `start_plotting(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {start_plotting} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await start_plotting(daemon, {service: "chia plots create", ...});
+```
 ### params:
 ```typescript
 {
@@ -84,7 +108,15 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `stop_plotting(agent, params)`
+## `stop_plotting(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {stop_plotting} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await stop_plotting(daemon, {id: "..."});
+```
 ### params:
 ```typescript
 {
@@ -98,7 +130,15 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `stop_service(agent, params)`
+## `stop_service(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {stop_service} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await stop_service(daemon, {service: "..."});
+```
 ### params:
 ```typescript
 {
@@ -112,7 +152,15 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `is_running(agent, params)`
+## `is_running(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {is_running} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await is_running(daemon, {service: "farmer"});
+```
 ### params:
 ```typescript
 {
@@ -129,7 +177,15 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `exit(agent)`
+## `exit(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {exit} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await exit(daemon);
+```
 ### response:
 ```typescript
 {}
@@ -137,11 +193,19 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `register_service(agent, params)`
+## `register_service(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {register_service} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await register_service(daemon, {service: "wallet_ui"});
+```
 ### params:
 ```typescript
 {
-  service: str;
+  service: str; // typically "wallet_ui" or "chia plots create"
 }
 ```
 ### response:
@@ -168,7 +232,15 @@ await daemon.connect("wss://host.name:1234");
 
 ---
 
-## `get_status(agent)`
+## `get_status(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_status} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_status(daemon);
+```
 ### response:
 ```typescript
 {
