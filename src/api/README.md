@@ -106,15 +106,15 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 
 
 #### [daemon](./ws/daemon/README.md#usage) 
-- [`ping`](./ws/daemon/README.md#pingagent)
-- [`start_service`](./ws/daemon/README.md#start_serviceagent-params)
-- [`start_plotting`](./ws/daemon/README.md#start_plottingagent-params)
-- [`stop_plotting`](./ws/daemon/README.md#stop_plottingagent-params)
-- [`stop_service`](./ws/daemon/README.md#stop_serviceagent-params)
-- [`is_running`](./ws/daemon/README.md#is_runningagent-params)
-- [`exit`](./ws/daemon/README.md#exitagent)
-- [`register_service`](./ws/daemon/README.md#register_serviceagent-params)
-- [`get_status`](./ws/daemon/README.md#get_statusagent)
+- [`ping`](./ws/daemon/README.md#pingdaemon)
+- [`start_service`](./ws/daemon/README.md#start_servicedaemon-params)
+- [`start_plotting`](./ws/daemon/README.md#start_plottingdaemon-params)
+- [`stop_plotting`](./ws/daemon/README.md#stop_plottingdaemon-params)
+- [`stop_service`](./ws/daemon/README.md#stop_servicedaemon-params)
+- [`is_running`](./ws/daemon/README.md#is_runningdaemon-params)
+- [`exit`](./ws/daemon/README.md#exitdaemon)
+- [`register_service`](./ws/daemon/README.md#register_servicedaemon-params)
+- [`get_status`](./ws/daemon/README.md#get_statusdaemon)
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  
