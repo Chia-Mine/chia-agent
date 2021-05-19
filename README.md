@@ -108,3 +108,7 @@ To check API update, check the link below.
 If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the link, please let me know.  
 
 https://github.com/Chia-Network/chia-blockchain/compare/1c808b6c2910ed32fdbfdfc576ba1bc5a5adeac9...main  
+
+## Donation
+For continuous development, please support me with donation
+`xch1wqpcvquv98qmeh9hg6wqpzhzmgs73lgvd8a7v5240nxgyat4p0sq4gdzyy`
