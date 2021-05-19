@@ -1,7 +1,7 @@
 import { ProofOfSpace } from "../../chia/types/blockchain_format/proof_of_space";
 import { bool, str, uint64, uint8 } from "../../chia/types/_python_types_";
 import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
-import { IAgent } from "../../../agent.type";
+import { TRPCAgent } from "../../../rpc/index";
 export declare const chia_farmer_service = "chia_farmer";
 export declare type chia_farmer_service = typeof chia_farmer_service;
 export declare const get_signage_point_command = "get_signage_point";
@@ -20,14 +20,14 @@ export declare type TGetSignagePointResponse = {
     };
     proofs: [string, ProofOfSpace];
 };
-export declare function get_signage_point(agent: IAgent, params: TGetSignagePointRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "get_signage_point", TGetSignagePointResponse>>;
+export declare function get_signage_point(agent: TRPCAgent, params: TGetSignagePointRequest): Promise<TGetSignagePointResponse>;
 export declare const get_signage_points_command = "get_signage_points";
 export declare type get_signage_points_command = typeof get_signage_points_command;
 export declare type TGetSignagePointsRequest = {};
 export declare type TGetSignagePointsResponse = {
     signage_points: TGetSignagePointResponse[];
 };
-export declare function get_signage_points(agent: IAgent): Promise<import("../../types").GetMessageType<"chia_farmer", "get_signage_points", TGetSignagePointsResponse>>;
+export declare function get_signage_points(agent: TRPCAgent): Promise<TGetSignagePointsResponse>;
 export declare const get_reward_targets_command = "get_reward_targets";
 export declare type get_reward_targets_command = typeof get_reward_targets_command;
 export declare type TGetRewardTargetRequest = {
@@ -42,7 +42,7 @@ export declare type TGetRewardTargetResponse = {
     farmer_target: str;
     pool_target: str;
 };
-export declare function get_reward_targets(agent: IAgent, params: TGetRewardTargetRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "get_reward_targets", TGetRewardTargetResponse>>;
+export declare function get_reward_targets(agent: TRPCAgent, params: TGetRewardTargetRequest): Promise<TGetRewardTargetResponse>;
 export declare const set_reward_targets_command = "set_reward_targets";
 export declare type set_reward_targets_command = typeof set_reward_targets_command;
 export declare type TSetRewardTargetRequest = {
@@ -50,4 +50,4 @@ export declare type TSetRewardTargetRequest = {
     pool_target?: str;
 };
 export declare type TSetRewardTargetResponse = {};
-export declare function set_reward_targets(agent: IAgent, params: TSetRewardTargetRequest): Promise<import("../../types").GetMessageType<"chia_farmer", "set_reward_targets", TSetRewardTargetResponse>>;
+export declare function set_reward_targets(agent: TRPCAgent, params: TSetRewardTargetRequest): Promise<TSetRewardTargetResponse>;
