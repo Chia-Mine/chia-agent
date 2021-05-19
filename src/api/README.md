@@ -39,12 +39,12 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_mempool_item_by_tx_id`](./rpc/full_node/README.md#get_mempool_item_by_tx_idagent-params)
 
 #### [Harvester RPC API](./rpc/harvester/README.md#usage)
-- [`get_plots`](./rpc/harvester/README.md#xxxxxx)
-- [`refresh_plots`](./rpc/harvester/README.md#xxxxxx)
-- [`delete_plot`](./rpc/harvester/README.md#xxxxxx)
-- [`add_plot_directory`](./rpc/harvester/README.md#xxxxxx)
-- [`get_plot_directories`](./rpc/harvester/README.md#xxxxxx)
-- [`remove_plot_directory`](./rpc/harvester/README.md#xxxxxx)
+- [`get_plots`](./rpc/harvester/README.md#get_plotsagent)
+- [`refresh_plots`](./rpc/harvester/README.md#refresh_plotsagent)
+- [`delete_plot`](./rpc/harvester/README.md#delete_plotagent-params)
+- [`add_plot_directory`](./rpc/harvester/README.md#add_plot_directoryagent-params)
+- [`get_plot_directories`](./rpc/harvester/README.md#get_plot_directoriesagent)
+- [`remove_plot_directory`](./rpc/harvester/README.md#remove_plot_directoryagent-params)
 
 #### [Wallet RPC API](./rpc/wallet/README.md#usage)
 - [`log_in`](./rpc/wallet/README.md#log_inagent-params)
