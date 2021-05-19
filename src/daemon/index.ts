@@ -4,7 +4,8 @@ import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
-import {daemon_service, register_service_command, TRegisterServiceResponse, WsMessage} from "../api/ws";
+import {daemon_service, TRegisterServiceResponse, WsMessage} from "../api/ws";
+import {register_service_command} from "../api/ws/daemon";
 import {GetMessageType} from "../api/types";
 
 export type EventType = "open" | "message" | "error" | "close";
