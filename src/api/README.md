@@ -13,9 +13,9 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 
 
 #### [Farmer RPC API](./rpc/farmer/README.md#usage)
+- [`get_reward_targets`](./rpc/farmer/README.md#get_reward_targetsagent-params)
 - [`get_signage_point`](./rpc/farmer/README.md#get_signage_pointagent-params)
 - [`get_signage_points`](./rpc/farmer/README.md#get_signage_pointsagent)
-- [`get_reward_targets`](./rpc/farmer/README.md#get_reward_targetsagent-params)
 - [`set_reward_targets`](./rpc/farmer/README.md#set_reward_targetsagent-params)
 
 #### [Full Node RPC API](./rpc/full_node/README.md#usage)
@@ -28,8 +28,8 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_unfinished_block_headers`](./rpc/full_node/README.md#get_unfinished_block_headersagent)
 - [`get_network_space`](./rpc/full_node/README.md#get_network_spaceagent-params)
 - [`get_additions_and_removals`](./rpc/full_node/README.md#get_additions_and_removalsagent-params)
-- [`get_initial_freeze_period`](./rpc/full_node/README.md#get_initial_freeze_periodagent)
-- [`get_network_info`](./rpc/full_node/README.md#get_network_infoagent)
+- [`get_initial_freeze_period_of_full_node`](./rpc/full_node/README.md#get_initial_freeze_period_of_full_nodeagent)
+- [`get_network_info_of_full_node`](./rpc/full_node/README.md#get_network_info_of_full_nodeagent)
 - [`get_coin_records_by_puzzle_hash`](./rpc/full_node/README.md#get_coin_records_by_puzzle_hashagent-params)
 - [`get_coin_records_by_puzzle_hashes`](./rpc/full_node/README.md#get_coin_records_by_puzzle_hashesagent-params)
 - [`get_coin_record_by_name`](./rpc/full_node/README.md#get_coin_record_by_nameagent-params)
@@ -57,8 +57,8 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_sync_status`](./rpc/wallet/README.md#get_sync_statusagent)
 - [`get_height_info`](./rpc/wallet/README.md#get_height_infoagent)
 - [`farm_block`](./rpc/wallet/README.md#farm_blockagent-params)
-- [`get_initial_freeze_period`](./rpc/wallet/README.md#get_initial_freeze_periodagent)
-- [`get_network_info`](./rpc/wallet/README.md#get_network_infoagent)
+- [`get_initial_freeze_period_of_wallet`](./rpc/wallet/README.md#get_initial_freeze_period_of_walletagent)
+- [`get_network_info_of_wallet`](./rpc/wallet/README.md#get_network_info_of_walletagent)
 - [`get_wallets`](./rpc/wallet/README.md#get_walletsagent)
 - [`create_new_wallet`](./rpc/wallet/README.md#create_new_walletagent-params)
 - [`get_wallet_balance`](./rpc/wallet/README.md#get_wallet_balanceagent-params)
@@ -122,20 +122,20 @@ After subscribing message channels like `wallet_ui` or `chia plots create`,
 you need to wait messages in the channel are arrived to your message listener.
 
 #### [chia_plots_create](./ws/chia_plots_create/README.md#usage)
-- [`state_changed`](./ws/chia_plots_create/README.md#command-state_changed)
+- [`state_changed`](./ws/chia_plots_create/README.md#on_state_changed_of_plots)
 
 #### [farmer](./ws/farmer/README.md#usage)
-- [`new_farming_info`](./ws/farmer/README.md#command-new_farming_info)
-- [`new_signage_point`](./ws/farmer/README.md#command-new_signage_point)
+- [`new_farming_info`](./ws/farmer/README.md#on_new_farming_info)
+- [`new_signage_point`](./ws/farmer/README.md#on_new_signage_point)
 
 #### [full_node](./ws/full_node/README.md#usage)
-- [`get_blockchain_state`](./ws/full_node/README.md#command-get_blockchain_state)
+- [`get_blockchain_state`](./ws/full_node/README.md#on_get_blockchain_state)
 
 #### [harvester](./ws/harvester/README.md#usage)
-- [`get_plots`](./ws/harvester/README.md#command-get_plots)
+- [`get_plots`](./ws/harvester/README.md#on_get_plots)
 
 #### [wallet](./ws/wallet/README.md#usage)
-- [`state_changed`](./ws/wallet/README.md#command-state_changed)
+- [`state_changed`](./ws/wallet/README.md#on_state_changed_of_wallet)
 
 ### Log
 

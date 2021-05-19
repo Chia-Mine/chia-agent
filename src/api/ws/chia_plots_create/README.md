@@ -26,8 +26,8 @@ const unsubscribe = await on_message_from_chia_plots_create(daemon, (event) => {
 
 ---
 
-### `on_state_change_of_plots`
-Capture broadcast message of command `state_change` from `chia_plots_create` service.
+### `on_state_changed_of_plots`
+Capture broadcast message of command `state_changed` from `chia_plots_create` service.
 
 #### Usage
 ```typescript
