@@ -42,6 +42,7 @@ const onProcessExit = () => {
   setTimeout(async () => {
     try{
       if(daemon && daemon.connected && !daemon.closing){
+        getLogger().debug("Detected Ctrl+C. Initiating shutdown...");
         await daemon.close();
         
         process.removeListener("SIGINT", onProcessExit);
