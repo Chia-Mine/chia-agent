@@ -160,7 +160,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/unfinis
 
 ---
 
-## `get_network_space_of_full_node(agent, params)`
+## `get_network_space(agent, params)`
 ### params
 ```typescript
 {
@@ -206,7 +206,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_re
 
 ---
 
-## `get_network_info(agent)`
+## `get_network_info_of_full_node(agent)`
 ### response
 ```typescript
 {
