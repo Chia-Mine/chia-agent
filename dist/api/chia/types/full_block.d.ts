@@ -1,0 +1,20 @@
+import { EndOfSubSlotBundle } from "./end_of_slot_bundle";
+import { RewardChainBlock } from "./blockchain_format/reward_chain_block";
+import { VDFProof } from "./blockchain_format/vdf";
+import { Foliage, FoliageTransactionBlock, TransactionsInfo } from "./blockchain_format/foliage";
+import { SerializedProgram } from "./blockchain_format/program";
+import { Optional, uint32 } from "./_python_types_";
+export declare type FullBlock = {
+    finished_sub_slots: EndOfSubSlotBundle[];
+    reward_chain_block: RewardChainBlock;
+    challenge_chain_sp_proof: Optional<VDFProof>;
+    challenge_chain_ip_proof: VDFProof;
+    reward_chain_sp_proof: Optional<VDFProof>;
+    reward_chain_ip_proof: VDFProof;
+    infused_challenge_chain_ip_proof: Optional<VDFProof>;
+    foliage: Foliage;
+    foliage_transaction_block: Optional<FoliageTransactionBlock>;
+    transactions_info: Optional<TransactionsInfo>;
+    transactions_generator: Optional<SerializedProgram>;
+    transactions_generator_ref_list: uint32[];
+};

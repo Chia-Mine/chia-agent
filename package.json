@@ -1,8 +1,8 @@
 {
   "name": "chia-agent",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "author": "Admin ChiaMineJP <admin@chiamine.jp>",
-  "description": "chia rpc agent for local chia daemon",
+  "description": "chia rpc/websocket client library",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -14,12 +14,14 @@
     "chia-agent": "./bin/cli.js"
   },
   "scripts": {
-    "build": "node ./pre_publish.js && tsc --project tsconfig.json --allowJS false",
+    "build": "node ./pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./build --outDir ./build",
     "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist"
   },
-  "keywords": [],
+  "keywords": [
+    "chia", "xch", "crypto", "coin", "mining", "rpc", "websocket", "typescript", "monitor", "proof"
+  ],
   "engines": {
-    "node": ">=10.14.2"
+    "node": ">=12.13.0"
   },
   "dependencies": {
     "ws": "^7.4.5",
