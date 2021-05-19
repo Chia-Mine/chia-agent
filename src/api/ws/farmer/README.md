@@ -1,44 +1,42 @@
 # Websocket Message from Farmer service
 
 ## Usage
-You need to create Websocket connection before subscribing websocket messages.  
+You need to create Websocket connection before subscribing websocket messages.
 ```js
 const {getDaemon} = require("chia-agent");
-const {chia_farmer_service} = require("chia-agent/api/ws");
+const {on_new_farming_info} = require("chia-agent/api/ws");
+
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
-await daemon.subscribe("wallet_ui"); // capture messages sent for GUI
-daemon.addMessageListener(chia_farmer_service, (event) => {
-  // Capturing broadcasted messages from the service.
-  if(event.command === "new_farming_info"){
-    console.log(e.data);
-  }
-  
+
+const unsubscribe = await on_new_farming_info(daemon, (event) => {
+  console.log(e.data);
+
   // Close connection if you don't need it anymore.
   if(...){
-    daemon.close();
+    unsubscribe(); // stop listening to this ws message.
   }
 });
-// Once daemon is instantiated, you don't need to re-create it.
-
-// Do some closing stuff.
-daemon.onClose((e) => {
-  ...
-});
-
-/*
- * You can connect to other than localhost when you specify websocket server url.
- */
-daemon.connect("wss://host.name:1234");
-await daemon.subscribe(xxxxx);
 ...
 ```
 
 ---
 
-## command: `new_farming_info`
-Format of`event` object in  
-`addMessageListener(chia_plots_create_service, (event) => {...});"`
+## `on_new_farming_info`
+###Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_new_farming_info} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_new_farming_info(daemon, (event) => {
+  // Format of `event` object is desribed below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
 
 ### event:
 ```typescript
@@ -67,9 +65,21 @@ Format of`event` object in
 
 ---
 
-## command: `new_signage_point`
-Format of`event` object in  
-`addMessageListener(chia_plots_create_service, (event) => {...});"`
+## `on_new_signage_point`
+###Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_new_signage_point} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_new_signage_point(daemon, (event) => {
+  // Format of `event` object is desribed below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
 
 ### event:
 ```typescript

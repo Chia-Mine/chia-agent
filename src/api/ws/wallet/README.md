@@ -1,44 +1,42 @@
 # Websocket Message from Wallet service
 
 ## Usage
-You need to create Websocket connection before subscribing websocket messages.  
+You need to create Websocket connection before subscribing websocket messages.
 ```js
 const {getDaemon} = require("chia-agent");
-const {chia_wallet_service} = require("chia-agent/api/ws");
+const {on_state_changed_of_wallet} = require("chia-agent/api/ws");
+
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
-await daemon.subscribe("wallet_ui"); // capture messages sent for GUI
-daemon.addMessageListener(chia_wallet_service, (event) => {
-  // Capturing broadcasted messages from the service.
-  if(event.command === "state_changed"){
-    console.log(e.data);
-  }
-  
+
+const unsubscribe = await on_state_changed_of_wallet(daemon, (event) => {
+  console.log(e.data);
+
   // Close connection if you don't need it anymore.
   if(...){
-    daemon.close();
+    unsubscribe(); // stop listening to this ws message.
   }
 });
-// Once daemon is instantiated, you don't need to re-create it.
-
-// Do some closing stuff.
-daemon.onClose((e) => {
-  ...
-});
-
-/*
- * You can connect to other than localhost when you specify websocket server url.
- */
-daemon.connect("wss://host.name:1234");
-await daemon.subscribe(xxxxx);
 ...
 ```
 
 ---
 
-## command: `state_changed`
-Format of`event` object in  
-`addMessageListener(chia_plots_create_service, (event) => {...});"`
+## `on_state_changed_of_wallet`
+###Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_state_changed_of_wallet} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_state_changed_of_wallet(daemon, (event) => {
+  // Format of `event` object is desribed below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
 
 ### event:
 ```typescript
