@@ -103,11 +103,13 @@ setTimeout(async () => {
 [See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
 
 ## API Compatibility Memo
+Current version of `chia-agent` follows API defined at commit [`9e9097b116...`](https://github.com/Chia-Network/chia-blockchain/tree/9e9097b11688e52ee13683533d1ad273d231a1ee) in `chia 1.1.6`.
+
 When original RPC/Websocket server API changes, those changes must be imported to this repository.  
 To check API update, check the link below.  
 If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the link, please let me know.  
 
-https://github.com/Chia-Network/chia-blockchain/compare/1c808b6c2910ed32fdbfdfc576ba1bc5a5adeac9...main  
+https://github.com/Chia-Network/chia-blockchain/compare/9e9097b11688e52ee13683533d1ad273d231a1ee...main  
 
 ## Donation
 For continuous development, please support me with donation
