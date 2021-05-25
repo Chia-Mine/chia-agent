@@ -1,4 +1,4 @@
-import {Agent as HttpsAgent, request as httpsRequest} from "https";
+import {Agent as HttpsAgent, request as httpsRequest, RequestOptions} from "https";
 import {Agent as HttpAgent, OutgoingHttpHeaders, request as httpRequest} from "http";
 import {existsSync, readFileSync} from "fs";
 import {getLogger} from "../logger";
@@ -161,35 +161,39 @@ export class RPCAgent {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     
-    return this.post(command, data) as Promise<M>;
+    return this.request<M>("POST", command, data);
   }
   
-  public post(path: string, data: any){
-    return new Promise((resolve: (v: RpcMessage) => void, reject) => {
+  public async request<R>(method: string, path: string, data: any){
+    return new Promise((resolve: (v: R) => void, reject) => {
       const body = data ? JSON.stringify(data) : "{}";
-      
       const pathname = `/${path.replace(/^\/+/, "")}`;
-      
-      const options = {
+      const METHOD = method.toUpperCase();
+      const options: RequestOptions = {
         protocol: this._protocol + ":", // nodejs's https module requires protocol to include ':'.
         hostname: this._hostname,
         port: `${this._port}`,
         path: pathname,
-        pathname,
-        method: "POST",
+        method: METHOD,
         agent: this._agent,
         headers: {
           Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json;charset=utf-8",
           "User-Agent": userAgent,
-          "Content-Length": body.length,
         } as OutgoingHttpHeaders,
       };
       
+      if(METHOD === "POST"){
+        options.headers = {
+          ...(options.headers || {}),
+          "Content-Type": "application/json;charset=utf-8",
+          "Content-Length": body.length,
+        };
+      }
+    
       const transporter = this._protocol === "https" ? httpsRequest : httpRequest;
-      
+    
       getLogger().debug(`Requesting to ${options.protocol}//${options.hostname}:${options.port}${options.path}`);
-      
+    
       const req = transporter(options, (res) => {
         if(!res.statusCode || res.statusCode < 200 || res.statusCode >= 300){
           getLogger().error(`Status not ok: ${res.statusCode}`);
@@ -200,7 +204,7 @@ export class RPCAgent {
           }
           return reject(new Error(`Status not ok: ${res.statusCode}`));
         }
-        
+      
         const chunks: any[] = [];
         res.on("data", chunk => {
           chunks.push(chunk);
@@ -208,14 +212,14 @@ export class RPCAgent {
             getLogger().debug(`The first response chunk data arrived`);
           }
         });
-        
+      
         res.on("end", () => {
           try{
             if(chunks.length > 0){
               const data = JSON.parse(Buffer.concat(chunks).toString());
               return resolve(data);
             }
-            
+          
             // RPC Server should return response like
             // {origin: string; destination: string; request_id: string; data: any; ...}
             // If no such response is returned, reject it.
@@ -228,18 +232,18 @@ export class RPCAgent {
               getLogger().error(Buffer.concat(chunks).toString());
             }
             catch(_){}
-  
+          
             reject(new Error("Server responded without expected data"));
           }
         });
       });
-      
+    
       req.on("error", error => {
         getLogger().error(JSON.stringify(error));
         reject(error);
       });
-      
-      if(body){
+    
+      if(METHOD === "POST" && body){
         req.write(body);
       }
       req.end();
