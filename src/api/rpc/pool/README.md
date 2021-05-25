@@ -43,14 +43,14 @@ const response = await pool_info(agent);
 ### response:
 ```typescript
 {
-  description: str;
-  fee: str;
-  logo_url: str;
-  minimum_difficulty: uint64;
-  name: str;
-  protocol_version: str;
-  relative_lock_height: uint32;
-  target_puzzle_hash: str;
+  description: str; // "(example) The Reference Pool allows you to pool with low fees, paying out daily using Chia."
+  fee: str; // "0.01"
+  logo_url: str; // "https://www.chia.net/img/chia_logo.svg"
+  minimum_difficulty: uint64; // 10
+  name: str; // "The Reference Pool"
+  protocol_version: str; // "1.0"
+  relative_lock_height: uint32; // 100
+  target_puzzle_hash: str; // "0x344587cf06a39db471d2cc0..."
 }
 ```
 
@@ -76,26 +76,26 @@ const response = await partials(agent, {...});
       proof: bytes; // "0xb2cd6374c8db249..."
     };
   };
-  sp_hash: str;
-  end_of_sub_slot: bool;
-  suggested_difficulty: uint64;
-  singleton_genesis: str;
-  owner_public_key: str;
-  pool_payout_instructions: str;
+  sp_hash: str; // "0x4c52796ca4f..."
+  end_of_sub_slot: bool; // true|false
+  suggested_difficulty: uint64; // 10 
+  singleton_genesis: str; // "0xae4ef3b9b..."
+  owner_public_key: str; // "0x84c3fcf9d5581c1..."
+  pool_payout_instructions: str; // "0xc2b08e41d766..."
   authentication_key_info: {
-    authentication_public_key: str;
-    authentication_public_key_timestamp: uint64;
+    authentication_public_key: str; // "0x970e181ae45435ae..."
+    authentication_public_key_timestamp: uint64; // 1621854388
   };
-  auth_key_and_partial_aggregate_signature: str;
+  auth_key_and_partial_aggregate_signature: str; // "0xa078dc1462bb..."
 }
 ```
 ### response:
 ```typescript
 {
-  points_balance: uint64;
-  current_difficulty: uint64;
+  points_balance: uint64; // 1130
+  current_difficulty: uint64; // 10
 } | {
-  error_code: int;
-  error_message: str;
+  error_code: int; // 4
+  error_message: str; // "Invalid proof of space"
 }
 ```
