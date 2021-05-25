@@ -69,11 +69,11 @@ const response = await partials(agent, {...});
 {
   payload: {
     proof_of_space: {
-      challenge: bytes32;
-      pool_contract_puzzle_hash: bytes32;
-      plot_public_key: G1Element;
-      size: uint8;
-      proof: bytes;
+      challenge: bytes32; // "0xe0e55d45eef8d..."
+      pool_contract_puzzle_hash: bytes32; // "0x9e3e9b37b54cf..."
+      plot_public_key: G1Element; // "0xa7ad70989cc8f18e..."
+      size: uint8; // number like 32
+      proof: bytes; // "0xb2cd6374c8db249..."
     };
   };
   sp_hash: str;
