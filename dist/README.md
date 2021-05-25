@@ -1,5 +1,12 @@
-## [Notice]: Pool API is being implemented  
-Please follow [`v1.1.0`](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0) branch of this repository.
+## [Notice] Pool API is being implemented
+Pool API reference for `chia-agent` is [here](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0/src/api/rpc/pool)
+
+Beta version of the npm module can be installed as below:
+```
+npm install chia-agent@beta
+# or
+yarn add chia-agent@beta
+```
 
 ---
 
