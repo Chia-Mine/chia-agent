@@ -1,3 +1,8 @@
+## [Notice]: Pool API is being implemented  
+Please follow [`v1.1.0`](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0) branch of this repository.
+
+---
+
 # chia-agent
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
