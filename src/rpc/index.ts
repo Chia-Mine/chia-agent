@@ -5,10 +5,10 @@ import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
 import {RpcMessage} from "../api/rpc/index";
 
-type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"daemon"
+type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"daemon"|"pool";
 
 export function getConnectionInfoFromConfig(destination: TDestination, config: TConfig){
-  const hostname = "localhost";
+  let hostname = "localhost";
   let port = -1;
   if(destination === "daemon"){
     port = +(config["/daemon_port"] as string);
@@ -24,6 +24,10 @@ export function getConnectionInfoFromConfig(destination: TDestination, config: T
   }
   else if(destination === "wallet"){
     port = +(config["/wallet/rpc_port"] as string);
+  }
+  else if(destination === "pool"){
+    hostname = config["/pool/host"] as string;
+    port = +(config["/pool/port"] as string);
   }
   else{
     throw new Error(`Unknown destination: ${destination}`);
@@ -164,7 +168,7 @@ export class RPCAgent {
     return this.request<M>("POST", command, data);
   }
   
-  public async request<R>(method: string, path: string, data: any){
+  public async request<R>(method: string, path: string, data?: any){
     return new Promise((resolve: (v: R) => void, reject) => {
       const body = data ? JSON.stringify(data) : "{}";
       const pathname = `/${path.replace(/^\/+/, "")}`;
