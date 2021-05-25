@@ -16,7 +16,7 @@ const fs_1 = require("fs");
 const logger_1 = require("../logger");
 const index_1 = require("../config/index");
 function getConnectionInfoFromConfig(destination, config) {
-    const hostname = "localhost";
+    let hostname = "localhost";
     let port = -1;
     if (destination === "daemon") {
         port = +config["/daemon_port"];
@@ -32,6 +32,10 @@ function getConnectionInfoFromConfig(destination, config) {
     }
     else if (destination === "wallet") {
         port = +config["/wallet/rpc_port"];
+    }
+    else if (destination === "pool") {
+        hostname = config["/pool/host"];
+        port = +config["/pool/port"];
     }
     else {
         throw new Error(`Unknown destination: ${destination}`);
@@ -127,77 +131,80 @@ class RPCAgent {
         return __awaiter(this, void 0, void 0, function* () {
             // parameter `destination` is not used because target rpc server is determined by url.
             logger_1.getLogger().debug(`Sending message. dest=${destination} command=${command}`);
-            return this.post(command, data);
+            return this.request("POST", command, data);
         });
     }
-    post(path, data) {
-        return new Promise((resolve, reject) => {
-            const body = data ? JSON.stringify(data) : "{}";
-            const pathname = `/${path.replace(/^\/+/, "")}`;
-            const options = {
-                protocol: this._protocol + ":",
-                hostname: this._hostname,
-                port: `${this._port}`,
-                path: pathname,
-                pathname,
-                method: "POST",
-                agent: this._agent,
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json;charset=utf-8",
-                    "User-Agent": userAgent,
-                    "Content-Length": body.length,
-                },
-            };
-            const transporter = this._protocol === "https" ? https_1.request : http_1.request;
-            logger_1.getLogger().debug(`Requesting to ${options.protocol}//${options.hostname}:${options.port}${options.path}`);
-            const req = transporter(options, (res) => {
-                if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
-                    logger_1.getLogger().error(`Status not ok: ${res.statusCode}`);
-                    if (res.statusCode === 404) {
-                        logger_1.getLogger().error(`Maybe the RPCAgent is connecting to different service against target rpc command.`);
-                        logger_1.getLogger().error(`For example, this happens when invoking 'new_farming_info' rpc command to 'full_node' service, which 'farm' service is correct`);
-                        logger_1.getLogger().error(`Check invoking command is correct and connecting service/host is right for the command`);
-                    }
-                    return reject(new Error(`Status not ok: ${res.statusCode}`));
+    request(method, path, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                const body = data ? JSON.stringify(data) : "{}";
+                const pathname = `/${path.replace(/^\/+/, "")}`;
+                const METHOD = method.toUpperCase();
+                const options = {
+                    protocol: this._protocol + ":",
+                    hostname: this._hostname,
+                    port: `${this._port}`,
+                    path: pathname,
+                    method: METHOD,
+                    agent: this._agent,
+                    headers: {
+                        Accept: "application/json, text/plain, */*",
+                        "User-Agent": userAgent,
+                    },
+                };
+                if (METHOD === "POST") {
+                    options.headers = Object.assign(Object.assign({}, (options.headers || {})), { "Content-Type": "application/json;charset=utf-8", "Content-Length": body.length });
                 }
-                const chunks = [];
-                res.on("data", chunk => {
-                    chunks.push(chunk);
-                    if (chunks.length === 0) {
-                        logger_1.getLogger().debug(`The first response chunk data arrived`);
-                    }
-                });
-                res.on("end", () => {
-                    try {
-                        if (chunks.length > 0) {
-                            const data = JSON.parse(Buffer.concat(chunks).toString());
-                            return resolve(data);
+                const transporter = this._protocol === "https" ? https_1.request : http_1.request;
+                logger_1.getLogger().debug(`Requesting to ${options.protocol}//${options.hostname}:${options.port}${options.path}`);
+                const req = transporter(options, (res) => {
+                    if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
+                        logger_1.getLogger().error(`Status not ok: ${res.statusCode}`);
+                        if (res.statusCode === 404) {
+                            logger_1.getLogger().error(`Maybe the RPCAgent is connecting to different service against target rpc command.`);
+                            logger_1.getLogger().error(`For example, this happens when invoking 'new_farming_info' rpc command to 'full_node' service, which 'farm' service is correct`);
+                            logger_1.getLogger().error(`Check invoking command is correct and connecting service/host is right for the command`);
                         }
-                        // RPC Server should return response like
-                        // {origin: string; destination: string; request_id: string; data: any; ...}
-                        // If no such response is returned, reject it.
-                        logger_1.getLogger().error(`RPC Server returned no data. This is not expected.`);
-                        reject(new Error("Server responded without expected data"));
+                        return reject(new Error(`Status not ok: ${res.statusCode}`));
                     }
-                    catch (e) {
-                        logger_1.getLogger().error(`Failed to parse response data`);
+                    const chunks = [];
+                    res.on("data", chunk => {
+                        chunks.push(chunk);
+                        if (chunks.length === 0) {
+                            logger_1.getLogger().debug(`The first response chunk data arrived`);
+                        }
+                    });
+                    res.on("end", () => {
                         try {
-                            logger_1.getLogger().error(Buffer.concat(chunks).toString());
+                            if (chunks.length > 0) {
+                                const data = JSON.parse(Buffer.concat(chunks).toString());
+                                return resolve(data);
+                            }
+                            // RPC Server should return response like
+                            // {origin: string; destination: string; request_id: string; data: any; ...}
+                            // If no such response is returned, reject it.
+                            logger_1.getLogger().error(`RPC Server returned no data. This is not expected.`);
+                            reject(new Error("Server responded without expected data"));
                         }
-                        catch (_) { }
-                        reject(new Error("Server responded without expected data"));
-                    }
+                        catch (e) {
+                            logger_1.getLogger().error(`Failed to parse response data`);
+                            try {
+                                logger_1.getLogger().error(Buffer.concat(chunks).toString());
+                            }
+                            catch (_) { }
+                            reject(new Error("Server responded without expected data"));
+                        }
+                    });
                 });
+                req.on("error", error => {
+                    logger_1.getLogger().error(JSON.stringify(error));
+                    reject(error);
+                });
+                if (METHOD === "POST" && body) {
+                    req.write(body);
+                }
+                req.end();
             });
-            req.on("error", error => {
-                logger_1.getLogger().error(JSON.stringify(error));
-                reject(error);
-            });
-            if (body) {
-                req.write(body);
-            }
-            req.end();
         });
     }
 }
