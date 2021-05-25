@@ -93,6 +93,11 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`send_clawback_transaction`](./rpc/wallet/README.md#send_clawback_transactionagent-params)
 - [`add_rate_limited_funds`](./rpc/wallet/README.md#add_rate_limited_fundsagent-params)
 
+#### [Pool API](./rpc/pool/README.md#usage)
+- [`pool_info`](./rpc/pool/README.md#pool_infoagent)
+- [`partials`](./rpc/pool/README.md#partialsagent-params)
+
+
 ### Websocket API
 Websocket API is used to connect to chia `daemon`.  
 
