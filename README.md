@@ -82,7 +82,7 @@ const {on_new_farming_info} = require("chia-agent/api/ws");
 setLogLevel("debug");
 
 const daemon = getDaemon();
-await daemon.connect(); // connect to local farm service using config file.
+await daemon.connect(); // connect to local daemon using config file.
 const unsubscribe = await on_new_farming_info(daemon, (e) => {
   console.log(e.data);
 })
