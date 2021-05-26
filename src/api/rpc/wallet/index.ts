@@ -402,7 +402,7 @@ export type send_transaction_command = typeof send_transaction_command;
 export type TSendTransactionRequest = {
   wallet_id: int;
   amount: int;
-  fee: int;
+  fee?: int;
   address: str;
 };
 export type TSendTransactionResponse = {
@@ -411,6 +411,25 @@ export type TSendTransactionResponse = {
 };
 export async function send_transaction(agent: TRPCAgent, data: TSendTransactionRequest){
   return agent.sendMessage<TSendTransactionResponse>(chia_wallet_service, send_transaction_command, data);
+}
+
+
+
+
+export const send_transaction_multi_command = "send_transaction_multi";
+export type send_transaction_multi_command = typeof send_transaction_multi_command;
+export type TSendTransactionMultiRequest = {
+  wallet_id: uint32;
+  additions: TAdditions[];
+  fee?: uint64;
+  coins?: Coin[];
+};
+export type TSendTransactionMultiResponse = {
+  transaction: TransactionRecord;
+  transaction_id: TransactionRecord["name"];
+};
+export async function send_transaction_multi(agent: TRPCAgent, data: TSendTransactionMultiRequest){
+  return agent.sendMessage<TSendTransactionMultiResponse>(chia_wallet_service, send_transaction_multi_command, data);
 }
 
 
