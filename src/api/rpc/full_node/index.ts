@@ -1,12 +1,14 @@
 import {FullBlock} from "../../chia/types/full_block";
 import {BlockRecord} from "../../chia/consensus/block_record";
-import {bool, int, Optional, str, uint128, uint32, uint64} from "../../chia/types/_python_types_";
+import {bool, float, int, Optional, str, uint128, uint32, uint64} from "../../chia/types/_python_types_";
 import {UnfinishedHeaderBlock} from "../../chia/types/unfinished_header_block";
 import {CoinRecord} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {MempoolItem} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
+import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
+import {SignagePoint} from "../../chia/full_node/signage_point";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -176,6 +178,27 @@ export type TGetNetworkInfoResponseOfFullNode = {
 };
 export async function get_network_info_of_full_node(agent: TRPCAgent) {
   return agent.sendMessage<TGetNetworkInfoResponseOfFullNode>(chia_full_node_service, get_network_info_command_of_full_node);
+}
+
+
+
+export const get_recent_signage_point_or_eos_command = "get_recent_signage_point_or_eos";
+export type get_recent_signage_point_or_eos_command = typeof get_recent_signage_point_or_eos_command;
+export type TGetRecentSignagePointOrEOSCommandRequest = {
+  sp_hash: str;
+  challenge_hash: str;
+} | {};
+export type TGetRecentSignagePointOrEOSCommandResponse = {
+  eos: EndOfSubSlotBundle;
+  time_received: float;
+  reverted: bool;
+} | {
+  signage_point: SignagePoint;
+  time_received: float;
+  reverted: bool;
+};
+export async function get_recent_signage_point_or_eos(agent: TRPCAgent, data: TGetRecentSignagePointOrEOSCommandRequest) {
+  return agent.sendMessage<TGetRecentSignagePointOrEOSCommandResponse>(chia_full_node_service, get_recent_signage_point_or_eos_command, data);
 }
 
 
