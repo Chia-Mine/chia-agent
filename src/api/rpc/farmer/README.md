@@ -130,3 +130,63 @@ const response = await set_reward_targets(agent, {...});
 ```typescript
 {}
 ```
+
+---
+
+## `get_pool_state(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_pool_state} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_pool_state(agent);
+```
+### response:
+```typescript
+{
+  pool_state: PoolState[];
+}
+```
+For content of `PoolState`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/farmer/index.ts
+
+---
+
+## `set_pool_payout_instructions(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {set_pool_payout_instructions} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "farmer"});
+const response = await set_pool_payout_instructions(agent, {...});
+```
+### params:
+```typescript
+{
+  singleton_genesis: str;
+  pool_payout_instructions: str;
+}
+```
+### response:
+```typescript
+{}
+```
+
+---
+
+## `get_plots(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_plots} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_plots(agent);
+```
+### response:
+```typescript
+{
+  [peer_host_port: string]: RequestPlotsResponse;
+}
+```
+For content of `RequestPlotsResponse`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/farmer/index.ts
