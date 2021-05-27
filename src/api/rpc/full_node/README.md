@@ -5,7 +5,7 @@ You need to create RPC connection before actually sending rpc request to the ser
 Please remember that all rpc API is provided as an async function.
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_block} = require("chia-agent/api/rpc");
+const {get_block} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({
   service: "full_node", // connect to local full_node service using config file.
 });
@@ -34,7 +34,7 @@ const agent = new RPCAgent({
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_blockchain_state} = require("chia-agent/api/rpc");
+const {get_blockchain_state} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_blockchain_state(agent);
 ```
@@ -66,7 +66,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/blo
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_block} = require("chia-agent/api/rpc");
+const {get_block} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_block(agent, params);
 ```
@@ -91,7 +91,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/full_bl
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_blocks} = require("chia-agent/api/rpc");
+const {get_blocks} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_blocks(agent, params);
 ```
@@ -118,7 +118,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/full_bl
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_block_record_by_height} = require("chia-agent/api/rpc");
+const {get_block_record_by_height} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_block_record_by_height(agent, params);
 ```
@@ -143,7 +143,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/blo
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_block_record} = require("chia-agent/api/rpc");
+const {get_block_record} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_block_record(agent, params);
 ```
@@ -168,7 +168,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/blo
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_block_records} = require("chia-agent/api/rpc");
+const {get_block_records} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_block_records(agent, params);
 ```
@@ -194,7 +194,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/blo
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_unfinished_block_headers} = require("chia-agent/api/rpc");
+const {get_unfinished_block_headers} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_unfinished_block_headers(agent);
 ```
@@ -213,7 +213,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/unfinis
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_network_space} = require("chia-agent/api/rpc");
+const {get_network_space} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_network_space(agent, params);
 ```
@@ -237,7 +237,7 @@ const response = await get_network_space(agent, params);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_additions_and_removals} = require("chia-agent/api/rpc");
+const {get_additions_and_removals} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_additions_and_removals(agent, params);
 ```
@@ -263,7 +263,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_re
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_initial_freeze_period_of_full_node} = require("chia-agent/api/rpc");
+const {get_initial_freeze_period_of_full_node} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_initial_freeze_period_of_full_node(agent);
 ```
@@ -280,7 +280,7 @@ const response = await get_initial_freeze_period_of_full_node(agent);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_network_info_of_full_node} = require("chia-agent/api/rpc");
+const {get_network_info_of_full_node} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_network_info_of_full_node(agent);
 ```
@@ -298,7 +298,7 @@ const response = await get_network_info_of_full_node(agent);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_recent_signage_point_or_eos} = require("chia-agent/api/rpc");
+const {get_recent_signage_point_or_eos} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_recent_signage_point_or_eos(agent, params);
 ```
@@ -333,7 +333,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/full_node/sig
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_coin_records_by_puzzle_hash} = require("chia-agent/api/rpc");
+const {get_coin_records_by_puzzle_hash} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_coin_records_by_puzzle_hash(agent, params);
 ```
@@ -361,7 +361,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_re
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_coin_records_by_puzzle_hashes} = require("chia-agent/api/rpc");
+const {get_coin_records_by_puzzle_hashes} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_coin_records_by_puzzle_hashes(agent, params);
 ```
@@ -389,7 +389,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_re
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_coin_record_by_name} = require("chia-agent/api/rpc");
+const {get_coin_record_by_name} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_coin_record_by_name(agent, params);
 ```
@@ -414,7 +414,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_re
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {push_tx} = require("chia-agent/api/rpc");
+const {push_tx} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await push_tx(agent, params);
 ```
@@ -439,7 +439,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_all_mempool_tx_ids} = require("chia-agent/api/rpc");
+const {get_all_mempool_tx_ids} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_all_mempool_tx_ids(agent);
 ```
@@ -456,7 +456,7 @@ const response = await get_all_mempool_tx_ids(agent);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_all_mempool_items} = require("chia-agent/api/rpc");
+const {get_all_mempool_items} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_all_mempool_items(agent);
 ```
@@ -475,7 +475,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mempool
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_mempool_item_by_tx_id} = require("chia-agent/api/rpc");
+const {get_mempool_item_by_tx_id} = require("chia-agent/api/rpc/full_node");
 const agent = new RPCAgent({service: "full_node"});
 const response = await get_mempool_item_by_tx_id(agent, params);
 ```
