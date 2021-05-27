@@ -271,7 +271,7 @@ export declare type send_transaction_command = typeof send_transaction_command;
 export declare type TSendTransactionRequest = {
     wallet_id: int;
     amount: int;
-    fee: int;
+    fee?: int;
     address: str;
 };
 export declare type TSendTransactionResponse = {
@@ -279,6 +279,19 @@ export declare type TSendTransactionResponse = {
     transaction_id: TransactionRecord["name"];
 };
 export declare function send_transaction(agent: TRPCAgent, data: TSendTransactionRequest): Promise<TSendTransactionResponse>;
+export declare const send_transaction_multi_command = "send_transaction_multi";
+export declare type send_transaction_multi_command = typeof send_transaction_multi_command;
+export declare type TSendTransactionMultiRequest = {
+    wallet_id: uint32;
+    additions: TAdditions[];
+    fee?: uint64;
+    coins?: Coin[];
+};
+export declare type TSendTransactionMultiResponse = {
+    transaction: TransactionRecord;
+    transaction_id: TransactionRecord["name"];
+};
+export declare function send_transaction_multi(agent: TRPCAgent, data: TSendTransactionMultiRequest): Promise<TSendTransactionMultiResponse>;
 export declare const create_backup_command = "create_backup";
 export declare type create_backup_command = typeof create_backup_command;
 export declare type TCreateBackupRequest = {

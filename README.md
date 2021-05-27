@@ -1,5 +1,5 @@
 ## [Notice] Pool API is being implemented
-Pool API reference for `chia-agent` is [here](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0/src/api/rpc/pool)
+All new APIs are listed in [CHANGELOG](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0/CHANGELOG.md).
 
 Beta version of the npm module can be installed as below:
 ```
