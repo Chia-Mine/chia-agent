@@ -5,7 +5,7 @@ You need to create RPC connection before actually sending rpc request to the ser
 Please remember that all rpc API is provided as an async function.
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_signage_point} = require("chia-agent/api/rpc");
+const {get_signage_point} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({
   service: "farmer", // connect to local farmer service using config file.
 });
@@ -36,7 +36,7 @@ const agent = new RPCAgent({
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_signage_point} = require("chia-agent/api/rpc");
+const {get_signage_point} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await get_signage_point(agent, params);
 ```
@@ -69,7 +69,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_signage_points} = require("chia-agent/api/rpc");
+const {get_signage_points} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await get_signage_points(agent);
 ```
@@ -86,7 +86,7 @@ const response = await get_signage_points(agent);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_reward_targets} = require("chia-agent/api/rpc");
+const {get_reward_targets} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await get_reward_targets(agent, params);
 ```
@@ -115,7 +115,7 @@ const response = await get_reward_targets(agent, params);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {set_reward_targets} = require("chia-agent/api/rpc");
+const {set_reward_targets} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await set_reward_targets(agent, params);
 ```
@@ -137,7 +137,7 @@ const response = await set_reward_targets(agent, params);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_pool_state} = require("chia-agent/api/rpc");
+const {get_pool_state} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await get_pool_state(agent);
 ```
@@ -156,7 +156,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/farmer/index.t
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {set_pool_payout_instructions} = require("chia-agent/api/rpc");
+const {set_pool_payout_instructions} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await set_pool_payout_instructions(agent, params);
 ```
@@ -178,7 +178,7 @@ const response = await set_pool_payout_instructions(agent, params);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_plots} = require("chia-agent/api/rpc");
+const {get_plots} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await get_plots(agent);
 ```
