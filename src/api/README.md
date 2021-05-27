@@ -70,7 +70,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_transactions`](./rpc/wallet/README.md#get_transactionsagent-params)
 - [`get_next_address`](./rpc/wallet/README.md#get_next_addressagent-params)
 - [`send_transaction`](./rpc/wallet/README.md#send_transactionagent-params)
-- [`send_transaction_multi](./rpc/wallet/README.md#send_transaction_multiagent-params)
+- [`send_transaction_multi`](./rpc/wallet/README.md#send_transaction_multiagent-params)
 - [`create_backup`](./rpc/wallet/README.md#create_backupagent-params)
 - [`get_transaction_count`](./rpc/wallet/README.md#get_transaction_countagent-params)
 - [`get_farmed_amount`](./rpc/wallet/README.md#get_farmed_amountagent)
