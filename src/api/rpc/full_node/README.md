@@ -294,6 +294,41 @@ const response = await get_network_info_of_full_node(agent);
 
 ---
 
+## `get_recent_signage_point_or_eos(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_recent_signage_point_or_eos} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_recent_signage_point_or_eos(agent, {...});
+```
+### params
+```typescript
+ {
+  sp_hash: str;
+  challenge_hash: str;
+} | {}
+```
+### response
+```typescript
+{
+  eos: EndOfSubSlotBundle;
+  time_received: float;
+  reverted: bool;
+} | {
+  signage_point: SignagePoint;
+  time_received: float;
+  reverted: bool;
+}
+```
+For content of `EndOfSubSlotBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/end_of_slot_bundle.ts
+
+For content of `SignagePoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/full_node/signage_point.ts
+
+---
+
 ## `get_coin_records_by_puzzle_hash(agent, params)`
 ### Usage
 ```js
@@ -304,10 +339,12 @@ const response = await get_coin_records_by_puzzle_hash(agent, {...});
 ```
 ### params
 ```typescript
+{
   puzzle_hash: str;
   start_height: uint32;
   end_height: uint32;
   include_spent_coins: bool;
+}
 ```
 ### response
 ```typescript
