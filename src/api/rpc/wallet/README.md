@@ -548,6 +548,38 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 
 ---
 
+## `send_transaction_multi(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {send_transaction_multi} = require("chia-agent/api/rpc");
+const agent = new RPCAgent({service: "wallet"});
+const response = await send_transaction_multi(agent, {...});
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  additions: Array<{
+    amount: uint64;
+    puzzle_hash: str;
+  }>;
+  fee?: uint64;
+  coins?: Coin[];
+}
+```
+### response:
+```typescript
+{
+  transaction: TransactionRecord;
+  transaction_id: TransactionRecord["name"];
+}
+```
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
 ## `create_backup(agent, params)`
 ### Usage
 ```js
