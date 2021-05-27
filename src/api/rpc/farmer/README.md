@@ -38,7 +38,7 @@ const agent = new RPCAgent({
 const {RPCAgent} = require("chia-agent");
 const {get_signage_point} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({service: "farmer"});
-const response = await get_signage_point(agent, {sp_hash: "..."});
+const response = await get_signage_point(agent, params);
 ```
 ### params:
 ```typescript
@@ -88,7 +88,7 @@ const response = await get_signage_points(agent);
 const {RPCAgent} = require("chia-agent");
 const {get_reward_targets} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({service: "farmer"});
-const response = await get_reward_targets(agent, {search_for_private_key: true});
+const response = await get_reward_targets(agent, params);
 ```
 ### params:
 ```typescript
@@ -117,7 +117,7 @@ const response = await get_reward_targets(agent, {search_for_private_key: true})
 const {RPCAgent} = require("chia-agent");
 const {set_reward_targets} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({service: "farmer"});
-const response = await set_reward_targets(agent, {...});
+const response = await set_reward_targets(agent, params);
 ```
 ### params:
 ```typescript
@@ -158,7 +158,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/farmer/index.t
 const {RPCAgent} = require("chia-agent");
 const {set_pool_payout_instructions} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({service: "farmer"});
-const response = await set_pool_payout_instructions(agent, {...});
+const response = await set_pool_payout_instructions(agent, params);
 ```
 ### params:
 ```typescript
