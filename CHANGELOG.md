@@ -1,3 +1,18 @@
+## [1.1.0-beta]
+### Added
+- [New pool protocol/api](./src/api/rpc/pool)
+  - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
+  - [`partials`](./rpc/pool/README.md#partialsagent-params)
+- [New farmer api](./src/api/rpc/farmer)
+  - [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
+  - [`set_pool_payout_instructions`](./src/api/rpc/farmer/README.md#set_pool_payout_instructionsagent-params)
+  - [`get_plots`](./src/api/rpc/farmer/README.md#get_plotsagent)
+- [New full_node api](./src/api/rpc/full_node)
+  - [`get_recent_signage_point_or_eos`](./src/api/rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)
+- [New wallet api](./src/api/rpc/wallet)
+  - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
+
+
 ## [1.0.1] - 2021-05-19
 ### Fixed
 - Only fixed typo in README.md
@@ -45,6 +60,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[1.1.0-beta]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0
 [0.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.4...v0.0.5
