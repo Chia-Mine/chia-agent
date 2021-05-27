@@ -72,7 +72,7 @@ const response = await refresh_plots(agent);
 const {RPCAgent} = require("chia-agent");
 const {delete_plot} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({service: "harvester"});
-const response = await delete_plot(agent, {filename: "..."});
+const response = await delete_plot(agent, params);
 ```
 ### params:
 ```typescript
@@ -93,7 +93,7 @@ const response = await delete_plot(agent, {filename: "..."});
 const {RPCAgent} = require("chia-agent");
 const {add_plot_directory} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({service: "harvester"});
-const response = await add_plot_directory(agent, {dirname: "..."});
+const response = await add_plot_directory(agent, params);
 ```
 ### params:
 ```typescript
@@ -131,7 +131,7 @@ const response = await get_plot_directories(agent);
 const {RPCAgent} = require("chia-agent");
 const {remove_plot_directory} = require("chia-agent/api/rpc");
 const agent = new RPCAgent({service: "harvester"});
-const response = await remove_plot_directory(agent, {dirname: "..."});
+const response = await remove_plot_directory(agent, params);
 ```
 ### params
 ```typescript

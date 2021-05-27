@@ -62,7 +62,7 @@ const response = await pool_info(agent);
 const {RPCAgent} = require("chia-agent");
 const {partials} = require("chia-agent/api/rpc/pool");
 const agent = new RPCAgent({service: "pool"});
-const response = await partials(agent, {...});
+const response = await partials(agent, params);
 ```
 ### params:
 ```typescript
