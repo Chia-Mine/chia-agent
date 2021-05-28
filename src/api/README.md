@@ -101,7 +101,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 #### [Pool API](./rpc/pool/README.md#usage)
 - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
 - [`partials`](./rpc/pool/README.md#partialsagent-params)
-
+- [`login`](./rpc/pool/README.md#loginagent-params)
 
 ### Websocket API
 Websocket API is used to connect to chia `daemon`.  
