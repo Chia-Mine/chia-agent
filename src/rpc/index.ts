@@ -193,6 +193,24 @@ export class RPCAgent {
           "Content-Length": body.length,
         };
       }
+      else if(METHOD === "GET"){
+        // Add query string if `data` is object.
+        if(data && typeof data === "object"){
+          // Remove string after '?' on path to prevent duplication.
+          let p = options.path as string;
+          if(/\?/.test(p)){
+            getLogger().warning("querystring in `path` is replaced by `data`");
+            p.replace(/\?.*/, "");
+          }
+          p += "?";
+          for(const key in data){
+            if(data.hasOwnProperty(key)){
+              p += `${key}=${data[key]}`;
+            }
+          }
+          options.path = p;
+        }
+      }
     
       const transporter = this._protocol === "https" ? httpsRequest : httpRequest;
     
