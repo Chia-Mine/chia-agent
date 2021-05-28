@@ -16,6 +16,8 @@ export async function pool_info(agent: TRPCAgent){
   return agent.request<TPoolInfoResponse>("GET", "pool_info");
 }
 
+
+
 export type TPartialsRequest = {
   payload: {
     proof_of_space: {
@@ -47,4 +49,18 @@ export type TPartialsResponse = {
 };
 export async function partials(agent: TRPCAgent, data: TPartialsRequest){
   return agent.request<TPartialsResponse>("POST", "partials", data);
+}
+
+
+
+export type TLoginRequest = {
+  singleton_genesis: str;
+  login_code: str;
+  timestamp: uint32;
+  authentication_pk: str;
+  signature: str;
+};
+export type TLoginResponse = any; // The format of a response is determined by pool operator.
+export async function login(agent: TRPCAgent, data: TLoginRequest){
+  return agent.request<TLoginResponse>("GET", "login", data);
 }

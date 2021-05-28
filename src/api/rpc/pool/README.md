@@ -99,3 +99,28 @@ const response = await partials(agent, params);
   error_message: str; // "Invalid proof of space"
 }
 ```
+
+---
+
+## `login(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {login} = require("chia-agent/api/rpc/pool");
+const agent = new RPCAgent({service: "pool"});
+const response = await partials(login, params);
+```
+### params:
+```typescript
+{
+  singleton_genesis: str;
+  login_code: str;
+  timestamp: uint32;
+  authentication_pk: str;
+  signature: str;
+}
+```
+### response:
+```
+<The format of a response is determined by pool operator>
+```
