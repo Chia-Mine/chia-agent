@@ -1,14 +1,14 @@
 ## [Unreleased]
 ### Added
 - New pool protocol/api
-  - [`login`](./rpc/pool/README.md#loginagent-params)
+  - [`login`](./src/rpc/pool/README.md#loginagent-params)
 
 
 ## [1.1.0-beta]
 ### Added
 - [New pool protocol/api](./src/api/rpc/pool)
-  - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
-  - [`partials`](./rpc/pool/README.md#partialsagent-params)
+  - [`pool_info`](./src/rpc/pool/README.md#pool_infoagent)
+  - [`partials`](./src/rpc/pool/README.md#partialsagent-params)
 - [New farmer api](./src/api/rpc/farmer)
   - [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
   - [`set_pool_payout_instructions`](./src/api/rpc/farmer/README.md#set_pool_payout_instructionsagent-params)
