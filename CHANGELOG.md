@@ -1,3 +1,9 @@
+## [Unreleased]
+### Added
+- New pool protocol/api
+  - [`login`](./rpc/pool/README.md#loginagent-params)
+
+
 ## [1.1.0-beta]
 ### Added
 - [New pool protocol/api](./src/api/rpc/pool)
