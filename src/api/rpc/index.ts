@@ -3,24 +3,34 @@ import type {
   TGetSignagePointResponse,
   TGetSignagePointsResponse,
   TSetRewardTargetResponse,
+  TGetPlotsResponse as TGetPlotsResponseOfFarmer,
+  TSetPoolPayoutInstructionsResponse,
+  TGetPoolStateResponse,
 } from "./farmer/index";
-
 export {
   chia_farmer_service,
   TGetRewardTargetRequest,
-  TGetRewardTargetResponse, 
+  TGetRewardTargetResponse,
   TGetSignagePointRequest,
-  TGetSignagePointResponse, 
+  TGetSignagePointResponse,
   TGetSignagePointsRequest,
-  TGetSignagePointsResponse, 
+  TGetSignagePointsResponse,
   TSetRewardTargetRequest,
-  TSetRewardTargetResponse, 
+  TSetRewardTargetResponse,
+  TGetPlotsRequest as TGetPlotsRequestOfFarmer,
+  TGetPlotsResponse as TGetPlotsResponseOfFarmer,
+  TSetPoolPayoutInstructionsRequest,
+  TSetPoolPayoutInstructionsResponse,
+  TGetPoolStateRequest,
+  TGetPoolStateResponse,
   get_reward_targets,
-  get_signage_point, 
-  get_signage_points, 
+  get_signage_point,
+  get_signage_points,
   set_reward_targets,
+  get_plots as get_plots_of_farmer,
+  set_pool_payout_instructions,
+  get_pool_state,
 } from "./farmer/index";
-
 import type {
   TGetAdditionsAndRemovalsResponse,
   TGetAllMempoolItemsResponse,
@@ -31,6 +41,7 @@ import type {
   TGetBlockResponse,
   TGetBlockchainStateResponse,
   TGetBlocksResponse,
+  TGetRecentSignagePointOrEOSCommandResponse,
   TGetCoinRecordByNameResponse,
   TGetCoinRecordsByPuzzleHashResponse,
   TGetCoinRecordsByPuzzleHashesResponse,
@@ -41,63 +52,65 @@ import type {
   TGetUnfinishedBlockHeadersResponse,
   TPushTxResponse,
 } from "./full_node/index";
-
 export {
   chia_full_node_service,
   TGetAdditionsAndRemovalsRequest,
-  TGetAdditionsAndRemovalsResponse, 
-  TGetAllMempoolItemsRequest, 
-  TGetAllMempoolItemsResponse, 
-  TGetAllMempoolTxIdsRequest, 
-  TGetAllMempoolTxIdsResponse, 
-  TGetBlockRecordByHeightRequest, 
-  TGetBlockRecordByHeightResponse, 
-  TGetBlockRecordRequest, 
-  TGetBlockRecordResponse, 
-  TGetBlockRecordsRequest, 
-  TGetBlockRecordsResponse, 
-  TGetBlockRequest, 
-  TGetBlockResponse, 
-  TGetBlockchainStateRequest, 
-  TGetBlockchainStateResponse, 
-  TGetBlocksRequest, 
-  TGetBlocksResponse, 
-  TGetCoinRecordByNameRequest, 
-  TGetCoinRecordByNameResponse, 
-  TGetCoinRecordsByPuzzleHashRequest, 
-  TGetCoinRecordsByPuzzleHashResponse, 
-  TGetCoinRecordsByPuzzleHashesRequest, 
-  TGetCoinRecordsByPuzzleHashesResponse, 
-  TGetInitialFreezePeriodRequestOfFullNode, 
-  TGetInitialFreezePeriodResponseOfFullNode, 
-  TGetMempoolItemByTxIdRequest, 
-  TGetMempoolItemByTxIdResponse, 
-  TGetNetworkInfoRequestOfFullNode, 
-  TGetNetworkInfoResponseOfFullNode, 
-  TGetNetworkSpaceRequest, 
-  TGetNetworkSpaceResponse, 
-  TGetUnfinishedBlockHeadersRequest, 
-  TGetUnfinishedBlockHeadersResponse, 
-  TPushTxRequest, 
+  TGetAdditionsAndRemovalsResponse,
+  TGetAllMempoolItemsRequest,
+  TGetAllMempoolItemsResponse,
+  TGetAllMempoolTxIdsRequest,
+  TGetAllMempoolTxIdsResponse,
+  TGetBlockRecordByHeightRequest,
+  TGetBlockRecordByHeightResponse,
+  TGetBlockRecordRequest,
+  TGetBlockRecordResponse,
+  TGetBlockRecordsRequest,
+  TGetBlockRecordsResponse,
+  TGetBlockRequest,
+  TGetBlockResponse,
+  TGetBlockchainStateRequest,
+  TGetBlockchainStateResponse,
+  TGetBlocksRequest,
+  TGetBlocksResponse,
+  TGetRecentSignagePointOrEOSCommandRequest,
+  TGetRecentSignagePointOrEOSCommandResponse,
+  TGetCoinRecordByNameRequest,
+  TGetCoinRecordByNameResponse,
+  TGetCoinRecordsByPuzzleHashRequest,
+  TGetCoinRecordsByPuzzleHashResponse,
+  TGetCoinRecordsByPuzzleHashesRequest,
+  TGetCoinRecordsByPuzzleHashesResponse,
+  TGetInitialFreezePeriodRequestOfFullNode,
+  TGetInitialFreezePeriodResponseOfFullNode,
+  TGetMempoolItemByTxIdRequest,
+  TGetMempoolItemByTxIdResponse,
+  TGetNetworkInfoRequestOfFullNode,
+  TGetNetworkInfoResponseOfFullNode,
+  TGetNetworkSpaceRequest,
+  TGetNetworkSpaceResponse,
+  TGetUnfinishedBlockHeadersRequest,
+  TGetUnfinishedBlockHeadersResponse,
+  TPushTxRequest,
   TPushTxResponse,
-  get_additions_and_removals, 
-  get_all_mempool_items, 
-  get_all_mempool_tx_ids, 
-  get_block, 
-  get_block_record, 
+  get_additions_and_removals,
+  get_all_mempool_items,
+  get_all_mempool_tx_ids,
+  get_block,
+  get_block_record,
   get_block_record_by_height,
-  get_block_records, 
-  get_blockchain_state, 
-  get_blocks, 
-  get_coin_record_by_name, 
-  get_coin_records_by_puzzle_hash, 
-  get_coin_records_by_puzzle_hashes, 
+  get_block_records,
+  get_blockchain_state,
+  get_blocks,
+  get_recent_signage_point_or_eos,
+  get_coin_record_by_name,
+  get_coin_records_by_puzzle_hash,
+  get_coin_records_by_puzzle_hashes,
   get_initial_freeze_period_of_full_node,
-  get_mempool_item_by_tx_id, 
+  get_mempool_item_by_tx_id,
   get_network_info_of_full_node,
-  get_network_space, 
-  get_unfinished_block_headers, 
-  push_tx, 
+  get_network_space,
+  get_unfinished_block_headers,
+  push_tx,
 } from "./full_node/index";
 
 import type {
@@ -108,21 +121,20 @@ import type {
   TRefreshPlotsResponse,
   TRemovePlotDirectoryResponse,
 } from "./harvester/index";
-
 export {
   chia_harvester_service,
-  TAddPlotDirectoryRequest, 
-  TAddPlotDirectoryResponse, 
-  TDeletePlotRequest, 
-  TDeletePlotResponse, 
-  TGetPlotDirectoriesRequest, 
-  TGetPlotDirectoriesResponse, 
-  TGetPlotsRequest, 
-  TGetPlotsResponse, 
-  TRefreshPlotsRequest, 
-  TRefreshPlotsResponse, 
+  TAddPlotDirectoryRequest,
+  TAddPlotDirectoryResponse,
+  TDeletePlotRequest,
+  TDeletePlotResponse,
+  TGetPlotDirectoriesRequest,
+  TGetPlotDirectoriesResponse,
+  TGetPlotsRequest,
+  TGetPlotsResponse,
+  TRefreshPlotsRequest,
+  TRefreshPlotsResponse,
   TRemovePlotDirectoryRequest,
-  TRemovePlotDirectoryResponse, 
+  TRemovePlotDirectoryResponse,
   add_plot_directory,
   delete_plot,
   get_plot_directories,
@@ -178,9 +190,8 @@ import type {
   TRlSetUserInfoResponse,
   TSendClawbackTransactionResponse,
   TSendTransactionResponse,
+  TSendTransactionMultiResponse,
 } from "./wallet/index";
-import {TGetInitialFreezePeriodRequestOfFullNode} from "./full_node/index";
-
 export {
   chia_wallet_service,
   TAddKeyRequest,
@@ -280,6 +291,8 @@ export {
   TSendClawbackTransactionResponse,
   TSendTransactionRequest,
   TSendTransactionResponse,
+  TSendTransactionMultiRequest,
+  TSendTransactionMultiResponse,
   TradeRecordInJson,
   add_key,
   add_rate_limited_funds,
@@ -326,15 +339,20 @@ export {
   rl_set_user_info,
   send_clawback_transaction,
   send_transaction,
+  send_transaction_multi,
 } from "./wallet/index";
+
+
 
 export type RpcFarmerMessage =
   TGetRewardTargetResponse
   | TGetSignagePointResponse
   | TGetSignagePointsResponse
   | TSetRewardTargetResponse
+  | TGetPlotsResponseOfFarmer
+  | TSetPoolPayoutInstructionsResponse
+  | TGetPoolStateResponse
 ;
-
 export type RpcFullNodeMessage =
   TGetAdditionsAndRemovalsResponse
   | TGetAllMempoolItemsResponse
@@ -345,6 +363,7 @@ export type RpcFullNodeMessage =
   | TGetBlockRecordsResponse
   | TGetBlockchainStateResponse
   | TGetBlocksResponse
+  | TGetRecentSignagePointOrEOSCommandResponse
   | TGetCoinRecordByNameResponse
   | TGetCoinRecordsByPuzzleHashResponse
   | TGetCoinRecordsByPuzzleHashesResponse
@@ -355,7 +374,6 @@ export type RpcFullNodeMessage =
   | TGetUnfinishedBlockHeadersResponse
   | TPushTxResponse
 ;
-
 export type RpcHarvesterMessage =
   TAddPlotDirectoryResponse
   | TDeletePlotResponse
@@ -364,7 +382,6 @@ export type RpcHarvesterMessage =
   | TRefreshPlotsResponse
   | TRemovePlotDirectoryResponse
 ;
-
 export type RpcWalletMessage =
   TAddKeyResponse
   | TAddRateLimitedFundsResponse
@@ -411,6 +428,7 @@ export type RpcWalletMessage =
   | TRlSetUserInfoResponse
   | TSendClawbackTransactionResponse
   | TSendTransactionResponse
+  | TSendTransactionMultiResponse
 ;
 
 export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage;
