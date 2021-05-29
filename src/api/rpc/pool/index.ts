@@ -27,16 +27,16 @@ export type TPartialsRequest = {
       size: uint8;
       proof: bytes;
     };
-  };
-  sp_hash: str;
-  end_of_sub_slot: bool;
-  suggested_difficulty: uint64;
-  singleton_genesis: str;
-  owner_public_key: str;
-  pool_payout_instructions: str;
-  authentication_key_info: {
-    authentication_public_key: str;
-    authentication_public_key_timestamp: uint64;
+    sp_hash: str;
+    end_of_sub_slot: bool;
+    suggested_difficulty: uint64;
+    singleton_genesis: str; // @TODO Change this to `launcher_id`
+    owner_public_key: str;
+    pool_payout_instructions: str;
+    authentication_key_info: {
+      authentication_public_key: str;
+      authentication_public_key_timestamp: uint64;
+    };
   };
   auth_key_and_partial_aggregate_signature: str;
 };
@@ -54,7 +54,7 @@ export async function partials(agent: TRPCAgent, data: TPartialsRequest){
 
 
 export type TLoginRequest = {
-  singleton_genesis: str;
+  singleton_genesis: str; // @TODO Change this to `launcher_id`
   login_code: str;
   timestamp: uint32;
   authentication_pk: str;

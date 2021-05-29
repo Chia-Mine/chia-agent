@@ -319,23 +319,26 @@ const agent = new RPCAgent({service: "wallet"});
 const response = await create_new_wallet(agent, params);
 ```
 ### params:
-One of `TCreate_New_CC_WalletRequest`, `TCreate_New_RC_WalletRequest`, `TCreate_New_DID_WalletRequest`
+One of `TCreate_New_CC_WalletRequest`, `TCreate_New_RL_WalletRequest`, `TCreate_New_DID_WalletRequest`
 ```typescript
 type TCreate_New_CC_WalletRequest = {
   host: str;
+  fee?: uint64;
   wallet_type: "cc_wallet"
   mode: "new";
   amount: uint64;
 } | {
   host: str;
+  fee?: uint64;
   wallet_type: "cc_wallet"
   mode: "existing";
   colour: str;
 };
 
-type TCreate_New_RC_WalletRequest = {
+type TCreate_New_RL_WalletRequest = {
   host: str;
-  wallet_type: "rc_wallet";
+  fee?: uint64;
+  wallet_type: "rl_wallet";
   rl_type: "admin";
   interval: int;
   limit: int;
@@ -344,12 +347,14 @@ type TCreate_New_RC_WalletRequest = {
   fee: int;
 } | {
   host: str;
-  wallet_type: "rc_wallet";
+  fee?: uint64;
+  wallet_type: "rl_wallet";
   rl_type: "user";
 };
 
 type TCreate_New_DID_WalletRequest = {
   host: str;
+  fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "new";
   backup_dids: str[];
@@ -357,13 +362,14 @@ type TCreate_New_DID_WalletRequest = {
   amount: int;
 } | {
   host: str;
+  fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "recovery";
   filename: str;
 };
 ```
 ### response:
-One of `TCreate_New_CC_WalletResponse`, `TCreate_New_RC_WalletResponse`, `TCreate_New_DID_WalletResponse`
+One of `TCreate_New_CC_WalletResponse`, `TCreate_New_RL_WalletResponse`, `TCreate_New_DID_WalletResponse`
 ```typescript
 type TCreate_New_CC_WalletResponse = {
   type: uint8;
@@ -373,7 +379,7 @@ type TCreate_New_CC_WalletResponse = {
   type: uint8;
 };
 
-type TCreate_New_RC_WalletResponse = {
+type TCreate_New_RL_WalletResponse = {
   success: bool;
   id: uint32;
   type: uint8;
@@ -1221,5 +1227,105 @@ const response = await add_rate_limited_funds(agent, params);
 ```typescript
 {
   status: "SUCCESS";
+}
+```
+
+---
+
+## `pw_join_pool(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {pw_join_pool} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await pw_join_pool(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  "target_puzzlehash"?: string;
+  pool_url: Optional<str>;
+  relative_lock_height: uint32;
+}
+```
+### response:
+```typescript
+{
+  state: PoolWalletInfo;
+}
+```
+For content of `PoolWalletInfo`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
+
+---
+
+## `pw_self_pool(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {pw_self_pool} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await pw_self_pool(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+}
+```
+### response:
+```typescript
+{
+  state: PoolWalletInfo;
+}
+```
+For content of `PoolWalletInfo`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
+
+---
+
+## `pw_collect_self_pooling_rewards(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {pw_collect_self_pooling_rewards} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await pw_collect_self_pooling_rewards(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  fee: uint64;
+}
+```
+### response:
+```typescript
+{
+  pool_wallet_state: unknown; // @TODO Maybe 'PoolWalletInfo' but check implementation later.
+}
+```
+
+---
+
+## `pw_status(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {pw_status} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await pw_status(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+}
+```
+### response:
+```typescript
+{
+  state: PoolWalletInfo;
 }
 ```
