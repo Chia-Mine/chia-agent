@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.partials = exports.pool_info = void 0;
+exports.login = exports.partials = exports.pool_info = void 0;
 function pool_info(agent) {
     return __awaiter(this, void 0, void 0, function* () {
         return agent.request("GET", "pool_info");
@@ -22,3 +22,9 @@ function partials(agent, data) {
     });
 }
 exports.partials = partials;
+function login(agent, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return agent.request("GET", "login", data);
+    });
+}
+exports.login = login;
