@@ -1,23 +1,9 @@
-## [Unreleased]
-### Added
-- New pool protocol/api
-  - [`login`](./src/api/rpc/pool/README.md#loginagent-params)
-- New wallet api
-  - [`pw_join_pool`](./src/rpc/wallet/README.md#pw_join_poolagent-params)
-  - [`pw_self_pool`](./src/rpc/wallet/README.md#pw_self_poolagent-params)
-  - [`pw_collect_self_pooling_rewards`](./src/rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
-  - [`pw_status`](./src/rpc/wallet/README.md#pw_statusagent-params)
-### Fixed
-  - Correct type name `TCreate_New_RC_WalletRequest/Response` to `TCreate_New_RL_WalletRequest/Response`
-  - Fixed wrong json structure of `TPartialsRequest`'
-  - Fixed `create_new_wallet` request format
-  - Fixed an issue where array data in YAML file could not be parsed as expected.
-
 ## [1.1.0-beta]
 ### Added
 - [New pool protocol/api](./src/api/rpc/pool)
   - [`pool_info`](./src/api/rpc/pool/README.md#pool_infoagent)
   - [`partials`](./src/api/rpc/pool/README.md#partialsagent-params)
+  - [`login`](./src/api/rpc/pool/README.md#loginagent-params)
 - [New farmer api](./src/api/rpc/farmer)
   - [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
   - [`set_pool_payout_instructions`](./src/api/rpc/farmer/README.md#set_pool_payout_instructionsagent-params)
@@ -26,6 +12,16 @@
   - [`get_recent_signage_point_or_eos`](./src/api/rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)
 - [New wallet api](./src/api/rpc/wallet)
   - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
+  - [`pw_join_pool`](./src/rpc/wallet/README.md#pw_join_poolagent-params)
+  - [`pw_self_pool`](./src/rpc/wallet/README.md#pw_self_poolagent-params)
+  - [`pw_collect_self_pooling_rewards`](./src/rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
+  - [`pw_status`](./src/rpc/wallet/README.md#pw_statusagent-params)
+
+### Fixed
+- Correct type name `TCreate_New_RC_WalletRequest/Response` to `TCreate_New_RL_WalletRequest/Response`
+- Fixed wrong structure of `TPartialsRequest`
+- Fixed wrong `create_new_wallet` request format
+- Fixed an issue where array data in YAML file was not parsed as expected.
 
 
 ## [1.0.1] - 2021-05-19
