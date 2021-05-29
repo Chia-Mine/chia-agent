@@ -52,6 +52,13 @@ function buildConfigObj(config, currentPath = [], product = {}) {
             buildConfigObj(value, currentPath, product);
             currentPath.pop();
         }
+        else if (Array.isArray(value)) {
+            value.forEach((v, i) => {
+                currentPath.push(`${i}`);
+                buildConfigObj(v, currentPath, product);
+                currentPath.pop();
+            });
+        }
         else {
             const path = currentPath.length > 0 ? `/${currentPath.join("/")}/${propName}` : `/${propName}`;
             product[path] = value;

@@ -34,8 +34,12 @@ function getConnectionInfoFromConfig(destination, config) {
         port = +config["/wallet/rpc_port"];
     }
     else if (destination === "pool") {
-        hostname = config["/pool/host"];
-        port = +config["/pool/port"];
+        hostname = config["/pool/pool_list/0/host"];
+        port = +config["/pool/pool_list/0/port"];
+        if (!hostname) {
+            logger_1.getLogger().error("Pool list was not found in config.yaml.");
+            throw new Error("Pool list was not found in config.yaml");
+        }
     }
     else {
         throw new Error(`Unknown destination: ${destination}`);
@@ -154,6 +158,24 @@ class RPCAgent {
                 };
                 if (METHOD === "POST") {
                     options.headers = Object.assign(Object.assign({}, (options.headers || {})), { "Content-Type": "application/json;charset=utf-8", "Content-Length": body.length });
+                }
+                else if (METHOD === "GET") {
+                    // Add query string if `data` is object.
+                    if (data && typeof data === "object") {
+                        // Remove string after '?' on path to prevent duplication.
+                        let p = options.path;
+                        if (/\?/.test(p)) {
+                            logger_1.getLogger().warning("querystring in `path` is replaced by `data`");
+                            p.replace(/\?.*/, "");
+                        }
+                        p += "?";
+                        for (const key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                p += `${key}=${data[key]}`;
+                            }
+                        }
+                        options.path = p;
+                    }
                 }
                 const transporter = this._protocol === "https" ? https_1.request : http_1.request;
                 logger_1.getLogger().debug(`Requesting to ${options.protocol}//${options.hostname}:${options.port}${options.path}`);
