@@ -3,7 +3,7 @@ import {bool, bytes, int, Optional, str, uint16, uint64, uint8} from "../../chia
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TRPCAgent} from "../../../rpc/index";
 import {TPoolInfoResponse} from "../pool/index";
-import {PoolConfig} from "../../chia/farmer/pool_config";
+import {PoolWalletConfig} from "../../chia/pools/pool_config";
 import {RespondPlots} from "../../chia/protocols/harvester_protocol";
 
 export const chia_farmer_service = "chia_farmer";
@@ -86,7 +86,7 @@ export type PoolState = {
   current_difficulty: int;
   pool_errors_24h: unknown[];
   pool_info: TPoolInfoResponse;
-  pool_config: PoolConfig;
+  pool_config: PoolWalletConfig;
   p2_singleton_puzzle_hash: str;
 };
 
@@ -106,7 +106,7 @@ export async function get_pool_state(agent: TRPCAgent){
 export const set_pool_payout_instructions_command = "set_pool_payout_instructions";
 export type set_pool_payout_instructions_command = typeof set_pool_payout_instructions_command;
 export type TSetPoolPayoutInstructionsRequest = {
-  singleton_genesis: str;
+  launcher_id: str;
   pool_payout_instructions: str;
 };
 export type TSetPoolPayoutInstructionsResponse = {

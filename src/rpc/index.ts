@@ -26,8 +26,12 @@ export function getConnectionInfoFromConfig(destination: TDestination, config: T
     port = +(config["/wallet/rpc_port"] as string);
   }
   else if(destination === "pool"){
-    hostname = config["/pool/host"] as string;
-    port = +(config["/pool/port"] as string);
+    hostname = config["/pool/pool_list/0/host"] as string;
+    port = +(config["/pool/pool_list/0/port"] as string);
+    if(!hostname){
+      getLogger().error("Pool list was not found in config.yaml.");
+      throw new Error("Pool list was not found in config.yaml");
+    }
   }
   else{
     throw new Error(`Unknown destination: ${destination}`);

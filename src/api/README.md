@@ -97,6 +97,10 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`rl_set_user_info`](./rpc/wallet/README.md#rl_set_user_infoagent-params)
 - [`send_clawback_transaction`](./rpc/wallet/README.md#send_clawback_transactionagent-params)
 - [`add_rate_limited_funds`](./rpc/wallet/README.md#add_rate_limited_fundsagent-params)
+- [`pw_join_pool`](./rpc/wallet/README.md#pw_join_poolagent-params)
+- [`pw_self_pool`](./rpc/wallet/README.md#pw_self_poolagent-params)
+- [`pw_collect_self_pooling_rewards`](./rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
+- [`pw_status`](./rpc/wallet/README.md#pw_statusagent-params)
 
 #### [Pool API](./rpc/pool/README.md#usage)
 - [`pool_info`](./rpc/pool/README.md#pool_infoagent)

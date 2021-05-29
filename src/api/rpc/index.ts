@@ -186,11 +186,15 @@ import type {
   TGetWalletBalanceResponse,
   TGetWalletsResponse,
   TLoginResponse,
+  TPwJoinPoolRequest,
+  TPwSelfPoolRequest,
+  TPwCollectSelfPoolingRewardsResponse,
+  TPwStatusResponse,
   TResponseToOfferResponse,
   TRlSetUserInfoResponse,
   TSendClawbackTransactionResponse,
   TSendTransactionResponse,
-  TSendTransactionMultiResponse,
+  TSendTransactionMultiResponse, TPwJoinPoolResponse, TPwSelfPoolResponse,
 } from "./wallet/index";
 export {
   chia_wallet_service,
@@ -221,8 +225,8 @@ export {
   TCreate_New_CC_WalletResponse,
   TCreate_New_DID_WalletRequest,
   TCreate_New_DID_WalletResponse,
-  TCreate_New_RC_WalletRequest,
-  TCreate_New_RC_WalletResponse,
+  TCreate_New_RL_WalletRequest,
+  TCreate_New_RL_WalletResponse,
   TDeleteAllKeysRequest,
   TDeleteAllKeysResponse,
   TDeleteKeyRequest,
@@ -283,6 +287,14 @@ export {
   TGetWalletsResponse,
   TLoginRequest,
   TLoginResponse,
+  TPwJoinPoolRequest,
+  TPwJoinPoolResponse,
+  TPwSelfPoolRequest,
+  TPwSelfPoolResponse,
+  TPwCollectSelfPoolingRewardsRequest,
+  TPwCollectSelfPoolingRewardsResponse,
+  TPwStatusRequest,
+  TPwStatusResponse,
   TResponseToOfferRequest,
   TResponseToOfferResponse,
   TRlSetUserInfoRequest,
@@ -335,6 +347,10 @@ export {
   get_wallet_balance,
   get_wallets,
   log_in,
+  pw_join_pool,
+  pw_self_pool,
+  pw_collect_self_pooling_rewards,
+  pw_status,
   respond_to_offer,
   rl_set_user_info,
   send_clawback_transaction,
@@ -424,6 +440,10 @@ export type RpcWalletMessage =
   | TGetWalletBalanceResponse
   | TGetWalletsResponse
   | TLoginResponse
+  | TPwJoinPoolResponse
+  | TPwSelfPoolResponse
+  | TPwCollectSelfPoolingRewardsResponse
+  | TPwStatusResponse
   | TResponseToOfferResponse
   | TRlSetUserInfoResponse
   | TSendClawbackTransactionResponse

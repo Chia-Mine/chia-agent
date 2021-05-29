@@ -18,6 +18,7 @@ import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {BackupInfo} from "../../chia/wallet/util/backup_utils";
 import {TRPCAgent} from "../../../rpc";
+import {PoolWalletInfo} from "../../chia/pools/pool_wallet_info";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -238,31 +239,35 @@ export async function get_wallets(agent: TRPCAgent){
 
 export type TCreate_New_CC_WalletRequest = {
   host: str;
+  fee?: uint64;
   wallet_type: "cc_wallet"
   mode: "new";
   amount: uint64;
 } | {
   host: str;
+  fee?: uint64;
   wallet_type: "cc_wallet"
   mode: "existing";
   colour: str;
 };
-export type TCreate_New_RC_WalletRequest = {
+export type TCreate_New_RL_WalletRequest = {
   host: str;
-  wallet_type: "rc_wallet";
+  fee?: uint64;
+  wallet_type: "rl_wallet";
   rl_type: "admin";
   interval: int;
   limit: int;
   pubkey: str;
   amount: int;
-  fee: int;
 } | {
   host: str;
-  wallet_type: "rc_wallet";
+  fee?: uint64;
+  wallet_type: "rl_wallet";
   rl_type: "user";
 };
 export type TCreate_New_DID_WalletRequest = {
   host: str;
+  fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "new";
   backup_dids: str[];
@@ -270,9 +275,32 @@ export type TCreate_New_DID_WalletRequest = {
   amount: int;
 } | {
   host: str;
+  fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "recovery";
   filename: str;
+};
+export type TCreate_New_Pool_WalletRequest = {
+  host: str;
+  fee?: uint64;
+  wallet_type: "pool_wallet";
+  mode: "new";
+  initial_target_state: {
+    wallet_type: "pool_wallet";
+    mode: "new";
+    host: str;
+    initial_target_state: {
+      target_puzzle_hash: str;
+      relative_lock_height: uint32;
+      pool_url: str;
+      state: "SELF_POOLING"|"FARMING_TO_POOL";
+    },
+  };
+} | {
+  host: str;
+  fee?: uint64;
+  wallet_type: "pool_wallet";
+  mode: "recovery";
 };
 
 export type TCreate_New_CC_WalletResponse = {
@@ -282,8 +310,7 @@ export type TCreate_New_CC_WalletResponse = {
 } | {
   type: uint8;
 };
-
-export type TCreate_New_RC_WalletResponse = {
+export type TCreate_New_RL_WalletResponse = {
   success: bool;
   id: uint32;
   type: uint8;
@@ -294,7 +321,6 @@ export type TCreate_New_RC_WalletResponse = {
   type: uint8;
   pubkey: str;
 };
-
 export type TCreate_New_DID_WalletResponse = {
   success: true;
   type: uint8;
@@ -312,11 +338,14 @@ export type TCreate_New_DID_WalletResponse = {
   backup_dids: bytes[];
   num_verifications_required: uint64;
 };
+export type TCreate_New_Pool_WalletResponse = {
+  transaction: TransactionRecord;
+};
 
 export const create_new_wallet_command = "create_new_wallet";
 export type create_new_wallet_command = typeof create_new_wallet_command;
-export type TCreateNewWalletRequest = TCreate_New_CC_WalletRequest | TCreate_New_RC_WalletRequest | TCreate_New_DID_WalletRequest;
-export type TCreateNewWalletResponse = TCreate_New_CC_WalletResponse | TCreate_New_RC_WalletResponse | TCreate_New_DID_WalletResponse;
+export type TCreateNewWalletRequest = TCreate_New_CC_WalletRequest | TCreate_New_RL_WalletRequest | TCreate_New_DID_WalletRequest | TCreate_New_Pool_WalletRequest;
+export type TCreateNewWalletResponse = TCreate_New_CC_WalletResponse | TCreate_New_RL_WalletResponse | TCreate_New_DID_WalletResponse | TCreate_New_Pool_WalletResponse;
 export async function create_new_wallet(agent: TRPCAgent, data: TCreateNewWalletRequest){
   return agent.sendMessage<TCreateNewWalletResponse>(chia_wallet_service, create_new_wallet_command, data);
 }
@@ -884,4 +913,68 @@ export type TAddRateLimitedFundsResponse = {
 };
 export async function add_rate_limited_funds(agent: TRPCAgent, data: TAddRateLimitedFundsRequest){
   return agent.sendMessage<TAddRateLimitedFundsResponse>(chia_wallet_service, add_rate_limited_funds_command, data);
+}
+
+
+
+
+export const pw_join_pool_command = "pw_join_pool";
+export type pw_join_pool_command = typeof pw_join_pool_command;
+export type TPwJoinPoolRequest = {
+  wallet_id: uint32;
+  "target_puzzlehash"?: string;
+  pool_url: Optional<str>;
+  relative_lock_height: uint32;
+};
+export type TPwJoinPoolResponse = {
+  state: PoolWalletInfo;
+};
+export async function pw_join_pool(agent: TRPCAgent, data: TPwJoinPoolRequest){
+  return agent.sendMessage<TPwJoinPoolResponse>(chia_wallet_service, pw_join_pool_command, data);
+}
+
+
+
+
+export const pw_self_pool_command = "pw_self_pool";
+export type pw_self_pool_command = typeof pw_self_pool_command;
+export type TPwSelfPoolRequest = {
+  wallet_id: uint32;
+};
+export type TPwSelfPoolResponse = {
+  state: PoolWalletInfo;
+};
+export async function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest){
+  return agent.sendMessage<TPwSelfPoolResponse>(chia_wallet_service, pw_self_pool_command, data);
+}
+
+
+
+
+export const pw_collect_self_pooling_rewards_command = "pw_collect_self_pooling_rewards";
+export type pw_collect_self_pooling_rewards_command = typeof pw_collect_self_pooling_rewards_command;
+export type TPwCollectSelfPoolingRewardsRequest = {
+  wallet_id: uint32;
+  fee: uint64;
+};
+export type TPwCollectSelfPoolingRewardsResponse = {
+  pool_wallet_state: unknown; // @TODO Maybe 'PoolWalletInfo' but check implementation later.
+};
+export async function pw_collect_self_pooling_rewards(agent: TRPCAgent, data: TPwCollectSelfPoolingRewardsRequest){
+  return agent.sendMessage<TPwCollectSelfPoolingRewardsResponse>(chia_wallet_service, pw_collect_self_pooling_rewards_command, data);
+}
+
+
+
+
+export const pw_status_command = "pw_status";
+export type pw_status_command = typeof pw_status_command;
+export type TPwStatusRequest = {
+  wallet_id: uint32;
+};
+export type TPwStatusResponse = {
+  state: PoolWalletInfo;
+};
+export async function pw_status(agent: TRPCAgent, data: TPwStatusRequest){
+  return agent.sendMessage<TPwStatusResponse>(chia_wallet_service, pw_status_command, data);
 }

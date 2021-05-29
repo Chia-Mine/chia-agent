@@ -163,7 +163,7 @@ const response = await set_pool_payout_instructions(agent, params);
 ### params:
 ```typescript
 {
-  singleton_genesis: str;
+  launcher_id: str;
   pool_payout_instructions: str;
 }
 ```

@@ -66,6 +66,13 @@ export function buildConfigObj(
       buildConfigObj(value as Record<string, unknown>, currentPath, product);
       currentPath.pop();
     }
+    else if(Array.isArray(value)){
+      value.forEach((v, i) => {
+        currentPath.push(`${i}`);
+        buildConfigObj(v as Record<string, unknown>, currentPath, product);
+        currentPath.pop();
+      });
+    }
     else{
       const path = currentPath.length > 0 ? `/${currentPath.join("/")}/${propName}` : `/${propName}`;
       product[path] = value;
