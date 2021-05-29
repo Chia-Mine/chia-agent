@@ -2,7 +2,16 @@
 ### Added
 - New pool protocol/api
   - [`login`](./src/api/rpc/pool/README.md#loginagent-params)
-
+- New wallet api
+  - [`pw_join_pool`](./src/rpc/wallet/README.md#pw_join_poolagent-params)
+  - [`pw_self_pool`](./src/rpc/wallet/README.md#pw_self_poolagent-params)
+  - [`pw_collect_self_pooling_rewards`](./src/rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
+  - [`pw_status`](./src/rpc/wallet/README.md#pw_statusagent-params)
+### Fixed
+  - Correct type name `TCreate_New_RC_WalletRequest/Response` to `TCreate_New_RL_WalletRequest/Response`
+  - Fixed wrong json structure of `TPartialsRequest`'
+  - Fixed `create_new_wallet` request format
+  - Fixed an issue where array data in YAML file could not be parsed as expected.
 
 ## [1.1.0-beta]
 ### Added
