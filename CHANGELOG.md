@@ -12,10 +12,10 @@
   - [`get_recent_signage_point_or_eos`](./src/api/rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)
 - [New wallet api](./src/api/rpc/wallet)
   - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
-  - [`pw_join_pool`](./src/rpc/wallet/README.md#pw_join_poolagent-params)
-  - [`pw_self_pool`](./src/rpc/wallet/README.md#pw_self_poolagent-params)
-  - [`pw_collect_self_pooling_rewards`](./src/rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
-  - [`pw_status`](./src/rpc/wallet/README.md#pw_statusagent-params)
+  - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
+  - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
+  - [`pw_collect_self_pooling_rewards`](./src/api/rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
+  - [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
 
 ### Fixed
 - Correct type name `TCreate_New_RC_WalletRequest/Response` to `TCreate_New_RL_WalletRequest/Response`
