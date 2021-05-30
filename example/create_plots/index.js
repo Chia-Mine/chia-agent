@@ -25,9 +25,9 @@ async function main(){
     b: 4600, // memory buffer size
     u: 128, // number of buckets
     r: 2, // number of threads
-    // a?: int, // fingerprint
-    // f: str, // farmer public key
-    // p: str, // pool public key
+    // a?: int, // fingerprint. The value is given by `chia keys show`
+    // f: str, // farmer public key. See `chia keys show` for farmer public key.
+    // p: str, // pool public key. See `chia keys show` for pool public key.
     // c: str, // pool contract address
     e: false, // false: Not disabling bitfield plotting.
     x: false, // false: Not skipping final dir copy.
