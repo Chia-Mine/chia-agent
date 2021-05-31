@@ -114,6 +114,11 @@ setTimeout(async () => {
 ## Examples
 [See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
 
+Here are some of those examples
+- [Send email when proof is found](https://github.com/Chia-Mine/chia-agent/blob/main/example/send_email_when_proof_is_found)
+- [RPC API code sample to show block record in certain height](https://github.com/Chia-Mine/chia-agent/blob/main/example/get_block_by_height)
+- [Create multiple plots with javascript](https://github.com/Chia-Mine/chia-agent/blob/main/example/create_plots)
+
 ## API Compatibility Memo
 Current version of `chia-agent` follows API defined at commit [`9e9097b116...`](https://github.com/Chia-Network/chia-blockchain/tree/9e9097b11688e52ee13683533d1ad273d231a1ee) in `chia 1.1.6`.
 
