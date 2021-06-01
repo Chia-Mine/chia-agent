@@ -111,7 +111,7 @@ Specify host and port of remote server to `daemon.connect` function as below.
 # Cancel plotting
 Check target task's uuid in plotter log file name. 
 ```shell
-ls -l $CHIAHOME/plotter
+ls -l $CHIA_HOME/plotter
 ```
 You can find a bunch of plotter log files like:  
 `plotter_log_0cda2be3-88c7-4f9a-ab06-b3dcc5130aac.txt`  
