@@ -14,6 +14,8 @@ export declare type PoolWalletInfo = {
     current: PoolState;
     target: Optional<PoolState>;
     launcher_coin: Coin;
+    launcher_id: bytes32;
+    p2_singleton_puzzle_hash: bytes32;
     current_inner: Program;
     tip_singleton_coin_id: bytes32;
 };

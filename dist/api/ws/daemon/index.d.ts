@@ -26,12 +26,12 @@ export declare function start_service(daemon: TDaemon, data: TStartServiceReques
 export declare const start_plotting_command = "start_plotting";
 export declare type start_plotting_command = typeof start_plotting_command;
 export declare type TStartPlottingRequest = {
-    service: string;
-    delay: int;
-    parallel: bool;
+    service: "chia plots create";
+    delay?: int;
+    parallel?: bool;
     k: int;
-    n: int;
-    queue: str;
+    n?: int;
+    queue?: str;
     t: str;
     t2: str;
     d: str;
@@ -39,6 +39,9 @@ export declare type TStartPlottingRequest = {
     u: int;
     r: int;
     a?: int;
+    f?: str;
+    p?: str;
+    c?: str;
     e: bool;
     x: bool;
     overrideK: bool;

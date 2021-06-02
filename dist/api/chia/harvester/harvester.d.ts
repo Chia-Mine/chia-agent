@@ -4,6 +4,7 @@ export declare type Plot = {
     filename: str;
     size: int;
     "plot-seed": bytes;
+    plot_id: bytes;
     pool_public_key: Optional<G1Element>;
     pool_contract_puzzle_hash: Optional<bytes32>;
     plot_public_key: G1Element;
