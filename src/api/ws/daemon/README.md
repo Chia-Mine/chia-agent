@@ -91,9 +91,9 @@ const response = await start_plotting(daemon, {service: "chia plots create", ...
   u: int; // number of buckets
   r: int; // number of threads
   a?: int; // wallet private key fingerprint
-  // f: str; // farmer public key. Not available at this time.
-  // p: str; // pool public key. Not available at this time.
-  // c: str; // pool contract address. Not available at this time.
+  f?: str; // farmer public key.
+  p?: str; // pool public key.
+  c?: str; // pool contract address.
   e: bool; // disable bitfield plotting
   x: bool; // exclude final dir. Skips adding [final dir] to harvester for farming
   overrideK: bool; // Set true only if you want to use k < 32

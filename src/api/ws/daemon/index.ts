@@ -53,9 +53,9 @@ export type TStartPlottingRequest = {
   u: int; // number of buckets. 128 is recommended
   r: int; // number of threads. 2 is recommended.
   a?: int; // fingerprint. Confirm it via `chia keys show` command.
-  // f: str; // farmer public key
-  // p: str; // pool public key
-  // c: str; // pool contract address
+  f?: str; // farmer public key
+  p?: str; // pool public key
+  c?: str; // pool contract address
   e: bool; // disable bitfield plotting. False is recommended.
   x: bool; // Skip final dir copy. False is recommended.
   overrideK: bool; // True if you want to use k < 33
