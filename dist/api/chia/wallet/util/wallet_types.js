@@ -12,4 +12,5 @@ exports.WalletType = {
     COLOURED_COIN: 6,
     RECOVERABLE: 7,
     DISTRIBUTED_ID: 8,
+    POOLING_WALLET: 9,
 };

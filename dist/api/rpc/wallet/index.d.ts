@@ -185,15 +185,10 @@ export declare type TCreate_New_Pool_WalletRequest = {
     wallet_type: "pool_wallet";
     mode: "new";
     initial_target_state: {
-        wallet_type: "pool_wallet";
-        mode: "new";
-        host: str;
-        initial_target_state: {
-            target_puzzle_hash: str;
-            relative_lock_height: uint32;
-            pool_url: str;
-            state: "SELF_POOLING" | "FARMING_TO_POOL";
-        };
+        state: "SELF_POOLING" | "FARMING_TO_POOL";
+        target_puzzle_hash: str;
+        pool_url: str;
+        relative_lock_height: uint32;
     };
 } | {
     host: str;
@@ -615,12 +610,12 @@ export declare const pw_join_pool_command = "pw_join_pool";
 export declare type pw_join_pool_command = typeof pw_join_pool_command;
 export declare type TPwJoinPoolRequest = {
     wallet_id: uint32;
-    "target_puzzlehash"?: string;
+    target_puzzlehash?: string;
     pool_url: Optional<str>;
     relative_lock_height: uint32;
 };
 export declare type TPwJoinPoolResponse = {
-    state: PoolWalletInfo;
+    transaction: TransactionRecord;
 };
 export declare function pw_join_pool(agent: TRPCAgent, data: TPwJoinPoolRequest): Promise<TPwJoinPoolResponse>;
 export declare const pw_self_pool_command = "pw_self_pool";
@@ -629,7 +624,7 @@ export declare type TPwSelfPoolRequest = {
     wallet_id: uint32;
 };
 export declare type TPwSelfPoolResponse = {
-    state: PoolWalletInfo;
+    transaction: TransactionRecord;
 };
 export declare function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest): Promise<TPwSelfPoolResponse>;
 export declare const pw_collect_self_pooling_rewards_command = "pw_collect_self_pooling_rewards";

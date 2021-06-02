@@ -126,9 +126,10 @@ export declare function get_network_info_of_full_node(agent: TRPCAgent): Promise
 export declare const get_recent_signage_point_or_eos_command = "get_recent_signage_point_or_eos";
 export declare type get_recent_signage_point_or_eos_command = typeof get_recent_signage_point_or_eos_command;
 export declare type TGetRecentSignagePointOrEOSCommandRequest = {
-    sp_hash: str;
     challenge_hash: str;
-} | {};
+} | {
+    sp_hash: str;
+};
 export declare type TGetRecentSignagePointOrEOSCommandResponse = {
     eos: EndOfSubSlotBundle;
     time_received: float;
