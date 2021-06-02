@@ -185,9 +185,10 @@ export async function get_network_info_of_full_node(agent: TRPCAgent) {
 export const get_recent_signage_point_or_eos_command = "get_recent_signage_point_or_eos";
 export type get_recent_signage_point_or_eos_command = typeof get_recent_signage_point_or_eos_command;
 export type TGetRecentSignagePointOrEOSCommandRequest = {
-  sp_hash: str;
   challenge_hash: str;
-} | {};
+} | {
+  sp_hash: str;
+};
 export type TGetRecentSignagePointOrEOSCommandResponse = {
   eos: EndOfSubSlotBundle;
   time_received: float;
