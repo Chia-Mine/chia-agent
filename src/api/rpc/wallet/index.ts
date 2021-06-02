@@ -286,15 +286,10 @@ export type TCreate_New_Pool_WalletRequest = {
   wallet_type: "pool_wallet";
   mode: "new";
   initial_target_state: {
-    wallet_type: "pool_wallet";
-    mode: "new";
-    host: str;
-    initial_target_state: {
-      target_puzzle_hash: str;
-      relative_lock_height: uint32;
-      pool_url: str;
-      state: "SELF_POOLING"|"FARMING_TO_POOL";
-    },
+    state: "SELF_POOLING"|"FARMING_TO_POOL";
+    target_puzzle_hash: str;
+    pool_url: str;
+    relative_lock_height: uint32;
   };
 } | {
   host: str;
@@ -922,12 +917,12 @@ export const pw_join_pool_command = "pw_join_pool";
 export type pw_join_pool_command = typeof pw_join_pool_command;
 export type TPwJoinPoolRequest = {
   wallet_id: uint32;
-  "target_puzzlehash"?: string;
+  target_puzzlehash?: string;
   pool_url: Optional<str>;
   relative_lock_height: uint32;
 };
 export type TPwJoinPoolResponse = {
-  state: PoolWalletInfo;
+  transaction: TransactionRecord;
 };
 export async function pw_join_pool(agent: TRPCAgent, data: TPwJoinPoolRequest){
   return agent.sendMessage<TPwJoinPoolResponse>(chia_wallet_service, pw_join_pool_command, data);
@@ -942,7 +937,7 @@ export type TPwSelfPoolRequest = {
   wallet_id: uint32;
 };
 export type TPwSelfPoolResponse = {
-  state: PoolWalletInfo;
+  transaction: TransactionRecord;
 };
 export async function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest){
   return agent.sendMessage<TPwSelfPoolResponse>(chia_wallet_service, pw_self_pool_command, data);

@@ -16,6 +16,8 @@ export type PoolWalletInfo = {
   current: PoolState;
   target: Optional<PoolState>;
   launcher_coin: Coin;
+  launcher_id: bytes32;
+  p2_singleton_puzzle_hash: bytes32;
   current_inner: Program; // # Inner puzzle in current singleton, not revealed yet
   tip_singleton_coin_id: bytes32;
 };
