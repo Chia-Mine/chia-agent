@@ -7,26 +7,61 @@ Please remember that all rpc API is provided as an async function.
 const {RPCAgent} = require("chia-agent");
 const {pool_info} = require("chia-agent/api/rpc/pool");
 const agent = new RPCAgent({
-  service: "pool", // connect to a pool service using config file.
+  protocol: "https", // or "http"
+  host: "some.pool.com",
+  port: 8443,
 });
+
+
 // Then call RPC function
 const response = await pool_info(agent);
 
 // Once agent is instantiated, you can re-use it everytime you want to request farmer API.
+```
 
+### Note  
+Unlike other RPC services like `farmer`, `harvester`, `wallet`, `full_node`, pool servers may be completely external and untrusted.  
+Additionally, actual pool implementation depends on pool operators.  
+They may use self-signed certificate and requires root CA cert on connection, or may restrict access by requesting client cert signed by shared private CA.
 
+#### Case1: Connect via HTTP without TLS certs
+Current testnet implementation is this case. Connection between pool and client does not require any certificates thus not secure.  
 
-/*
- * You can instantiate `agent` with hostname/port.
- * See https://github.com/Chia-Mine/chia-agent/blob/main/src/rpc/index.ts
- */
+```js
+const {RPCAgent} = require("chia-agent");
+const agent = new RPCAgent({
+  protocol: "http",
+  host: "some.pool.com",
+  port: 80,
+});
+```
+
+#### Case2: Connect via HTTPS with server certs signed by public known CA and WITHOUT client auth
+This may be the most popular case after the pool protocol releases to mainnet.  
+This is as simple as case1 because it does not require private root CA certs nor client certs.
+```js
+const {RPCAgent} = require("chia-agent");
 const agent = new RPCAgent({
   protocol: "https",
-  host: "aaa.bbb.ccc",
-  port: 8666,
-  ca_cert: fs.readFileSync(...),
-  client_cert: fs.readFileSync(...),
-  client_key: fs.readFileSync(...),
+  host: "some.pool.com",
+  port: 443,
+});
+```
+
+#### Case3: Connect via HTTPS with server certs signed by private CA and WITH client auth
+The case for private pool. Sounds like VIP only.  
+In this case, you need to have the private root CA certs, your client certs signed by the private CA.
+
+If you don't have valid client certs authorized by those private pool servers, https connection to those pools will be rejected.
+```js
+const {RPCAgent} = require("chia-agent");
+const agent = new RPCAgent({
+  protocol: "https",
+  host: "private.pool.com",
+  port: 10443,
+  ca_cert: fs.readFileSync("/path/to/ca/cert"),
+  client_cert: fs.readFileSync("/path/to/public/client/cert"),
+  client_key: fs.readFileSync("/path/to/private/client/key"),
 });
 ```
 
@@ -37,7 +72,7 @@ const agent = new RPCAgent({
 ```js
 const {RPCAgent} = require("chia-agent");
 const {pool_info} = require("chia-agent/api/rpc/pool");
-const agent = new RPCAgent({service: "pool"});
+const agent = new RPCAgent(connectionInfo);
 const response = await pool_info(agent);
 ```
 ### response:
@@ -61,7 +96,7 @@ const response = await pool_info(agent);
 ```js
 const {RPCAgent} = require("chia-agent");
 const {partials} = require("chia-agent/api/rpc/pool");
-const agent = new RPCAgent({service: "pool"});
+const agent = new RPCAgent(connectionInfo);
 const response = await partials(agent, params);
 ```
 ### params:
@@ -107,7 +142,7 @@ const response = await partials(agent, params);
 ```js
 const {RPCAgent} = require("chia-agent");
 const {login} = require("chia-agent/api/rpc/pool");
-const agent = new RPCAgent({service: "pool"});
+const agent = new RPCAgent(connectionInfo);
 const response = await partials(login, params);
 ```
 ### params:
