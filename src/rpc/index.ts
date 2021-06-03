@@ -50,8 +50,8 @@ export type TRPCAgentProps = {
   host: string;
   port: number;
   ca_cert?: string|Buffer;
-  client_cert: string|Buffer;
-  client_key: string|Buffer;
+  client_cert?: string|Buffer;
+  client_key?: string|Buffer;
 } | {
   protocol: "https";
   host: string;
@@ -73,8 +73,8 @@ export class RPCAgent {
   protected _hostname: string;
   protected _port: number;
   protected _caCert?: string|Buffer = "";
-  protected _clientCert: string|Buffer = "";
-  protected _clientKey: string|Buffer = "";
+  protected _clientCert?: string|Buffer = "";
+  protected _clientKey?: string|Buffer = "";
   protected _agent: HttpsAgent|HttpAgent;
   
   public constructor(props: TRPCAgentProps) {
