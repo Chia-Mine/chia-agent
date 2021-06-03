@@ -34,9 +34,14 @@ function getConnectionInfoFromConfig(destination, config) {
         port = +config["/wallet/rpc_port"];
     }
     else if (destination === "pool") {
-        hostname = config["/pool/pool_list/0/host"];
-        port = +config["/pool/pool_list/0/port"];
-        if (!hostname) {
+        const pool_url = config["/pool/pool_list/0/pool_url"];
+        const regex = /^(https?:\/\/)?([^/:]+):?(\d*)/;
+        const match = regex.exec(pool_url);
+        if (match) {
+            hostname = match[2];
+            port = match[3] ? +match[3] : 80;
+        }
+        else {
             logger_1.getLogger().error("Pool list was not found in config.yaml.");
             throw new Error("Pool list was not found in config.yaml");
         }
