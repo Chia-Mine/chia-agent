@@ -305,9 +305,10 @@ const response = await get_recent_signage_point_or_eos(agent, params);
 ### params
 ```typescript
  {
-  sp_hash: str;
   challenge_hash: str;
-} | {}
+} | {
+  sp_hash: str;
+}
 ```
 ### response
 ```typescript
