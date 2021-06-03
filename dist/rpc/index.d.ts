@@ -12,9 +12,9 @@ export declare type TRPCAgentProps = {
     protocol: "https";
     host: string;
     port: number;
-    ca_cert: string | Buffer;
-    client_cert: string | Buffer;
-    client_key: string | Buffer;
+    ca_cert?: string | Buffer;
+    client_cert?: string | Buffer;
+    client_key?: string | Buffer;
 } | {
     protocol: "https";
     host: string;
@@ -32,9 +32,9 @@ export declare class RPCAgent {
     protected _protocol: "http" | "https";
     protected _hostname: string;
     protected _port: number;
-    protected _caCert: string | Buffer;
-    protected _clientCert: string | Buffer;
-    protected _clientKey: string | Buffer;
+    protected _caCert?: string | Buffer;
+    protected _clientCert?: string | Buffer;
+    protected _clientKey?: string | Buffer;
     protected _agent: HttpsAgent | HttpAgent;
     constructor(props: TRPCAgentProps);
     protected _getConfig(configPath?: string): TConfig;
