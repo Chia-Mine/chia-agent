@@ -1,10 +1,9 @@
 import { ProofOfSpace } from "../../chia/types/blockchain_format/proof_of_space";
-import { bool, int, Optional, str, uint16, uint64, uint8 } from "../../chia/types/_python_types_";
+import { bool, Optional, str, uint16, uint64, uint8 } from "../../chia/types/_python_types_";
 import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
 import { TRPCAgent } from "../../../rpc/index";
-import { TPoolInfoResponse } from "../pool/index";
-import { PoolWalletConfig } from "../../chia/pools/pool_config";
 import { RespondPlots } from "../../chia/protocols/harvester_protocol";
+import { PoolState } from "../../chia/farmer/farmer";
 export declare const chia_farmer_service = "chia_farmer";
 export declare type chia_farmer_service = typeof chia_farmer_service;
 export declare const get_signage_point_command = "get_signage_point";
@@ -54,18 +53,6 @@ export declare type TSetRewardTargetRequest = {
 };
 export declare type TSetRewardTargetResponse = {};
 export declare function set_reward_targets(agent: TRPCAgent, params: TSetRewardTargetRequest): Promise<TSetRewardTargetResponse>;
-export declare type PoolState = {
-    points_found_since_start: int;
-    points_found_24h: unknown[];
-    points_acknowledged_since_start: int;
-    points_acknowledged_24h: unknown[];
-    current_points_balance: int;
-    current_difficulty: int;
-    pool_errors_24h: unknown[];
-    pool_info: TPoolInfoResponse;
-    pool_config: PoolWalletConfig;
-    p2_singleton_puzzle_hash: str;
-};
 export declare const get_pool_state_command = "get_pool_state";
 export declare type get_pool_state_command = typeof get_pool_state_command;
 export declare type TGetPoolStateRequest = {};

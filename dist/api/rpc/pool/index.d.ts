@@ -34,13 +34,14 @@ export declare type TPartialsRequest = {
     };
     auth_key_and_partial_aggregate_signature: str;
 };
-export declare type TPartialsResponse = {
-    points_balance: uint64;
-    current_difficulty: uint64;
-} | {
+export declare type TPartialsErrorResponse = {
     error_code: int;
     error_message: str;
 };
+export declare type TPartialsResponse = {
+    points_balance: uint64;
+    current_difficulty: uint64;
+} | TPartialsErrorResponse;
 export declare function partials(agent: TRPCAgent, data: TPartialsRequest): Promise<TPartialsResponse>;
 export declare type TLoginRequest = {
     singleton_genesis: str;
