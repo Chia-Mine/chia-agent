@@ -627,16 +627,17 @@ export declare type TPwSelfPoolResponse = {
     transaction: TransactionRecord;
 };
 export declare function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest): Promise<TPwSelfPoolResponse>;
-export declare const pw_collect_self_pooling_rewards_command = "pw_collect_self_pooling_rewards";
-export declare type pw_collect_self_pooling_rewards_command = typeof pw_collect_self_pooling_rewards_command;
-export declare type TPwCollectSelfPoolingRewardsRequest = {
+export declare const pw_absorb_rewards_command = "pw_absorb_rewards";
+export declare type pw_absorb_rewards_command = typeof pw_absorb_rewards_command;
+export declare type TPwAbsorbRewardsRequest = {
     wallet_id: uint32;
     fee: uint64;
 };
-export declare type TPwCollectSelfPoolingRewardsResponse = {
-    pool_wallet_state: unknown;
+export declare type TPwAbsorbRewardsResponse = {
+    state: PoolWalletInfo;
+    transaction: TransactionRecord;
 };
-export declare function pw_collect_self_pooling_rewards(agent: TRPCAgent, data: TPwCollectSelfPoolingRewardsRequest): Promise<TPwCollectSelfPoolingRewardsResponse>;
+export declare function pw_absorb_rewards(agent: TRPCAgent, data: TPwAbsorbRewardsRequest): Promise<TPwAbsorbRewardsResponse>;
 export declare const pw_status_command = "pw_status";
 export declare type pw_status_command = typeof pw_status_command;
 export declare type TPwStatusRequest = {

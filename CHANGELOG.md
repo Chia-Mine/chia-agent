@@ -1,3 +1,7 @@
+## [1.1.0-beta.5] (Changes from 1.1.0-beta.4)
+### Changed
+- Changed an API endpoint name from `pw_collect_self_pooling_rewards` to `pw_absorb_rewards`
+
 ## [1.1.0-beta]
 ### Added
 - [New pool protocol/api](./src/api/rpc/pool)
@@ -14,8 +18,10 @@
   - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
   - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
   - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
-  - [`pw_collect_self_pooling_rewards`](./src/api/rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
+  - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
   - [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
+  
+- Added BUILD.md
 
 ### Fixed
 - Correct type name `TCreate_New_RC_WalletRequest/Response` to `TCreate_New_RL_WalletRequest/Response`
@@ -71,6 +77,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[1.1.0-beta.5]: https://github.com/Chia-Mine/chia-agent/compare/97bd55fe016f52c4a5fce313bd1e7cb8a26fa7e0...v1.1.0
 [1.1.0-beta]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0

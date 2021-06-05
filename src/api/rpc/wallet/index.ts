@@ -946,17 +946,18 @@ export async function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest){
 
 
 
-export const pw_collect_self_pooling_rewards_command = "pw_collect_self_pooling_rewards";
-export type pw_collect_self_pooling_rewards_command = typeof pw_collect_self_pooling_rewards_command;
-export type TPwCollectSelfPoolingRewardsRequest = {
+export const pw_absorb_rewards_command = "pw_absorb_rewards";
+export type pw_absorb_rewards_command = typeof pw_absorb_rewards_command;
+export type TPwAbsorbRewardsRequest = {
   wallet_id: uint32;
   fee: uint64;
 };
-export type TPwCollectSelfPoolingRewardsResponse = {
-  pool_wallet_state: unknown; // @TODO Maybe 'PoolWalletInfo' but check implementation later.
+export type TPwAbsorbRewardsResponse = {
+  state: PoolWalletInfo;
+  transaction: TransactionRecord;
 };
-export async function pw_collect_self_pooling_rewards(agent: TRPCAgent, data: TPwCollectSelfPoolingRewardsRequest){
-  return agent.sendMessage<TPwCollectSelfPoolingRewardsResponse>(chia_wallet_service, pw_collect_self_pooling_rewards_command, data);
+export async function pw_absorb_rewards(agent: TRPCAgent, data: TPwAbsorbRewardsRequest){
+  return agent.sendMessage<TPwAbsorbRewardsResponse>(chia_wallet_service, pw_absorb_rewards_command, data);
 }
 
 
