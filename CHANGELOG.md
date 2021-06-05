@@ -20,6 +20,8 @@
   - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
   - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
   - [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
+  
+- Added BUILD.md
 
 ### Fixed
 - Correct type name `TCreate_New_RC_WalletRequest/Response` to `TCreate_New_RL_WalletRequest/Response`
