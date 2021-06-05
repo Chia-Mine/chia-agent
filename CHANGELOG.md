@@ -1,5 +1,5 @@
 ## [1.1.0-beta.7] (Changes from 1.1.0-beta.6)
-###Fixed
+### Fixed
 - Fixed an issue where submodule could not be loaded. e.g. `const {...} = require("chia-agent/api/rpc");`
 
 ## [1.1.0-beta.6] (Changes from 1.1.0-beta.5)
