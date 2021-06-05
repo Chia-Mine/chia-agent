@@ -119,6 +119,13 @@ Here are some of those examples
 - [RPC API code sample to show block record in certain height](https://github.com/Chia-Mine/chia-agent/blob/main/example/get_block_by_height)
 - [Create multiple plots with javascript](https://github.com/Chia-Mine/chia-agent/blob/main/example/create_plots)
 
+## Build from source
+Once source files is build by `npm run build:prod`, files will be output to `/dist` directory.  
+Then the files/directories are published to npm registry.  
+Please note it does not upload files in project root to npm registry, but files inside '/dist'.
+
+[Read details here](https://github.com/Chia-Mine/chia-agent/blob/v1.1.0/BUILD.md)
+
 ## API Compatibility Memo
 Current version of `chia-agent` follows API defined at commit [`9e9097b116...`](https://github.com/Chia-Network/chia-blockchain/tree/9e9097b11688e52ee13683533d1ad273d231a1ee) in `chia 1.1.6`.
 
