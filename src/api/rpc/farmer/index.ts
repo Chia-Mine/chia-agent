@@ -1,10 +1,9 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
-import {bool, bytes, int, Optional, str, uint16, uint64, uint8} from "../../chia/types/_python_types_";
+import {bool, Optional, str, uint16, uint64, uint8} from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TRPCAgent} from "../../../rpc/index";
-import {TPoolInfoResponse} from "../pool/index";
-import {PoolWalletConfig} from "../../chia/pools/pool_config";
 import {RespondPlots} from "../../chia/protocols/harvester_protocol";
+import {PoolState} from "../../chia/farmer/farmer";
 
 export const chia_farmer_service = "chia_farmer";
 export type chia_farmer_service = typeof chia_farmer_service;
@@ -77,19 +76,6 @@ export async function set_reward_targets(agent: TRPCAgent, params: TSetRewardTar
 
 
 
-export type PoolState = {
-  points_found_since_start: int;
-  points_found_24h: unknown[];
-  points_acknowledged_since_start: int;
-  points_acknowledged_24h: unknown[];
-  current_points_balance: int;
-  current_difficulty: int;
-  pool_errors_24h: unknown[];
-  pool_info: TPoolInfoResponse;
-  pool_config: PoolWalletConfig;
-  p2_singleton_puzzle_hash: str;
-};
-
 export const get_pool_state_command = "get_pool_state";
 export type get_pool_state_command = typeof get_pool_state_command;
 export type TGetPoolStateRequest = {
@@ -120,7 +106,7 @@ export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSe
 export type RequestPlotsResponse = {
   type: 68;
   id: Optional<uint16>;
-  data: RespondPlots;
+  data: RespondPlots; // @todo Check whether `data` is serialized str or RespondPlots json object.
 };
 export const get_plots_command = "get_plots";
 export type get_plots_command = typeof get_plots_command;

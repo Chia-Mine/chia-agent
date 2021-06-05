@@ -19,6 +19,7 @@ import {SpendBundle} from "../../chia/types/spend_bundle";
 import {BackupInfo} from "../../chia/wallet/util/backup_utils";
 import {TRPCAgent} from "../../../rpc";
 import {PoolWalletInfo} from "../../chia/pools/pool_wallet_info";
+import {TradeRecordInJson} from "../../chia/wallet/util/trade_utils";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -43,8 +44,6 @@ export type TLoginResponse = {
   success: False;
   error: "not_initialized" | "Unknown Error";
 } | {
-  success: False;
-  error: "not_initialized";
   backup_info: BackupInfo;
   backup_path: str; // Union[str, PathLike[str]]
 };
@@ -77,7 +76,12 @@ export type TGetPrivateKeyResponse = {
     fingerprint: int;
     sk: str;
     pk: str;
-    seed: str;
+    seed: Optional<str>;
+  };
+} | {
+  success: False;
+  private_key: {
+    fingerprint: int;
   };
 };
 export async function get_private_key(agent: TRPCAgent, data: TGetPrivateKeyRequest){
@@ -250,6 +254,14 @@ export type TCreate_New_CC_WalletRequest = {
   mode: "existing";
   colour: str;
 };
+export type TCreate_New_CC_WalletResponse = {
+  type: uint8;
+  colour: str;
+  wallet_id: uint32;
+} | {
+  type: uint8;
+};
+
 export type TCreate_New_RL_WalletRequest = {
   host: str;
   fee?: uint64;
@@ -265,6 +277,18 @@ export type TCreate_New_RL_WalletRequest = {
   wallet_type: "rl_wallet";
   rl_type: "user";
 };
+export type TCreate_New_RL_WalletResponse = {
+  success: bool;
+  id: uint32;
+  type: uint8;
+  origin: Optional<Coin>;
+  pubkey: str;
+} | {
+  id: uint32;
+  type: uint8;
+  pubkey: str;
+};
+
 export type TCreate_New_DID_WalletRequest = {
   host: str;
   fee?: uint64;
@@ -280,6 +304,24 @@ export type TCreate_New_DID_WalletRequest = {
   did_type: "recovery";
   filename: str;
 };
+export type TCreate_New_DID_WalletResponse = {
+  success: True;
+  type: uint8;
+  my_did: str;
+  wallet_id: uint32;
+} | {
+  success: True;
+  type: uint8;
+  my_did: str;
+  wallet_id: uint32;
+  coin_name: str;
+  coin_list: [bytes32, bytes32, uint64]; // Not Coin[]. See as_list function implementation.
+  newpuzhash: str;
+  pubkey: str;
+  backup_dids: bytes[];
+  num_verifications_required: uint64;
+};
+
 export type TCreate_New_Pool_WalletRequest = {
   host: str;
   fee?: uint64;
@@ -298,41 +340,6 @@ export type TCreate_New_Pool_WalletRequest = {
   mode: "recovery";
 };
 
-export type TCreate_New_CC_WalletResponse = {
-  type: uint8;
-  colour: str;
-  wallet_id: uint32;
-} | {
-  type: uint8;
-};
-export type TCreate_New_RL_WalletResponse = {
-  success: bool;
-  id: uint32;
-  type: uint8;
-  origin: Optional<Coin>;
-  pubkey: str;
-} | {
-  id: uint32;
-  type: uint8;
-  pubkey: str;
-};
-export type TCreate_New_DID_WalletResponse = {
-  success: true;
-  type: uint8;
-  my_did: str;
-  wallet_id: uint32;
-} | {
-  success: true;
-  type: uint8;
-  my_did: str;
-  wallet_id: uint32;
-  coin_name: bytes32;
-  coin_list: [bytes32, bytes32, uint64];
-  newpuzhash: str;
-  pubkey: str;
-  backup_dids: bytes[];
-  num_verifications_required: uint64;
-};
 export type TCreate_New_Pool_WalletResponse = {
   transaction: TransactionRecord;
 };
@@ -373,7 +380,7 @@ export async function get_wallet_balance(agent: TRPCAgent, data: TGetWalletBalan
 export const get_transaction_command = "get_transaction";
 export type get_transaction_command = typeof get_transaction_command;
 export type TGetTransactionRequest = {
-  transaction_id: bytes32;
+  transaction_id: str;
 };
 export type TGetTransactionResponse = {
   transaction: TransactionRecord;
@@ -599,11 +606,10 @@ export async function cc_get_colour(agent: TRPCAgent, data: TCcGetColourRequest)
 export const create_offer_for_ids_command = "create_offer_for_ids";
 export type create_offer_for_ids_command = typeof create_offer_for_ids_command;
 export type TCreateOfferForIdsRequest = {
-  ids: Record<int, int>;
+  ids: Record<int, int>; // {[wallet_id: int]: int(amount)}
   filename: str;
 };
 export type TCreateOfferForIdsResponse = {
-  discrepancies: Optional<Record<str, int>>;
 };
 export async function create_offer_for_ids(agent: TRPCAgent, data: TCreateOfferForIdsRequest){
   return agent.sendMessage<TCreateOfferForIdsResponse>(chia_wallet_service, create_offer_for_ids_command, data);
@@ -618,6 +624,7 @@ export type TGetDiscrepanciesForOfferRequest = {
   filename: str;
 };
 export type TGetDiscrepanciesForOfferResponse = {
+  discrepancies: Optional<Record<str, int>>; // {[colour: string]: int(amount)}
 };
 export async function get_discrepancies_for_offer(agent: TRPCAgent, data: TGetDiscrepanciesForOfferRequest){
   return agent.sendMessage<TGetDiscrepanciesForOfferResponse>(chia_wallet_service, get_discrepancies_for_offer_command, data);
@@ -640,16 +647,6 @@ export async function respond_to_offer(agent: TRPCAgent, data: TResponseToOfferR
 
 
 
-export type TradeRecordInJson = {
-  trade_id: str;
-  sent: uint32;
-  my_offer: bool;
-  created_at_time: uint64;
-  accepted_at_time: Optional<uint64>;
-  confirmed_at_index: uint32;
-  status: str;
-  offer_dict: Optional<Record<str, int>>;
-};
 export const get_trade_command = "get_trade";
 export type get_trade_command = typeof get_trade_command;
 export type TGetTradeRequest = {
@@ -731,10 +728,11 @@ export async function did_spend(agent: TRPCAgent, data: TDidSpendRequest){
 export const did_get_pubkey_command = "did_get_pubkey";
 export type did_get_pubkey_command = typeof did_get_pubkey_command;
 export type TDidGetPubkeyRequest = {
+  wallet_id: int;
 };
 export type TDidGetPubkeyResponse = {
   success: bool;
-  pubkey: str;
+  pubkey: bytes;
 };
 export async function did_get_pubkey(agent: TRPCAgent){
   return agent.sendMessage<TDidGetPubkeyResponse>(chia_wallet_service, did_get_pubkey_command);
@@ -766,8 +764,8 @@ export type did_recovery_spend_command = typeof did_recovery_spend_command;
 export type TDidRecoverySpendRequest = {
   wallet_id: int;
   attest_filenames: str[];
-  pubkey: str;
-  puzhash: str;
+  pubkey?: str;
+  puzhash?: str;
 };
 export type TDidRecoverySpendResponse = {
   success: SpendBundle;

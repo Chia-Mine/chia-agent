@@ -148,7 +148,7 @@ const response = await get_pool_state(agent);
 }
 ```
 For content of `PoolState`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/farmer/index.ts
+see [https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/farmer/farmer.ts](../../chia/farmer/farmer.ts)
 
 ---
 
@@ -185,7 +185,7 @@ const response = await get_plots(agent);
 ### response:
 ```typescript
 {
-  [peer_host_port: string]: RequestPlotsResponse;
+  [peer_host_and_port: string]: RequestPlotsResponse;
 }
 ```
 For content of `RequestPlotsResponse`,  

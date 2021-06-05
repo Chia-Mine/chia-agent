@@ -1,3 +1,15 @@
+## [1.1.0-beta.6] (Changes from 1.1.0-beta.5)
+### Changed
+- Update unknown types in `PoolState`.
+
+### Fixed
+- Fixed `login` response json of Wallet RPC API 
+- Fixed `get_private_key` response json of Wallet RPC API
+- Fixed `create_offer_for_ids` response json of Wallet RPC API
+- Fixed `get_discrepancies_for_offer` response json of Wallet RPC API
+- Fixed `did_get_pubkey` response json of Wallet RPC API
+- Fixed `did_recovery_spend` response json of Wallet RPC API
+
 ## [1.1.0-beta.5] (Changes from 1.1.0-beta.4)
 ### Changed
 - Changed an API endpoint name from `pw_collect_self_pooling_rewards` to `pw_absorb_rewards`
@@ -77,7 +89,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[1.1.0-beta.5]: https://github.com/Chia-Mine/chia-agent/compare/97bd55fe016f52c4a5fce313bd1e7cb8a26fa7e0...v1.1.0
+[1.1.0-beta.6]: https://github.com/Chia-Mine/chia-agent/compare/18eb244e4adef48b7c8a6ed70719230fc237f6b4...v1.1.0
+[1.1.0-beta.5]: https://github.com/Chia-Mine/chia-agent/compare/97bd55fe016f52c4a5fce313bd1e7cb8a26fa7e0...18eb244e4adef48b7c8a6ed70719230fc237f6b4
 [1.1.0-beta]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0

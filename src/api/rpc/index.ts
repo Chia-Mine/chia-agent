@@ -305,7 +305,6 @@ export {
   TSendTransactionResponse,
   TSendTransactionMultiRequest,
   TSendTransactionMultiResponse,
-  TradeRecordInJson,
   add_key,
   add_rate_limited_funds,
   cancel_trade,

@@ -40,13 +40,14 @@ export type TPartialsRequest = {
   };
   auth_key_and_partial_aggregate_signature: str;
 };
-export type TPartialsResponse = {
-  points_balance: uint64;
-  current_difficulty: uint64;
-} | {
+export type TPartialsErrorResponse = {
   error_code: int;
   error_message: str;
 };
+export type TPartialsResponse = {
+  points_balance: uint64;
+  current_difficulty: uint64;
+} | TPartialsErrorResponse;
 export async function partials(agent: TRPCAgent, data: TPartialsRequest){
   return agent.request<TPartialsResponse>("POST", "partials", data);
 }
