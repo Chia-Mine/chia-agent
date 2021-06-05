@@ -9,7 +9,7 @@
     "url": "https://github.com/Chia-Mine/chia-agent.git"
   },
   "bugs": "https://github.com/Chia-Mine/chia-agent/issues",
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "bin": {
     "chia-agent": "./dist/bin/cli.js"
   },
@@ -18,13 +18,22 @@
     "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist"
   },
   "keywords": [
-    "chia", "xch", "crypto", "coin", "mining", "rpc", "websocket", "typescript", "monitor", "proof"
+    "chia",
+    "xch",
+    "crypto",
+    "rpc",
+    "websocket",
+    "pool",
+    "typescript"
+  ],
+  "files": [
+    "dist/**/*"
   ],
   "engines": {
     "node": ">=12.13.0"
   },
   "dependencies": {
-    "ws": "^7.4.5",
+    "ws": "^7.4.6",
     "yaml": "^1.10.2"
   },
   "devDependencies": {
@@ -35,7 +44,6 @@
     "eslint": "^7.8.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsdoc": "^30.4.1",
-    "patch-package": "^6.4.7",
     "typescript": "^4.2.4"
   }
 }
