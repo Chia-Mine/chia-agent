@@ -188,7 +188,7 @@ import type {
   TLoginResponse,
   TPwJoinPoolRequest,
   TPwSelfPoolRequest,
-  TPwCollectSelfPoolingRewardsResponse,
+  TPwAbsorbRewardsResponse,
   TPwStatusResponse,
   TResponseToOfferResponse,
   TRlSetUserInfoResponse,
@@ -291,8 +291,8 @@ export {
   TPwJoinPoolResponse,
   TPwSelfPoolRequest,
   TPwSelfPoolResponse,
-  TPwCollectSelfPoolingRewardsRequest,
-  TPwCollectSelfPoolingRewardsResponse,
+  TPwAbsorbRewardsRequest,
+  TPwAbsorbRewardsResponse,
   TPwStatusRequest,
   TPwStatusResponse,
   TResponseToOfferRequest,
@@ -349,7 +349,7 @@ export {
   log_in,
   pw_join_pool,
   pw_self_pool,
-  pw_collect_self_pooling_rewards,
+  pw_absorb_rewards,
   pw_status,
   respond_to_offer,
   rl_set_user_info,
@@ -442,7 +442,7 @@ export type RpcWalletMessage =
   | TLoginResponse
   | TPwJoinPoolResponse
   | TPwSelfPoolResponse
-  | TPwCollectSelfPoolingRewardsResponse
+  | TPwAbsorbRewardsResponse
   | TPwStatusResponse
   | TResponseToOfferResponse
   | TRlSetUserInfoResponse

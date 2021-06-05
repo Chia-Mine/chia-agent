@@ -1285,13 +1285,13 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wa
 
 ---
 
-## `pw_collect_self_pooling_rewards(agent, params)`
+## `pw_absorb_rewards(agent, params)`
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {pw_collect_self_pooling_rewards} = require("chia-agent/api/rpc/wallet");
+const {pw_absorb_rewards} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
-const response = await pw_collect_self_pooling_rewards(agent, params);
+const response = await pw_absorb_rewards(agent, params);
 ```
 ### params:
 ```typescript
@@ -1303,7 +1303,8 @@ const response = await pw_collect_self_pooling_rewards(agent, params);
 ### response:
 ```typescript
 {
-  pool_wallet_state: unknown; // @TODO Maybe 'PoolWalletInfo' but check implementation later.
+  state: PoolWalletInfo;
+  transaction: TransactionRecord;
 }
 ```
 
