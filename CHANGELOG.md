@@ -1,3 +1,8 @@
+## [1.1.0-beta.8] *Unreleased*
+Memo:  
+Check 
+https://github.com/Chia-Network/chia-blockchain/compare/6a61ee9ba5ed69449b99bdf1c7f9d11dbc766db0...pools.2021-may-25
+
 ## [1.1.0-beta.7] (Changes from 1.1.0-beta.6)
 ### Fixed
 - Fixed an issue where submodule could not be loaded. e.g. `const {...} = require("chia-agent/api/rpc");`
@@ -93,7 +98,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[1.1.0-beta.7]: https://github.com/Chia-Mine/chia-agent/compare/1d5065fcd0b1b673fd7c7e042205ca34bbc66836...v1.1.0
+[1.1.0-beta.8]: https://github.com/Chia-Mine/chia-agent/compare/2aea73f07b40f0a256e55805b84d189a6c67ea3b...v1.1.0
+[1.1.0-beta.7]: https://github.com/Chia-Mine/chia-agent/compare/1d5065fcd0b1b673fd7c7e042205ca34bbc66836...2aea73f07b40f0a256e55805b84d189a6c67ea3b
 [1.1.0-beta.6]: https://github.com/Chia-Mine/chia-agent/compare/18eb244e4adef48b7c8a6ed70719230fc237f6b4...1d5065fcd0b1b673fd7c7e042205ca34bbc66836
 [1.1.0-beta.5]: https://github.com/Chia-Mine/chia-agent/compare/97bd55fe016f52c4a5fce313bd1e7cb8a26fa7e0...18eb244e4adef48b7c8a6ed70719230fc237f6b4
 [1.1.0-beta]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0
