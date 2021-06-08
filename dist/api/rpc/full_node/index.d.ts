@@ -9,6 +9,7 @@ import { MempoolItem } from "../../chia/types/mempool_item";
 import { TRPCAgent } from "../../../rpc";
 import { EndOfSubSlotBundle } from "../../chia/types/end_of_slot_bundle";
 import { SignagePoint } from "../../chia/full_node/signage_point";
+import { CoinSolution } from "../../chia/types/coin_solution";
 export declare const chia_full_node_service = "chia_full_node";
 export declare type chia_full_node_service = typeof chia_full_node_service;
 export declare const get_blockchain_state_command = "get_blockchain_state";
@@ -182,6 +183,16 @@ export declare type TPushTxResponse = {
     status: str;
 };
 export declare function push_tx(agent: TRPCAgent, data: TPushTxRequest): Promise<TPushTxResponse>;
+export declare const get_puzzle_and_solution_command = "get_puzzle_and_solution";
+export declare type get_puzzle_and_solution_command = typeof get_puzzle_and_solution_command;
+export declare type TGetPuzzleAndSolutionRequest = {
+    coin_id: str;
+    height: uint32;
+};
+export declare type TGetPuzzleAndSolutionResponse = {
+    coin_solution: CoinSolution;
+};
+export declare function get_puzzle_and_solution(agent: TRPCAgent, data: TGetPuzzleAndSolutionRequest): Promise<TGetPuzzleAndSolutionResponse>;
 export declare const get_all_mempool_tx_ids_command = "get_all_mempool_tx_ids";
 export declare type get_all_mempool_tx_ids_command = typeof get_all_mempool_tx_ids_command;
 export declare type TGetAllMempoolTxIdsRequest = {};

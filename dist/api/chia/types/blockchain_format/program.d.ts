@@ -1,5 +1,3 @@
-import { bytes } from "../_python_types_";
-export declare type SerializedProgram = {
-    _buf: bytes;
-};
+import { str } from "../_python_types_";
+export declare type SerializedProgram = str;
 export declare type Program = unknown;

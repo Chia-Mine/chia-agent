@@ -1,7 +1,7 @@
 ## Update anchor
-https://github.com/Chia-Network/chia-blockchain/compare/6a61ee9ba5ed69449b99bdf1c7f9d11dbc766db0...pools.2021-may-25
+https://github.com/Chia-Network/chia-blockchain/compare/cd78b0e99f199ed97a357775234ae2de0f7eb8b3...pools.2021-may-25
 
-## [1.1.0-beta.8] *Unreleased*
+## [1.1.0-beta.8] (Changes from 1.1.0-beta.7)
 ### Added
 - Added new full_node API [`get_puzzle_and_solution`](./src/api/rpc/full_node/README.md#get_puzzle_and_solutionagent-params)
 
