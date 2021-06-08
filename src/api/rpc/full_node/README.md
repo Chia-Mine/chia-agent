@@ -436,6 +436,32 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 
 ---
 
+## `get_puzzle_and_solution(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_puzzle_and_solution} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_puzzle_and_solution(agent, params);
+```
+### params
+```typescript
+{
+  coin_id: str;
+  height: uint32;
+}
+```
+### response
+```typescript
+{
+  coin_solution: CoinSolution;
+}
+```
+For content of `CoinSolution`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_solutions.ts
+
+---
+
 ## `get_all_mempool_tx_ids(agent)`
 ### Usage
 ```js

@@ -9,6 +9,7 @@ import {MempoolItem} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
+import {CoinSolution} from "../../chia/types/coin_solution";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -262,6 +263,21 @@ export type TPushTxResponse = {
 };
 export async function push_tx(agent: TRPCAgent, data: TPushTxRequest) {
   return agent.sendMessage<TPushTxResponse>(chia_full_node_service, push_tx_command, data);
+}
+
+
+
+export const get_puzzle_and_solution_command = "get_puzzle_and_solution";
+export type get_puzzle_and_solution_command = typeof get_puzzle_and_solution_command;
+export type TGetPuzzleAndSolutionRequest = {
+  coin_id: str;
+  height: uint32;
+};
+export type TGetPuzzleAndSolutionResponse = {
+  coin_solution: CoinSolution;
+};
+export async function get_puzzle_and_solution(agent: TRPCAgent, data: TGetPuzzleAndSolutionRequest) {
+  return agent.sendMessage<TGetPuzzleAndSolutionResponse>(chia_full_node_service, get_puzzle_and_solution_command, data);
 }
 
 

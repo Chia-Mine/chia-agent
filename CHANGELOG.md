@@ -1,7 +1,12 @@
-## [1.1.0-beta.8] *Unreleased*
-Memo:  
-Check 
+## Update anchor
 https://github.com/Chia-Network/chia-blockchain/compare/6a61ee9ba5ed69449b99bdf1c7f9d11dbc766db0...pools.2021-may-25
+
+## [1.1.0-beta.8] *Unreleased*
+### Added
+- Added new full_node API [`get_puzzle_and_solution`](./src/api/rpc/full_node/README.md#get_puzzle_and_solutionagent-params)
+
+### Fixed
+- Fixed the type of `SerializedProgram` to `str`
 
 ## [1.1.0-beta.7] (Changes from 1.1.0-beta.6)
 ### Fixed
@@ -35,6 +40,7 @@ https://github.com/Chia-Network/chia-blockchain/compare/6a61ee9ba5ed69449b99bdf1
   - [`get_plots`](./src/api/rpc/farmer/README.md#get_plotsagent)
 - [New full_node api](./src/api/rpc/full_node)
   - [`get_recent_signage_point_or_eos`](./src/api/rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)
+  - [`get_puzzle_and_solution`](./src/api/rpc/full_node/README.md#get_puzzle_and_solutionagent-params)
 - [New wallet api](./src/api/rpc/wallet)
   - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
   - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
