@@ -1,5 +1,5 @@
-export type G1Element = unknown; 
-export type G2Element = unknown; // see https://pypi.org/project/blspy/
+export type G1Element = string; // i.e. "0xa7ad70989cc8f18e..."
+export type G2Element = string;
 
 export type bytes = string;
 
