@@ -56,6 +56,9 @@ https://github.com/Chia-Network/chia-blockchain/compare/cd78b0e99f199ed97a357775
 - Fixed wrong `create_new_wallet` request format
 - Fixed an issue where array data in YAML file was not parsed as expected.
 
+### Changed
+- Update G1Element/G2Element type to `string`
+
 
 ## [1.0.1] - 2021-05-19
 ### Fixed
