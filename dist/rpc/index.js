@@ -161,7 +161,7 @@ class RPCAgent {
                         "User-Agent": userAgent,
                     },
                 };
-                if (METHOD === "POST") {
+                if (METHOD === "POST" || METHOD === "PUT" || METHOD === "DELETE") {
                     options.headers = Object.assign(Object.assign({}, (options.headers || {})), { "Content-Type": "application/json;charset=utf-8", "Content-Length": body.length });
                 }
                 else if (METHOD === "GET") {
@@ -227,7 +227,7 @@ class RPCAgent {
                     logger_1.getLogger().error(JSON.stringify(error));
                     reject(error);
                 });
-                if (METHOD === "POST" && body) {
+                if ((METHOD === "POST" || METHOD === "PUT" || METHOD === "DELETE") && body) {
                     req.write(body);
                 }
                 req.end();

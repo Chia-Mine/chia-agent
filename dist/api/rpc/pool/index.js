@@ -9,19 +9,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.partials = exports.pool_info = void 0;
+exports.login = exports.partial = exports.put_farmer = exports.post_farmer = exports.get_farmer = exports.pool_info = void 0;
 function pool_info(agent) {
     return __awaiter(this, void 0, void 0, function* () {
         return agent.request("GET", "pool_info");
     });
 }
 exports.pool_info = pool_info;
-function partials(agent, data) {
+function get_farmer(agent, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.request("POST", "partials", data);
+        return agent.request("GET", "farmer");
     });
 }
-exports.partials = partials;
+exports.get_farmer = get_farmer;
+function post_farmer(agent, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return agent.request("POST", "farmer");
+    });
+}
+exports.post_farmer = post_farmer;
+function put_farmer(agent, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return agent.request("PUT", "farmer");
+    });
+}
+exports.put_farmer = put_farmer;
+function partial(agent, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return agent.request("POST", "partial", data);
+    });
+}
+exports.partial = partial;
 function login(agent, data) {
     return __awaiter(this, void 0, void 0, function* () {
         return agent.request("GET", "login", data);
