@@ -1,6 +1,3 @@
-## Update anchor
-https://github.com/Chia-Network/chia-blockchain/compare/cd78b0e99f199ed97a357775234ae2de0f7eb8b3...pools.2021-may-25
-
 ## [1.1.0-beta.9] (Changes from 1.1.0-beta.8)
 ### Changed
 - Updated `PoolState` type.
