@@ -104,7 +104,6 @@ const response = await get_farmer(agent, params);
 ```typescript
 {
   launcher_id: str;
-  target_puzzle_hash: str;
   authentication_token: str;
   signature: str;
 }
@@ -243,13 +242,12 @@ const response = await login(agent, params);
 ```typescript
 {
   launcher_id: str;
-  target_puzzle_hash: str;
   authentication_token: uint64;
   signature: str;
 }
 ```
 ### response:
-```
+```typescript
 {
   farmer_record: FarmerRecord;
   recent_partials: Array<[uint64, uint64]>; // Array of tuple [timestamp, difficulty]

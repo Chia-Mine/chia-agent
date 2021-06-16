@@ -1,12 +1,15 @@
-import {bool, bytes, G1Element, int, str, uint32, uint64, uint8} from "../../chia/types/_python_types_";
+import {str, uint64} from "../../chia/types/_python_types_";
 import {TRPCAgent} from "../../../rpc";
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {
   ErrorResponse,
   GetFarmerResponse,
   GetPoolInfoResponse,
   PostFarmerRequest,
-  PostFarmerResponse, PostPartialRequest, PostPartialResponse, PutFarmerRequest, PutFarmerResponse
+  PostFarmerResponse,
+  PostPartialRequest,
+  PostPartialResponse,
+  PutFarmerRequest,
+  PutFarmerResponse
 } from "../../chia/protocols/pool_protocol";
 import {FarmerRecord} from "../../chia/pool/store";
 
@@ -21,7 +24,6 @@ export async function pool_info(agent: TRPCAgent){
 
 export type TGetFarmerRequest = {
   launcher_id: str;
-  target_puzzle_hash: str;
   authentication_token: str;
   signature: str;
 };
@@ -58,7 +60,6 @@ export async function partial(agent: TRPCAgent, data: TPartialRequest){
 
 export type TLoginRequest = {
   launcher_id: str;
-  target_puzzle_hash: str;
   authentication_token: uint64;
   signature: str;
 };
