@@ -190,3 +190,26 @@ const response = await get_plots(agent);
 ```
 For content of `RequestPlotsResponse`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/farmer/index.ts
+
+---
+
+## `get_pool_login_link(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_pool_login_link} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_pool_login_link(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+}
+```
+### response:
+```typescript
+{
+  login_link: str;
+}
+```

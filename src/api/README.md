@@ -20,6 +20,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_pool_state`](./rpc/farmer/README.md#get_pool_stateagent)
 - [`set_payout_instructions`](./rpc/farmer/README.md#set_payout_instructionsagent-params)
 - [`get_plots`](./rpc/farmer/README.md#get_plotsagent)
+- [`get_pool_login_link`](./rpc/farmer/README.md#get_pool_login_linkagent-params)
 
 #### [Full Node RPC API](./rpc/full_node/README.md#usage)
 - [`get_blockchain_state`](./rpc/full_node/README.md#get_blockchain_stateagent)

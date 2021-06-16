@@ -118,3 +118,17 @@ export type TGetPlotsResponse = {
 export async function get_plots(agent: TRPCAgent){
   return agent.sendMessage<TGetPlotsResponse>(chia_farmer_service, get_plots_command);
 }
+
+
+
+export const get_pool_login_link_command = "get_pool_login_link";
+export type get_pool_login_link_command = typeof get_pool_login_link_command;
+export type TGetPoolLinkRequest = {
+  launcher_id: str;
+};
+export type TGetPoolLinkResponse = {
+  login_link: str;
+};
+export async function get_pool_login_link(agent: TRPCAgent, params: TGetPoolLinkRequest){
+  return agent.sendMessage<TGetPoolLinkResponse>(chia_farmer_service, get_pool_login_link_command, params);
+}
