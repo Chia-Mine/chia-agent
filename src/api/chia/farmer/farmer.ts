@@ -1,5 +1,5 @@
 import {float, int, Optional, str, uint64, uint8} from "../types/_python_types_";
-import {TPartialsErrorResponse, TPoolInfoResponse} from "../../rpc/pool/index";
+import {TPartialErrorResponse, TPoolInfoResponse} from "../../rpc/pool/index";
 import {PoolWalletConfig} from "../pools/pool_config";
 
 // dependency: self.pool_state, by: get_pool_state of Farmer RPC API
@@ -36,7 +36,7 @@ export type PoolState = {
   next_pool_info_update: float;
   current_points: uint64;
   current_difficulty: uint64;
-  pool_errors_24h: TPartialsErrorResponse[];
+  pool_errors_24h: TPartialErrorResponse[];
   authentication_token_timeout: uint8;
   pool_config: PoolWalletConfig;
   p2_singleton_puzzle_hash: str;

@@ -1,67 +1,71 @@
-import {bool, bytes, G1Element, int, Optional, str, uint32, uint64, uint8} from "../../chia/types/_python_types_";
+import {bool, bytes, G1Element, int, str, uint32, uint64, uint8} from "../../chia/types/_python_types_";
 import {TRPCAgent} from "../../../rpc";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
+import {
+  ErrorResponse,
+  GetFarmerResponse,
+  GetPoolInfoResponse,
+  PostFarmerRequest,
+  PostFarmerResponse, PostPartialRequest, PostPartialResponse, PutFarmerRequest, PutFarmerResponse
+} from "../../chia/protocols/pool_protocol";
+import {FarmerRecord} from "../../chia/pool/store";
 
-export type TPoolInfoResponse = {
-  description: str;
-  fee: str;
-  logo_url: str;
-  minimum_difficulty: uint64;
-  name: str;
-  protocol_version: str;
-  relative_lock_height: uint32;
-  target_puzzle_hash: str;
-};
+
+
+export type TPoolInfoResponse = GetPoolInfoResponse;
 export async function pool_info(agent: TRPCAgent){
   return agent.request<TPoolInfoResponse>("GET", "pool_info");
 }
 
 
 
-export type TPartialsRequest = {
-  payload: {
-    proof_of_space: {
-      challenge: bytes32;
-      pool_contract_puzzle_hash: bytes32;
-      plot_public_key: G1Element;
-      size: uint8;
-      proof: bytes;
-    };
-    sp_hash: str;
-    end_of_sub_slot: bool;
-    suggested_difficulty: uint64;
-    singleton_genesis: str; // @TODO Change this to `launcher_id`
-    owner_public_key: str;
-    pool_payout_instructions: str;
-    authentication_key_info: {
-      authentication_public_key: str;
-      authentication_public_key_timestamp: uint64;
-    };
-  };
-  auth_key_and_partial_aggregate_signature: str;
+export type TGetFarmerRequest = {
+  launcher_id: str;
+  target_puzzle_hash: str;
+  authentication_token: str;
+  signature: str;
 };
-export type TPartialsErrorResponse = {
-  error_code: int;
-  error_message: str;
-};
-export type TPartialsResponse = {
-  points_balance: uint64;
-  current_difficulty: uint64;
-} | TPartialsErrorResponse;
-export async function partials(agent: TRPCAgent, data: TPartialsRequest){
-  return agent.request<TPartialsResponse>("POST", "partials", data);
+export type TGetFarmerResponse = GetFarmerResponse;
+export async function get_farmer(agent: TRPCAgent, data: TGetFarmerRequest){
+  return agent.request<TGetFarmerResponse>("GET", "farmer");
+}
+
+
+
+export type TPostFarmerRequest = PostFarmerRequest;
+export type TPostFarmerResponse = PostFarmerResponse | ErrorResponse;
+export async function post_farmer(agent: TRPCAgent, data: TPostFarmerRequest){
+  return agent.request<TPostFarmerResponse>("POST", "farmer");
+}
+
+
+
+export type TPutFarmerRequest = PutFarmerRequest;
+export type TPutFarmerResponse = PutFarmerResponse | ErrorResponse;
+export async function put_farmer(agent: TRPCAgent, data: TPutFarmerRequest){
+  return agent.request<TPutFarmerResponse>("PUT", "farmer");
+}
+
+
+
+export type TPartialRequest = PostPartialRequest;
+export type TPartialResponse = PostPartialResponse | ErrorResponse;
+export async function partial(agent: TRPCAgent, data: TPartialRequest){
+  return agent.request<TPartialResponse>("POST", "partial", data);
 }
 
 
 
 export type TLoginRequest = {
-  singleton_genesis: str; // @TODO Change this to `launcher_id`
-  login_code: str;
-  timestamp: uint32;
-  authentication_pk: str;
+  launcher_id: str;
+  target_puzzle_hash: str;
+  authentication_token: uint64;
   signature: str;
 };
-export type TLoginResponse = any; // The format of a response is determined by pool operator.
+export type TLoginResponse = {
+  farmer_record: FarmerRecord;
+  recent_partials: Array<[uint64, uint64]>; // Array of tuple [timestamp, difficulty]
+} | { };
 export async function login(agent: TRPCAgent, data: TLoginRequest){
   return agent.request<TLoginResponse>("GET", "login", data);
 }

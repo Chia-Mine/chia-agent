@@ -195,7 +195,7 @@ export class RPCAgent {
         } as OutgoingHttpHeaders,
       };
       
-      if(METHOD === "POST"){
+      if(METHOD === "POST" || METHOD === "PUT" || METHOD === "DELETE"){
         options.headers = {
           ...(options.headers || {}),
           "Content-Type": "application/json;charset=utf-8",
@@ -274,7 +274,7 @@ export class RPCAgent {
         reject(error);
       });
     
-      if(METHOD === "POST" && body){
+      if((METHOD === "POST" || METHOD === "PUT" || METHOD === "DELETE") && body){
         req.write(body);
       }
       req.end();

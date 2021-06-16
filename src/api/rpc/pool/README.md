@@ -78,62 +78,156 @@ const response = await pool_info(agent);
 ### response:
 ```typescript
 {
-  description: str; // "(example) The Reference Pool allows you to pool with low fees, paying out daily using Chia."
-  fee: str; // "0.01"
+  name: str; // "The Reference Pool"
   logo_url: str; // "https://www.chia.net/img/chia_logo.svg"
   minimum_difficulty: uint64; // 10
-  name: str; // "The Reference Pool"
-  protocol_version: str; // "1.0"
   relative_lock_height: uint32; // 100
-  target_puzzle_hash: str; // "0x344587cf06a39db471d2cc0..."
+  protocol_version: str; // "1.0"
+  fee: str; // "0.01"
+  description: str; // "(example) The Reference Pool allows you to pool with low fees, paying out daily using Chia."
+  target_puzzle_hash: bytes32; // "0x344587cf06a39db471d2cc0..."
+  authentication_token_timeout: uint8;
 }
 ```
 
 ---
 
-## `partials(agent, params)`
+## `get_farmer(agent, params)`
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {partials} = require("chia-agent/api/rpc/pool");
+const {get_farmer} = require("chia-agent/api/rpc/pool");
 const agent = new RPCAgent(connectionInfo);
-const response = await partials(agent, params);
+const response = await get_farmer(agent, params);
 ```
-### params:
+### params
 ```typescript
 {
-  payload: {
-    proof_of_space: {
-      challenge: bytes32; // "0xe0e55d45eef8d..."
-      pool_contract_puzzle_hash: bytes32; // "0x9e3e9b37b54cf..."
-      plot_public_key: G1Element; // "0xa7ad70989cc8f18e..."
-      size: uint8; // number like 32
-      proof: bytes; // "0xb2cd6374c8db249..."
-    };
-  };
-  sp_hash: str; // "0x4c52796ca4f..."
-  end_of_sub_slot: bool; // true|false
-  suggested_difficulty: uint64; // 10 
-  singleton_genesis: str; // "0xae4ef3b9b..."
-  owner_public_key: str; // "0x84c3fcf9d5581c1..."
-  pool_payout_instructions: str; // "0xc2b08e41d766..."
-  authentication_key_info: {
-    authentication_public_key: str; // "0x970e181ae45435ae..."
-    authentication_public_key_timestamp: uint64; // 1621854388
-  };
-  auth_key_and_partial_aggregate_signature: str; // "0xa078dc1462bb..."
+  launcher_id: str;
+  target_puzzle_hash: str;
+  authentication_token: str;
+  signature: str;
 }
 ```
 ### response:
 ```typescript
 {
-  points_balance: uint64; // 1130
-  current_difficulty: uint64; // 10
+  authentication_public_key: G1Element;
+  payout_instructions: str;
+  current_difficulty: uint64;
+  current_points: uint64;
+}
+```
+
+---
+
+## `post_farmer(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {post_farmer} = require("chia-agent/api/rpc/pool");
+const agent = new RPCAgent(connectionInfo);
+const response = await post_farmer(agent, params);
+```
+### params
+```typescript
+{
+  payload: {
+    launcher_id: bytes32;
+    authentication_token: uint64;
+    authentication_public_key: G1Element;
+    payout_instructions: str;
+    suggested_difficulty: Optional<uint64>;
+  };
+  signature: G2Element;
+}
+```
+### response:
+```typescript
+{
+  welcome_message: str;
+} | {
+  error_code: uint16;
+  error_message: Optional<str>;
+}
+```
+For content of `G1Element` / `G2Element`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/_python_types_.ts  
+
+---
+
+## `put_farmer(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {put_farmer} = require("chia-agent/api/rpc/pool");
+const agent = new RPCAgent(connectionInfo);
+const response = await put_farmer(agent, params);
+```
+### params
+```typescript
+{
+  payload: {
+    launcher_id: bytes32;
+    authentication_token: uint64;
+    authentication_public_key: Optional<G1Element>;
+    payout_instructions: Optional<str>;
+    suggested_difficulty: Optional<uint64>;
+  };
+  signature: G2Element;
+}
+```
+### response:
+```typescript
+{
+  authentication_public_key: Optional<bool>;
+  payout_instructions: Optional<bool>;
+  suggested_difficulty: Optional<bool>;
+} | {
+  error_code: uint16;
+  error_message: Optional<str>;
+}
+```
+For content of `G1Element` / `G2Element`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/_python_types_.ts
+
+---
+
+## `partial(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {partial} = require("chia-agent/api/rpc/pool");
+const agent = new RPCAgent(connectionInfo);
+const response = await partial(agent, params);
+```
+### params:
+```typescript
+{
+  payload: {
+    launcher_id: bytes32;
+    authentication_token: uint64;
+    proof_of_space: ProofOfSpace;
+    sp_hash: bytes32;
+    end_of_sub_slot: bool;
+    harvester_id: bytes32;
+  };
+  aggregate_signature: G2Element;
+}
+```
+### response:
+```typescript
+{
+  current_difficulty: uint64;
 } | {
   error_code: int; // 4
   error_message: str; // "Invalid proof of space"
 }
 ```
+For content of `G2Element`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/_python_types_.ts
+For content of `ProofOfSpace`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/proof_of_space.ts
 
 ---
 
@@ -143,19 +237,21 @@ const response = await partials(agent, params);
 const {RPCAgent} = require("chia-agent");
 const {login} = require("chia-agent/api/rpc/pool");
 const agent = new RPCAgent(connectionInfo);
-const response = await partials(login, params);
+const response = await login(agent, params);
 ```
 ### params:
 ```typescript
 {
-  singleton_genesis: str;
-  login_code: str;
-  timestamp: uint32;
-  authentication_pk: str;
+  launcher_id: str;
+  target_puzzle_hash: str;
+  authentication_token: uint64;
   signature: str;
 }
 ```
 ### response:
 ```
-<The format of a response is determined by pool operator>
+{
+  farmer_record: FarmerRecord;
+  recent_partials: Array<[uint64, uint64]>; // Array of tuple [timestamp, difficulty]
+} | { };
 ```

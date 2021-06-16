@@ -88,7 +88,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`cancel_trade`](./rpc/wallet/README.md#cancel_tradeagent-params)
 - [`did_update_recovery_ids`](./rpc/wallet/README.md#did_update_recovery_idsagent-params)
 - [`did_spend`](./rpc/wallet/README.md#did_spendagent-params)
-- [`did_get_pubkey`](./rpc/wallet/README.md#did_get_pubkeyagent)
+- [`did_get_pubkey`](./rpc/wallet/README.md#did_get_pubkeyagent-params)
 - [`did_get_did`](./rpc/wallet/README.md#did_get_didagent-params)
 - [`did_recovery_spend`](./rpc/wallet/README.md#did_recovery_spendagent-params)
 - [`did_get_recovery_list`](./rpc/wallet/README.md#did_get_recovery_listagent-params)
@@ -100,12 +100,15 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`add_rate_limited_funds`](./rpc/wallet/README.md#add_rate_limited_fundsagent-params)
 - [`pw_join_pool`](./rpc/wallet/README.md#pw_join_poolagent-params)
 - [`pw_self_pool`](./rpc/wallet/README.md#pw_self_poolagent-params)
-- [`pw_collect_self_pooling_rewards`](./rpc/wallet/README.md#pw_collect_self_pooling_rewardsagent-params)
+- [`pw_absorb_rewards`](./rpc/wallet/README.md#pw_absorb_rewardsagent-params)
 - [`pw_status`](./rpc/wallet/README.md#pw_statusagent-params)
 
 #### [Pool API](./rpc/pool/README.md#usage)
 - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
-- [`partials`](./rpc/pool/README.md#partialsagent-params)
+- [`get_farmer`](./rpc/pool/README.md#get_farmeragent-params)
+- [`post_farmer`](./rpc/pool/README.md#post_farmeragent-params)
+- [`put_farmer`](./rpc/pool/README.md#put_farmeragent-params)
+- [`partial`](./rpc/pool/README.md#partialagent-params)
 - [`login`](./rpc/pool/README.md#loginagent-params)
 
 ### Websocket API
