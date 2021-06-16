@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_plots = exports.get_plots_command = exports.set_pool_payout_instructions = exports.set_pool_payout_instructions_command = exports.get_pool_state = exports.get_pool_state_command = exports.set_reward_targets = exports.set_reward_targets_command = exports.get_reward_targets = exports.get_reward_targets_command = exports.get_signage_points = exports.get_signage_points_command = exports.get_signage_point = exports.get_signage_point_command = exports.chia_farmer_service = void 0;
+exports.get_plots = exports.get_plots_command = exports.set_pool_payout_instructions = exports.set_payout_instructions_command = exports.get_pool_state = exports.get_pool_state_command = exports.set_reward_targets = exports.set_reward_targets_command = exports.get_reward_targets = exports.get_reward_targets_command = exports.get_signage_points = exports.get_signage_points_command = exports.get_signage_point = exports.get_signage_point_command = exports.chia_farmer_service = void 0;
 exports.chia_farmer_service = "chia_farmer";
 exports.get_signage_point_command = "get_signage_point";
 function get_signage_point(agent, params) {
@@ -46,10 +46,10 @@ function get_pool_state(agent) {
     });
 }
 exports.get_pool_state = get_pool_state;
-exports.set_pool_payout_instructions_command = "set_pool_payout_instructions";
+exports.set_payout_instructions_command = "set_payout_instructions";
 function set_pool_payout_instructions(agent, params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return agent.sendMessage(exports.chia_farmer_service, exports.set_pool_payout_instructions_command, params);
+        return agent.sendMessage(exports.chia_farmer_service, exports.set_payout_instructions_command, params);
     });
 }
 exports.set_pool_payout_instructions = set_pool_payout_instructions;

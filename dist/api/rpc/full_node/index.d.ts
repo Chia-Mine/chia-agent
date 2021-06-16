@@ -22,7 +22,7 @@ export declare type TGetBlockchainStateResponse = {
         sync: {
             sync_mode: bool;
             synced: bool;
-            sync_tip_height: Optional<uint32>;
+            sync_tip_height: uint32;
             sync_progress_height: uint32;
         };
         difficulty: uint64;

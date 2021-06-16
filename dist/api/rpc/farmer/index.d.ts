@@ -2,7 +2,6 @@ import { ProofOfSpace } from "../../chia/types/blockchain_format/proof_of_space"
 import { bool, Optional, str, uint16, uint64, uint8 } from "../../chia/types/_python_types_";
 import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
 import { TRPCAgent } from "../../../rpc/index";
-import { RespondPlots } from "../../chia/protocols/harvester_protocol";
 import { PoolState } from "../../chia/farmer/farmer";
 export declare const chia_farmer_service = "chia_farmer";
 export declare type chia_farmer_service = typeof chia_farmer_service;
@@ -60,18 +59,18 @@ export declare type TGetPoolStateResponse = {
     pool_state: PoolState[];
 };
 export declare function get_pool_state(agent: TRPCAgent): Promise<TSetRewardTargetResponse>;
-export declare const set_pool_payout_instructions_command = "set_pool_payout_instructions";
-export declare type set_pool_payout_instructions_command = typeof set_pool_payout_instructions_command;
-export declare type TSetPoolPayoutInstructionsRequest = {
+export declare const set_payout_instructions_command = "set_payout_instructions";
+export declare type set_payout_instructions_command = typeof set_payout_instructions_command;
+export declare type TSetPayoutInstructionsRequest = {
     launcher_id: str;
-    pool_payout_instructions: str;
+    payout_instructions: str;
 };
-export declare type TSetPoolPayoutInstructionsResponse = {};
-export declare function set_pool_payout_instructions(agent: TRPCAgent, params: TSetPoolPayoutInstructionsRequest): Promise<TSetPoolPayoutInstructionsResponse>;
+export declare type TSetPayoutInstructionsResponse = {};
+export declare function set_pool_payout_instructions(agent: TRPCAgent, params: TSetPayoutInstructionsRequest): Promise<TSetPayoutInstructionsResponse>;
 export declare type RequestPlotsResponse = {
     type: 68;
     id: Optional<uint16>;
-    data: RespondPlots;
+    data: str;
 };
 export declare const get_plots_command = "get_plots";
 export declare type get_plots_command = typeof get_plots_command;
