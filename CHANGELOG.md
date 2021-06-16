@@ -3,6 +3,8 @@
 [1.1.0-beta.11] (Changes from 1.1.0-beta.10) Not yet released
 ###  Changed
 - Updated [`partial`](./src/api/rpc/pool/README.md#partialagent-params)
+- Updated [`get_farmer`](./src/api/rpc/pool/README.md#get_farmeragent-params)
+- Updated [`login`](./src/api/rpc/pool/README.md#loginagent-params)
 
 ## [1.1.0-beta.10] (Changes from 1.1.0-beta.9)
 ### Added
