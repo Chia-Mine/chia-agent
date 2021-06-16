@@ -9,10 +9,10 @@ yarn add chia-agent@beta
 ```
 
 Current API version to sync with:  
-  `00507bac018209f3e984baf8d088ad17a9cf894c` of `chia-blockchain`  
+  `72b52fad5fef612c66da57084c01fde9a834ac24` of `chia-blockchain`  
 
 Diff checker:  
-  https://github.com/Chia-Network/chia-blockchain/compare/00507bac018209f3e984baf8d088ad17a9cf894c...pools.dev
+  https://github.com/Chia-Network/chia-blockchain/compare/72b52fad5fef612c66da57084c01fde9a834ac24...pools.dev
 
 ---
 

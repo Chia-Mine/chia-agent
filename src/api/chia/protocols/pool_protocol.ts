@@ -21,6 +21,13 @@ export const PoolErrorCode = {
   REQUEST_FAILED: 16,
 };
 
+export type AuthenticationPayload = {
+  method_name: str;
+  launcher_id: bytes32;
+  target_puzzle_hash: bytes32;
+  authentication_token: uint64;
+};
+
 export type GetPoolInfoResponse = {
   name: str;
   logo_url: str;
@@ -48,7 +55,7 @@ export type PostPartialRequest = {
 };
 
 export type PostPartialResponse = {
-  current_difficulty: uint64;
+  new_difficulty: uint64;
 };
 
 export type GetFarmerResponse = {

@@ -218,7 +218,7 @@ const response = await partial(agent, params);
 ### response:
 ```typescript
 {
-  current_difficulty: uint64;
+  new_difficulty: uint64;
 } | {
   error_code: int; // 4
   error_message: str; // "Invalid proof of space"
