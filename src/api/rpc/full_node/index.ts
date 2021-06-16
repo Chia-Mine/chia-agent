@@ -25,7 +25,7 @@ export type TGetBlockchainStateResponse = {
     sync: {
       sync_mode: bool;
       synced: bool;
-      sync_tip_height: Optional<uint32>;
+      sync_tip_height: uint32; // full_node_rpc_api.py declares Optional<uint32> but it seems 
       sync_progress_height: uint32;
     },
     difficulty: uint64;

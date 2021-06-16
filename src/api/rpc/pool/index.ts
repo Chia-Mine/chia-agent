@@ -1,5 +1,5 @@
 import {bool, bytes, G1Element, int, Optional, str, uint32, uint64, uint8} from "../../chia/types/_python_types_";
-import {TRPCAgent} from "../../../rpc/index";
+import {TRPCAgent} from "../../../rpc";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 
 export type TPoolInfoResponse = {

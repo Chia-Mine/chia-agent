@@ -328,11 +328,15 @@ export type TCreate_New_Pool_WalletRequest = {
   wallet_type: "pool_wallet";
   mode: "new";
   initial_target_state: {
-    state: "SELF_POOLING"|"FARMING_TO_POOL";
+    state: "SELF_POOLING";
+  } | {
+    state: "FARMING_TO_POOL";
     target_puzzle_hash: str;
     pool_url: str;
     relative_lock_height: uint32;
   };
+  p2_singleton_delayed_ph?: str;
+  p2_singleton_delay_time?: uint64;
 } | {
   host: str;
   fee?: uint64;
@@ -342,6 +346,8 @@ export type TCreate_New_Pool_WalletRequest = {
 
 export type TCreate_New_Pool_WalletResponse = {
   transaction: TransactionRecord;
+  launcher_id: str;
+  p2_singleton_puzzle_hash: str;
 };
 
 export const create_new_wallet_command = "create_new_wallet";
@@ -916,7 +922,7 @@ export type pw_join_pool_command = typeof pw_join_pool_command;
 export type TPwJoinPoolRequest = {
   wallet_id: uint32;
   target_puzzlehash?: string;
-  pool_url: Optional<str>;
+  pool_url?: str;
   relative_lock_height: uint32;
 };
 export type TPwJoinPoolResponse = {

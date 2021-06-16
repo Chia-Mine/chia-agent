@@ -152,19 +152,19 @@ see [https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/farmer/farme
 
 ---
 
-## `set_pool_payout_instructions(agent, params)`
+## `set_payout_instructions(agent, params)`
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {set_pool_payout_instructions} = require("chia-agent/api/rpc/farmer");
+const {set_payout_instructions} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
-const response = await set_pool_payout_instructions(agent, params);
+const response = await set_payout_instructions(agent, params);
 ```
 ### params:
 ```typescript
 {
   launcher_id: str;
-  pool_payout_instructions: str;
+  payout_instructions: str;
 }
 ```
 ### response:

@@ -4,7 +4,7 @@ import type {
   TGetSignagePointsResponse,
   TSetRewardTargetResponse,
   TGetPlotsResponse as TGetPlotsResponseOfFarmer,
-  TSetPoolPayoutInstructionsResponse,
+  TSetPayoutInstructionsResponse,
   TGetPoolStateResponse,
 } from "./farmer/index";
 export {
@@ -19,8 +19,8 @@ export {
   TSetRewardTargetResponse,
   TGetPlotsRequest as TGetPlotsRequestOfFarmer,
   TGetPlotsResponse as TGetPlotsResponseOfFarmer,
-  TSetPoolPayoutInstructionsRequest,
-  TSetPoolPayoutInstructionsResponse,
+  TSetPayoutInstructionsRequest,
+  TSetPayoutInstructionsResponse,
   TGetPoolStateRequest,
   TGetPoolStateResponse,
   get_reward_targets,
@@ -365,7 +365,7 @@ export type RpcFarmerMessage =
   | TGetSignagePointsResponse
   | TSetRewardTargetResponse
   | TGetPlotsResponseOfFarmer
-  | TSetPoolPayoutInstructionsResponse
+  | TSetPayoutInstructionsResponse
   | TGetPoolStateResponse
 ;
 export type RpcFullNodeMessage =

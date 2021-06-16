@@ -6,7 +6,7 @@ import {Program} from "../types/blockchain_format/program";
 export type PoolState = {
   version: uint8;
   state: uint8;
-  target_puzzle_hash: bytes32;
+  target_puzzle_hash: bytes32; // # TODO: rename target_puzzle_hash -> pay_to_address
   owner_pubkey: G1Element;
   pool_url: Optional<str>;
   relative_lock_height: uint32;

@@ -89,16 +89,16 @@ export async function get_pool_state(agent: TRPCAgent){
 
 
 
-export const set_pool_payout_instructions_command = "set_pool_payout_instructions";
-export type set_pool_payout_instructions_command = typeof set_pool_payout_instructions_command;
-export type TSetPoolPayoutInstructionsRequest = {
+export const set_payout_instructions_command = "set_payout_instructions";
+export type set_payout_instructions_command = typeof set_payout_instructions_command;
+export type TSetPayoutInstructionsRequest = {
   launcher_id: str;
-  pool_payout_instructions: str;
+  payout_instructions: str;
 };
-export type TSetPoolPayoutInstructionsResponse = {
+export type TSetPayoutInstructionsResponse = {
 };
-export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSetPoolPayoutInstructionsRequest){
-  return agent.sendMessage<TSetPoolPayoutInstructionsResponse>(chia_farmer_service, set_pool_payout_instructions_command, params);
+export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSetPayoutInstructionsRequest){
+  return agent.sendMessage<TSetPayoutInstructionsResponse>(chia_farmer_service, set_payout_instructions_command, params);
 }
 
 
@@ -106,7 +106,7 @@ export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSe
 export type RequestPlotsResponse = {
   type: 68;
   id: Optional<uint16>;
-  data: RespondPlots; // @todo Check whether `data` is serialized str or RespondPlots json object.
+  data: str; //RespondPlots; Serialized as a byte stream.  // See how it is serialized by https://github.com/Chia-Network/chia-blockchain/blob/main/chia/protocols/harvester_protocol.py
 };
 export const get_plots_command = "get_plots";
 export type get_plots_command = typeof get_plots_command;

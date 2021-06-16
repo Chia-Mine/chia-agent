@@ -319,7 +319,7 @@ const agent = new RPCAgent({service: "wallet"});
 const response = await create_new_wallet(agent, params);
 ```
 ### params:
-One of `TCreate_New_CC_WalletRequest`, `TCreate_New_RL_WalletRequest`, `TCreate_New_DID_WalletRequest`
+One of `TCreate_New_CC_WalletRequest`, `TCreate_New_RL_WalletRequest`, `TCreate_New_DID_WalletRequest`, `TCreate_New_Pool_WalletRequest`
 ```typescript
 type TCreate_New_CC_WalletRequest = {
   host: str;
@@ -367,9 +367,31 @@ type TCreate_New_DID_WalletRequest = {
   did_type: "recovery";
   filename: str;
 };
+
+type TCreate_New_Pool_WalletRequest = {
+  host: str;
+  fee?: uint64;
+  wallet_type: "pool_wallet";
+  mode: "new";
+  initial_target_state: {
+    state: "SELF_POOLING";
+  } | {
+    state: "FARMING_TO_POOL";
+    target_puzzle_hash: str;
+    pool_url: str;
+    relative_lock_height: uint32;
+  };
+  p2_singleton_delayed_ph?: str;
+  p2_singleton_delay_time?: uint64;
+} | {
+  host: str;
+  fee?: uint64;
+  wallet_type: "pool_wallet";
+  mode: "recovery";
+};
 ```
 ### response:
-One of `TCreate_New_CC_WalletResponse`, `TCreate_New_RL_WalletResponse`, `TCreate_New_DID_WalletResponse`
+One of `TCreate_New_CC_WalletResponse`, `TCreate_New_RL_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_Pool_WalletResponse`
 ```typescript
 type TCreate_New_CC_WalletResponse = {
   type: uint8;
@@ -408,9 +430,17 @@ type TCreate_New_DID_WalletResponse = {
   backup_dids: bytes[];
   num_verifications_required: uint64;
 };
+
+type TCreate_New_Pool_WalletResponse = {
+  transaction: TransactionRecord;
+  launcher_id: str;
+  p2_singleton_puzzle_hash: str;
+};
 ```
 For content of `Coin`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
 ---
 
