@@ -5,6 +5,7 @@
 - Updated [`partial`](./src/api/rpc/pool/README.md#partialagent-params)
 - Updated [`get_farmer`](./src/api/rpc/pool/README.md#get_farmeragent-params)
 - Updated [`login`](./src/api/rpc/pool/README.md#loginagent-params)
+- Updated [`get_private_key`](./src/api/rpc/wallet/README.md#get_private_keyagent-params)
 
 ## [1.1.0-beta.10] (Changes from 1.1.0-beta.9)
 ### Added

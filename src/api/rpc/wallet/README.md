@@ -107,6 +107,8 @@ private_key: {
   fingerprint: int;
   sk: str;
   pk: str;
+  farmer_pk: str;
+  pool_pk: str;
   seed: str;
 }
 ```
