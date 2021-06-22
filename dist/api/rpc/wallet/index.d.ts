@@ -49,6 +49,8 @@ export declare type TGetPrivateKeyResponse = {
         fingerprint: int;
         sk: str;
         pk: str;
+        farmer_pk: str;
+        pool_pk: str;
         seed: Optional<str>;
     };
 } | {

@@ -6,7 +6,6 @@ export declare type TPoolInfoResponse = GetPoolInfoResponse;
 export declare function pool_info(agent: TRPCAgent): Promise<GetPoolInfoResponse>;
 export declare type TGetFarmerRequest = {
     launcher_id: str;
-    target_puzzle_hash: str;
     authentication_token: str;
     signature: str;
 };
@@ -23,7 +22,6 @@ export declare type TPartialResponse = PostPartialResponse | ErrorResponse;
 export declare function partial(agent: TRPCAgent, data: TPartialRequest): Promise<TPartialResponse>;
 export declare type TLoginRequest = {
     launcher_id: str;
-    target_puzzle_hash: str;
     authentication_token: uint64;
     signature: str;
 };

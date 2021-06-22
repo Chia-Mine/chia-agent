@@ -1,5 +1,12 @@
 # Changelog
 
+[1.1.0-beta.11] (Changes from 1.1.0-beta.10) Not yet released
+###  Changed
+- Updated [`partial`](./src/api/rpc/pool/README.md#partialagent-params)
+- Updated [`get_farmer`](./src/api/rpc/pool/README.md#get_farmeragent-params)
+- Updated [`login`](./src/api/rpc/pool/README.md#loginagent-params)
+- Updated [`get_private_key`](./src/api/rpc/wallet/README.md#get_private_keyagent-params)
+
 ## [1.1.0-beta.10] (Changes from 1.1.0-beta.9)
 ### Added
 - Added [`get_farmer`](./src/api/rpc/pool/README.md#get_farmeragent-params)
@@ -132,7 +139,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[1.1.0-beta.10]: https://github.com/Chia-Mine/chia-agent/compare/c94274b49ca7bcecce7700b2331c5ab8d4cbd529...v1.1.0
+[1.1.0-beta.11]: https://github.com/Chia-Mine/chia-agent/compare/e3d3eab88e5e2ab2d7dedc40037093f6ef235f83...v1.1.0
+[1.1.0-beta.10]: https://github.com/Chia-Mine/chia-agent/compare/c94274b49ca7bcecce7700b2331c5ab8d4cbd529...e3d3eab88e5e2ab2d7dedc40037093f6ef235f83
 [1.1.0-beta.9]: https://github.com/Chia-Mine/chia-agent/compare/16ef8414950c4d0d34d33d9d6307a78654df59dd...c94274b49ca7bcecce7700b2331c5ab8d4cbd529
 [1.1.0-beta.8]: https://github.com/Chia-Mine/chia-agent/compare/2aea73f07b40f0a256e55805b84d189a6c67ea3b...16ef8414950c4d0d34d33d9d6307a78654df59dd
 [1.1.0-beta.7]: https://github.com/Chia-Mine/chia-agent/compare/1d5065fcd0b1b673fd7c7e042205ca34bbc66836...2aea73f07b40f0a256e55805b84d189a6c67ea3b

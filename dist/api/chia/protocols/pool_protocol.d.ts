@@ -19,6 +19,12 @@ export declare const PoolErrorCode: {
     DELAY_TIME_TOO_SHORT: number;
     REQUEST_FAILED: number;
 };
+export declare type AuthenticationPayload = {
+    method_name: str;
+    launcher_id: bytes32;
+    target_puzzle_hash: bytes32;
+    authentication_token: uint64;
+};
 export declare type GetPoolInfoResponse = {
     name: str;
     logo_url: str;
@@ -43,7 +49,7 @@ export declare type PostPartialRequest = {
     aggregate_signature: G2Element;
 };
 export declare type PostPartialResponse = {
-    current_difficulty: uint64;
+    new_difficulty: uint64;
 };
 export declare type GetFarmerResponse = {
     authentication_public_key: G1Element;

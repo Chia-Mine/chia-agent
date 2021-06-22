@@ -79,3 +79,12 @@ export declare type TGetPlotsResponse = {
     [peer_host_port: string]: RequestPlotsResponse;
 };
 export declare function get_plots(agent: TRPCAgent): Promise<TGetPlotsResponse>;
+export declare const get_pool_login_link_command = "get_pool_login_link";
+export declare type get_pool_login_link_command = typeof get_pool_login_link_command;
+export declare type TGetPoolLinkRequest = {
+    launcher_id: str;
+};
+export declare type TGetPoolLinkResponse = {
+    login_link: str;
+};
+export declare function get_pool_login_link(agent: TRPCAgent, params: TGetPoolLinkRequest): Promise<TGetPoolLinkResponse>;
