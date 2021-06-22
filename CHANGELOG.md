@@ -1,6 +1,6 @@
 # Changelog
 
-[1.1.0-beta.11] (Changes from 1.1.0-beta.10) Not yet released
+## [1.1.0-beta.11] (Changes from 1.1.0-beta.10)
 ###  Changed
 - Updated [`partial`](./src/api/rpc/pool/README.md#partialagent-params)
 - Updated [`get_farmer`](./src/api/rpc/pool/README.md#get_farmeragent-params)
