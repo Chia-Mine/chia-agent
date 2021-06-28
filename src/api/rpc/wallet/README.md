@@ -717,6 +717,27 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 
 ---
 
+## `delete_unconfirmed_transactions(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {delete_unconfirmed_transactions} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await delete_unconfirmed_transactions(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: int;
+}
+```
+### response:
+```typescript
+{}
+```
+
+---
+
 ## `cc_set_name(agent, params)`
 ### Usage
 ```js
@@ -1339,6 +1360,8 @@ const response = await pw_absorb_rewards(agent, params);
   transaction: TransactionRecord;
 }
 ```
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
 ---
 
@@ -1360,5 +1383,8 @@ const response = await pw_status(agent, params);
 ```typescript
 {
   state: PoolWalletInfo;
+  unconfirmed_transactions: TransactionRecord[];
 }
 ```
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts

@@ -543,6 +543,20 @@ export async function create_signed_transaction(agent: TRPCAgent, data: TCreateS
 
 
 
+export const delete_unconfirmed_transactions_command = "delete_unconfirmed_transactions";
+export type delete_unconfirmed_transactions_command = typeof delete_unconfirmed_transactions_command;
+export type TDeleteUnconfirmedTransactionsRequest = {
+  wallet_id: int;
+};
+export type TDeleteUnconfirmedTransactionsResponse = {
+};
+export async function delete_unconfirmed_transactions(agent: TRPCAgent, data: TDeleteUnconfirmedTransactionsRequest){
+  return agent.sendMessage<TDeleteUnconfirmedTransactionsResponse>(chia_wallet_service, delete_unconfirmed_transactions_command, data);
+}
+
+
+
+
 // # Coloured coins and trading
 export const cc_set_name_command = "cc_set_name";
 export type cc_set_name_command = typeof cc_set_name_command;
@@ -976,6 +990,7 @@ export type TPwStatusRequest = {
 };
 export type TPwStatusResponse = {
   state: PoolWalletInfo;
+  unconfirmed_transactions: TransactionRecord[];
 };
 export async function pw_status(agent: TRPCAgent, data: TPwStatusRequest){
   return agent.sendMessage<TPwStatusResponse>(chia_wallet_service, pw_status_command, data);

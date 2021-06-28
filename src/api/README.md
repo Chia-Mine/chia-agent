@@ -77,6 +77,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_transaction_count`](./rpc/wallet/README.md#get_transaction_countagent-params)
 - [`get_farmed_amount`](./rpc/wallet/README.md#get_farmed_amountagent)
 - [`create_signed_transaction`](./rpc/wallet/README.md#create_signed_transactionagent-params)
+- [`delete_unconfirmed_transactions`](./rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
 - [`cc_set_name`](./rpc/wallet/README.md#cc_set_nameagent-params)
 - [`cc_get_name`](./rpc/wallet/README.md#cc_get_nameagent-params)
 - [`cc_spend`](./rpc/wallet/README.md#cc_spendagent-params)
