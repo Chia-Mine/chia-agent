@@ -373,6 +373,13 @@ export declare type TCreateSignedTransactionResponse = {
     signed_tx: TransactionRecord;
 };
 export declare function create_signed_transaction(agent: TRPCAgent, data: TCreateSignedTransactionRequest): Promise<TCreateSignedTransactionResponse>;
+export declare const delete_unconfirmed_transactions_command = "delete_unconfirmed_transactions";
+export declare type delete_unconfirmed_transactions_command = typeof delete_unconfirmed_transactions_command;
+export declare type TDeleteUnconfirmedTransactionsRequest = {
+    wallet_id: int;
+};
+export declare type TDeleteUnconfirmedTransactionsResponse = {};
+export declare function delete_unconfirmed_transactions(agent: TRPCAgent, data: TDeleteUnconfirmedTransactionsRequest): Promise<TDeleteUnconfirmedTransactionsResponse>;
 export declare const cc_set_name_command = "cc_set_name";
 export declare type cc_set_name_command = typeof cc_set_name_command;
 export declare type TCcSetNameRequest = {
@@ -649,5 +656,6 @@ export declare type TPwStatusRequest = {
 };
 export declare type TPwStatusResponse = {
     state: PoolWalletInfo;
+    unconfirmed_transactions: TransactionRecord[];
 };
 export declare function pw_status(agent: TRPCAgent, data: TPwStatusRequest): Promise<TPwStatusResponse>;

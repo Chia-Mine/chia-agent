@@ -18,4 +18,5 @@ export declare type PoolWalletInfo = {
     p2_singleton_puzzle_hash: bytes32;
     current_inner: Program;
     tip_singleton_coin_id: bytes32;
+    singleton_block_height: uint32;
 };
