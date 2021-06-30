@@ -12,7 +12,7 @@ Current API version to sync with:
   `5b6f13e156fb0cbd8645b523bc4adfda3918ed90` of `chia-blockchain`  
 
 Diff checker:  
-  https://github.com/Chia-Network/chia-blockchain/compare/5b6f13e156fb0cbd8645b523bc4adfda3918ed90...pools.dev
+  https://github.com/Chia-Network/chia-blockchain/compare/5b6f13e156fb0cbd8645b523bc4adfda3918ed90...pools.testnet9
 
 ---
 
