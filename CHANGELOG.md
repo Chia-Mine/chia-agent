@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0-beta.13] Unreleased
+### Changed
+- Updated [`delete_unconfirmed_transactions`](./src/api/rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
+
 ## [1.1.0-beta.12] (Changes from 1.1.0-beta.11)
 ### Added
 - Added [`delete_unconfirmed_transactions`](./src/api/rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
@@ -147,7 +151,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[1.1.0-beta.12]: https://github.com/Chia-Mine/chia-agent/compare/64565c7cfe128b3dcc6e9d6ef3b9dc26e7ea6cf1...v1.1.0
+[1.1.0-beta.13]: https://github.com/Chia-Mine/chia-agent/compare/dadb068bbddcb7ae64a780ba6e70b8dd5bbc5f73...v1.1.0
+[1.1.0-beta.12]: https://github.com/Chia-Mine/chia-agent/compare/64565c7cfe128b3dcc6e9d6ef3b9dc26e7ea6cf1...dadb068bbddcb7ae64a780ba6e70b8dd5bbc5f73
 [1.1.0-beta.11]: https://github.com/Chia-Mine/chia-agent/compare/e3d3eab88e5e2ab2d7dedc40037093f6ef235f83...64565c7cfe128b3dcc6e9d6ef3b9dc26e7ea6cf1
 [1.1.0-beta.10]: https://github.com/Chia-Mine/chia-agent/compare/c94274b49ca7bcecce7700b2331c5ab8d4cbd529...e3d3eab88e5e2ab2d7dedc40037093f6ef235f83
 [1.1.0-beta.9]: https://github.com/Chia-Mine/chia-agent/compare/16ef8414950c4d0d34d33d9d6307a78654df59dd...c94274b49ca7bcecce7700b2331c5ab8d4cbd529

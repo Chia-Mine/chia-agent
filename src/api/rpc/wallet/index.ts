@@ -546,7 +546,7 @@ export async function create_signed_transaction(agent: TRPCAgent, data: TCreateS
 export const delete_unconfirmed_transactions_command = "delete_unconfirmed_transactions";
 export type delete_unconfirmed_transactions_command = typeof delete_unconfirmed_transactions_command;
 export type TDeleteUnconfirmedTransactionsRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export type TDeleteUnconfirmedTransactionsResponse = {
 };

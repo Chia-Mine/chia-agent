@@ -728,7 +728,7 @@ const response = await delete_unconfirmed_transactions(agent, params);
 ### params:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
 }
 ```
 ### response:
