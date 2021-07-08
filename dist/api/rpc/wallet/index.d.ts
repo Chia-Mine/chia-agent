@@ -92,6 +92,18 @@ export declare type TDeleteKeyRequest = {
 };
 export declare type TDeleteKeyResponse = {};
 export declare function delete_key(agent: TRPCAgent, data: TDeleteKeyRequest): Promise<TDeleteKeyResponse>;
+export declare const check_delete_key_command = "check_delete_key";
+export declare type check_delete_key_command = typeof check_delete_key_command;
+export declare type TCheckDeleteKeyRequest = {
+    fingerprint: int;
+};
+export declare type TCheckDeleteKeyResponse = {
+    fingerprint: int;
+    used_for_farmer_rewards: bool;
+    used_for_pool_rewards: bool;
+    wallet_balance: bool;
+};
+export declare function check_delete_key(agent: TRPCAgent, data: TCheckDeleteKeyRequest): Promise<TCheckDeleteKeyResponse>;
 export declare const delete_all_keys_command = "delete_all_keys";
 export declare type delete_all_keys_command = typeof delete_all_keys_command;
 export declare type TDeleteAllKeysRequest = {};
@@ -376,7 +388,7 @@ export declare function create_signed_transaction(agent: TRPCAgent, data: TCreat
 export declare const delete_unconfirmed_transactions_command = "delete_unconfirmed_transactions";
 export declare type delete_unconfirmed_transactions_command = typeof delete_unconfirmed_transactions_command;
 export declare type TDeleteUnconfirmedTransactionsRequest = {
-    wallet_id: int;
+    wallet_id: uint32;
 };
 export declare type TDeleteUnconfirmedTransactionsResponse = {};
 export declare function delete_unconfirmed_transactions(agent: TRPCAgent, data: TDeleteUnconfirmedTransactionsRequest): Promise<TDeleteUnconfirmedTransactionsResponse>;

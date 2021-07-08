@@ -1,7 +1,8 @@
 import { ProofOfSpace } from "../../chia/types/blockchain_format/proof_of_space";
-import { bool, Optional, str, uint16, uint64, uint8 } from "../../chia/types/_python_types_";
+import { bool, int, str, uint64, uint8 } from "../../chia/types/_python_types_";
 import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
 import { TRPCAgent } from "../../../rpc/index";
+import { RespondPlots } from "../../chia/protocols/harvester_protocol";
 import { PoolState } from "../../chia/farmer/farmer";
 export declare const chia_farmer_service = "chia_farmer";
 export declare type chia_farmer_service = typeof chia_farmer_service;
@@ -67,18 +68,20 @@ export declare type TSetPayoutInstructionsRequest = {
 };
 export declare type TSetPayoutInstructionsResponse = {};
 export declare function set_pool_payout_instructions(agent: TRPCAgent, params: TSetPayoutInstructionsRequest): Promise<TSetPayoutInstructionsResponse>;
-export declare type RequestPlotsResponse = {
-    type: 68;
-    id: Optional<uint16>;
-    data: str;
+export declare type HarvesterObject = RespondPlots & {
+    connection: {
+        node_id: str;
+        host: str;
+        port: int;
+    };
 };
-export declare const get_plots_command = "get_plots";
-export declare type get_plots_command = typeof get_plots_command;
-export declare type TGetPlotsRequest = {};
-export declare type TGetPlotsResponse = {
-    [peer_host_port: string]: RequestPlotsResponse;
+export declare const get_harvesters_command = "get_harvesters";
+export declare type get_harvesters_command = typeof get_harvesters_command;
+export declare type TGetHarvestersRequest = {};
+export declare type TGetHarvestersResponse = {
+    harvesters: HarvesterObject[];
 };
-export declare function get_plots(agent: TRPCAgent): Promise<TGetPlotsResponse>;
+export declare function get_harvesters(agent: TRPCAgent): Promise<TGetHarvestersResponse>;
 export declare const get_pool_login_link_command = "get_pool_login_link";
 export declare type get_pool_login_link_command = typeof get_pool_login_link_command;
 export declare type TGetPoolLinkRequest = {
