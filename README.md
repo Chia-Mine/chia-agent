@@ -1,5 +1,4 @@
-## [Notice]: Pool API is being implemented  
-Please follow [`v1.1.0`](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0) branch of this repository.
+**Now supports New Pool API! :tada::tada:**
 
 ---
 
@@ -7,7 +6,7 @@ Please follow [`v1.1.0`](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0) br
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `chia 1.1.x`.  
+Supports all RPC/Websocket API available at `chia 1.2.x`.  
 
 you can develop your own nodejs script with `chia-agent` to:
 - retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
@@ -23,6 +22,10 @@ npm install chia-agent
 # or
 yarn add chia-agent
 ```
+
+## Compatibility
+This code is compatible with: [`859a107f597ab755aec6a7a2e54346bd96e70e75`](https://github.com/Chia-Network/chia-blockchain/tree/859a107f597ab755aec6a7a2e54346bd96e70e75) of [chia-blockchain@1.2.0](https://github.com/Chia-Network/chia-blockchain)  
+Here is a [Compatibility checker](https://github.com/Chia-Network/chia-blockchain/compare/859a107f597ab755aec6a7a2e54346bd96e70e75...main)
 
 ## API
 There are 2 kinds of APIs in chia.  
@@ -75,7 +78,7 @@ const {on_new_farming_info} = require("chia-agent/api/ws");
 setLogLevel("debug");
 
 const daemon = getDaemon();
-await daemon.connect(); // connect to local farm service using config file.
+await daemon.connect(); // connect to local daemon using config file.
 const unsubscribe = await on_new_farming_info(daemon, (e) => {
   console.log(e.data);
 })
@@ -107,15 +110,18 @@ setTimeout(async () => {
 ## Examples
 [See documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/example)
 
-## API Compatibility Memo
-Current version of `chia-agent` follows API defined at commit [`9e9097b116...`](https://github.com/Chia-Network/chia-blockchain/tree/9e9097b11688e52ee13683533d1ad273d231a1ee) in `chia 1.1.6`.
+Here are some of those examples
+- [Send email when proof is found](https://github.com/Chia-Mine/chia-agent/blob/main/example/send_email_when_proof_is_found)
+- [RPC API code sample to show block record in certain height](https://github.com/Chia-Mine/chia-agent/blob/main/example/get_block_by_height)
+- [Create multiple plots with javascript](https://github.com/Chia-Mine/chia-agent/blob/main/example/create_plots)
 
-When original RPC/Websocket server API changes, those changes must be imported to this repository.  
-To check API update, check the link below.  
-If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the link, please let me know.  
+## Build from source
+Once source files is build by `npm run build:prod`, files will be output to `/dist` directory.  
+Then the files/directories are published to npm registry.  
+Please note it does not upload files in project root to npm registry, but files inside '/dist'.
 
-https://github.com/Chia-Network/chia-blockchain/compare/9e9097b11688e52ee13683533d1ad273d231a1ee...main  
+[Read details here](https://github.com/Chia-Mine/chia-agent/blob/v1.1.0/BUILD.md)
 
 ## Donation
 For continuous development, please support me with donation
-`xch1wqpcvquv98qmeh9hg6wqpzhzmgs73lgvd8a7v5240nxgyat4p0sq4gdzyy`
+`xch1wr8g2k7cn55xvepmg480dsu2xhf4rz5ezghwwapulj7jxqcz9ztqqclwdj`

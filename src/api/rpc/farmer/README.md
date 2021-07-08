@@ -5,7 +5,7 @@ You need to create RPC connection before actually sending rpc request to the ser
 Please remember that all rpc API is provided as an async function.
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_signage_point} = require("chia-agent/api/rpc");
+const {get_signage_point} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({
   service: "farmer", // connect to local farmer service using config file.
 });
@@ -36,9 +36,9 @@ const agent = new RPCAgent({
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_signage_point} = require("chia-agent/api/rpc");
+const {get_signage_point} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
-const response = await get_signage_point(agent, {sp_hash: "..."});
+const response = await get_signage_point(agent, params);
 ```
 ### params:
 ```typescript
@@ -69,7 +69,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_signage_points} = require("chia-agent/api/rpc");
+const {get_signage_points} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
 const response = await get_signage_points(agent);
 ```
@@ -86,9 +86,9 @@ const response = await get_signage_points(agent);
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_reward_targets} = require("chia-agent/api/rpc");
+const {get_reward_targets} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
-const response = await get_reward_targets(agent, {search_for_private_key: true});
+const response = await get_reward_targets(agent, params);
 ```
 ### params:
 ```typescript
@@ -115,9 +115,9 @@ const response = await get_reward_targets(agent, {search_for_private_key: true})
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {set_reward_targets} = require("chia-agent/api/rpc");
+const {set_reward_targets} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
-const response = await set_reward_targets(agent, {...});
+const response = await set_reward_targets(agent, params);
 ```
 ### params:
 ```typescript
@@ -129,4 +129,93 @@ const response = await set_reward_targets(agent, {...});
 ### response:
 ```typescript
 {}
+```
+
+---
+
+## `get_pool_state(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_pool_state} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_pool_state(agent);
+```
+### response:
+```typescript
+{
+  pool_state: PoolState[];
+}
+```
+For content of `PoolState`,  
+see [https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/farmer/farmer.ts](../../chia/farmer/farmer.ts)
+
+---
+
+## `set_payout_instructions(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {set_payout_instructions} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await set_payout_instructions(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+  payout_instructions: str;
+}
+```
+### response:
+```typescript
+{}
+```
+
+---
+
+## `get_harvesters(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_harvesters} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_harvesters(agent);
+```
+### response:
+```typescript
+{
+  plots: Plot[];
+  failed_to_open_filenames: str[];
+  no_key_filenames: str[];
+  connection: {
+    node_id: str;
+    host: str;
+    port: int; // type of socket.getpeername[1]
+  };
+}
+```
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+---
+
+## `get_pool_login_link(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_pool_login_link} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_pool_login_link(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+}
+```
+### response:
+```typescript
+{
+  login_link: str;
+}
 ```

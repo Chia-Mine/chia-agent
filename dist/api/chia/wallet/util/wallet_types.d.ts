@@ -8,4 +8,5 @@ export declare const WalletType: {
     COLOURED_COIN: number;
     RECOVERABLE: number;
     DISTRIBUTED_ID: number;
+    POOLING_WALLET: number;
 };

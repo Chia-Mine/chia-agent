@@ -1,7 +1,9 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
-import {bool, str, uint64, uint8} from "../../chia/types/_python_types_";
+import {bool, int, str, uint64, uint8} from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TRPCAgent} from "../../../rpc/index";
+import {RespondPlots} from "../../chia/protocols/harvester_protocol";
+import {PoolState} from "../../chia/farmer/farmer";
 
 export const chia_farmer_service = "chia_farmer";
 export type chia_farmer_service = typeof chia_farmer_service;
@@ -70,4 +72,64 @@ export type TSetRewardTargetResponse = {
 };
 export async function set_reward_targets(agent: TRPCAgent, params: TSetRewardTargetRequest){
   return agent.sendMessage<TSetRewardTargetResponse>(chia_farmer_service, set_reward_targets_command, params);
+}
+
+
+
+export const get_pool_state_command = "get_pool_state";
+export type get_pool_state_command = typeof get_pool_state_command;
+export type TGetPoolStateRequest = {
+};
+export type TGetPoolStateResponse = {
+  pool_state: PoolState[];
+};
+export async function get_pool_state(agent: TRPCAgent){
+  return agent.sendMessage<TSetRewardTargetResponse>(chia_farmer_service, get_pool_state_command);
+}
+
+
+
+export const set_payout_instructions_command = "set_payout_instructions";
+export type set_payout_instructions_command = typeof set_payout_instructions_command;
+export type TSetPayoutInstructionsRequest = {
+  launcher_id: str;
+  payout_instructions: str;
+};
+export type TSetPayoutInstructionsResponse = {
+};
+export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSetPayoutInstructionsRequest){
+  return agent.sendMessage<TSetPayoutInstructionsResponse>(chia_farmer_service, set_payout_instructions_command, params);
+}
+
+
+export type HarvesterObject = RespondPlots & {
+  connection: {
+    node_id: str;
+    host: str;
+    port: int; // type of socket.getpeername[1]
+  };
+};
+export const get_harvesters_command = "get_harvesters";
+export type get_harvesters_command = typeof get_harvesters_command;
+export type TGetHarvestersRequest = {
+};
+export type TGetHarvestersResponse = {
+  harvesters: HarvesterObject[];
+};
+export async function get_harvesters(agent: TRPCAgent){
+  return agent.sendMessage<TGetHarvestersResponse>(chia_farmer_service, get_harvesters_command);
+}
+
+
+
+export const get_pool_login_link_command = "get_pool_login_link";
+export type get_pool_login_link_command = typeof get_pool_login_link_command;
+export type TGetPoolLinkRequest = {
+  launcher_id: str;
+};
+export type TGetPoolLinkResponse = {
+  login_link: str;
+};
+export async function get_pool_login_link(agent: TRPCAgent, params: TGetPoolLinkRequest){
+  return agent.sendMessage<TGetPoolLinkResponse>(chia_farmer_service, get_pool_login_link_command, params);
 }

@@ -1,14 +1,14 @@
-import {Agent as HttpsAgent, request as httpsRequest} from "https";
+import {Agent as HttpsAgent, request as httpsRequest, RequestOptions} from "https";
 import {Agent as HttpAgent, OutgoingHttpHeaders, request as httpRequest} from "http";
 import {existsSync, readFileSync} from "fs";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
 import {RpcMessage} from "../api/rpc/index";
 
-type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"daemon"
+type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"daemon"|"pool";
 
 export function getConnectionInfoFromConfig(destination: TDestination, config: TConfig){
-  const hostname = "localhost";
+  let hostname = "localhost";
   let port = -1;
   if(destination === "daemon"){
     port = +(config["/daemon_port"] as string);
@@ -25,6 +25,19 @@ export function getConnectionInfoFromConfig(destination: TDestination, config: T
   else if(destination === "wallet"){
     port = +(config["/wallet/rpc_port"] as string);
   }
+  else if(destination === "pool"){
+    const pool_url = config["/pool/pool_list/0/pool_url"] as string;
+    const regex = /^(https?:\/\/)?([^/:]+):?(\d*)/;
+    const match = regex.exec(pool_url);
+    if(match){
+      hostname = match[2];
+      port = match[3] ? +match[3] : 80;
+    }
+    else{
+      getLogger().error("Pool list was not found in config.yaml.");
+      throw new Error("Pool list was not found in config.yaml");
+    }
+  }
   else{
     throw new Error(`Unknown destination: ${destination}`);
   }
@@ -36,9 +49,9 @@ export type TRPCAgentProps = {
   protocol: "https";
   host: string;
   port: number;
-  ca_cert: string|Buffer;
-  client_cert: string|Buffer;
-  client_key: string|Buffer;
+  ca_cert?: string|Buffer;
+  client_cert?: string|Buffer;
+  client_key?: string|Buffer;
 } | {
   protocol: "https";
   host: string;
@@ -59,9 +72,9 @@ export class RPCAgent {
   protected _protocol: "http"|"https";
   protected _hostname: string;
   protected _port: number;
-  protected _caCert: string|Buffer = "";
-  protected _clientCert: string|Buffer = "";
-  protected _clientKey: string|Buffer = "";
+  protected _caCert?: string|Buffer = "";
+  protected _clientCert?: string|Buffer = "";
+  protected _clientKey?: string|Buffer = "";
   protected _agent: HttpsAgent|HttpAgent;
   
   public constructor(props: TRPCAgentProps) {
@@ -161,35 +174,57 @@ export class RPCAgent {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     
-    return this.post(command, data) as Promise<M>;
+    return this.request<M>("POST", command, data);
   }
   
-  public post(path: string, data: any){
-    return new Promise((resolve: (v: RpcMessage) => void, reject) => {
+  public async request<R>(method: string, path: string, data?: any){
+    return new Promise((resolve: (v: R) => void, reject) => {
       const body = data ? JSON.stringify(data) : "{}";
-      
       const pathname = `/${path.replace(/^\/+/, "")}`;
-      
-      const options = {
+      const METHOD = method.toUpperCase();
+      const options: RequestOptions = {
         protocol: this._protocol + ":", // nodejs's https module requires protocol to include ':'.
         hostname: this._hostname,
         port: `${this._port}`,
         path: pathname,
-        pathname,
-        method: "POST",
+        method: METHOD,
         agent: this._agent,
         headers: {
           Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json;charset=utf-8",
           "User-Agent": userAgent,
-          "Content-Length": body.length,
         } as OutgoingHttpHeaders,
       };
       
+      if(METHOD === "POST" || METHOD === "PUT" || METHOD === "DELETE"){
+        options.headers = {
+          ...(options.headers || {}),
+          "Content-Type": "application/json;charset=utf-8",
+          "Content-Length": body.length,
+        };
+      }
+      else if(METHOD === "GET"){
+        // Add query string if `data` is object.
+        if(data && typeof data === "object"){
+          // Remove string after '?' on path to prevent duplication.
+          let p = options.path as string;
+          if(/\?/.test(p)){
+            getLogger().warning("querystring in `path` is replaced by `data`");
+            p.replace(/\?.*/, "");
+          }
+          p += "?";
+          for(const key in data){
+            if(data.hasOwnProperty(key)){
+              p += `${key}=${data[key]}`;
+            }
+          }
+          options.path = p;
+        }
+      }
+    
       const transporter = this._protocol === "https" ? httpsRequest : httpRequest;
-      
+    
       getLogger().debug(`Requesting to ${options.protocol}//${options.hostname}:${options.port}${options.path}`);
-      
+    
       const req = transporter(options, (res) => {
         if(!res.statusCode || res.statusCode < 200 || res.statusCode >= 300){
           getLogger().error(`Status not ok: ${res.statusCode}`);
@@ -200,7 +235,7 @@ export class RPCAgent {
           }
           return reject(new Error(`Status not ok: ${res.statusCode}`));
         }
-        
+      
         const chunks: any[] = [];
         res.on("data", chunk => {
           chunks.push(chunk);
@@ -208,14 +243,14 @@ export class RPCAgent {
             getLogger().debug(`The first response chunk data arrived`);
           }
         });
-        
+      
         res.on("end", () => {
           try{
             if(chunks.length > 0){
               const data = JSON.parse(Buffer.concat(chunks).toString());
               return resolve(data);
             }
-            
+          
             // RPC Server should return response like
             // {origin: string; destination: string; request_id: string; data: any; ...}
             // If no such response is returned, reject it.
@@ -228,18 +263,18 @@ export class RPCAgent {
               getLogger().error(Buffer.concat(chunks).toString());
             }
             catch(_){}
-  
+          
             reject(new Error("Server responded without expected data"));
           }
         });
       });
-      
+    
       req.on("error", error => {
         getLogger().error(JSON.stringify(error));
         reject(error);
       });
-      
-      if(body){
+    
+      if((METHOD === "POST" || METHOD === "PUT" || METHOD === "DELETE") && body){
         req.write(body);
       }
       req.end();

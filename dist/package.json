@@ -1,6 +1,6 @@
 {
   "name": "chia-agent",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "Admin ChiaMineJP <admin@chiamine.jp>",
   "description": "chia rpc/websocket client library",
   "license": "MIT",
@@ -17,19 +17,16 @@
     "chia",
     "xch",
     "crypto",
-    "coin",
-    "mining",
     "rpc",
     "websocket",
-    "typescript",
-    "monitor",
-    "proof"
+    "pool",
+    "typescript"
   ],
   "engines": {
     "node": ">=12.13.0"
   },
   "dependencies": {
-    "ws": "^7.4.5",
+    "ws": "^7.4.6",
     "yaml": "^1.10.2"
   }
 }

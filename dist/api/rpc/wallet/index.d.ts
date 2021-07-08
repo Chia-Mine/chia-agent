@@ -6,6 +6,8 @@ import { TransactionRecord } from "../../chia/wallet/transaction_record";
 import { SpendBundle } from "../../chia/types/spend_bundle";
 import { BackupInfo } from "../../chia/wallet/util/backup_utils";
 import { TRPCAgent } from "../../../rpc";
+import { PoolWalletInfo } from "../../chia/pools/pool_wallet_info";
+import { TradeRecordInJson } from "../../chia/wallet/util/trade_utils";
 export declare const chia_wallet_service = "chia_wallet";
 export declare type chia_wallet_service = typeof chia_wallet_service;
 export declare const log_in_command = "log_in";
@@ -26,8 +28,6 @@ export declare type TLoginResponse = {
     success: False;
     error: "not_initialized" | "Unknown Error";
 } | {
-    success: False;
-    error: "not_initialized";
     backup_info: BackupInfo;
     backup_path: str;
 };
@@ -49,7 +49,14 @@ export declare type TGetPrivateKeyResponse = {
         fingerprint: int;
         sk: str;
         pk: str;
-        seed: str;
+        farmer_pk: str;
+        pool_pk: str;
+        seed: Optional<str>;
+    };
+} | {
+    success: False;
+    private_key: {
+        fingerprint: int;
     };
 };
 export declare function get_private_key(agent: TRPCAgent, data: TGetPrivateKeyRequest): Promise<TGetPrivateKeyResponse>;
@@ -85,6 +92,18 @@ export declare type TDeleteKeyRequest = {
 };
 export declare type TDeleteKeyResponse = {};
 export declare function delete_key(agent: TRPCAgent, data: TDeleteKeyRequest): Promise<TDeleteKeyResponse>;
+export declare const check_delete_key_command = "check_delete_key";
+export declare type check_delete_key_command = typeof check_delete_key_command;
+export declare type TCheckDeleteKeyRequest = {
+    fingerprint: int;
+};
+export declare type TCheckDeleteKeyResponse = {
+    fingerprint: int;
+    used_for_farmer_rewards: bool;
+    used_for_pool_rewards: bool;
+    wallet_balance: bool;
+};
+export declare function check_delete_key(agent: TRPCAgent, data: TCheckDeleteKeyRequest): Promise<TCheckDeleteKeyResponse>;
 export declare const delete_all_keys_command = "delete_all_keys";
 export declare type delete_all_keys_command = typeof delete_all_keys_command;
 export declare type TDeleteAllKeysRequest = {};
@@ -137,41 +156,16 @@ export declare type TGetWalletsResponse = {
 export declare function get_wallets(agent: TRPCAgent): Promise<TGetWalletsResponse>;
 export declare type TCreate_New_CC_WalletRequest = {
     host: str;
+    fee?: uint64;
     wallet_type: "cc_wallet";
     mode: "new";
     amount: uint64;
 } | {
     host: str;
+    fee?: uint64;
     wallet_type: "cc_wallet";
     mode: "existing";
     colour: str;
-};
-export declare type TCreate_New_RC_WalletRequest = {
-    host: str;
-    wallet_type: "rc_wallet";
-    rl_type: "admin";
-    interval: int;
-    limit: int;
-    pubkey: str;
-    amount: int;
-    fee: int;
-} | {
-    host: str;
-    wallet_type: "rc_wallet";
-    rl_type: "user";
-};
-export declare type TCreate_New_DID_WalletRequest = {
-    host: str;
-    wallet_type: "did_wallet";
-    did_type: "new";
-    backup_dids: str[];
-    num_of_backup_ids_needed: uint64;
-    amount: int;
-} | {
-    host: str;
-    wallet_type: "did_wallet";
-    did_type: "recovery";
-    filename: str;
 };
 export declare type TCreate_New_CC_WalletResponse = {
     type: uint8;
@@ -180,7 +174,22 @@ export declare type TCreate_New_CC_WalletResponse = {
 } | {
     type: uint8;
 };
-export declare type TCreate_New_RC_WalletResponse = {
+export declare type TCreate_New_RL_WalletRequest = {
+    host: str;
+    fee?: uint64;
+    wallet_type: "rl_wallet";
+    rl_type: "admin";
+    interval: int;
+    limit: int;
+    pubkey: str;
+    amount: int;
+} | {
+    host: str;
+    fee?: uint64;
+    wallet_type: "rl_wallet";
+    rl_type: "user";
+};
+export declare type TCreate_New_RL_WalletResponse = {
     success: bool;
     id: uint32;
     type: uint8;
@@ -191,27 +200,68 @@ export declare type TCreate_New_RC_WalletResponse = {
     type: uint8;
     pubkey: str;
 };
+export declare type TCreate_New_DID_WalletRequest = {
+    host: str;
+    fee?: uint64;
+    wallet_type: "did_wallet";
+    did_type: "new";
+    backup_dids: str[];
+    num_of_backup_ids_needed: uint64;
+    amount: int;
+} | {
+    host: str;
+    fee?: uint64;
+    wallet_type: "did_wallet";
+    did_type: "recovery";
+    filename: str;
+};
 export declare type TCreate_New_DID_WalletResponse = {
-    success: true;
+    success: True;
     type: uint8;
     my_did: str;
     wallet_id: uint32;
 } | {
-    success: true;
+    success: True;
     type: uint8;
     my_did: str;
     wallet_id: uint32;
-    coin_name: bytes32;
+    coin_name: str;
     coin_list: [bytes32, bytes32, uint64];
     newpuzhash: str;
     pubkey: str;
     backup_dids: bytes[];
     num_verifications_required: uint64;
 };
+export declare type TCreate_New_Pool_WalletRequest = {
+    host: str;
+    fee?: uint64;
+    wallet_type: "pool_wallet";
+    mode: "new";
+    initial_target_state: {
+        state: "SELF_POOLING";
+    } | {
+        state: "FARMING_TO_POOL";
+        target_puzzle_hash: str;
+        pool_url: str;
+        relative_lock_height: uint32;
+    };
+    p2_singleton_delayed_ph?: str;
+    p2_singleton_delay_time?: uint64;
+} | {
+    host: str;
+    fee?: uint64;
+    wallet_type: "pool_wallet";
+    mode: "recovery";
+};
+export declare type TCreate_New_Pool_WalletResponse = {
+    transaction: TransactionRecord;
+    launcher_id: str;
+    p2_singleton_puzzle_hash: str;
+};
 export declare const create_new_wallet_command = "create_new_wallet";
 export declare type create_new_wallet_command = typeof create_new_wallet_command;
-export declare type TCreateNewWalletRequest = TCreate_New_CC_WalletRequest | TCreate_New_RC_WalletRequest | TCreate_New_DID_WalletRequest;
-export declare type TCreateNewWalletResponse = TCreate_New_CC_WalletResponse | TCreate_New_RC_WalletResponse | TCreate_New_DID_WalletResponse;
+export declare type TCreateNewWalletRequest = TCreate_New_CC_WalletRequest | TCreate_New_RL_WalletRequest | TCreate_New_DID_WalletRequest | TCreate_New_Pool_WalletRequest;
+export declare type TCreateNewWalletResponse = TCreate_New_CC_WalletResponse | TCreate_New_RL_WalletResponse | TCreate_New_DID_WalletResponse | TCreate_New_Pool_WalletResponse;
 export declare function create_new_wallet(agent: TRPCAgent, data: TCreateNewWalletRequest): Promise<TCreateNewWalletResponse>;
 export declare const get_wallet_balance_command = "get_wallet_balance";
 export declare type get_wallet_balance_command = typeof get_wallet_balance_command;
@@ -234,7 +284,7 @@ export declare function get_wallet_balance(agent: TRPCAgent, data: TGetWalletBal
 export declare const get_transaction_command = "get_transaction";
 export declare type get_transaction_command = typeof get_transaction_command;
 export declare type TGetTransactionRequest = {
-    transaction_id: bytes32;
+    transaction_id: str;
 };
 export declare type TGetTransactionResponse = {
     transaction: TransactionRecord;
@@ -271,7 +321,7 @@ export declare type send_transaction_command = typeof send_transaction_command;
 export declare type TSendTransactionRequest = {
     wallet_id: int;
     amount: int;
-    fee: int;
+    fee?: int;
     address: str;
 };
 export declare type TSendTransactionResponse = {
@@ -279,6 +329,19 @@ export declare type TSendTransactionResponse = {
     transaction_id: TransactionRecord["name"];
 };
 export declare function send_transaction(agent: TRPCAgent, data: TSendTransactionRequest): Promise<TSendTransactionResponse>;
+export declare const send_transaction_multi_command = "send_transaction_multi";
+export declare type send_transaction_multi_command = typeof send_transaction_multi_command;
+export declare type TSendTransactionMultiRequest = {
+    wallet_id: uint32;
+    additions: TAdditions[];
+    fee?: uint64;
+    coins?: Coin[];
+};
+export declare type TSendTransactionMultiResponse = {
+    transaction: TransactionRecord;
+    transaction_id: TransactionRecord["name"];
+};
+export declare function send_transaction_multi(agent: TRPCAgent, data: TSendTransactionMultiRequest): Promise<TSendTransactionMultiResponse>;
 export declare const create_backup_command = "create_backup";
 export declare type create_backup_command = typeof create_backup_command;
 export declare type TCreateBackupRequest = {
@@ -322,6 +385,13 @@ export declare type TCreateSignedTransactionResponse = {
     signed_tx: TransactionRecord;
 };
 export declare function create_signed_transaction(agent: TRPCAgent, data: TCreateSignedTransactionRequest): Promise<TCreateSignedTransactionResponse>;
+export declare const delete_unconfirmed_transactions_command = "delete_unconfirmed_transactions";
+export declare type delete_unconfirmed_transactions_command = typeof delete_unconfirmed_transactions_command;
+export declare type TDeleteUnconfirmedTransactionsRequest = {
+    wallet_id: uint32;
+};
+export declare type TDeleteUnconfirmedTransactionsResponse = {};
+export declare function delete_unconfirmed_transactions(agent: TRPCAgent, data: TDeleteUnconfirmedTransactionsRequest): Promise<TDeleteUnconfirmedTransactionsResponse>;
 export declare const cc_set_name_command = "cc_set_name";
 export declare type cc_set_name_command = typeof cc_set_name_command;
 export declare type TCcSetNameRequest = {
@@ -371,16 +441,16 @@ export declare type TCreateOfferForIdsRequest = {
     ids: Record<int, int>;
     filename: str;
 };
-export declare type TCreateOfferForIdsResponse = {
-    discrepancies: Optional<Record<str, int>>;
-};
+export declare type TCreateOfferForIdsResponse = {};
 export declare function create_offer_for_ids(agent: TRPCAgent, data: TCreateOfferForIdsRequest): Promise<TCreateOfferForIdsResponse>;
 export declare const get_discrepancies_for_offer_command = "get_discrepancies_for_offer";
 export declare type get_discrepancies_for_offer_command = typeof get_discrepancies_for_offer_command;
 export declare type TGetDiscrepanciesForOfferRequest = {
     filename: str;
 };
-export declare type TGetDiscrepanciesForOfferResponse = {};
+export declare type TGetDiscrepanciesForOfferResponse = {
+    discrepancies: Optional<Record<str, int>>;
+};
 export declare function get_discrepancies_for_offer(agent: TRPCAgent, data: TGetDiscrepanciesForOfferRequest): Promise<TGetDiscrepanciesForOfferResponse>;
 export declare const respond_to_offer_command = "respond_to_offer";
 export declare type respond_to_offer_command = typeof respond_to_offer_command;
@@ -389,16 +459,6 @@ export declare type TResponseToOfferRequest = {
 };
 export declare type TResponseToOfferResponse = {};
 export declare function respond_to_offer(agent: TRPCAgent, data: TResponseToOfferRequest): Promise<TResponseToOfferResponse>;
-export declare type TradeRecordInJson = {
-    trade_id: str;
-    sent: uint32;
-    my_offer: bool;
-    created_at_time: uint64;
-    accepted_at_time: Optional<uint64>;
-    confirmed_at_index: uint32;
-    status: str;
-    offer_dict: Optional<Record<str, int>>;
-};
 export declare const get_trade_command = "get_trade";
 export declare type get_trade_command = typeof get_trade_command;
 export declare type TGetTradeRequest = {
@@ -446,10 +506,12 @@ export declare type TDidSpendResponse = {
 export declare function did_spend(agent: TRPCAgent, data: TDidSpendRequest): Promise<TDidSpendResponse>;
 export declare const did_get_pubkey_command = "did_get_pubkey";
 export declare type did_get_pubkey_command = typeof did_get_pubkey_command;
-export declare type TDidGetPubkeyRequest = {};
+export declare type TDidGetPubkeyRequest = {
+    wallet_id: int;
+};
 export declare type TDidGetPubkeyResponse = {
     success: bool;
-    pubkey: str;
+    pubkey: bytes;
 };
 export declare function did_get_pubkey(agent: TRPCAgent): Promise<TDidGetPubkeyResponse>;
 export declare const did_get_did_command = "did_get_did";
@@ -469,8 +531,8 @@ export declare type did_recovery_spend_command = typeof did_recovery_spend_comma
 export declare type TDidRecoverySpendRequest = {
     wallet_id: int;
     attest_filenames: str[];
-    pubkey: str;
-    puzhash: str;
+    pubkey?: str;
+    puzhash?: str;
 };
 export declare type TDidRecoverySpendResponse = {
     success: SpendBundle;
@@ -567,3 +629,45 @@ export declare type TAddRateLimitedFundsResponse = {
     status: "SUCCESS";
 };
 export declare function add_rate_limited_funds(agent: TRPCAgent, data: TAddRateLimitedFundsRequest): Promise<TAddRateLimitedFundsResponse>;
+export declare const pw_join_pool_command = "pw_join_pool";
+export declare type pw_join_pool_command = typeof pw_join_pool_command;
+export declare type TPwJoinPoolRequest = {
+    wallet_id: uint32;
+    target_puzzlehash?: string;
+    pool_url?: str;
+    relative_lock_height: uint32;
+};
+export declare type TPwJoinPoolResponse = {
+    transaction: TransactionRecord;
+};
+export declare function pw_join_pool(agent: TRPCAgent, data: TPwJoinPoolRequest): Promise<TPwJoinPoolResponse>;
+export declare const pw_self_pool_command = "pw_self_pool";
+export declare type pw_self_pool_command = typeof pw_self_pool_command;
+export declare type TPwSelfPoolRequest = {
+    wallet_id: uint32;
+};
+export declare type TPwSelfPoolResponse = {
+    transaction: TransactionRecord;
+};
+export declare function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest): Promise<TPwSelfPoolResponse>;
+export declare const pw_absorb_rewards_command = "pw_absorb_rewards";
+export declare type pw_absorb_rewards_command = typeof pw_absorb_rewards_command;
+export declare type TPwAbsorbRewardsRequest = {
+    wallet_id: uint32;
+    fee: uint64;
+};
+export declare type TPwAbsorbRewardsResponse = {
+    state: PoolWalletInfo;
+    transaction: TransactionRecord;
+};
+export declare function pw_absorb_rewards(agent: TRPCAgent, data: TPwAbsorbRewardsRequest): Promise<TPwAbsorbRewardsResponse>;
+export declare const pw_status_command = "pw_status";
+export declare type pw_status_command = typeof pw_status_command;
+export declare type TPwStatusRequest = {
+    wallet_id: uint32;
+};
+export declare type TPwStatusResponse = {
+    state: PoolWalletInfo;
+    unconfirmed_transactions: TransactionRecord[];
+};
+export declare function pw_status(agent: TRPCAgent, data: TPwStatusRequest): Promise<TPwStatusResponse>;

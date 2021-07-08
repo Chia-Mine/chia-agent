@@ -40,25 +40,25 @@ export async function start_service(daemon: TDaemon, data: TStartServiceRequest)
 export const start_plotting_command = "start_plotting";
 export type start_plotting_command = typeof start_plotting_command;
 export type TStartPlottingRequest = {
-  service: string;
-  delay: int; // delay in seconds
-  parallel: bool; // parallel or serialize
+  service: "chia plots create";
+  delay?: int; // delay in seconds
+  parallel?: bool; // parallel or serialize
   k: int; // size
-  n: int; // count of creating plot
-  queue: str; // queue name
+  n?: int; // count of creating plot
+  queue?: str; // queue name
   t: str; // tmp dir
   t2: str; // tmp dir 2
   d: str; // final dir
-  b: int; // memory buffer size
-  u: int; // number of buckets
-  r: int; // number of threads
-  a?: int; // fingerprint
-  // f: str; // farmer public key
-  // p: str; // pool public key
-  // c: str; // pool contract address
-  e: bool; // disable bitfield plotting
-  x: bool; // 
-  overrideK: bool;
+  b: int; // memory buffer size. 3390 is recommended.
+  u: int; // number of buckets. 128 is recommended
+  r: int; // number of threads. 2 is recommended.
+  a?: int; // fingerprint. Confirm it via `chia keys show` command.
+  f?: str; // farmer public key
+  p?: str; // pool public key
+  c?: str; // pool contract address
+  e: bool; // disable bitfield plotting. False is recommended.
+  x: bool; // Skip final dir copy. False is recommended.
+  overrideK: bool; // True if you want to use k < 33
 };
 export type TStartPlottingResponse = {
   success: bool;

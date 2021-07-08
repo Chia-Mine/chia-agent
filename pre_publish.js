@@ -24,6 +24,7 @@ const copyFileToPublish = (fileName) => {
 };
 
 copyFileToPublish("README.md");
+copyFileToPublish("CHANGELOG.md");
 copyFileToPublish("LICENSE");
 
 if(typeof packageJson.devDependencies !== "undefined") delete packageJson.devDependencies;

@@ -1,12 +1,15 @@
 import {FullBlock} from "../../chia/types/full_block";
 import {BlockRecord} from "../../chia/consensus/block_record";
-import {bool, int, Optional, str, uint128, uint32, uint64} from "../../chia/types/_python_types_";
+import {bool, float, int, Optional, str, uint128, uint32, uint64} from "../../chia/types/_python_types_";
 import {UnfinishedHeaderBlock} from "../../chia/types/unfinished_header_block";
 import {CoinRecord} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {MempoolItem} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
+import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
+import {SignagePoint} from "../../chia/full_node/signage_point";
+import {CoinSolution} from "../../chia/types/coin_solution";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -22,7 +25,7 @@ export type TGetBlockchainStateResponse = {
     sync: {
       sync_mode: bool;
       synced: bool;
-      sync_tip_height: Optional<uint32>;
+      sync_tip_height: uint32; // full_node_rpc_api.py declares Optional<uint32> but it seems 
       sync_progress_height: uint32;
     },
     difficulty: uint64;
@@ -180,6 +183,28 @@ export async function get_network_info_of_full_node(agent: TRPCAgent) {
 
 
 
+export const get_recent_signage_point_or_eos_command = "get_recent_signage_point_or_eos";
+export type get_recent_signage_point_or_eos_command = typeof get_recent_signage_point_or_eos_command;
+export type TGetRecentSignagePointOrEOSCommandRequest = {
+  challenge_hash: str;
+} | {
+  sp_hash: str;
+};
+export type TGetRecentSignagePointOrEOSCommandResponse = {
+  eos: EndOfSubSlotBundle;
+  time_received: float;
+  reverted: bool;
+} | {
+  signage_point: SignagePoint;
+  time_received: float;
+  reverted: bool;
+};
+export async function get_recent_signage_point_or_eos(agent: TRPCAgent, data: TGetRecentSignagePointOrEOSCommandRequest) {
+  return agent.sendMessage<TGetRecentSignagePointOrEOSCommandResponse>(chia_full_node_service, get_recent_signage_point_or_eos_command, data);
+}
+
+
+
 export const get_coin_records_by_puzzle_hash_command = "get_coin_records_by_puzzle_hash";
 export type get_coin_records_by_puzzle_hash_command = typeof get_coin_records_by_puzzle_hash_command;
 export type TGetCoinRecordsByPuzzleHashRequest = {
@@ -238,6 +263,21 @@ export type TPushTxResponse = {
 };
 export async function push_tx(agent: TRPCAgent, data: TPushTxRequest) {
   return agent.sendMessage<TPushTxResponse>(chia_full_node_service, push_tx_command, data);
+}
+
+
+
+export const get_puzzle_and_solution_command = "get_puzzle_and_solution";
+export type get_puzzle_and_solution_command = typeof get_puzzle_and_solution_command;
+export type TGetPuzzleAndSolutionRequest = {
+  coin_id: str;
+  height: uint32;
+};
+export type TGetPuzzleAndSolutionResponse = {
+  coin_solution: CoinSolution;
+};
+export async function get_puzzle_and_solution(agent: TRPCAgent, data: TGetPuzzleAndSolutionRequest) {
+  return agent.sendMessage<TGetPuzzleAndSolutionResponse>(chia_full_node_service, get_puzzle_and_solution_command, data);
 }
 
 

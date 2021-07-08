@@ -1,5 +1,5 @@
-export declare type G1Element = unknown;
-export declare type G2Element = unknown;
+export declare type G1Element = string;
+export declare type G2Element = string;
 export declare type bytes = string;
 export declare type int = number;
 export declare type int8 = number;
