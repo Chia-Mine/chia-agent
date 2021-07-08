@@ -1,9 +1,10 @@
 # Changelog
 
-## [1.1.0-beta]
+## [1.2.0]
 ### Changed
 - Update G1Element/G2Element type to `string` (Serialized hex string representation)
 - Updated [`get_private_key`](./src/api/rpc/wallet/README.md#get_private_keyagent-params)
+- Set version in line with compatible `chia-blockchain`
 
 ### Added
 - [New pool protocol/api](./src/api/rpc/pool)
@@ -96,16 +97,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[1.1.0-beta.13]: https://github.com/Chia-Mine/chia-agent/compare/dadb068bbddcb7ae64a780ba6e70b8dd5bbc5f73...v1.1.0
-[1.1.0-beta.12]: https://github.com/Chia-Mine/chia-agent/compare/64565c7cfe128b3dcc6e9d6ef3b9dc26e7ea6cf1...dadb068bbddcb7ae64a780ba6e70b8dd5bbc5f73
-[1.1.0-beta.11]: https://github.com/Chia-Mine/chia-agent/compare/e3d3eab88e5e2ab2d7dedc40037093f6ef235f83...64565c7cfe128b3dcc6e9d6ef3b9dc26e7ea6cf1
-[1.1.0-beta.10]: https://github.com/Chia-Mine/chia-agent/compare/c94274b49ca7bcecce7700b2331c5ab8d4cbd529...e3d3eab88e5e2ab2d7dedc40037093f6ef235f83
-[1.1.0-beta.9]: https://github.com/Chia-Mine/chia-agent/compare/16ef8414950c4d0d34d33d9d6307a78654df59dd...c94274b49ca7bcecce7700b2331c5ab8d4cbd529
-[1.1.0-beta.8]: https://github.com/Chia-Mine/chia-agent/compare/2aea73f07b40f0a256e55805b84d189a6c67ea3b...16ef8414950c4d0d34d33d9d6307a78654df59dd
-[1.1.0-beta.7]: https://github.com/Chia-Mine/chia-agent/compare/1d5065fcd0b1b673fd7c7e042205ca34bbc66836...2aea73f07b40f0a256e55805b84d189a6c67ea3b
-[1.1.0-beta.6]: https://github.com/Chia-Mine/chia-agent/compare/18eb244e4adef48b7c8a6ed70719230fc237f6b4...1d5065fcd0b1b673fd7c7e042205ca34bbc66836
-[1.1.0-beta.5]: https://github.com/Chia-Mine/chia-agent/compare/97bd55fe016f52c4a5fce313bd1e7cb8a26fa7e0...18eb244e4adef48b7c8a6ed70719230fc237f6b4
-[1.1.0-beta]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0
+[1.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.2.0
 [1.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0
 [0.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.4...v0.0.5

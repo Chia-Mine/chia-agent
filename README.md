@@ -1,18 +1,4 @@
-## [Notice] Pool API is being implemented
-All new APIs are listed in [CHANGELOG](https://github.com/Chia-Mine/chia-agent/tree/v1.1.0/CHANGELOG.md).
-
-Beta version of the npm module can be installed as below:
-```
-npm install chia-agent@beta
-# or
-yarn add chia-agent@beta
-```
-
-Current API version to sync with:  
-  `37b26af19e270b583a62d5eeb9cf2185b1a48536` of `chia-blockchain`  
-
-Diff checker:  
-  https://github.com/Chia-Network/chia-blockchain/compare/37b26af19e270b583a62d5eeb9cf2185b1a48536...main
+**Now supports New Pool API! :tada::tada:**
 
 ---
 
@@ -20,7 +6,7 @@ Diff checker:
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `chia 1.1.x`.  
+Supports all RPC/Websocket API available at `chia 1.2.x`.  
 
 you can develop your own nodejs script with `chia-agent` to:
 - retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
@@ -36,6 +22,11 @@ npm install chia-agent
 # or
 yarn add chia-agent
 ```
+
+## Compatibility
+This code is compatible with: [`859a107f597ab755aec6a7a2e54346bd96e70e75`](https://github.com/Chia-Network/chia-blockchain/tree/859a107f597ab755aec6a7a2e54346bd96e70e75) of [chia-blockchain@1.2.0](https://github.com/Chia-Network/chia-blockchain)  
+:point_right: [Diff checker](https://github.com/Chia-Network/chia-blockchain/compare/859a107f597ab755aec6a7a2e54346bd96e70e75...main) 	:point_left:  
+If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the above link, please let me know.
 
 ## API
 There are 2 kinds of APIs in chia.  
@@ -132,15 +123,6 @@ Please note it does not upload files in project root to npm registry, but files 
 
 [Read details here](https://github.com/Chia-Mine/chia-agent/blob/v1.1.0/BUILD.md)
 
-## API Compatibility Memo
-Current version of `chia-agent` follows API defined at commit [`9e9097b116...`](https://github.com/Chia-Network/chia-blockchain/tree/9e9097b11688e52ee13683533d1ad273d231a1ee) in `chia 1.1.6`.
-
-When original RPC/Websocket server API changes, those changes must be imported to this repository.  
-To check API update, check the link below.  
-If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the link, please let me know.  
-
-https://github.com/Chia-Network/chia-blockchain/compare/9e9097b11688e52ee13683533d1ad273d231a1ee...main  
-
 ## Donation
 For continuous development, please support me with donation
-`xch1wqpcvquv98qmeh9hg6wqpzhzmgs73lgvd8a7v5240nxgyat4p0sq4gdzyy`
+`xch1wr8g2k7cn55xvepmg480dsu2xhf4rz5ezghwwapulj7jxqcz9ztqqclwdj`
