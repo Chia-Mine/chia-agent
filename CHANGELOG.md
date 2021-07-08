@@ -1,78 +1,10 @@
 # Changelog
 
-## [1.1.0-beta.13] Unreleased
-### Added
-- Added [`check_delete_key`](./src/api/rpc/wallet/README.md#check_delete_keyagent-params).
+## [1.1.0-beta]
 ### Changed
-- Updated [`delete_unconfirmed_transactions`](./src/api/rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
-- Renamed `get_plots` of farmer API to [`get_harvesters`](./src/api/rpc/farmer/README.md#get_harvestersagent-params).
-
-## [1.1.0-beta.12] (Changes from 1.1.0-beta.11)
-### Added
-- Added [`delete_unconfirmed_transactions`](./src/api/rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
-
-### Changed
-- Updated [PoolWalletInfo](./src/api/chia/wallet/wallet_info.ts)
-- Update [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
-
-## [1.1.0-beta.11] (Changes from 1.1.0-beta.10)
-###  Changed
-- Updated [`partial`](./src/api/rpc/pool/README.md#partialagent-params)
-- Updated [`get_farmer`](./src/api/rpc/pool/README.md#get_farmeragent-params)
-- Updated [`login`](./src/api/rpc/pool/README.md#loginagent-params)
+- Update G1Element/G2Element type to `string` (Serialized hex string representation)
 - Updated [`get_private_key`](./src/api/rpc/wallet/README.md#get_private_keyagent-params)
 
-## [1.1.0-beta.10] (Changes from 1.1.0-beta.9)
-### Added
-- Added [`get_farmer`](./src/api/rpc/pool/README.md#get_farmeragent-params)
-- Added [`post_farmer`](./src/api/rpc/pool/README.md#post_farmeragent-params)
-- Added [`put_farmer`](./src/api/rpc/pool/README.md#put_farmeragent-params)
-
-### Changed
-- Updated `pool_info` Pool API
-- Changed Pool API endpoint name `partials` to `partial`
-- Updated `login` Pool API
-
-### Fixed
-- Fixed RPC API document links
-
-## [1.1.0-beta.9] (Changes from 1.1.0-beta.8)
-### Changed
-- Updated `PoolState` type.
-- Changed Farmer API endpoint name `set_pool_payout_instructions` to `set_payout_instructions`
-
-### Added
-- Added type TCreate_New_Pool_WalletRequest
-- Added type TCreate_New_Pool_WalletResponse
-
-## [1.1.0-beta.8] (Changes from 1.1.0-beta.7)
-### Added
-- Added new full_node API [`get_puzzle_and_solution`](./src/api/rpc/full_node/README.md#get_puzzle_and_solutionagent-params)
-
-### Fixed
-- Fixed the type of `SerializedProgram` to `str`
-
-## [1.1.0-beta.7] (Changes from 1.1.0-beta.6)
-### Fixed
-- Fixed an issue where submodule could not be loaded. e.g. `const {...} = require("chia-agent/api/rpc");`
-
-## [1.1.0-beta.6] (Changes from 1.1.0-beta.5)
-### Changed
-- Update unknown types in `PoolState`.
-
-### Fixed
-- Fixed `login` response json of Wallet RPC API 
-- Fixed `get_private_key` response json of Wallet RPC API
-- Fixed `create_offer_for_ids` response json of Wallet RPC API
-- Fixed `get_discrepancies_for_offer` response json of Wallet RPC API
-- Fixed `did_get_pubkey` response json of Wallet RPC API
-- Fixed `did_recovery_spend` response json of Wallet RPC API
-
-## [1.1.0-beta.5] (Changes from 1.1.0-beta.4)
-### Changed
-- Changed an API endpoint name from `pw_collect_self_pooling_rewards` to `pw_absorb_rewards`
-
-## [1.1.0-beta]
 ### Added
 - [New pool protocol/api](./src/api/rpc/pool)
   - [`pool_info`](./src/api/rpc/pool/README.md#pool_infoagent)
@@ -89,23 +21,32 @@
   - [`get_recent_signage_point_or_eos`](./src/api/rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)
   - [`get_puzzle_and_solution`](./src/api/rpc/full_node/README.md#get_puzzle_and_solutionagent-params)
 - [New wallet api](./src/api/rpc/wallet)
+  - [`delete_unconfirmed_transactions`](./src/api/rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
   - [`check_delete_key`](./src/api/rpc/wallet/README.md#check_delete_keyagent-params).
   - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
   - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
   - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
   - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
   - [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
-  
-- Added BUILD.md
+- Added type [TCreate_New_Pool_WalletRequest](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+- Added type [TCreate_New_Pool_WalletResponse](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+- Added type [PoolWalletInfo](./src/api/chia/wallet/wallet_info.ts)
+- Added [BUILD.md](./BUILD.md)
 
 ### Fixed
+- Fixed RPC API document links
+- Fixed the type of `SerializedProgram` to `str`
+- Fixed an issue where submodule could not be loaded. e.g. `const {...} = require("chia-agent/api/rpc");`
 - Correct type name `TCreate_New_RC_WalletRequest/Response` to `TCreate_New_RL_WalletRequest/Response`
-- Fixed wrong structure of `TPartialsRequest`
 - Fixed wrong `create_new_wallet` request format
 - Fixed an issue where array data in YAML file was not parsed as expected.
+- Fixed `login` response json of Wallet RPC API
+- Fixed `get_private_key` response json of Wallet RPC API
+- Fixed `create_offer_for_ids` response json of Wallet RPC API
+- Fixed `get_discrepancies_for_offer` response json of Wallet RPC API
+- Fixed `did_get_pubkey` response json of Wallet RPC API
+- Fixed `did_recovery_spend` response json of Wallet RPC API
 
-### Changed
-- Update G1Element/G2Element type to `string`
 
 
 ## [1.0.1] - 2021-05-19
