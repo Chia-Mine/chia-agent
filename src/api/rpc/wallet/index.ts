@@ -145,6 +145,24 @@ export async function delete_key(agent: TRPCAgent, data: TDeleteKeyRequest){
 
 
 
+export const check_delete_key_command = "check_delete_key";
+export type check_delete_key_command = typeof check_delete_key_command;
+export type TCheckDeleteKeyRequest = {
+  fingerprint: int;
+};
+export type TCheckDeleteKeyResponse = {
+  fingerprint: int;
+  used_for_farmer_rewards: bool;
+  used_for_pool_rewards: bool;
+  wallet_balance: bool;
+};
+export async function check_delete_key(agent: TRPCAgent, data: TCheckDeleteKeyRequest){
+  return agent.sendMessage<TCheckDeleteKeyResponse>(chia_wallet_service, check_delete_key_command, data);
+}
+
+
+
+
 export const delete_all_keys_command = "delete_all_keys";
 export type delete_all_keys_command = typeof delete_all_keys_command;
 export type TDeleteAllKeysRequest = {

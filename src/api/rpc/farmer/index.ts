@@ -1,5 +1,5 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
-import {bool, Optional, str, uint16, uint64, uint8} from "../../chia/types/_python_types_";
+import {bool, int, str, uint64, uint8} from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TRPCAgent} from "../../../rpc/index";
 import {RespondPlots} from "../../chia/protocols/harvester_protocol";
@@ -102,21 +102,22 @@ export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSe
 }
 
 
-
-export type RequestPlotsResponse = {
-  type: 68;
-  id: Optional<uint16>;
-  data: str; //RespondPlots; Serialized as a byte stream.  // See how it is serialized by https://github.com/Chia-Network/chia-blockchain/blob/main/chia/protocols/harvester_protocol.py
+export type HarvesterObject = RespondPlots & {
+  connection: {
+    node_id: str;
+    host: str;
+    port: int; // type of socket.getpeername[1]
+  };
 };
-export const get_plots_command = "get_plots";
-export type get_plots_command = typeof get_plots_command;
-export type TGetPlotsRequest = {
+export const get_harvesters_command = "get_harvesters";
+export type get_harvesters_command = typeof get_harvesters_command;
+export type TGetHarvestersRequest = {
 };
-export type TGetPlotsResponse = {
-  [peer_host_port: string]: RequestPlotsResponse;
+export type TGetHarvestersResponse = {
+  harvesters: HarvesterObject[];
 };
-export async function get_plots(agent: TRPCAgent){
-  return agent.sendMessage<TGetPlotsResponse>(chia_farmer_service, get_plots_command);
+export async function get_harvesters(agent: TRPCAgent){
+  return agent.sendMessage<TGetHarvestersResponse>(chia_farmer_service, get_harvesters_command);
 }
 
 

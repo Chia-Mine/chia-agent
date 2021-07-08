@@ -174,23 +174,29 @@ const response = await set_payout_instructions(agent, params);
 
 ---
 
-## `get_plots(agent)`
+## `get_harvesters(agent)`
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
-const {get_plots} = require("chia-agent/api/rpc/farmer");
+const {get_harvesters} = require("chia-agent/api/rpc/farmer");
 const agent = new RPCAgent({service: "farmer"});
-const response = await get_plots(agent);
+const response = await get_harvesters(agent);
 ```
 ### response:
 ```typescript
 {
-  [peer_host_and_port: string]: RequestPlotsResponse;
+  plots: Plot[];
+  failed_to_open_filenames: str[];
+  no_key_filenames: str[];
+  connection: {
+    node_id: str;
+    host: str;
+    port: int; // type of socket.getpeername[1]
+  };
 }
 ```
-For content of `RequestPlotsResponse`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/farmer/index.ts
-
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
 ---
 
 ## `get_pool_login_link(agent, params)`

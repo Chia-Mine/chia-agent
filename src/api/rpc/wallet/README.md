@@ -185,6 +185,32 @@ const response = await delete_key(agent, params);
 
 ---
 
+## `check_delete_key(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {check_delete_key} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await check_delete_key(agent, params);
+```
+### params:
+```typescript
+{
+  fingerprint: int;
+}
+```
+### response:
+```typescript
+{
+  fingerprint: int;
+  used_for_farmer_rewards: bool;
+  used_for_pool_rewards: bool;
+  wallet_balance: bool;
+}
+```
+
+---
+
 ## `delete_all_keys(agent)`
 ### Usage
 ```js

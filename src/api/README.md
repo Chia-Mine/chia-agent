@@ -19,7 +19,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`set_reward_targets`](./rpc/farmer/README.md#set_reward_targetsagent-params)
 - [`get_pool_state`](./rpc/farmer/README.md#get_pool_stateagent)
 - [`set_payout_instructions`](./rpc/farmer/README.md#set_payout_instructionsagent-params)
-- [`get_plots`](./rpc/farmer/README.md#get_plotsagent)
+- [`get_harvesters`](./rpc/farmer/README.md#get_harvestersagent)
 - [`get_pool_login_link`](./rpc/farmer/README.md#get_pool_login_linkagent-params)
 
 #### [Full Node RPC API](./rpc/full_node/README.md#usage)
@@ -59,6 +59,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`generate_mnemonic`](./rpc/wallet/README.md#generate_mnemonicagent)
 - [`add_key`](./rpc/wallet/README.md#add_keyagent-params)
 - [`delete_key`](./rpc/wallet/README.md#delete_keyagent-params)
+- [`check_delete_key`](./rpc/wallet/README.md#check_delete_keyagent-params).
 - [`delete_all_keys`](./rpc/wallet/README.md#delete_all_keysagent)
 - [`get_sync_status`](./rpc/wallet/README.md#get_sync_statusagent)
 - [`get_height_info`](./rpc/wallet/README.md#get_height_infoagent)

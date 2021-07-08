@@ -1,8 +1,11 @@
 # Changelog
 
 ## [1.1.0-beta.13] Unreleased
+### Added
+- Added [`check_delete_key`](./src/api/rpc/wallet/README.md#check_delete_keyagent-params).
 ### Changed
 - Updated [`delete_unconfirmed_transactions`](./src/api/rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
+- Renamed `get_plots` of farmer API to [`get_harvesters`](./src/api/rpc/farmer/README.md#get_harvestersagent-params).
 
 ## [1.1.0-beta.12] (Changes from 1.1.0-beta.11)
 ### Added
@@ -81,11 +84,12 @@
 - [New farmer api](./src/api/rpc/farmer)
   - [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
   - [`set_payout_instructions`](./src/api/rpc/farmer/README.md#set_payout_instructionsagent-params)
-  - [`get_plots`](./src/api/rpc/farmer/README.md#get_plotsagent)
+  - [`get_harvesters`](./src/api/rpc/farmer/README.md#get_harvestersagent)
 - [New full_node api](./src/api/rpc/full_node)
   - [`get_recent_signage_point_or_eos`](./src/api/rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)
   - [`get_puzzle_and_solution`](./src/api/rpc/full_node/README.md#get_puzzle_and_solutionagent-params)
 - [New wallet api](./src/api/rpc/wallet)
+  - [`check_delete_key`](./src/api/rpc/wallet/README.md#check_delete_keyagent-params).
   - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
   - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
   - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
