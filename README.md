@@ -25,8 +25,7 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with: [`859a107f597ab755aec6a7a2e54346bd96e70e75`](https://github.com/Chia-Network/chia-blockchain/tree/859a107f597ab755aec6a7a2e54346bd96e70e75) of [chia-blockchain@1.2.0](https://github.com/Chia-Network/chia-blockchain)  
-:point_right: [Diff checker](https://github.com/Chia-Network/chia-blockchain/compare/859a107f597ab755aec6a7a2e54346bd96e70e75...main) 	:point_left:  
-If you notice `chia/rpc/*_rpc_api.py` and/or `chia/daemon/server.py` are listed in the above link, please let me know.
+Here is a [Compatibility checker](https://github.com/Chia-Network/chia-blockchain/compare/859a107f597ab755aec6a7a2e54346bd96e70e75...main)
 
 ## API
 There are 2 kinds of APIs in chia.  
