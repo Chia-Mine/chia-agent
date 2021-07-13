@@ -2,7 +2,7 @@
 
 ## [1.1.1]
 ### Changed
-- Rename `CoinSolution` to `CoinSpend`
+- Rename `CoinSolution` to `CoinSpend` and updated affected API response format.
 
 ## [1.1.0] - 2021-07-08
 ### Changed
