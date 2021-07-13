@@ -454,11 +454,11 @@ const response = await get_puzzle_and_solution(agent, params);
 ### response
 ```typescript
 {
-  coin_solution: CoinSolution;
+  coin_solution: CoinSpend;
 }
 ```
-For content of `CoinSolution`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_solutions.ts
+For content of `CoinSpend`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/cons_spends.ts
 
 ---
 

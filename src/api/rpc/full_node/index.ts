@@ -9,7 +9,7 @@ import {MempoolItem} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
-import {CoinSolution} from "../../chia/types/coin_solution";
+import {CoinSpend} from "../../chia/types/coin_spend";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -274,7 +274,7 @@ export type TGetPuzzleAndSolutionRequest = {
   height: uint32;
 };
 export type TGetPuzzleAndSolutionResponse = {
-  coin_solution: CoinSolution;
+  coin_solution: CoinSpend;
 };
 export async function get_puzzle_and_solution(agent: TRPCAgent, data: TGetPuzzleAndSolutionRequest) {
   return agent.sendMessage<TGetPuzzleAndSolutionResponse>(chia_full_node_service, get_puzzle_and_solution_command, data);

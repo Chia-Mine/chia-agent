@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.1.0]
+## [1.1.1]
+### Changed
+- Rename `CoinSolution` to `CoinSpend`
+
+## [1.1.0] - 2021-07-08
 ### Changed
 - Update G1Element/G2Element type to `string` (Serialized hex string representation)
 - Updated [`get_private_key`](./src/api/rpc/wallet/README.md#get_private_keyagent-params)
@@ -96,6 +100,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[1.1.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0
