@@ -4,6 +4,9 @@
 ### Changed
 - Rename `CoinSolution` to `CoinSpend` and updated affected API response format.
 
+### Added
+- Added [`get_coin_records_by_parent_ids`](./rpc/full_node/README.md#get_coin_records_by_parent_idsagent-params)
+
 ## [1.1.0] - 2021-07-08
 ### Changed
 - Update G1Element/G2Element type to `string` (Serialized hex string representation)

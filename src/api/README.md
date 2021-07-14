@@ -38,6 +38,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_coin_records_by_puzzle_hash`](./rpc/full_node/README.md#get_coin_records_by_puzzle_hashagent-params)
 - [`get_coin_records_by_puzzle_hashes`](./rpc/full_node/README.md#get_coin_records_by_puzzle_hashesagent-params)
 - [`get_coin_record_by_name`](./rpc/full_node/README.md#get_coin_record_by_nameagent-params)
+- [`get_coin_records_by_parent_ids`](./rpc/full_node/README.md#get_coin_records_by_parent_idsagent-params)
 - [`push_tx`](./rpc/full_node/README.md#push_txagent-params)
 - [`get_puzzle_and_solution`](./rpc/full_node/README.md#get_puzzle_and_solutionagent-params)
 - [`get_all_mempool_tx_ids`](./rpc/full_node/README.md#get_all_mempool_tx_idsagent)
