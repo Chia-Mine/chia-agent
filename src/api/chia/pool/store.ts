@@ -1,6 +1,6 @@
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 import {bool, G1Element, str, uint64} from "../types/_python_types_";
-import {CoinSolution} from "../types/coin_solution";
+import {CoinSpend} from "../types/coin_spend";
 import {PoolState} from "../pools/pool_wallet_info";
 
 export type FarmerRecord = {
@@ -9,7 +9,7 @@ export type FarmerRecord = {
   delay_time: uint64; // # Backup time after which farmer can claim rewards directly, if pool unresponsive
   delay_puzzle_hash: bytes32; // # Backup puzzlehash to claim rewards
   authentication_public_key: G1Element; // # This is the latest public key of the farmer (signs all partials)
-  singleton_tip: CoinSolution; // # Last coin solution that is buried in the blockchain, for this singleton
+  singleton_tip: CoinSpend; // # Last coin solution that is buried in the blockchain, for this singleton
   singleton_tip_state: PoolState; // # Current state of the singleton
   points: uint64; // # Total points accumulated since last rest (or payout)
   difficulty: uint64; // # Current difficulty for this farmer

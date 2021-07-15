@@ -1,6 +1,17 @@
 # Changelog
 
-## [1.1.0]
+## [2.0.0]
+I incremented major version. See "Changed" section for detail.
+
+### Changed
+- Rename `CoinSolution` to `CoinSpend` and updated affected API response format.
+  - **Note: this introduces breaking changes to some API response format.**  
+    For additional information, please see https://github.com/Chia-Network/chia-blockchain/commit/6cf29102f95b410a8c6dc416e612c998bac567fa#comments
+
+### Added
+- Added [`get_coin_records_by_parent_ids`](./rpc/full_node/README.md#get_coin_records_by_parent_idsagent-params)
+
+## [1.1.0] - 2021-07-08
 ### Changed
 - Update G1Element/G2Element type to `string` (Serialized hex string representation)
 - Updated [`get_private_key`](./src/api/rpc/wallet/README.md#get_private_keyagent-params)
@@ -96,6 +107,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[2.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.5...v1.0.0

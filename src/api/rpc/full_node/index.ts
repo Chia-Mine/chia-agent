@@ -9,7 +9,7 @@ import {MempoolItem} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
-import {CoinSolution} from "../../chia/types/coin_solution";
+import {CoinSpend} from "../../chia/types/coin_spend";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -253,6 +253,21 @@ export async function get_coin_record_by_name(agent: TRPCAgent, data: TGetCoinRe
 
 
 
+
+export const get_coin_records_by_parent_ids_command = "get_coin_records_by_parent_ids";
+export type get_coin_records_by_parent_ids_command = typeof get_coin_records_by_parent_ids_command;
+export type TGetCoinRecordsByParentIdsRequest = {
+  parent_ids: str[];
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
+};
+export type TGetCoinRecordsByParentIdsResponse = {
+  coin_records: CoinRecord[];
+};
+
+
+
 export const push_tx_command = "push_tx";
 export type push_tx_command = typeof push_tx_command;
 export type TPushTxRequest = {
@@ -274,7 +289,7 @@ export type TGetPuzzleAndSolutionRequest = {
   height: uint32;
 };
 export type TGetPuzzleAndSolutionResponse = {
-  coin_solution: CoinSolution;
+  coin_solution: CoinSpend;
 };
 export async function get_puzzle_and_solution(agent: TRPCAgent, data: TGetPuzzleAndSolutionRequest) {
   return agent.sendMessage<TGetPuzzleAndSolutionResponse>(chia_full_node_service, get_puzzle_and_solution_command, data);

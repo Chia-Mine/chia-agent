@@ -409,6 +409,35 @@ const response = await get_coin_record_by_name(agent, params);
 For content of `CoinRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
 
+
+---
+
+## `get_coin_records_by_parent_ids(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_coin_records_by_parent_ids} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_coin_records_by_parent_ids(agent, params);
+```
+### params
+```typescript
+{
+  parent_ids: str[];
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
+}
+```
+### response
+```typescript
+{
+  coin_records: CoinRecord[];
+}
+```
+For content of `CoinRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
+
 ---
 
 ## `push_tx(agent, params)`
@@ -454,11 +483,11 @@ const response = await get_puzzle_and_solution(agent, params);
 ### response
 ```typescript
 {
-  coin_solution: CoinSolution;
+  coin_solution: CoinSpend;
 }
 ```
-For content of `CoinSolution`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_solutions.ts
+For content of `CoinSpend`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/cons_spends.ts
 
 ---
 
