@@ -6,7 +6,8 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `chia 1.2.x`.  
+Supports all RPC/Websocket API available at `chia 1.2.2`.  
+\(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
 - retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
