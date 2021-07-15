@@ -3,6 +3,8 @@
 ## [1.1.1]
 ### Changed
 - Rename `CoinSolution` to `CoinSpend` and updated affected API response format.
+  - **Note: this introduces breaking changes to some API response format.**  
+    For additional information, please see https://github.com/Chia-Network/chia-blockchain/commit/6cf29102f95b410a8c6dc416e612c998bac567fa#comments
 
 ### Added
 - Added [`get_coin_records_by_parent_ids`](./rpc/full_node/README.md#get_coin_records_by_parent_idsagent-params)
