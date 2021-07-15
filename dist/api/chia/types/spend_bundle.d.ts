@@ -1,6 +1,6 @@
 import { G2Element } from "./_python_types_";
-import { CoinSolution } from "./coin_solution";
+import { CoinSpend } from "./coin_spend";
 export declare type SpendBundle = {
-    coin_solutions: CoinSolution[];
+    cons_spends: CoinSpend[];
     aggregated_signature: G2Element;
 };

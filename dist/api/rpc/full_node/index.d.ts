@@ -9,7 +9,7 @@ import { MempoolItem } from "../../chia/types/mempool_item";
 import { TRPCAgent } from "../../../rpc";
 import { EndOfSubSlotBundle } from "../../chia/types/end_of_slot_bundle";
 import { SignagePoint } from "../../chia/full_node/signage_point";
-import { CoinSolution } from "../../chia/types/coin_solution";
+import { CoinSpend } from "../../chia/types/coin_spend";
 export declare const chia_full_node_service = "chia_full_node";
 export declare type chia_full_node_service = typeof chia_full_node_service;
 export declare const get_blockchain_state_command = "get_blockchain_state";
@@ -174,6 +174,17 @@ export declare type TGetCoinRecordByNameResponse = {
     coin_record: CoinRecord;
 };
 export declare function get_coin_record_by_name(agent: TRPCAgent, data: TGetCoinRecordByNameRequest): Promise<TGetCoinRecordByNameResponse>;
+export declare const get_coin_records_by_parent_ids_command = "get_coin_records_by_parent_ids";
+export declare type get_coin_records_by_parent_ids_command = typeof get_coin_records_by_parent_ids_command;
+export declare type TGetCoinRecordsByParentIdsRequest = {
+    parent_ids: str[];
+    start_height?: uint32;
+    end_height?: uint32;
+    include_spent_coins?: bool;
+};
+export declare type TGetCoinRecordsByParentIdsResponse = {
+    coin_records: CoinRecord[];
+};
 export declare const push_tx_command = "push_tx";
 export declare type push_tx_command = typeof push_tx_command;
 export declare type TPushTxRequest = {
@@ -190,7 +201,7 @@ export declare type TGetPuzzleAndSolutionRequest = {
     height: uint32;
 };
 export declare type TGetPuzzleAndSolutionResponse = {
-    coin_solution: CoinSolution;
+    coin_solution: CoinSpend;
 };
 export declare function get_puzzle_and_solution(agent: TRPCAgent, data: TGetPuzzleAndSolutionRequest): Promise<TGetPuzzleAndSolutionResponse>;
 export declare const get_all_mempool_tx_ids_command = "get_all_mempool_tx_ids";
