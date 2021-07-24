@@ -1,7 +1,8 @@
 # Changelog
 
 ## [2.0.1]
-No changes yet.
+### Added
+- [`on_new_plots`](./src/api/ws/farmer/README.md#on_new_plots)
 
 ## [2.0.0]
 I incremented major version. See "Changed" section for detail.

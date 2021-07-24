@@ -149,6 +149,7 @@ you need to wait messages in the channel are arrived to your message listener.
 #### [farmer](./ws/farmer/README.md#usage)
 - [`new_farming_info`](./ws/farmer/README.md#on_new_farming_info)
 - [`new_signage_point`](./ws/farmer/README.md#on_new_signage_point)
+- [`new_plots`](./ws/farmer/README.md#on_new_plots)
 
 #### [full_node](./ws/full_node/README.md#usage)
 - [`get_blockchain_state`](./ws/full_node/README.md#on_get_blockchain_state)

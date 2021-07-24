@@ -5,6 +5,7 @@ import {uint32, uint64} from "../../chia/types/_python_types_";
 import {TDaemon} from "../../../daemon/index";
 import {GetMessageType, wallet_ui_service} from "../../types";
 import {WsMessage} from "../index";
+import {TGetHarvestersResponse} from "../../rpc/farmer/index";
 
 export const chia_farmer_service = "chia_farmer";
 export type chia_farmer_service = typeof chia_farmer_service;
@@ -47,9 +48,22 @@ export async function on_new_signage_point(daemon: TDaemon, callback: (e: GetMes
   return daemon.addMessageListener(chia_farmer_service, messageListener);
 }
 
+export const new_plots_command = "get_harvesters"; // not "new_plots" for now.
+export type new_plots_command = typeof new_plots_command;
+export type TNewPlotsBroadCast = TGetHarvestersResponse;
+export async function on_new_plots(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, new_plots_command, TNewPlotsBroadCast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_farmer_service && e.command === new_plots_command){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
+
 // Whole commands for the service
-export type chia_farmer_commands = new_farming_info_command | new_signage_point_command;
-export type TChiaFarmerBroadcast = TNewFarmingInfoBroadCast | TNewSignagePointBroadCast;
+export type chia_farmer_commands = new_farming_info_command | new_signage_point_command | new_plots_command;
+export type TChiaFarmerBroadcast = TNewFarmingInfoBroadCast | TNewSignagePointBroadCast | TNewPlotsBroadCast;
 export async function on_message_from_farmer(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, chia_farmer_commands, TChiaFarmerBroadcast>) => unknown){
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsMessage) => {

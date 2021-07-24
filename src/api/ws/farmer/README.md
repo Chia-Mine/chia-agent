@@ -112,3 +112,43 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 
 For content of `NewSignagePoint`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/farmer_protocol.ts
+
+---
+
+### `on_new_plots`
+Capture broadcast message of command `on_new_plots` from `chia_farmer` service.
+
+####Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_new_plots} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_new_plots(daemon, (event) => {
+  // Format of `event` object is desribed below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "get_harvesters";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: string;
+}
+```
+#### data:
+```typescript
+{
+  harvesters: HarvesterObject[];
+}
+```
+For content of `HarvesterObject`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/farmer/index.ts
