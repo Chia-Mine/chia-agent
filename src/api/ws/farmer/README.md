@@ -118,7 +118,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/far
 ### `on_new_plots`
 Capture broadcast message of command `on_new_plots` from `chia_farmer` service.
 
-####Usage
+#### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
 const {on_new_plots} = require("chia-agent/api/ws");
