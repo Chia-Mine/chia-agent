@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.on_message_from_farmer = exports.on_new_signage_point = exports.new_signage_point_command = exports.on_new_farming_info = exports.new_farming_info_command = exports.chia_farmer_service = void 0;
+exports.on_message_from_farmer = exports.on_new_plots = exports.new_plots_command = exports.on_new_signage_point = exports.new_signage_point_command = exports.on_new_farming_info = exports.new_farming_info_command = exports.chia_farmer_service = void 0;
 const types_1 = require("../../types");
 exports.chia_farmer_service = "chia_farmer";
 exports.new_farming_info_command = "new_farming_info";
@@ -38,6 +38,19 @@ function on_new_signage_point(daemon, callback) {
     });
 }
 exports.on_new_signage_point = on_new_signage_point;
+exports.new_plots_command = "get_harvesters"; // not "new_plots" for now.
+function on_new_plots(daemon, callback) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield daemon.subscribe(types_1.wallet_ui_service);
+        const messageListener = (e) => {
+            if (e.origin === exports.chia_farmer_service && e.command === exports.new_plots_command) {
+                callback(e);
+            }
+        };
+        return daemon.addMessageListener(exports.chia_farmer_service, messageListener);
+    });
+}
+exports.on_new_plots = on_new_plots;
 function on_message_from_farmer(daemon, callback) {
     return __awaiter(this, void 0, void 0, function* () {
         yield daemon.subscribe(types_1.wallet_ui_service);
