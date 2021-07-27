@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exit = exports.is_running = exports.ping = exports.register_service = exports.start_plotting = exports.exit_command = exports.start_service = exports.stop_plotting = exports.stop_service = exports.ping_command = exports.get_status = exports.daemon_service = exports.on_state_changed_of_plots = exports.state_changed_command_of_plots = exports.chia_plots_create_service = exports.on_state_changed_of_wallet = exports.on_message_from_wallet = exports.chia_wallet_service = exports.on_get_plots = exports.on_message_from_harvester = exports.chia_harvester_service = exports.on_get_blockchain_state = exports.on_message_from_full_node = exports.chia_full_node_service = exports.on_new_signage_point = exports.on_new_farming_info = exports.on_message_from_farmer = exports.chia_farmer_service = void 0;
+exports.exit = exports.is_running = exports.ping = exports.register_service = exports.start_plotting = exports.exit_command = exports.start_service = exports.stop_plotting = exports.stop_service = exports.ping_command = exports.get_status = exports.daemon_service = exports.on_state_changed_of_plots = exports.state_changed_command_of_plots = exports.chia_plots_create_service = exports.on_state_changed_of_wallet = exports.on_message_from_wallet = exports.chia_wallet_service = exports.on_get_plots = exports.on_message_from_harvester = exports.chia_harvester_service = exports.on_get_blockchain_state = exports.on_message_from_full_node = exports.chia_full_node_service = exports.on_new_plots = exports.on_new_signage_point = exports.on_new_farming_info = exports.on_message_from_farmer = exports.chia_farmer_service = void 0;
 var index_1 = require("./farmer/index");
 Object.defineProperty(exports, "chia_farmer_service", { enumerable: true, get: function () { return index_1.chia_farmer_service; } });
 Object.defineProperty(exports, "on_message_from_farmer", { enumerable: true, get: function () { return index_1.on_message_from_farmer; } });
 Object.defineProperty(exports, "on_new_farming_info", { enumerable: true, get: function () { return index_1.on_new_farming_info; } });
 Object.defineProperty(exports, "on_new_signage_point", { enumerable: true, get: function () { return index_1.on_new_signage_point; } });
+Object.defineProperty(exports, "on_new_plots", { enumerable: true, get: function () { return index_1.on_new_plots; } });
 var index_2 = require("./full_node/index");
 Object.defineProperty(exports, "chia_full_node_service", { enumerable: true, get: function () { return index_2.chia_full_node_service; } });
 Object.defineProperty(exports, "on_message_from_full_node", { enumerable: true, get: function () { return index_2.on_message_from_full_node; } });

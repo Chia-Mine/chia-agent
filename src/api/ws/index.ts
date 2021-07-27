@@ -3,17 +3,21 @@ import type {
   chia_farmer_service,
   new_farming_info_command,
   new_signage_point_command,
+  new_plots_command,
   TNewFarmingInfoBroadCast,
   TNewSignagePointBroadCast,
+  TNewPlotsBroadCast,
 } from "./farmer/index";
 export {
   chia_farmer_service,
   TChiaFarmerBroadcast,
   TNewSignagePointBroadCast,
   TNewFarmingInfoBroadCast,
+  TNewPlotsBroadCast,
   on_message_from_farmer,
   on_new_farming_info,
   on_new_signage_point,
+  on_new_plots,
 } from "./farmer/index";
 
 import type {
@@ -126,6 +130,7 @@ export {
 export type WsFarmerMessage =
   GetMessageType<chia_farmer_service, new_farming_info_command, TNewFarmingInfoBroadCast>
   | GetMessageType<chia_farmer_service, new_signage_point_command, TNewSignagePointBroadCast>
+  | GetMessageType<chia_farmer_service, new_plots_command, TNewPlotsBroadCast>
   ;
 
 export type WsFullNodeMessage =

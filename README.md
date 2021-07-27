@@ -25,8 +25,8 @@ yarn add chia-agent
 ```
 
 ## Compatibility
-This code is compatible with: [`f708500f8c1c65181a11c58b7037af0e9419ffe9`](https://github.com/Chia-Network/chia-blockchain/tree/f708500f8c1c65181a11c58b7037af0e9419ffe9) of [chia-blockchain@1.2.2](https://github.com/Chia-Network/chia-blockchain)  
-Here is a [Compatibility checker](https://github.com/Chia-Network/chia-blockchain/compare/f708500f8c1c65181a11c58b7037af0e9419ffe9...main)
+This code is compatible with: [`b593f55dcd35ef6ca48a4db0c3f57a46947da767`](https://github.com/Chia-Network/chia-blockchain/tree/b593f55dcd35ef6ca48a4db0c3f57a46947da767) of [chia-blockchain@1.2.2](https://github.com/Chia-Network/chia-blockchain)  
+Here is a [Compatibility checker](https://github.com/Chia-Network/chia-blockchain/compare/b593f55dcd35ef6ca48a4db0c3f57a46947da767...main)
 
 ## API
 There are 2 kinds of APIs in chia.  
