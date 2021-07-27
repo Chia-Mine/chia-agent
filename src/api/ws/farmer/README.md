@@ -74,7 +74,7 @@ unsubscribe(); // Stop subscribing messages
 ### `on_new_signage_point`
 Capture broadcast message of command `new_signage_point` from `chia_farmer` service.
 
-####Usage
+#### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
 const {on_new_signage_point} = require("chia-agent/api/ws");
