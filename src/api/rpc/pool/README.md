@@ -25,7 +25,7 @@ Additionally, actual pool implementation depends on pool operators.
 They may use self-signed certificate and requires root CA cert on connection, or may restrict access by requesting client cert signed by shared private CA.
 
 #### Case1: Connect via HTTP without TLS certs
-Current testnet implementation is this case. Connection between pool and client does not require any certificates thus not secure.  
+Past testnet implementation is this case. Connection between pool and client does not require any certificates thus not secure.  
 
 ```js
 const {RPCAgent} = require("chia-agent");
