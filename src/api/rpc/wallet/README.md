@@ -300,7 +300,7 @@ const response = await get_initial_freeze_period_of_wallet(agent);
 ### response:
 ```typescript
 {
-  INITIAL_FREEZE_END_TIMESTAMP: uint64;
+  INITIAL_FREEZE_END_TIMESTAMP: 1620061200; // Mon May 03 2021 17:00:00 GMT+0000
 }
 ```
 
