@@ -137,6 +137,18 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`exit`](./ws/daemon/README.md#exitdaemon)
 - [`register_service`](./ws/daemon/README.md#register_servicedaemon-params)
 - [`get_status`](./ws/daemon/README.md#get_statusdaemon)
+- [`add_private_key`](./ws/daemon/README.md#add_private_keydaemon-params)
+- [`check_keys`](./ws/daemon/README.md#check_keysdaemon-params)
+- [`delete_all_keys`](./ws/daemon/README.md#delete_all_keysdaemon-params)
+- [`delete_key_by_fingerprint`](./ws/daemon/README.md#delete_key_by_fingerprintdaemon-params)
+- [`get_all_private_keys`](./ws/daemon/README.md#get_all_private_keysdaemon-params)
+- [`get_first_private_key`](./ws/daemon/README.md#get_first_private_keydaemon-params)
+- [`get_key_for_fingerprint`](./ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
+- [`is_keyring_locked`](./ws/daemon/README.md#is_keyring_lockeddaemon)
+- [`keyring_status`](./ws/daemon/README.md#keyring_statusdaemon)
+- [`remove_keyring_passphrase`](./ws/daemon/README.md#remove_keyring_passphrasedaemon-params)
+- [`set_keyring_passphrase`](./ws/daemon/README.md#set_keyring_passphrasedaemon-params)
+- [`unlock_keyring`](./ws/daemon/README.md#unlock_keyringdaemon-params)
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  

@@ -3,6 +3,20 @@
 ## [2.0.2]
 ### Changed
 - Update documents
+### Added
+- [New daemon api](./src/api/ws/daemon)
+  - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
+  - [`check_keys`](./src/api/ws/daemon/README.md#check_keysdaemon-params)
+  - [`delete_all_keys`](./src/api/ws/daemon/README.md#delete_all_keysdaemon-params)
+  - [`delete_key_by_fingerprint`](./src/api/ws/daemon/README.md#delete_key_by_fingerprintdaemon-params)
+  - [`get_all_private_keys`](./src/api/ws/daemon/README.md#get_all_private_keysdaemon-params)
+  - [`get_first_private_key`](./src/api/ws/daemon/README.md#get_first_private_keydaemon-params)
+  - [`get_key_for_fingerprint`](./src/api/ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
+  - [`is_keyring_locked`](./src/api/ws/daemon/README.md#is_keyring_lockeddaemon)
+  - [`keyring_status`](./src/api/ws/daemon/README.md#keyring_statusdaemon)
+  - [`remove_keyring_passphrase`](./src/api/ws/daemon/README.md#remove_keyring_passphrasedaemon-params)
+  - [`set_keyring_passphrase`](./src/api/ws/daemon/README.md#set_keyring_passphrasedaemon-params)
+  - [`unlock_keyring`](./src/api/ws/daemon/README.md#unlock_keyringdaemon-params)
 
 ## [2.0.1]
 ### Added
