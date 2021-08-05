@@ -47,14 +47,19 @@ const {getDaemon} = require("chia-agent");
 const {start_service} = require("chia-agent/api/ws");
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
-const response = await start_service(daemon, {service: "chia_farmer"});
+const response = await start_service(daemon, {service: "..."});
 ```
 ### params:
 ```typescript
 {
-  service: str; // "chia_farmer", "chia_full_node", "chia_harvester", "chia_wallet"
+  service: TService;
   testing?: bool;
 }
+```
+where `TService` is one of
+```typescript
+"chia"|"chia_wallet"|"chia_full_node"|"chia_harvester"|"chia_farmer"
+  |"chia_introducer"|"chia_timelord"|"chia_timelord_launcher"|"chia_full_node_simulator";
 ```
 ### response:
 ```typescript

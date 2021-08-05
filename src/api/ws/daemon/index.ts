@@ -20,15 +20,17 @@ export async function ping(daemon: TDaemon) {
 
 
 
+export type TService = "chia"|"chia_wallet"|"chia_full_node"|"chia_harvester"|"chia_farmer"
+  |"chia_introducer"|"chia_timelord"|"chia_timelord_launcher"|"chia_full_node_simulator";
 export const start_service_command = "start_service";
 export type start_service_command = typeof start_service_command;
 export type TStartServiceRequest = {
-  service: str;
+  service: TService;
   testing?: bool;
 };
 export type TStartServiceResponse = {
   success: bool;
-  service: str;
+  service: TService;
   error: Optional<str>;
 };
 export async function start_service(daemon: TDaemon, data: TStartServiceRequest) {
