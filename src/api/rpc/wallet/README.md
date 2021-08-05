@@ -158,7 +158,7 @@ const response = await add_key(agent, params);
 {
   success: false;
   error: str;
-  word: unknown; // @todo replace unknown to actual type
+  word?: unknown; // @todo replace unknown to actual type
 } | {
   fingerprint: int;
 }

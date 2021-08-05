@@ -122,7 +122,7 @@ export type TAddKeyRequest = {
 export type TAddKeyResponse = {
   success: false;
   error: str;
-  word: unknown; // e.args[0] where e = KeyError
+  word?: unknown; // e.args[0] where e = KeyError
 } | {
   fingerprint: int;
 };
