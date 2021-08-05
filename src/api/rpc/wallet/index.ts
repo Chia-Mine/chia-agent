@@ -59,6 +59,8 @@ export type TGetPublicKeysRequest = {
 };
 export type TGetPublicKeysResponse = {
   public_key_fingerprints: int[];
+} | {
+  keyring_is_locked: True;
 };
 export async function get_public_keys(agent: TRPCAgent){
   return agent.sendMessage<TGetPublicKeysResponse>(chia_wallet_service, get_public_keys_command);

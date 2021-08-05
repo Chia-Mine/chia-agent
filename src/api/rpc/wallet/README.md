@@ -82,6 +82,8 @@ const response = await get_public_keys(agent);
 ```typescript
 {
   public_key_fingerprints: int[];
+} | {
+  keyring_is_locked: True;
 }
 ```
 
