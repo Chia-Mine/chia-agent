@@ -170,8 +170,9 @@ export type delete_all_keys_command = typeof delete_all_keys_command;
 export type TDeleteAllKeysRequest = {
   // no input
 };
-export type TDeleteAllKeysResponse = {
-  // no output
+export type TDeleteAllKeysResponse = {} | {
+  success: False;
+  error: str;
 };
 export async function delete_all_keys(agent: TRPCAgent){
   return agent.sendMessage<TDeleteAllKeysResponse>(chia_wallet_service, delete_all_keys_command);

@@ -5,6 +5,7 @@
 - Update documents
 - Updated [`get_public_keys`](./src/api/rpc/wallet/README.md#get_public_keysagent) of Wallet RPC API
 - Updated [`add_key`](./src/api/rpc/wallet/README.md#add_keyagent-params) of Wallet RPC API
+- Updated [`delete_all_keys`](./src/api/rpc/wallet/README.md#delete_all_keysagent) of Wallet RPC API
 ### Added
 - [New daemon api](./src/api/ws/daemon)
   - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)

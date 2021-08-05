@@ -223,7 +223,10 @@ const response = await delete_all_keys(agent);
 ```
 ### response:
 ```typescript
-{}
+{} | {
+  success: False;
+  error: str;
+}
 ```
 No params nor response 
 
