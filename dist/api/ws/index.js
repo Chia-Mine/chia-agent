@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exit = exports.is_running = exports.ping = exports.register_service = exports.start_plotting = exports.exit_command = exports.start_service = exports.stop_plotting = exports.stop_service = exports.ping_command = exports.get_status = exports.daemon_service = exports.on_state_changed_of_plots = exports.state_changed_command_of_plots = exports.chia_plots_create_service = exports.on_state_changed_of_wallet = exports.on_message_from_wallet = exports.chia_wallet_service = exports.on_get_plots = exports.on_message_from_harvester = exports.chia_harvester_service = exports.on_get_blockchain_state = exports.on_message_from_full_node = exports.chia_full_node_service = exports.on_new_plots = exports.on_new_signage_point = exports.on_new_farming_info = exports.on_message_from_farmer = exports.chia_farmer_service = void 0;
+exports.exit = exports.remove_keyring_passphrase = exports.set_keyring_passphrase = exports.unlock_keyring = exports.keyring_status = exports.is_keyring_locked = exports.get_key_for_fingerprint = exports.get_first_private_key = exports.get_all_private_keys = exports.delete_key_by_fingerprint = exports.delete_all_keys = exports.check_keys = exports.add_private_key = exports.is_running = exports.ping = exports.register_service = exports.start_plotting = exports.exit_command = exports.start_service = exports.stop_plotting = exports.stop_service = exports.ping_command = exports.get_status = exports.daemon_service = exports.on_state_changed_of_plots = exports.state_changed_command_of_plots = exports.chia_plots_create_service = exports.on_state_changed_of_wallet = exports.on_message_from_wallet = exports.chia_wallet_service = exports.on_get_plots = exports.on_message_from_harvester = exports.chia_harvester_service = exports.on_get_blockchain_state = exports.on_message_from_full_node = exports.chia_full_node_service = exports.on_new_plots = exports.on_new_signage_point = exports.on_new_farming_info = exports.on_message_from_farmer = exports.chia_farmer_service = void 0;
 var index_1 = require("./farmer/index");
 Object.defineProperty(exports, "chia_farmer_service", { enumerable: true, get: function () { return index_1.chia_farmer_service; } });
 Object.defineProperty(exports, "on_message_from_farmer", { enumerable: true, get: function () { return index_1.on_message_from_farmer; } });
@@ -35,4 +35,16 @@ Object.defineProperty(exports, "start_plotting", { enumerable: true, get: functi
 Object.defineProperty(exports, "register_service", { enumerable: true, get: function () { return index_6.register_service; } });
 Object.defineProperty(exports, "ping", { enumerable: true, get: function () { return index_6.ping; } });
 Object.defineProperty(exports, "is_running", { enumerable: true, get: function () { return index_6.is_running; } });
+Object.defineProperty(exports, "add_private_key", { enumerable: true, get: function () { return index_6.add_private_key; } });
+Object.defineProperty(exports, "check_keys", { enumerable: true, get: function () { return index_6.check_keys; } });
+Object.defineProperty(exports, "delete_all_keys", { enumerable: true, get: function () { return index_6.delete_all_keys; } });
+Object.defineProperty(exports, "delete_key_by_fingerprint", { enumerable: true, get: function () { return index_6.delete_key_by_fingerprint; } });
+Object.defineProperty(exports, "get_all_private_keys", { enumerable: true, get: function () { return index_6.get_all_private_keys; } });
+Object.defineProperty(exports, "get_first_private_key", { enumerable: true, get: function () { return index_6.get_first_private_key; } });
+Object.defineProperty(exports, "get_key_for_fingerprint", { enumerable: true, get: function () { return index_6.get_key_for_fingerprint; } });
+Object.defineProperty(exports, "is_keyring_locked", { enumerable: true, get: function () { return index_6.is_keyring_locked; } });
+Object.defineProperty(exports, "keyring_status", { enumerable: true, get: function () { return index_6.keyring_status; } });
+Object.defineProperty(exports, "unlock_keyring", { enumerable: true, get: function () { return index_6.unlock_keyring; } });
+Object.defineProperty(exports, "set_keyring_passphrase", { enumerable: true, get: function () { return index_6.set_keyring_passphrase; } });
+Object.defineProperty(exports, "remove_keyring_passphrase", { enumerable: true, get: function () { return index_6.remove_keyring_passphrase; } });
 Object.defineProperty(exports, "exit", { enumerable: true, get: function () { return index_6.exit; } });

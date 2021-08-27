@@ -37,6 +37,8 @@ export declare type get_public_keys_command = typeof get_public_keys_command;
 export declare type TGetPublicKeysRequest = {};
 export declare type TGetPublicKeysResponse = {
     public_key_fingerprints: int[];
+} | {
+    keyring_is_locked: True;
 };
 export declare function get_public_keys(agent: TRPCAgent): Promise<TGetPublicKeysResponse>;
 export declare const get_private_key_command = "get_private_key";
@@ -80,7 +82,7 @@ export declare type TAddKeyRequest = {
 export declare type TAddKeyResponse = {
     success: false;
     error: str;
-    word: unknown;
+    word?: unknown;
 } | {
     fingerprint: int;
 };
@@ -107,7 +109,10 @@ export declare function check_delete_key(agent: TRPCAgent, data: TCheckDeleteKey
 export declare const delete_all_keys_command = "delete_all_keys";
 export declare type delete_all_keys_command = typeof delete_all_keys_command;
 export declare type TDeleteAllKeysRequest = {};
-export declare type TDeleteAllKeysResponse = {};
+export declare type TDeleteAllKeysResponse = {} | {
+    success: False;
+    error: str;
+};
 export declare function delete_all_keys(agent: TRPCAgent): Promise<TDeleteAllKeysResponse>;
 export declare const get_sync_status_command = "get_sync_status";
 export declare type get_sync_status_command = typeof get_sync_status_command;
@@ -136,7 +141,7 @@ export declare const get_initial_freeze_period_command_of_wallet = "get_initial_
 export declare type get_initial_freeze_period_command_of_wallet = typeof get_initial_freeze_period_command_of_wallet;
 export declare type TGetInitialFreezePeriodRequestOfWallet = {};
 export declare type TGetInitialFreezePeriodResponseOfWallet = {
-    INITIAL_FREEZE_END_TIMESTAMP: uint64;
+    INITIAL_FREEZE_END_TIMESTAMP: 1620061200;
 };
 export declare function get_initial_freeze_period_of_wallet(agent: TRPCAgent): Promise<TGetInitialFreezePeriodResponseOfWallet>;
 export declare const get_network_info_command_of_wallet = "get_network_info";

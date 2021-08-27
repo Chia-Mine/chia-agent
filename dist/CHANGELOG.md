@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.0.2]
+### Changed
+- Update documents
+- Updated [`get_public_keys`](./src/api/rpc/wallet/README.md#get_public_keysagent) of Wallet RPC API
+- Updated [`add_key`](./src/api/rpc/wallet/README.md#add_keyagent-params) of Wallet RPC API
+- Updated [`delete_all_keys`](./src/api/rpc/wallet/README.md#delete_all_keysagent) of Wallet RPC API
+- Updated [`get_initial_freeze_period`](./src/api/rpc/wallet/README.md#get_initial_freeze_period_of_walletagent) of Wallet RPC API
+### Added
+- [New daemon api](./src/api/ws/daemon)
+  - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
+  - [`check_keys`](./src/api/ws/daemon/README.md#check_keysdaemon-params)
+  - [`delete_all_keys`](./src/api/ws/daemon/README.md#delete_all_keysdaemon-params)
+  - [`delete_key_by_fingerprint`](./src/api/ws/daemon/README.md#delete_key_by_fingerprintdaemon-params)
+  - [`get_all_private_keys`](./src/api/ws/daemon/README.md#get_all_private_keysdaemon-params)
+  - [`get_first_private_key`](./src/api/ws/daemon/README.md#get_first_private_keydaemon-params)
+  - [`get_key_for_fingerprint`](./src/api/ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
+  - [`is_keyring_locked`](./src/api/ws/daemon/README.md#is_keyring_lockeddaemon)
+  - [`keyring_status`](./src/api/ws/daemon/README.md#keyring_statusdaemon)
+  - [`remove_keyring_passphrase`](./src/api/ws/daemon/README.md#remove_keyring_passphrasedaemon-params)
+  - [`set_keyring_passphrase`](./src/api/ws/daemon/README.md#set_keyring_passphrasedaemon-params)
+  - [`unlock_keyring`](./src/api/ws/daemon/README.md#unlock_keyringdaemon-params)
+- [New full_node api](./src/api/rpc/full_node)
+  - [`get_coin_records_by_name`](./src/api/rpc/full_node/README.md#get_coin_records_by_namesagent-params)
+
 ## [2.0.1]
 ### Added
 - [`on_new_plots`](./src/api/ws/farmer/README.md#on_new_plots)
@@ -111,6 +135,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[2.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v1.0.1...v1.1.0

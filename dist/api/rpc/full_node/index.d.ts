@@ -174,6 +174,18 @@ export declare type TGetCoinRecordByNameResponse = {
     coin_record: CoinRecord;
 };
 export declare function get_coin_record_by_name(agent: TRPCAgent, data: TGetCoinRecordByNameRequest): Promise<TGetCoinRecordByNameResponse>;
+export declare const get_coin_records_by_names_command = "get_coin_records_by_names";
+export declare type get_coin_records_by_names_command = typeof get_coin_records_by_names_command;
+export declare type TGetCoinRecordsByNamesRequest = {
+    names: str[];
+    start_height?: uint32;
+    end_height?: uint32;
+    include_spent_coins?: bool;
+};
+export declare type TGetCoinRecordsByNamesResponse = {
+    coin_records: CoinRecord[];
+};
+export declare function get_coin_records_by_names(agent: TRPCAgent, data: TGetCoinRecordsByNamesRequest): Promise<TGetCoinRecordsByNamesResponse>;
 export declare const get_coin_records_by_parent_ids_command = "get_coin_records_by_parent_ids";
 export declare type get_coin_records_by_parent_ids_command = typeof get_coin_records_by_parent_ids_command;
 export declare type TGetCoinRecordsByParentIdsRequest = {
