@@ -6,11 +6,11 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `chia 1.2.3`.  
+Supports all RPC/Websocket API available at `chia 1.2.4`.  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
-- retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`.
+- retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`, `pool`.
 - send email when proof is found.
 - trigger scripts when target event is observed.
 - start/stop services.
@@ -26,8 +26,8 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`fa71f91f4cbef4e28aac670e7ed0b27402be6036`](https://github.com/Chia-Network/chia-blockchain/tree/fa71f91f4cbef4e28aac670e7ed0b27402be6036) of [chia-blockchain@1.2.3](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/fa71f91f4cbef4e28aac670e7ed0b27402be6036...main)
+- [`4f8ab5a92b5a7c6666af4390f3992f1107772a5b`](https://github.com/Chia-Network/chia-blockchain/tree/4f8ab5a92b5a7c6666af4390f3992f1107772a5b) of [chia-blockchain@1.2.4](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/4f8ab5a92b5a7c6666af4390f3992f1107772a5b...main)
 - [`32907fb429fead42ce74e62ac1abf87759217c0d`](https://github.com/Chia-Network/pool-reference/tree/32907fb429fead42ce74e62ac1abf87759217c0d) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
   - [Diff to the latest pool-reference](https://github.com/Chia-Network/chia-blockchain/compare/32907fb429fead42ce74e62ac1abf87759217c0d...main)
 

@@ -21,6 +21,8 @@
   - [`remove_keyring_passphrase`](./src/api/ws/daemon/README.md#remove_keyring_passphrasedaemon-params)
   - [`set_keyring_passphrase`](./src/api/ws/daemon/README.md#set_keyring_passphrasedaemon-params)
   - [`unlock_keyring`](./src/api/ws/daemon/README.md#unlock_keyringdaemon-params)
+- [New full_node api](./src/api/rpc/full_node)
+  - [`get_coin_records_by_name`](./src/api/rpc/full_node/README.md#get_coin_records_by_namesagent-params)
 
 ## [2.0.1]
 ### Added

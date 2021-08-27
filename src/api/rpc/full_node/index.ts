@@ -253,6 +253,23 @@ export async function get_coin_record_by_name(agent: TRPCAgent, data: TGetCoinRe
 
 
 
+export const get_coin_records_by_names_command = "get_coin_records_by_names";
+export type get_coin_records_by_names_command = typeof get_coin_records_by_names_command;
+export type TGetCoinRecordsByNamesRequest = {
+  names: str[];
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
+};
+export type TGetCoinRecordsByNamesResponse = {
+  coin_records: CoinRecord[];
+};
+export async function get_coin_records_by_names(agent: TRPCAgent, data: TGetCoinRecordsByNamesRequest) {
+  return agent.sendMessage<TGetCoinRecordsByNamesResponse>(chia_full_node_service, get_coin_records_by_names_command, data);
+}
+
+
+
 
 export const get_coin_records_by_parent_ids_command = "get_coin_records_by_parent_ids";
 export type get_coin_records_by_parent_ids_command = typeof get_coin_records_by_parent_ids_command;
