@@ -1,6 +1,6 @@
 # RPCAgent
 
-RPC client for connecting to chia services like `farmer`, `full_node`, `harvester`, `wallet`.  
+RPC client for connecting to chia services like `farmer`, `full_node`, `harvester`, `wallet`, `pool`.  
 
 Once RPCAgent is instantiated, you can use RPC API functions via the agent.
 ```js
@@ -57,7 +57,7 @@ const agent = new RPCAgent({
   port: 8555,
   ca_cert: fs.readFileSync("..."),
   client_cert: fs.readFileSync("..."),
-  clien_key: fs.readFileSync("..."),
+  client_key: fs.readFileSync("..."),
 });
 ```
 

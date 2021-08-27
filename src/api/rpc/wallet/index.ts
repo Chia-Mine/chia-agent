@@ -59,6 +59,8 @@ export type TGetPublicKeysRequest = {
 };
 export type TGetPublicKeysResponse = {
   public_key_fingerprints: int[];
+} | {
+  keyring_is_locked: True;
 };
 export async function get_public_keys(agent: TRPCAgent){
   return agent.sendMessage<TGetPublicKeysResponse>(chia_wallet_service, get_public_keys_command);
@@ -120,7 +122,7 @@ export type TAddKeyRequest = {
 export type TAddKeyResponse = {
   success: false;
   error: str;
-  word: unknown; // e.args[0] where e = KeyError
+  word?: unknown; // e.args[0] where e = KeyError
 } | {
   fingerprint: int;
 };
@@ -168,8 +170,9 @@ export type delete_all_keys_command = typeof delete_all_keys_command;
 export type TDeleteAllKeysRequest = {
   // no input
 };
-export type TDeleteAllKeysResponse = {
-  // no output
+export type TDeleteAllKeysResponse = {} | {
+  success: False;
+  error: str;
 };
 export async function delete_all_keys(agent: TRPCAgent){
   return agent.sendMessage<TDeleteAllKeysResponse>(chia_wallet_service, delete_all_keys_command);
@@ -225,7 +228,7 @@ export type get_initial_freeze_period_command_of_wallet = typeof get_initial_fre
 export type TGetInitialFreezePeriodRequestOfWallet = {
 };
 export type TGetInitialFreezePeriodResponseOfWallet = {
-  INITIAL_FREEZE_END_TIMESTAMP: uint64;
+  INITIAL_FREEZE_END_TIMESTAMP: 1620061200; // Mon May 03 2021 17:00:00 GMT+0000
 };
 export async function get_initial_freeze_period_of_wallet(agent: TRPCAgent){
   return agent.sendMessage<TGetInitialFreezePeriodResponseOfWallet>(chia_wallet_service, get_initial_freeze_period_command_of_wallet);

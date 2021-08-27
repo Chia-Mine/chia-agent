@@ -1,7 +1,7 @@
 // The daemon service currently does not provide state_change event as of v1.1.5.
 import {GetMessageType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
-import {bool, int, Optional, str, True} from "../../chia/types/_python_types_";
+import {bool, False, int, None, Optional, str, True} from "../../chia/types/_python_types_";
 
 export const daemon_service = "daemon";
 export type daemon_service = typeof daemon_service;
@@ -20,15 +20,17 @@ export async function ping(daemon: TDaemon) {
 
 
 
+export type TService = "chia"|"chia_wallet"|"chia_full_node"|"chia_harvester"|"chia_farmer"
+  |"chia_introducer"|"chia_timelord"|"chia_timelord_launcher"|"chia_full_node_simulator";
 export const start_service_command = "start_service";
 export type start_service_command = typeof start_service_command;
 export type TStartServiceRequest = {
-  service: str;
+  service: TService;
   testing?: bool;
 };
 export type TStartServiceResponse = {
   success: bool;
-  service: str;
+  service: TService;
   error: Optional<str>;
 };
 export async function start_service(daemon: TDaemon, data: TStartServiceRequest) {
@@ -109,6 +111,204 @@ export type TIsRunningResponse = {
 };
 export async function is_running(daemon: TDaemon, data: TIsRunningRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, is_running_command, TIsRunningResponse>>(daemon_service, is_running_command, data);
+}
+
+
+
+export const add_private_key_command = "add_private_key";
+export type add_private_key_command = typeof add_private_key_command;
+export type TAddPrivateKeyRequest = {
+  kc_user?: str;
+  kc_testing?: bool;
+  mnemonic?: str;
+  passphrase?: str;
+};
+export type TAddPrivateKeyResponse = {
+  success: bool;
+  error?: str;
+  error_details?: {message: str};
+};
+export async function add_private_key(daemon: TDaemon, data: TAddPrivateKeyRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, add_private_key_command, TAddPrivateKeyResponse>>(daemon_service, add_private_key_command, data);
+}
+
+
+
+export const check_keys_command = "check_keys";
+export type check_keys_command = typeof check_keys_command;
+export type TCheckKeysRequest = {
+  kc_user?: str;
+  kc_testing?: bool;
+  root_path: str;
+};
+export type TCheckKeysResponse = {
+  success: bool;
+  error?: str;
+  error_details?: {message: str};
+};
+export async function check_keys(daemon: TDaemon, data: TCheckKeysRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, check_keys_command, TCheckKeysResponse>>(daemon_service, check_keys_command, data);
+}
+
+
+
+export const delete_all_keys_command = "delete_all_keys";
+export type delete_all_keys_command = typeof delete_all_keys_command;
+export type TDeleteAllKeysRequest = {
+  kc_user?: str;
+  kc_testing?: bool;
+};
+export type TDeleteAllKeysResponse = {
+  success: bool;
+  error?: str;
+  error_details?: {message: str};
+};
+export async function delete_all_keys(daemon: TDaemon, data: TDeleteAllKeysRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, delete_all_keys_command, TDeleteAllKeysResponse>>(daemon_service, delete_all_keys_command, data);
+}
+
+
+
+export const delete_key_by_fingerprint_command = "delete_key_by_fingerprint";
+export type delete_key_by_fingerprint_command = typeof delete_key_by_fingerprint_command;
+export type TDeleteKeyByFingerprintRequest = {
+  kc_user?: str;
+  kc_testing?: bool;
+  fingerprint: int;
+};
+export type TDeleteKeyByFingerprintResponse = {
+  success: bool;
+  error?: str;
+  error_details?: {message: str};
+};
+export async function delete_key_by_fingerprint(daemon: TDaemon, data: TDeleteKeyByFingerprintRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, delete_key_by_fingerprint_command, TDeleteKeyByFingerprintResponse>>(daemon_service, delete_key_by_fingerprint_command, data);
+}
+
+
+
+export const get_all_private_keys_command = "get_all_private_keys";
+export type get_all_private_keys_command = typeof get_all_private_keys_command;
+export type TGetAllPrivateKeysRequest = {
+  kc_user?: str;
+  kc_testing?: bool;
+};
+export type TGetAllPrivateKeysResponse = {
+  success: bool;
+  error?: str;
+  private_keys: Array<{pk: str; entropy: str}>;
+};
+export async function get_all_private_keys(daemon: TDaemon, data: TGetAllPrivateKeysRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_all_private_keys_command, TGetAllPrivateKeysResponse>>(daemon_service, get_all_private_keys_command, data);
+}
+
+
+
+export const get_first_private_key_command = "get_first_private_key";
+export type get_first_private_key_command = typeof get_first_private_key_command;
+export type TGetFirstPrivateKeyRequest = {
+  kc_user?: str;
+  kc_testing?: bool;
+};
+export type TGetFirstPrivateKeyResponse = {
+  success: bool;
+  error?: str;
+  private_key: {pk: str; entropy: str};
+};
+export async function get_first_private_key(daemon: TDaemon, data: TGetFirstPrivateKeyRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_first_private_key_command, TGetFirstPrivateKeyResponse>>(daemon_service, get_first_private_key_command, data);
+}
+
+
+
+export const get_key_for_fingerprint_command = "get_key_for_fingerprint";
+export type get_key_for_fingerprint_command = typeof get_key_for_fingerprint_command;
+export type TGetKeyForFingerprintRequest = {
+  kc_user?: str;
+  kc_testing?: bool;
+  fingerprint?: int;
+};
+export type TGetKeyForFingerprintResponse = {
+  success: bool;
+  error?: str;
+  pk: str;
+  entropy: str;
+};
+export async function get_key_for_fingerprint(daemon: TDaemon, data: TGetKeyForFingerprintRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_key_for_fingerprint_command, TGetKeyForFingerprintResponse>>(daemon_service, get_key_for_fingerprint_command, data);
+}
+
+
+
+export const is_keyring_locked_command = "is_keyring_locked";
+export type is_keyring_locked_command = typeof is_keyring_locked_command;
+export type TIsKeyringLockedResponse = {
+  success: bool;
+  is_keyring_locked: bool;
+};
+export async function is_keyring_locked(daemon: TDaemon) {
+  return daemon.sendMessage<GetMessageType<daemon_service, is_keyring_locked_command, TIsKeyringLockedResponse>>(daemon_service, is_keyring_locked_command);
+}
+
+
+
+export const keyring_status_command = "keyring_status";
+export type keyring_status_command = typeof keyring_status_command;
+export type TKeyringStatusResponse = {
+  success: bool;
+  is_keyring_locked: bool;
+  passphrase_support_enabled: bool;
+  user_passphrase_is_set: bool;
+  needs_migration: bool;
+};
+export async function keyring_status(daemon: TDaemon) {
+  return daemon.sendMessage<GetMessageType<daemon_service, keyring_status_command, TKeyringStatusResponse>>(daemon_service, keyring_status_command);
+}
+
+
+
+export const unlock_keyring_command = "unlock_keyring";
+export type unlock_keyring_command = typeof unlock_keyring_command;
+export type TUnlockKeyringRequest = {
+  key: string;
+};
+export type TUnlockKeyringResponse = {
+  success: bool;
+  error: string|None;
+};
+export async function unlock_keyring(daemon: TDaemon, data: TUnlockKeyringRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, unlock_keyring_command, TUnlockKeyringResponse>>(daemon_service, unlock_keyring_command, data);
+}
+
+
+
+export const set_keyring_passphrase_command = "set_keyring_passphrase";
+export type set_keyring_passphrase_command = typeof set_keyring_passphrase_command;
+export type TSetKeyringPassphraseRequest = {
+  current_passphrase: string;
+  new_passphrase: string;
+};
+export type TSetKeyringPassphraseResponse = {
+  success: bool;
+  error: string;
+};
+export async function set_keyring_passphrase(daemon: TDaemon, data: TSetKeyringPassphraseRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, set_keyring_passphrase_command, TSetKeyringPassphraseResponse>>(daemon_service, set_keyring_passphrase_command, data);
+}
+
+
+
+export const remove_keyring_passphrase_command = "remove_keyring_passphrase";
+export type remove_keyring_passphrase_command = typeof remove_keyring_passphrase_command;
+export type TRemoveKeyringPassphraseRequest = {
+  current_passphrase: str;
+};
+export type TRemoveKeyringPassphraseResponse = {
+  success: bool;
+  error: string;
+};
+export async function remove_keyring_passphrase(daemon: TDaemon, data: TRemoveKeyringPassphraseRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, remove_keyring_passphrase_command, TRemoveKeyringPassphraseResponse>>(daemon_service, remove_keyring_passphrase_command, data);
 }
 
 

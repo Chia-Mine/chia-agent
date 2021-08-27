@@ -76,6 +76,18 @@ import type {
   exit_command,
   get_status_command,
   is_running_command,
+  add_private_key_command,
+  check_keys_command,
+  delete_all_keys_command,
+  delete_key_by_fingerprint_command,
+  get_all_private_keys_command,
+  get_first_private_key_command,
+  get_key_for_fingerprint_command,
+  is_keyring_locked_command,
+  keyring_status_command,
+  unlock_keyring_command,
+  set_keyring_passphrase_command,
+  remove_keyring_passphrase_command,
   ping_command,
   register_service_command,
   start_plotting_command,
@@ -85,6 +97,18 @@ import type {
   TExitResponse,
   TGetStatusResponse,
   TIsRunningResponse,
+  TAddPrivateKeyResponse,
+  TCheckKeysResponse,
+  TDeleteAllKeysResponse,
+  TDeleteKeyByFingerprintResponse,
+  TGetAllPrivateKeysResponse,
+  TGetFirstPrivateKeyResponse,
+  TGetKeyForFingerprintResponse,
+  TIsKeyringLockedResponse,
+  TKeyringStatusResponse,
+  TUnlockKeyringResponse,
+  TSetKeyringPassphraseResponse,
+  TRemoveKeyringPassphraseResponse,
   TPingResponse,
   TRegisterServiceResponse,
   TStartPlottingResponse,
@@ -102,6 +126,18 @@ export {
   TExitResponse,
   TGetStatusResponse,
   TIsRunningResponse,
+  TAddPrivateKeyResponse,
+  TCheckKeysResponse,
+  TDeleteAllKeysResponse,
+  TDeleteKeyByFingerprintResponse,
+  TGetAllPrivateKeysResponse,
+  TGetFirstPrivateKeyResponse,
+  TGetKeyForFingerprintResponse,
+  TIsKeyringLockedResponse,
+  TKeyringStatusResponse,
+  TUnlockKeyringResponse,
+  TSetKeyringPassphraseResponse,
+  TRemoveKeyringPassphraseResponse,
   TPingResponse,
   TStopPlottingRequest,
   TRegisterServiceRequest,
@@ -112,6 +148,16 @@ export {
   TStartPlottingRequest,
   TStopServiceRequest,
   TIsRunningRequest,
+  TAddPrivateKeyRequest,
+  TCheckKeysRequest,
+  TDeleteAllKeysRequest,
+  TDeleteKeyByFingerprintRequest,
+  TGetAllPrivateKeysRequest,
+  TGetFirstPrivateKeyRequest,
+  TGetKeyForFingerprintRequest,
+  TUnlockKeyringRequest,
+  TSetKeyringPassphraseRequest,
+  TRemoveKeyringPassphraseRequest,
   TExitRequest,
   get_status, 
   ping_command, 
@@ -122,7 +168,19 @@ export {
   start_plotting, 
   register_service, 
   ping, 
-  is_running, 
+  is_running,
+  add_private_key,
+  check_keys,
+  delete_all_keys,
+  delete_key_by_fingerprint,
+  get_all_private_keys,
+  get_first_private_key,
+  get_key_for_fingerprint,
+  is_keyring_locked,
+  keyring_status,
+  unlock_keyring,
+  set_keyring_passphrase,
+  remove_keyring_passphrase,
   exit, 
 } from "./daemon/index";
 
@@ -154,7 +212,20 @@ export type WsDaemonMessage =
   | GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>
   | GetMessageType<daemon_service, start_service_command, TStartServiceResponse>
   | GetMessageType<daemon_service, stop_plotting_command, TStopPlottingResponse>
-  | GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>;
+  | GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>
+  | GetMessageType<daemon_service, add_private_key_command, TAddPrivateKeyResponse>
+  | GetMessageType<daemon_service, check_keys_command, TCheckKeysResponse>
+  | GetMessageType<daemon_service, delete_all_keys_command, TDeleteAllKeysResponse>
+  | GetMessageType<daemon_service, delete_key_by_fingerprint_command, TDeleteKeyByFingerprintResponse>
+  | GetMessageType<daemon_service, get_all_private_keys_command, TGetAllPrivateKeysResponse>
+  | GetMessageType<daemon_service, get_first_private_key_command, TGetFirstPrivateKeyResponse>
+  | GetMessageType<daemon_service, get_key_for_fingerprint_command, TGetKeyForFingerprintResponse>
+  | GetMessageType<daemon_service, is_keyring_locked_command, TIsKeyringLockedResponse>
+  | GetMessageType<daemon_service, keyring_status_command, TKeyringStatusResponse>
+  | GetMessageType<daemon_service, unlock_keyring_command, TUnlockKeyringResponse>
+  | GetMessageType<daemon_service, set_keyring_passphrase_command, TSetKeyringPassphraseResponse>
+  | GetMessageType<daemon_service, remove_keyring_passphrase_command, TRemoveKeyringPassphraseResponse>
+  ;
 
 
 

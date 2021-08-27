@@ -82,6 +82,8 @@ const response = await get_public_keys(agent);
 ```typescript
 {
   public_key_fingerprints: int[];
+} | {
+  keyring_is_locked: True;
 }
 ```
 
@@ -156,7 +158,7 @@ const response = await add_key(agent, params);
 {
   success: false;
   error: str;
-  word: unknown; // @todo replace unknown to actual type
+  word?: unknown; // @todo replace unknown to actual type
 } | {
   fingerprint: int;
 }
@@ -221,7 +223,10 @@ const response = await delete_all_keys(agent);
 ```
 ### response:
 ```typescript
-{}
+{} | {
+  success: False;
+  error: str;
+}
 ```
 No params nor response 
 
@@ -295,7 +300,7 @@ const response = await get_initial_freeze_period_of_wallet(agent);
 ### response:
 ```typescript
 {
-  INITIAL_FREEZE_END_TIMESTAMP: uint64;
+  INITIAL_FREEZE_END_TIMESTAMP: 1620061200; // Mon May 03 2021 17:00:00 GMT+0000
 }
 ```
 
