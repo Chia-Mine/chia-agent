@@ -26,8 +26,8 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`86fbcf824907c6db80471443a96d3aea56b7c50e`](https://github.com/Chia-Network/chia-blockchain/tree/86fbcf824907c6db80471443a96d3aea56b7c50e) of [chia-blockchain@1.2.4](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/86fbcf824907c6db80471443a96d3aea56b7c50e...main)
+- [`39ab18cb9028a330644d3117cf716b319ee64a45`](https://github.com/Chia-Network/chia-blockchain/tree/39ab18cb9028a330644d3117cf716b319ee64a45) of [chia-blockchain@1.2.5](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/39ab18cb9028a330644d3117cf716b319ee64a45...main)
 - [`32907fb429fead42ce74e62ac1abf87759217c0d`](https://github.com/Chia-Network/pool-reference/tree/32907fb429fead42ce74e62ac1abf87759217c0d) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
   - [Diff to the latest pool-reference](https://github.com/Chia-Network/chia-blockchain/compare/32907fb429fead42ce74e62ac1abf87759217c0d...main)
 
