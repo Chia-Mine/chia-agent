@@ -1,8 +1,7 @@
 # Changelog
 
 ## [2.0.4]
-This release corresponds to chia-blockchain@1.2.6 which only updates README.  
-There are no external API changes at all.
+This release corresponds to chia-blockchain@1.2.6, which introduced no external API changes.  
 
 ## [2.0.3]
 This release corresponds to chia-blockchain@1.2.5 which only updates install script.  
