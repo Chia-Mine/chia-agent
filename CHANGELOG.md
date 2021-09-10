@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.0.4]
+This release corresponds to chia-blockchain@1.2.6, which introduced no external API changes.  
+
 ## [2.0.3]
 This release corresponds to chia-blockchain@1.2.5 which only updates install script.  
 There are no API changes at all.
@@ -139,6 +142,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[2.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.0...v2.0.1
