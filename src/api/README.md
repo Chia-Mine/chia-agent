@@ -92,7 +92,6 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_all_trades`](./rpc/wallet/README.md#get_all_tradesagent)
 - [`cancel_trade`](./rpc/wallet/README.md#cancel_tradeagent-params)
 - [`did_update_recovery_ids`](./rpc/wallet/README.md#did_update_recovery_idsagent-params)
-- [`did_spend`](./rpc/wallet/README.md#did_spendagent-params)
 - [`did_get_pubkey`](./rpc/wallet/README.md#did_get_pubkeyagent-params)
 - [`did_get_did`](./rpc/wallet/README.md#did_get_didagent-params)
 - [`did_recovery_spend`](./rpc/wallet/README.md#did_recovery_spendagent-params)
@@ -129,15 +128,6 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 
 
 #### [daemon](./ws/daemon/README.md#usage) 
-- [`ping`](./ws/daemon/README.md#pingdaemon)
-- [`start_service`](./ws/daemon/README.md#start_servicedaemon-params)
-- [`start_plotting`](./ws/daemon/README.md#start_plottingdaemon-params)
-- [`stop_plotting`](./ws/daemon/README.md#stop_plottingdaemon-params)
-- [`stop_service`](./ws/daemon/README.md#stop_servicedaemon-params)
-- [`is_running`](./ws/daemon/README.md#is_runningdaemon-params)
-- [`exit`](./ws/daemon/README.md#exitdaemon)
-- [`register_service`](./ws/daemon/README.md#register_servicedaemon-params)
-- [`get_status`](./ws/daemon/README.md#get_statusdaemon)
 - [`add_private_key`](./ws/daemon/README.md#add_private_keydaemon-params)
 - [`check_keys`](./ws/daemon/README.md#check_keysdaemon-params)
 - [`delete_all_keys`](./ws/daemon/README.md#delete_all_keysdaemon-params)
@@ -145,16 +135,30 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`get_all_private_keys`](./ws/daemon/README.md#get_all_private_keysdaemon-params)
 - [`get_first_private_key`](./ws/daemon/README.md#get_first_private_keydaemon-params)
 - [`get_key_for_fingerprint`](./ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
+- [`ping`](./ws/daemon/README.md#pingdaemon)
+- [`start_service`](./ws/daemon/README.md#start_servicedaemon-params)
+- [`start_plotting`](./ws/daemon/README.md#start_plottingdaemon-params)
+- [`stop_plotting`](./ws/daemon/README.md#stop_plottingdaemon-params)
+- [`stop_service`](./ws/daemon/README.md#stop_servicedaemon-params)
+- [`is_running`](./ws/daemon/README.md#is_runningdaemon-params)
 - [`is_keyring_locked`](./ws/daemon/README.md#is_keyring_lockeddaemon)
 - [`keyring_status`](./ws/daemon/README.md#keyring_statusdaemon)
-- [`remove_keyring_passphrase`](./ws/daemon/README.md#remove_keyring_passphrasedaemon-params)
-- [`set_keyring_passphrase`](./ws/daemon/README.md#set_keyring_passphrasedaemon-params)
 - [`unlock_keyring`](./ws/daemon/README.md#unlock_keyringdaemon-params)
+- [`migrate_keyring`](./ws/daemon/README.md#migrate_keyringdaemon-params)
+- [`set_keyring_passphrase`](./ws/daemon/README.md#set_keyring_passphrasedaemon-params)
+- [`remove_keyring_passphrase`](./ws/daemon/README.md#remove_keyring_passphrasedaemon-params)
+- [`notify_keyring_migration_completed`](./ws/daemon/README.md#notify_keyring_migration_completeddaemon-params)
+- [`exit`](./ws/daemon/README.md#exitdaemon)
+- [`register_service`](./ws/daemon/README.md#register_servicedaemon-params)
+- [`get_status`](./ws/daemon/README.md#get_statusdaemon)
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  
 After subscribing message channels like `wallet_ui` or `chia plots create`,
 you need to wait messages in the channel are arrived to your message listener.
+
+#### [daemon](./ws/daemon/README.md#usagesubscription)
+- [`keyring_status_changed`](./ws/daemon/README.md#on_keyring_status_changed)
 
 #### [chia_plots_create](./ws/chia_plots_create/README.md#usage)
 - [`state_changed`](./ws/chia_plots_create/README.md#on_state_changed_of_plots)

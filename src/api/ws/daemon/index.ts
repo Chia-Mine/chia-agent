@@ -1,7 +1,8 @@
 // The daemon service currently does not provide state_change event as of v1.1.5.
-import {GetMessageType} from "../../types";
+import {GetMessageType, wallet_ui_service} from "../../types";
 import {TDaemon} from "../../../daemon/index";
-import {bool, False, int, None, Optional, str, True} from "../../chia/types/_python_types_";
+import {bool, int, None, Optional, str, True} from "../../chia/types/_python_types_";
+import {WsMessage} from "../index";
 
 export const daemon_service = "daemon";
 export type daemon_service = typeof daemon_service;
@@ -260,6 +261,10 @@ export type TKeyringStatusResponse = {
   passphrase_support_enabled: bool;
   user_passphrase_is_set: bool;
   needs_migration: bool;
+  passphrase_requirements: {} | {
+    is_optional: True;
+    min_length: int;
+  };
 };
 export async function keyring_status(daemon: TDaemon) {
   return daemon.sendMessage<GetMessageType<daemon_service, keyring_status_command, TKeyringStatusResponse>>(daemon_service, keyring_status_command);
@@ -274,10 +279,26 @@ export type TUnlockKeyringRequest = {
 };
 export type TUnlockKeyringResponse = {
   success: bool;
-  error: string|None;
+  error: str|None;
 };
 export async function unlock_keyring(daemon: TDaemon, data: TUnlockKeyringRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, unlock_keyring_command, TUnlockKeyringResponse>>(daemon_service, unlock_keyring_command, data);
+}
+
+
+
+export const migrate_keyring_command = "migrate_keyring";
+export type migrate_keyring_command = typeof migrate_keyring_command;
+export type TMigrateKeyringRequest = {
+  passphrase?: string;
+  cleanup_legacy_keyring?: bool;
+};
+export type TMigrateKeyringResponse = {
+  success: bool;
+  error: str|None;
+};
+export async function migrate_keyring(daemon: TDaemon, data: TMigrateKeyringRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, migrate_keyring_command, TMigrateKeyringResponse>>(daemon_service, migrate_keyring_command, data);
 }
 
 
@@ -290,7 +311,7 @@ export type TSetKeyringPassphraseRequest = {
 };
 export type TSetKeyringPassphraseResponse = {
   success: bool;
-  error: string;
+  error: str;
 };
 export async function set_keyring_passphrase(daemon: TDaemon, data: TSetKeyringPassphraseRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, set_keyring_passphrase_command, TSetKeyringPassphraseResponse>>(daemon_service, set_keyring_passphrase_command, data);
@@ -305,10 +326,25 @@ export type TRemoveKeyringPassphraseRequest = {
 };
 export type TRemoveKeyringPassphraseResponse = {
   success: bool;
-  error: string;
+  error: str;
 };
 export async function remove_keyring_passphrase(daemon: TDaemon, data: TRemoveKeyringPassphraseRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, remove_keyring_passphrase_command, TRemoveKeyringPassphraseResponse>>(daemon_service, remove_keyring_passphrase_command, data);
+}
+
+
+
+export const notify_keyring_migration_completed_command = "notify_keyring_migration_completed";
+export type notify_keyring_migration_completed_command = typeof notify_keyring_migration_completed_command;
+export type TNotifyKeyringMigrationCompletedRequest = {
+  key: str;
+};
+export type TNotifyKeyringMigrationCompletedResponse = {
+  success: bool;
+  error: str;
+};
+export async function notify_keyring_migration_completed(daemon: TDaemon, data: TNotifyKeyringMigrationCompletedRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, notify_keyring_migration_completed_command, TNotifyKeyringMigrationCompletedResponse>>(daemon_service, notify_keyring_migration_completed_command, data);
 }
 
 
@@ -366,4 +402,22 @@ export type TGetStatusResponse = {
 };
 export async function get_status(daemon: TDaemon) {
   return daemon.sendMessage<GetMessageType<daemon_service, get_status_command, TGetStatusResponse>>(daemon_service, get_status_command);
+}
+
+
+//// From here subscribe/listen style APIs ////
+
+export const keyring_status_changed_command = "keyring_status_changed";
+export type keyring_status_changed_command = typeof keyring_status_changed_command;
+export type TKeyringStatusChangedBroadCast = {
+  keyring_status_changed: TKeyringStatusResponse;
+};
+export async function on_keyring_status_changed(daemon: TDaemon, callback: (e: GetMessageType<daemon_service, keyring_status_changed_command, TKeyringStatusChangedBroadCast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === daemon_service && e.command === keyring_status_changed_command){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(daemon_service, messageListener);
 }

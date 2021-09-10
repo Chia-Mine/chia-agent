@@ -94,6 +94,9 @@ import type {
   start_service_command,
   stop_plotting_command,
   stop_service_command,
+  migrate_keyring_command,
+  notify_keyring_migration_completed_command,
+  keyring_status_changed_command,
   TExitResponse,
   TGetStatusResponse,
   TIsRunningResponse,
@@ -115,6 +118,9 @@ import type {
   TStartServiceResponse,
   TStopPlottingResponse,
   TStopServiceResponse,
+  TMigrateKeyringResponse,
+  TNotifyKeyringMigrationCompletedResponse,
+  TKeyringStatusChangedBroadCast,
 } from "./daemon/index";
 export {
   daemon_service,
@@ -136,9 +142,12 @@ export {
   TIsKeyringLockedResponse,
   TKeyringStatusResponse,
   TUnlockKeyringResponse,
+  TMigrateKeyringResponse,
   TSetKeyringPassphraseResponse,
   TRemoveKeyringPassphraseResponse,
+  TNotifyKeyringMigrationCompletedResponse,
   TPingResponse,
+  TKeyringStatusChangedBroadCast,
   TStopPlottingRequest,
   TRegisterServiceRequest,
   TPlotQueue,
@@ -156,8 +165,10 @@ export {
   TGetFirstPrivateKeyRequest,
   TGetKeyForFingerprintRequest,
   TUnlockKeyringRequest,
+  TMigrateKeyringRequest,
   TSetKeyringPassphraseRequest,
   TRemoveKeyringPassphraseRequest,
+  TNotifyKeyringMigrationCompletedRequest,
   TExitRequest,
   get_status, 
   ping_command, 
@@ -179,9 +190,12 @@ export {
   is_keyring_locked,
   keyring_status,
   unlock_keyring,
+  migrate_keyring,
   set_keyring_passphrase,
   remove_keyring_passphrase,
-  exit, 
+  notify_keyring_migration_completed,
+  exit,
+  on_keyring_status_changed,
 } from "./daemon/index";
 
 
@@ -223,8 +237,11 @@ export type WsDaemonMessage =
   | GetMessageType<daemon_service, is_keyring_locked_command, TIsKeyringLockedResponse>
   | GetMessageType<daemon_service, keyring_status_command, TKeyringStatusResponse>
   | GetMessageType<daemon_service, unlock_keyring_command, TUnlockKeyringResponse>
+  | GetMessageType<daemon_service, migrate_keyring_command, TMigrateKeyringResponse>
   | GetMessageType<daemon_service, set_keyring_passphrase_command, TSetKeyringPassphraseResponse>
   | GetMessageType<daemon_service, remove_keyring_passphrase_command, TRemoveKeyringPassphraseResponse>
+  | GetMessageType<daemon_service, notify_keyring_migration_completed_command, TNotifyKeyringMigrationCompletedResponse>
+  | GetMessageType<daemon_service, keyring_status_changed_command, TKeyringStatusChangedBroadCast>
   ;
 
 

@@ -1,7 +1,20 @@
 # Changelog
 
+## [2.0.5]
+### Changed
+- Updated [`keyring_status`](./src/api/ws/daemon/README.md#keyring_statusdaemon) of Wallet RPC API
+### Added
+- [New daemon api](./src/api/ws/daemon)
+  - [`migrate_keyring`](./src/api/ws/daemon/README.md#migrate_keyringdaemon-params)
+  - [`notify_keyring_migration_completed`](./src/api/ws/daemon/README.md#notify_keyring_migration_completeddaemon-params)
+  - [`keyring_status_changed`](./src/api/ws/daemon/README.md#on_keyring_status_changed)
+### Deprecated
+- `did_spend`  
+  Note: `chia-blockchain` no longer responds to `/did_spend` wallet API endpoint.  
+  For now, I don't remove `/did_spend` from `chia-agent` but only remove from API document.
+
 ## [2.0.4]
-This release corresponds to chia-blockchain@1.2.6, which introduced no external API changes.  
+This release corresponds to chia-blockchain@1.2.6, which introduced no external API changes.
 
 ## [2.0.3]
 This release corresponds to chia-blockchain@1.2.5 which only updates install script.  
@@ -142,6 +155,10 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+<<<<<<< HEAD
+=======
+[2.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.4...v2.0.5
+>>>>>>> 42c595d (Synced to 5d75defa1e2209ab3b74c9210fc32b3efad095e3 of chia-blockchain)
 [2.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.1...v2.0.2

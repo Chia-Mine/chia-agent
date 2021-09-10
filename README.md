@@ -6,7 +6,7 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `chia 1.2.6`.  
+Supports all RPC/Websocket API available at `chia 1.2.7`.  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
@@ -26,10 +26,10 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`5fc67c72c76f24a46285b127c6a4f9b4ea2b533a`](https://github.com/Chia-Network/chia-blockchain/tree/5fc67c72c76f24a46285b127c6a4f9b4ea2b533a) of [chia-blockchain@1.2.6](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/5fc67c72c76f24a46285b127c6a4f9b4ea2b533a...main)
+- [`5d75defa1e2209ab3b74c9210fc32b3efad095e3`](https://github.com/Chia-Network/chia-blockchain/tree/5d75defa1e2209ab3b74c9210fc32b3efad095e3) of [chia-blockchain@1.2.7](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/5d75defa1e2209ab3b74c9210fc32b3efad095e3...main)
 - [`32907fb429fead42ce74e62ac1abf87759217c0d`](https://github.com/Chia-Network/pool-reference/tree/32907fb429fead42ce74e62ac1abf87759217c0d) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
-  - [Diff to the latest pool-reference](https://github.com/Chia-Network/chia-blockchain/compare/32907fb429fead42ce74e62ac1abf87759217c0d...main)
+  - [Diff to the latest pool-reference](https://github.com/Chia-Network/pool-reference/compare/32907fb429fead42ce74e62ac1abf87759217c0d...main)
 
 ## API
 There are 2 kinds of APIs in chia.  
@@ -124,7 +124,7 @@ Once source files is build by `npm run build:prod`, files will be output to `/di
 Then the files/directories are published to npm registry.  
 Please note it does not upload files in project root to npm registry, but files inside '/dist'.
 
-[Read details here](https://github.com/Chia-Mine/chia-agent/blob/v1.1.0/BUILD.md)
+[Read details here](https://github.com/Chia-Mine/chia-agent/blob/main/BUILD.md)
 
 ## Donation
 For continuous development, please support me with donation
