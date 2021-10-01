@@ -2,7 +2,8 @@
 
 ## Usage
 You need to create Websocket connection before subscribing websocket messages.  
-Unlike other websocket APIs, daemon websocket API is based on `request/response` manner rather than `subscribe/listen`.
+Unlike other websocket APIs, daemon websocket API is based on `request/response` style rather than `subscribe/listen`.  
+Note: `subscribe/listen` style WebSocket API for daemon was introduced at `chia-blockchain@1.2.8`. See detail [here](./#usagesubscription)
 ```js
 const {getDaemon} = require("chia-agent");
 const {start_plotting, is_running} = require("chia-agent/api/ws");
@@ -34,7 +35,8 @@ const response = await ping(daemon);
 ### response:
 ```typescript
 {
-  value: str;
+  success: bool;
+  value: str; // "pong"
 }
 ```
 
@@ -64,6 +66,7 @@ where `TService` is one of
 ### response:
 ```typescript
 {
+  success: bool;
   service: str;
   error: Optional<str>;
 }
@@ -107,6 +110,8 @@ const response = await start_plotting(daemon, {service: "chia plots create", ...
 ### response:
 ```typescript
 {
+  success: bool;
+  ids: str[];
   service_name: str; // should be 'chia plots create'
 }
 ```
@@ -130,7 +135,9 @@ const response = await stop_plotting(daemon, {id: "..."});
 ```
 ### response:
 ```typescript
-{}
+{
+  success: bool;
+}
 ```
 
 ---
@@ -152,7 +159,9 @@ const response = await stop_service(daemon, {service: "..."});
 ```
 ### response:
 ```typescript
-{}
+{
+  success: bool;
+}
 ```
 
 ---
@@ -175,6 +184,7 @@ const response = await is_running(daemon, {service: "chia_farmer"});
 ### response:
 ```typescript
 {
+  success: bool;
   service_name: str;
   is_running: bool;
 }
@@ -411,8 +421,13 @@ const response = await keyring_status(daemon);
   success: bool;
   is_keyring_locked: bool;
   passphrase_support_enabled: bool;
+  can_save_passphrase: bool;
   user_passphrase_is_set: bool;
   needs_migration: bool;
+  passphrase_requirements: {} | {
+    is_optional: True;
+    min_length: int;
+  };
 }
 ```
 
@@ -431,6 +446,57 @@ const response = await unlock_keyring(daemon, params);
 ```typescript
 {
   key: string;
+}
+```
+### response:
+```typescript
+{
+  success: bool;
+  error: string|None;
+}
+```
+
+---
+
+## `validate_keyring_passphrase(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {validate_keyring_passphrase} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await validate_keyring_passphrase(daemon, params);
+```
+### params:
+```typescript
+{
+  key: string;
+}
+```
+### response:
+```typescript
+{
+  success: bool;
+  error: string|None;
+}
+```
+
+---
+
+## `migrate_keyring(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {migrate_keyring} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await migrate_keyring(daemon, params);
+```
+### params:
+```typescript
+{
+  passphrase?: string;
+  cleanup_legacy_keyring?: bool;
 }
 ```
 ### response:
@@ -494,6 +560,31 @@ const response = await remove_keyring_passphrase(daemon, params);
 
 ---
 
+## `notify_keyring_migration_completed(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {notify_keyring_migration_completed} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await notify_keyring_migration_completed(daemon, params);
+```
+### params:
+```typescript
+{
+  key: str;
+}
+```
+### response:
+```typescript
+{
+  success: bool;
+  error: string;
+}
+```
+
+---
+
 ## `exit(daemon)`
 ### Usage
 ```js
@@ -505,7 +596,9 @@ const response = await exit(daemon);
 ```
 ### response:
 ```typescript
-{}
+{
+  success: bool;
+}
 ```
 
 ---
@@ -561,6 +654,75 @@ const response = await get_status(daemon);
 ### response:
 ```typescript
 {
+  success: bool;
   genesis_initialized: True;
+}
+```
+
+---
+
+## Usage(Subscription)
+Starting from `chia-blockchain@1.2.8`, `subscribe/listen` style WebSocket API was introduced to `daemon` service.  
+Here's an example.
+```js
+const {getDaemon} = require("chia-agent");
+const {on_keyring_status_changed} = require("chia-agent/api/ws");
+
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+
+const unsubscribe = await on_keyring_status_changed(daemon, (event) => {
+  console.log(e.data);
+  
+  // Close connection if you don't need it anymore.
+  if(...){
+    unsubscribe(); // stop listening to this ws message.
+  }
+});
+...
+```
+
+---
+
+### `on_keyring_status_changed`
+Capture broadcast message of command `on_keyring_status_changed` from `daemon` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_keyring_status_changed} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_keyring_status_changed(daemon, (event) => {
+  // Format of `event` object is desribed below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+#### event:
+```typescript
+{
+  origin: "daemon";
+  command: "keyring_status_changed";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  success: bool;
+  is_keyring_locked: bool;
+  passphrase_support_enabled: bool;
+  user_passphrase_is_set: bool;
+  needs_migration: bool;
+  passphrase_requirements: {} | {
+    is_optional: True;
+    min_length: int;
+  };
 }
 ```

@@ -1,7 +1,33 @@
 # Changelog
 
+## [2.0.5]
+### Changed
+- Updated [`keyring_status`](./src/api/ws/daemon/README.md#keyring_statusdaemon) of Daemon Websocket API
+- Updated [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params) of Daemon Websocket API
+### Fixed
+- Added missing properties for
+  - [`ping`](./src/api/ws/daemon/README.md#pingdaemon)
+  - [`start_service`](./src/api/ws/daemon/README.md#start_servicedaemon-params)
+  - [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params)
+  - [`stop_plotting`](./src/api/ws/daemon/README.md#stop_plottingdaemon-params)
+  - [`stop_service`](./src/api/ws/daemon/README.md#stop_servicedaemon-params)
+  - [`is_running`](./src/api/ws/daemon/README.md#is_runningdaemon-params)
+  - [`exit`](./src/api/ws/daemon/README.md#exitdaemon)
+  - [`get_status`](./src/api/ws/daemon/README.md#get_statusdaemon)
+  - [`stop_service`](./src/api/ws/daemon/README.md#stop_servicedaemon-params)
+### Added
+- [New daemon api](./src/api/ws/daemon)
+  - [`validate_keyring_passphrase`](./src/api/ws/daemon/README.md#validate_keyring_passphrasedaemon-params)
+  - [`migrate_keyring`](./src/api/ws/daemon/README.md#migrate_keyringdaemon-params)
+  - [`notify_keyring_migration_completed`](./src/api/ws/daemon/README.md#notify_keyring_migration_completeddaemon-params)
+  - [`keyring_status_changed`](./src/api/ws/daemon/README.md#on_keyring_status_changed)
+### Deprecated
+- `did_spend`  
+  Note: `chia-blockchain` no longer responds to `/did_spend` wallet API endpoint on and after 1.2.8.  
+  For now, I don't remove `/did_spend` from `chia-agent` but only remove from API document.
+
 ## [2.0.4]
-This release corresponds to chia-blockchain@1.2.6, which introduced no external API changes.  
+This release corresponds to chia-blockchain@1.2.6, which introduced no external API changes.
 
 ## [2.0.3]
 This release corresponds to chia-blockchain@1.2.5 which only updates install script.  
@@ -142,6 +168,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[2.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.4...v2.0.5
 [2.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.1...v2.0.2

@@ -1039,28 +1039,6 @@ const response = await did_update_recovery_ids(agent, params);
 
 ---
 
-## `did_spend(agent, params)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {did_spend} = require("chia-agent/api/rpc/wallet");
-const agent = new RPCAgent({service: "wallet"});
-const response = await did_spend(agent, params);
-```
-### params:
-```typescript
-{
-  wallet_id: int;
-  puzzlehash: bytes32;
-}
-```
-### response:
-```typescript
-{}
-```
-
----
-
 ## `did_get_pubkey(agent, params)`
 ### Usage
 ```js
