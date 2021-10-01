@@ -3,7 +3,7 @@
 ## Usage
 You need to create Websocket connection before subscribing websocket messages.  
 Unlike other websocket APIs, daemon websocket API is based on `request/response` style rather than `subscribe/listen`.  
-Note: `subscribe/listen` style WebSocket API for daemon was introduced at `chia-blockchain@1.2.7`. See detail [here](./#usagesubscription)
+Note: `subscribe/listen` style WebSocket API for daemon was introduced at `chia-blockchain@1.2.8`. See detail [here](./#usagesubscription)
 ```js
 const {getDaemon} = require("chia-agent");
 const {start_plotting, is_running} = require("chia-agent/api/ws");
@@ -662,7 +662,7 @@ const response = await get_status(daemon);
 ---
 
 ## Usage(Subscription)
-Starting from `chia-blockchain@1.2.7`, `subscribe/listen` style WebSocket API was introduced to `daemon` service.  
+Starting from `chia-blockchain@1.2.8`, `subscribe/listen` style WebSocket API was introduced to `daemon` service.  
 Here's an example.
 ```js
 const {getDaemon} = require("chia-agent");
