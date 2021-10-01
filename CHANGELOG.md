@@ -23,7 +23,7 @@
   - [`keyring_status_changed`](./src/api/ws/daemon/README.md#on_keyring_status_changed)
 ### Deprecated
 - `did_spend`  
-  Note: `chia-blockchain` no longer responds to `/did_spend` wallet API endpoint after ver1.2.8.  
+  Note: `chia-blockchain` no longer responds to `/did_spend` wallet API endpoint on and after 1.2.8.  
   For now, I don't remove `/did_spend` from `chia-agent` but only remove from API document.
 
 ## [2.0.4]
