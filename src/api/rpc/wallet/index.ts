@@ -762,6 +762,7 @@ export type TDidSpendResponse = {
   success: bool;
 };
 export async function did_spend(agent: TRPCAgent, data: TDidSpendRequest){
+  console.warn("did_spend was deprecated at chia-blockchain@1.2.8.");
   return agent.sendMessage<TDidSpendResponse>(chia_wallet_service, did_spend_command, data);
 }
 

@@ -65,6 +65,7 @@ export type TStartPlottingRequest = {
 };
 export type TStartPlottingResponse = {
   success: bool;
+  ids: str[];
   service_name: str; // should be 'chia plots create'
 };
 export async function start_plotting(daemon: TDaemon, data: TStartPlottingRequest) {
@@ -93,6 +94,8 @@ export type TStopServiceRequest = {
   service: str;
 };
 export type TStopServiceResponse = {
+  success: bool;
+  service_name: str;
 };
 export async function stop_service(daemon: TDaemon, data: TStopServiceRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>>(daemon_service, stop_service_command, data);
@@ -259,6 +262,7 @@ export type TKeyringStatusResponse = {
   success: bool;
   is_keyring_locked: bool;
   passphrase_support_enabled: bool;
+  can_save_passphrase: bool;
   user_passphrase_is_set: bool;
   needs_migration: bool;
   passphrase_requirements: {} | {
@@ -283,6 +287,21 @@ export type TUnlockKeyringResponse = {
 };
 export async function unlock_keyring(daemon: TDaemon, data: TUnlockKeyringRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, unlock_keyring_command, TUnlockKeyringResponse>>(daemon_service, unlock_keyring_command, data);
+}
+
+
+
+export const validate_keyring_passphrase_command = "validate_keyring_passphrase";
+export type validate_keyring_passphrase_command = typeof validate_keyring_passphrase_command;
+export type TValidateKeyringPassphraseRequest = {
+  key: string;
+};
+export type TValidateKeyringPassphraseResponse = {
+  success: bool;
+  error: str|None;
+};
+export async function validate_keyring_passphrase(daemon: TDaemon, data: TValidateKeyringPassphraseRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, validate_keyring_passphrase_command, TValidateKeyringPassphraseResponse>>(daemon_service, validate_keyring_passphrase_command, data);
 }
 
 

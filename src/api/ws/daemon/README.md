@@ -35,7 +35,8 @@ const response = await ping(daemon);
 ### response:
 ```typescript
 {
-  value: str;
+  success: bool;
+  value: str; // "pong"
 }
 ```
 
@@ -65,6 +66,7 @@ where `TService` is one of
 ### response:
 ```typescript
 {
+  success: bool;
   service: str;
   error: Optional<str>;
 }
@@ -108,6 +110,8 @@ const response = await start_plotting(daemon, {service: "chia plots create", ...
 ### response:
 ```typescript
 {
+  success: bool;
+  ids: str[];
   service_name: str; // should be 'chia plots create'
 }
 ```
@@ -131,7 +135,9 @@ const response = await stop_plotting(daemon, {id: "..."});
 ```
 ### response:
 ```typescript
-{}
+{
+  success: bool;
+}
 ```
 
 ---
@@ -153,7 +159,9 @@ const response = await stop_service(daemon, {service: "..."});
 ```
 ### response:
 ```typescript
-{}
+{
+  success: bool;
+}
 ```
 
 ---
@@ -176,6 +184,7 @@ const response = await is_running(daemon, {service: "chia_farmer"});
 ### response:
 ```typescript
 {
+  success: bool;
   service_name: str;
   is_running: bool;
 }
@@ -412,6 +421,7 @@ const response = await keyring_status(daemon);
   success: bool;
   is_keyring_locked: bool;
   passphrase_support_enabled: bool;
+  can_save_passphrase: bool;
   user_passphrase_is_set: bool;
   needs_migration: bool;
   passphrase_requirements: {} | {
@@ -431,6 +441,31 @@ const {unlock_keyring} = require("chia-agent/api/ws");
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
 const response = await unlock_keyring(daemon, params);
+```
+### params:
+```typescript
+{
+  key: string;
+}
+```
+### response:
+```typescript
+{
+  success: bool;
+  error: string|None;
+}
+```
+
+---
+
+## `validate_keyring_passphrase(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {validate_keyring_passphrase} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await validate_keyring_passphrase(daemon, params);
 ```
 ### params:
 ```typescript
@@ -561,7 +596,9 @@ const response = await exit(daemon);
 ```
 ### response:
 ```typescript
-{}
+{
+  success: bool;
+}
 ```
 
 ---
@@ -617,6 +654,7 @@ const response = await get_status(daemon);
 ### response:
 ```typescript
 {
+  success: bool;
   genesis_initialized: True;
 }
 ```

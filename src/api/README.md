@@ -144,6 +144,7 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`is_keyring_locked`](./ws/daemon/README.md#is_keyring_lockeddaemon)
 - [`keyring_status`](./ws/daemon/README.md#keyring_statusdaemon)
 - [`unlock_keyring`](./ws/daemon/README.md#unlock_keyringdaemon-params)
+- [`validate_keyring_passphrase`](./ws/daemon/README.md#validate_keyring_passphrasedaemon-params)
 - [`migrate_keyring`](./ws/daemon/README.md#migrate_keyringdaemon-params)
 - [`set_keyring_passphrase`](./ws/daemon/README.md#set_keyring_passphrasedaemon-params)
 - [`remove_keyring_passphrase`](./ws/daemon/README.md#remove_keyring_passphrasedaemon-params)
