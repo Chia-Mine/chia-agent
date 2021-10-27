@@ -424,6 +424,9 @@ const response = await keyring_status(daemon);
   can_save_passphrase: bool;
   user_passphrase_is_set: bool;
   needs_migration: bool;
+  can_remove_legacy_keys: bool;
+  can_set_passphrase_hint: bool;
+  passphrase_hint: str;
   passphrase_requirements: {} | {
     is_optional: True;
     min_length: int;
@@ -495,7 +498,9 @@ const response = await migrate_keyring(daemon, params);
 ### params:
 ```typescript
 {
-  passphrase?: string;
+  passphrase?: str;
+  passphrase_hint?: str;
+  save_passphrase?: bool;
   cleanup_legacy_keyring?: bool;
 }
 ```
@@ -523,6 +528,8 @@ const response = await set_keyring_passphrase(daemon, params);
 {
   current_passphrase: string;
   new_passphrase: string;
+  passphrase_hint?: str;
+  save_passphrase?: bool;
 }
 ```
 ### response:

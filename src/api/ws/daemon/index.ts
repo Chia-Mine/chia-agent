@@ -265,6 +265,9 @@ export type TKeyringStatusResponse = {
   can_save_passphrase: bool;
   user_passphrase_is_set: bool;
   needs_migration: bool;
+  can_remove_legacy_keys: bool;
+  can_set_passphrase_hint: bool;
+  passphrase_hint: str;
   passphrase_requirements: {} | {
     is_optional: True;
     min_length: int;
@@ -309,7 +312,9 @@ export async function validate_keyring_passphrase(daemon: TDaemon, data: TValida
 export const migrate_keyring_command = "migrate_keyring";
 export type migrate_keyring_command = typeof migrate_keyring_command;
 export type TMigrateKeyringRequest = {
-  passphrase?: string;
+  passphrase?: str;
+  passphrase_hint?: str;
+  save_passphrase?: bool;
   cleanup_legacy_keyring?: bool;
 };
 export type TMigrateKeyringResponse = {
@@ -325,8 +330,10 @@ export async function migrate_keyring(daemon: TDaemon, data: TMigrateKeyringRequ
 export const set_keyring_passphrase_command = "set_keyring_passphrase";
 export type set_keyring_passphrase_command = typeof set_keyring_passphrase_command;
 export type TSetKeyringPassphraseRequest = {
-  current_passphrase: string;
-  new_passphrase: string;
+  current_passphrase: str;
+  new_passphrase: str;
+  passphrase_hint?: str;
+  save_passphrase?: bool;
 };
 export type TSetKeyringPassphraseResponse = {
   success: bool;
