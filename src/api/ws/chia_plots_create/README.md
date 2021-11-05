@@ -46,7 +46,7 @@ unsubscribe(); // Stop subscribing messages
 #### event:
 ```typescript
 {
-  origin: "chia plots create";
+  origin: "chia_plotter";
   command: "state_changed";
   ack: boolean;
   data: /*See below*/;

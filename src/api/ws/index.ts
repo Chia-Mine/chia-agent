@@ -60,12 +60,12 @@ export {
 } from "./wallet/index";
 
 import type {
-  chia_plots_create_service,
+  chia_plotter_service,
   state_changed_command_of_plots,
   TStateChangedBroadCastOfPlots,
 } from "./chia_plots_create/index";
 export {
-  chia_plots_create_service,
+  chia_plotter_service,
   state_changed_command_of_plots,
   TStateChangedBroadCastOfPlots,
   on_state_changed_of_plots,
@@ -220,7 +220,7 @@ export type WsWalletMessage =
   GetMessageType<chia_wallet_service, state_changed_command_of_wallet, TStateChangedBroadCastOfWallet>;
 
 export type WsPlotsMessage =
-  GetMessageType<chia_plots_create_service, state_changed_command_of_plots, TStateChangedBroadCastOfPlots>;
+  GetMessageType<chia_plotter_service, state_changed_command_of_plots, TStateChangedBroadCastOfPlots>;
 
 export type WsDaemonMessage =
   GetMessageType<daemon_service, exit_command, TExitResponse>

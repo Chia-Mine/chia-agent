@@ -81,12 +81,12 @@ const {getDaemon} = require("chia-agent");
 const {start_plotting} = require("chia-agent/api/ws");
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
-const response = await start_plotting(daemon, {service: "chia plots create", ...});
+const response = await start_plotting(daemon, {service: "chia_plotter", ...});
 ```
 ### params:
 ```typescript
 {
-  service: "chia plots create";
+  service: "chia_plotter";
   delay: int; // delay in seconds
   parallel: bool; // parallel or serialize
   k: int; // size. 32, 33, ...
@@ -112,7 +112,7 @@ const response = await start_plotting(daemon, {service: "chia plots create", ...
 {
   success: bool;
   ids: str[];
-  service_name: str; // should be 'chia plots create'
+  service_name: str; // should be 'chia_plotter'
 }
 ```
 
@@ -622,7 +622,7 @@ const response = await register_service(daemon, {service: "wallet_ui"});
 ### params:
 ```typescript
 {
-  service: str; // typically "wallet_ui" or "chia plots create"
+  service: str; // typically "wallet_ui" or "chia_plotter"
 }
 ```
 ### response:

@@ -43,7 +43,7 @@ export async function start_service(daemon: TDaemon, data: TStartServiceRequest)
 export const start_plotting_command = "start_plotting";
 export type start_plotting_command = typeof start_plotting_command;
 export type TStartPlottingRequest = {
-  service: "chia plots create";
+  service: "chia_plotter";
   delay?: int; // delay in seconds
   parallel?: bool; // parallel or serialize
   k: int; // size
@@ -66,7 +66,7 @@ export type TStartPlottingRequest = {
 export type TStartPlottingResponse = {
   success: bool;
   ids: str[];
-  service_name: str; // should be 'chia plots create'
+  service_name: str; // should be 'chia_plotter'
 };
 export async function start_plotting(daemon: TDaemon, data: TStartPlottingRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>>(daemon_service, start_plotting_command, data);
