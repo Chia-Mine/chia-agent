@@ -4,7 +4,7 @@
 ### Minor Breaking Change
 - Service name of plotter was changed:  
   `chia plots create` => `chia_plotter`.  
-  If you start plotting via daemon websocket API, you might write like this:  
+  If you have a code which starts plotting via daemon websocket API, you might write like this:  
   ```typescript
   const {getDaemon} = require("chia-agent");
   const {start_plotting} = require("chia-agent/api/ws");
@@ -12,7 +12,7 @@
   await daemon.connect(); // connect to local daemon using config file.
   const response = await start_plotting(daemon, {service: "chia plots create", ...});
   ```
-  After chia-blockchain@1.2.11, you must rewrite the last line of the above code like this:  
+  On and after chia-blockchain@1.2.11, you must rewrite the last line of the above code like this:  
   ```typescript
   const response = await start_plotting(daemon, {service: "chia_plotter", ...});
   ```
@@ -194,7 +194,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[2.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.6...v2.1.0
+[3.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.6...v3.0.0
 [2.0.6]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.5...v2.0.6
 [2.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.4...v2.0.5
 [2.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.3...v2.0.4
