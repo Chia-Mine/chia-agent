@@ -81,30 +81,56 @@ const {getDaemon} = require("chia-agent");
 const {start_plotting} = require("chia-agent/api/ws");
 const daemon = getDaemon(); // This is the websocket connection handler
 await daemon.connect(); // connect to local daemon using config file.
-const response = await start_plotting(daemon, {service: "chia_plotter", ...});
+const response = await start_plotting(daemon, params);
 ```
 ### params:
 ```typescript
 {
   service: "chia_plotter";
-  delay: int; // delay in seconds
-  parallel: bool; // parallel or serialize
+  delay?: int; // delay in seconds. Default: 0
+  parallel?: bool; // parallel or serialize. Default: False
   k: int; // size. 32, 33, ...
-  n: int; // count of creating plot
-  queue: str; // queue name
   t: str; // tmp dir
-  t2: str; // tmp dir 2
   d: str; // final dir
-  b: int; // memory buffer size in MiB
-  u: int; // number of buckets
+  x?: bool; // exclude final dir. Skips adding [final dir] to harvester for farming. Default: False
+  n?: int; // count of creating plot. Default: 1
+  queue?: str; // queue name. Default: "default"
   r: int; // number of threads
-  a?: int; // wallet private key fingerprint
   f?: str; // farmer public key.
   p?: str; // pool public key.
   c?: str; // pool contract address.
+} & (chiapos_params | bladebit_params | madmax_params)
+```
+### chiapos_params:
+```typescript
+{
+  plotter: "chiapos";
+  t2: str; // tmp dir 2
+  b: int; // memory buffer size in MiB
+  u: int; // number of buckets
+  a?: int; // wallet private key fingerprint
   e: bool; // disable bitfield plotting
-  x: bool; // exclude final dir. Skips adding [final dir] to harvester for farming
   overrideK: bool; // Set true only if you want to use k < 32
+}
+```
+### bladebit_params:
+```typescript
+{
+  plotter: "bladebit";
+  w?: bool; // Warm start. Default: False
+  m?: bool; // Disable NUMA. Default: False
+}
+```
+### madmax_params:
+```typescript
+{
+  plotter: "madmax";
+  t2: str; // tmp dir 2
+  b: int; // memory buffer size in MiB
+  u: int; // number of buckets
+  v: int; // number of buckets for phase 3 & 4
+  K?: int; // Thread multiplier for phase 2. Default: 1
+  G?: bool; // Alternate tmpdir/tmp2dir. Default: False
 }
 ```
 ### response:

@@ -45,27 +45,45 @@ export async function start_service(daemon: TDaemon, data: TStartServiceRequest)
 
 export const start_plotting_command = "start_plotting";
 export type start_plotting_command = typeof start_plotting_command;
-export type TStartPlottingRequest = {
+export type TCommonPlottingParams = {
   service: "chia_plotter";
-  delay?: int; // delay in seconds
-  parallel?: bool; // parallel or serialize
-  k: int; // size
-  n?: int; // count of creating plot
-  queue?: str; // queue name
+  delay?: int; // delay in seconds. Default: 0
+  parallel?: bool; // parallel or serialize. Default: False
+  k: int; // size. 32, 33, ...
   t: str; // tmp dir
-  t2: str; // tmp dir 2
   d: str; // final dir
-  b: int; // memory buffer size. 3390 is recommended.
-  u: int; // number of buckets. 128 is recommended
-  r: int; // number of threads. 2 is recommended.
-  a?: int; // fingerprint. Confirm it via `chia keys show` command.
-  f?: str; // farmer public key
-  p?: str; // pool public key
-  c?: str; // pool contract address
-  e: bool; // disable bitfield plotting. False is recommended.
-  x: bool; // Skip final dir copy. False is recommended.
-  overrideK: bool; // True if you want to use k < 33
+  x?: bool; // exclude final dir. Skips adding [final dir] to harvester for farming. Default: False
+  n?: int; // count of creating plot. Default: 1
+  queue?: str; // queue name. Default: "default"
+  r: int; // number of threads
+  f?: str; // farmer public key.
+  p?: str; // pool public key.
+  c?: str; // pool contract address.
 };
+export type TChiaPosParams = {
+  plotter: "chiapos";
+  t2: str; // tmp dir 2
+  b: int; // memory buffer size in MiB
+  u: int; // number of buckets
+  a?: int; // wallet private key fingerprint
+  e: bool; // disable bitfield plotting
+  overrideK: bool; // Set true only if you want to use k < 32
+};
+export type TBladeBitParams = {
+  plotter: "bladebit";
+  w?: bool; // Warm start. Default: False
+  m?: bool; // Disable NUMA. Default: False
+};
+export type TMadMaxParams = {
+  plotter: "madmax";
+  t2: str; // tmp dir 2
+  b: int; // memory buffer size in MiB
+  u: int; // number of buckets
+  v: int; // number of buckets for phase 3 & 4
+  K?: int; // Thread multiplier for phase 2. Default: 1
+  G?: bool; // Alternate tmpdir/tmp2dir. Default: False
+};
+export type TStartPlottingRequest = TCommonPlottingParams & (TChiaPosParams | TBladeBitParams | TMadMaxParams);
 export type TStartPlottingResponse = {
   success: bool;
   ids: str[];

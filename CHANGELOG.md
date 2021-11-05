@@ -16,6 +16,8 @@
   ```typescript
   const response = await start_plotting(daemon, {service: "chia_plotter", ...});
   ```
+### Changed
+- Updated [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params) of Daemon Websocket API
 ### Added
 - [New daemon api](./src/api/ws/daemon)
   - [`get_plotters`](./src/api/ws/daemon/README.md#get_plottersdaemon)
