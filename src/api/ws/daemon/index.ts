@@ -3,6 +3,9 @@ import {GetMessageType, wallet_ui_service} from "../../types";
 import {TDaemon} from "../../../daemon/index";
 import {bool, int, None, Optional, str, True} from "../../chia/types/_python_types_";
 import {WsMessage} from "../index";
+import {chiapos_install_info} from "../../chia/plotters/chiapos";
+import {bladebit_install_info} from "../../chia/plotters/bladebit";
+import {madmax_install_info} from "../../chia/plotters/maxmax";
 
 export const daemon_service = "daemon";
 export type daemon_service = typeof daemon_service;
@@ -428,6 +431,24 @@ export type TGetStatusResponse = {
 };
 export async function get_status(daemon: TDaemon) {
   return daemon.sendMessage<GetMessageType<daemon_service, get_status_command, TGetStatusResponse>>(daemon_service, get_status_command);
+}
+
+
+
+export const get_plotters_command = "get_plotters";
+export type get_plotters_command = typeof get_plotters_command;
+export type TGetPlottersRequest = {
+};
+export type TGetPlottersResponse = {
+  success: True;
+  plotters: {
+    chiapos?: chiapos_install_info;
+    bladebit?: bladebit_install_info;
+    madmax?: madmax_install_info;
+  }
+};
+export async function get_plotters(daemon: TDaemon) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_plotters_command, TGetPlottersResponse>>(daemon_service, get_plotters_command);
 }
 
 

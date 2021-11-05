@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.1.0]
+## [3.0.0]
 ### Minor Breaking Change
 - Service name of plotter was changed:  
   `chia plots create` => `chia_plotter`.  
@@ -16,6 +16,9 @@
   ```typescript
   const response = await start_plotting(daemon, {service: "chia_plotter", ...});
   ```
+### Added
+- [New daemon api](./src/api/ws/daemon)
+  - [`get_plotters`](./src/api/ws/daemon/README.md#get_plottersdaemon)
 
 ## [2.0.6]
 ### Changed

@@ -668,6 +668,32 @@ const response = await get_status(daemon);
 
 ---
 
+## `get_plotters(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_plotters} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_plotters(daemon);
+```
+### response:
+```typescript
+{
+  success: bool;
+  plotters: {
+    chiapos?: chiapos_install_info;
+    bladebit?: bladebit_install_info;
+    madmax?: madmax_install_info;
+  }
+}
+```
+For content of `chiapos_install_info`, `bladebit_install_info`, `madmax_install_info`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/plotters/
+
+
+---
+
 ## Usage(Subscription)
 Starting from `chia-blockchain@1.2.8`, `subscribe/listen` style WebSocket API was introduced to `daemon` service.  
 Here's an example.
