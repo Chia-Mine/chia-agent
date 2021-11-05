@@ -465,6 +465,7 @@ type TCreate_New_DID_WalletResponse = {
 };
 
 type TCreate_New_Pool_WalletResponse = {
+  total_fee: uint64;
   transaction: TransactionRecord;
   launcher_id: str;
   p2_singleton_puzzle_hash: str;

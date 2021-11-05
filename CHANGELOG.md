@@ -18,6 +18,7 @@
   ```
 ### Changed
 - Updated [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params) of Daemon Websocket API
+- Updated [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params) of Wallet RPC API
 ### Added
 - [New daemon api](./src/api/ws/daemon)
   - [`get_plotters`](./src/api/ws/daemon/README.md#get_plottersdaemon)
