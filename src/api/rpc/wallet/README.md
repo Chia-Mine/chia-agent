@@ -948,7 +948,7 @@ const response = await get_trade(agent, params);
 ### params:
 ```typescript
 {
-  trade_id: bytes;
+  trade_id: str;
 }
 ```
 ### response:

@@ -694,7 +694,7 @@ export async function respond_to_offer(agent: TRPCAgent, data: TResponseToOfferR
 export const get_trade_command = "get_trade";
 export type get_trade_command = typeof get_trade_command;
 export type TGetTradeRequest = {
-  trade_id: bytes;
+  trade_id: str;
 };
 export type TGetTradeResponse = {
   trade: TradeRecordInJson;
