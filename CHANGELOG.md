@@ -16,6 +16,7 @@
   ```typescript
   const response = await start_plotting(daemon, {service: "chia_plotter", ...});
   ```
+  Please note you need to also update other code lines which refers to old service name(`chia plots create`).
 ### Changed
 - Updated [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params) of Daemon Websocket API
 - Updated [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params) of Wallet RPC API
