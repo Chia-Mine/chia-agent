@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.0.0]
+### Minor Breaking Change
+- Service name of plotter was changed:  
+  `chia plots create` => `chia_plotter`.  
+  If you have a code which starts plotting via daemon websocket API, you might write like this:  
+  ```typescript
+  const {getDaemon} = require("chia-agent");
+  const {start_plotting} = require("chia-agent/api/ws");
+  const daemon = getDaemon(); // This is the websocket connection handler
+  await daemon.connect(); // connect to local daemon using config file.
+  const response = await start_plotting(daemon, {service: "chia plots create", ...});
+  ```
+  On and after chia-blockchain@1.2.11, you must rewrite the last line of the above code like this:  
+  ```typescript
+  const response = await start_plotting(daemon, {service: "chia_plotter", ...});
+  ```
+  Please note you need to also update other code lines which refers to old service name(`chia plots create`).
+### Changed
+- Updated [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params) of Daemon Websocket API
+- Updated [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params) of Wallet RPC API
+- Updated [`get_trade`](./src/api/rpc/wallet/README.md#get_tradeagent-params) of Wallet RPC API
+- Updated [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params) of Wallet RPC API
+- Updated [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params) of Wallet RPC API
+- Updated [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params) of Wallet RPC API
+- Updated [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params) of Wallet RPC API
+### Added
+- [New daemon api](./src/api/ws/daemon)
+  - [`get_plotters`](./src/api/ws/daemon/README.md#get_plottersdaemon)
+
 ## [2.0.6]
 ### Changed
 - Updated [`keyring_status`](./src/api/ws/daemon/README.md#keyring_statusdaemon) of Daemon Websocket API
@@ -174,6 +203,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[3.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.6...v3.0.0
 [2.0.6]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.5...v2.0.6
 [2.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.4...v2.0.5
 [2.0.4]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.3...v2.0.4

@@ -20,7 +20,7 @@ main().catch(e => {
 
 function createPlotOption(opt){
   return {
-    service: "chia plots create",
+    service: "chia_plotter",
     delay: ((opt.delay || 0)*60), // delay in seconds
     parallel: false, // parallel or serialize
     k: 32, // size
@@ -196,7 +196,7 @@ pool public key: `0fc10e05716f56b665d3692dc9f09e3f2d14868a479fdccaee02e1357a0337
 Then just copy and paste those strings as values of `-f`/`-p` options.
 ```js
   const plot_option = {
-    service: "chia plots create",
+    service: "chia_plotter",
     delay: 0, // delay in seconds
     parallel: false, // parallel or serialize
     k: 33, // size

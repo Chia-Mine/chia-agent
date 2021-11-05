@@ -60,12 +60,12 @@ export {
 } from "./wallet/index";
 
 import type {
-  chia_plots_create_service,
+  chia_plotter_service,
   state_changed_command_of_plots,
   TStateChangedBroadCastOfPlots,
 } from "./chia_plots_create/index";
 export {
-  chia_plots_create_service,
+  chia_plotter_service,
   state_changed_command_of_plots,
   TStateChangedBroadCastOfPlots,
   on_state_changed_of_plots,
@@ -75,6 +75,7 @@ import type {
   daemon_service,
   exit_command,
   get_status_command,
+  get_plotters_command,
   is_running_command,
   add_private_key_command,
   check_keys_command,
@@ -100,6 +101,7 @@ import type {
   validate_keyring_passphrase_command,
   TExitResponse,
   TGetStatusResponse,
+  TGetPlottersResponse,
   TIsRunningResponse,
   TAddPrivateKeyResponse,
   TCheckKeysResponse,
@@ -133,6 +135,7 @@ export {
   TStopServiceResponse,
   TExitResponse,
   TGetStatusResponse,
+  TGetPlottersResponse,
   TIsRunningResponse,
   TAddPrivateKeyResponse,
   TCheckKeysResponse,
@@ -156,6 +159,7 @@ export {
   TPlotQueue,
   TPingRequest,
   TGetStatusRequest,
+  TGetPlottersRequest,
   TStartServiceRequest,
   TStartPlottingRequest,
   TStopServiceRequest,
@@ -174,7 +178,8 @@ export {
   TNotifyKeyringMigrationCompletedRequest,
   TExitRequest,
   TValidateKeyringPassphraseRequest,
-  get_status, 
+  get_status,
+  get_plotters,
   ping_command, 
   stop_service, 
   stop_plotting, 
@@ -220,11 +225,12 @@ export type WsWalletMessage =
   GetMessageType<chia_wallet_service, state_changed_command_of_wallet, TStateChangedBroadCastOfWallet>;
 
 export type WsPlotsMessage =
-  GetMessageType<chia_plots_create_service, state_changed_command_of_plots, TStateChangedBroadCastOfPlots>;
+  GetMessageType<chia_plotter_service, state_changed_command_of_plots, TStateChangedBroadCastOfPlots>;
 
 export type WsDaemonMessage =
   GetMessageType<daemon_service, exit_command, TExitResponse>
   | GetMessageType<daemon_service, get_status_command, TGetStatusResponse>
+  | GetMessageType<daemon_service, get_plotters_command, TGetPlottersResponse>
   | GetMessageType<daemon_service, is_running_command, TIsRunningResponse>
   | GetMessageType<daemon_service, ping_command, TPingResponse>
   | GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>

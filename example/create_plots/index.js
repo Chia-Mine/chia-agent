@@ -4,7 +4,7 @@ main().catch(e => {
 
 function createPlotOption(opt){
   return {
-    service: "chia plots create",
+    service: "chia_plotter",
     delay: ((opt.delay || 0)*60), // delay in seconds
     parallel: false, // parallel or serialize
     k: 32, // size

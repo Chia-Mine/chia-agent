@@ -3,6 +3,9 @@ import {GetMessageType, wallet_ui_service} from "../../types";
 import {TDaemon} from "../../../daemon/index";
 import {bool, int, None, Optional, str, True} from "../../chia/types/_python_types_";
 import {WsMessage} from "../index";
+import {chiapos_install_info} from "../../chia/plotters/chiapos";
+import {bladebit_install_info} from "../../chia/plotters/bladebit";
+import {madmax_install_info} from "../../chia/plotters/maxmax";
 
 export const daemon_service = "daemon";
 export type daemon_service = typeof daemon_service;
@@ -42,31 +45,49 @@ export async function start_service(daemon: TDaemon, data: TStartServiceRequest)
 
 export const start_plotting_command = "start_plotting";
 export type start_plotting_command = typeof start_plotting_command;
-export type TStartPlottingRequest = {
-  service: "chia plots create";
-  delay?: int; // delay in seconds
-  parallel?: bool; // parallel or serialize
-  k: int; // size
-  n?: int; // count of creating plot
-  queue?: str; // queue name
+export type TCommonPlottingParams = {
+  service: "chia_plotter";
+  delay?: int; // delay in seconds. Default: 0
+  parallel?: bool; // parallel or serialize. Default: False
+  k: int; // size. 32, 33, ...
   t: str; // tmp dir
-  t2: str; // tmp dir 2
   d: str; // final dir
-  b: int; // memory buffer size. 3390 is recommended.
-  u: int; // number of buckets. 128 is recommended
-  r: int; // number of threads. 2 is recommended.
-  a?: int; // fingerprint. Confirm it via `chia keys show` command.
-  f?: str; // farmer public key
-  p?: str; // pool public key
-  c?: str; // pool contract address
-  e: bool; // disable bitfield plotting. False is recommended.
-  x: bool; // Skip final dir copy. False is recommended.
-  overrideK: bool; // True if you want to use k < 33
+  x?: bool; // exclude final dir. Skips adding [final dir] to harvester for farming. Default: False
+  n?: int; // count of creating plot. Default: 1
+  queue?: str; // queue name. Default: "default"
+  r: int; // number of threads
+  f?: str; // farmer public key.
+  p?: str; // pool public key.
+  c?: str; // pool contract address.
 };
+export type TChiaPosParams = {
+  plotter: "chiapos";
+  t2: str; // tmp dir 2
+  b: int; // memory buffer size in MiB
+  u: int; // number of buckets
+  a?: int; // wallet private key fingerprint
+  e: bool; // disable bitfield plotting
+  overrideK: bool; // Set true only if you want to use k < 32
+};
+export type TBladeBitParams = {
+  plotter: "bladebit";
+  w?: bool; // Warm start. Default: False
+  m?: bool; // Disable NUMA. Default: False
+};
+export type TMadMaxParams = {
+  plotter: "madmax";
+  t2: str; // tmp dir 2
+  b: int; // memory buffer size in MiB
+  u: int; // number of buckets
+  v: int; // number of buckets for phase 3 & 4
+  K?: int; // Thread multiplier for phase 2. Default: 1
+  G?: bool; // Alternate tmpdir/tmp2dir. Default: False
+};
+export type TStartPlottingRequest = TCommonPlottingParams & (TChiaPosParams | TBladeBitParams | TMadMaxParams);
 export type TStartPlottingResponse = {
   success: bool;
   ids: str[];
-  service_name: str; // should be 'chia plots create'
+  service_name: str; // should be 'chia_plotter'
 };
 export async function start_plotting(daemon: TDaemon, data: TStartPlottingRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>>(daemon_service, start_plotting_command, data);
@@ -428,6 +449,24 @@ export type TGetStatusResponse = {
 };
 export async function get_status(daemon: TDaemon) {
   return daemon.sendMessage<GetMessageType<daemon_service, get_status_command, TGetStatusResponse>>(daemon_service, get_status_command);
+}
+
+
+
+export const get_plotters_command = "get_plotters";
+export type get_plotters_command = typeof get_plotters_command;
+export type TGetPlottersRequest = {
+};
+export type TGetPlottersResponse = {
+  success: True;
+  plotters: {
+    chiapos?: chiapos_install_info;
+    bladebit?: bladebit_install_info;
+    madmax?: madmax_install_info;
+  }
+};
+export async function get_plotters(daemon: TDaemon) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_plotters_command, TGetPlottersResponse>>(daemon_service, get_plotters_command);
 }
 
 

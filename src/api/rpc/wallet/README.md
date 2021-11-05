@@ -465,6 +465,7 @@ type TCreate_New_DID_WalletResponse = {
 };
 
 type TCreate_New_Pool_WalletResponse = {
+  total_fee: uint64;
   transaction: TransactionRecord;
   launcher_id: str;
   p2_singleton_puzzle_hash: str;
@@ -947,7 +948,7 @@ const response = await get_trade(agent, params);
 ### params:
 ```typescript
 {
-  trade_id: bytes;
+  trade_id: str;
 }
 ```
 ### response:
@@ -1305,6 +1306,7 @@ const response = await pw_join_pool(agent, params);
 ### params:
 ```typescript
 {
+  fee?: uint64;
   wallet_id: uint32;
   "target_puzzlehash"?: string;
   pool_url: Optional<str>;
@@ -1314,11 +1316,15 @@ const response = await pw_join_pool(agent, params);
 ### response:
 ```typescript
 {
-  state: PoolWalletInfo;
+  total_fee: uint64;
+  transaction: TransactionRecord;
+} | {
+  success: False;
+  error: "not_initialized";
 }
 ```
-For content of `PoolWalletInfo`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
 ---
 
@@ -1334,16 +1340,21 @@ const response = await pw_self_pool(agent, params);
 ```typescript
 {
   wallet_id: uint32;
+  fee?: uint64;
 }
 ```
 ### response:
 ```typescript
 {
-  state: PoolWalletInfo;
-}
+  total_fee: uint64;
+  transaction: TransactionRecord;
+} | {
+  success: False;
+  error: "not_initialized";
+};
 ```
-For content of `PoolWalletInfo`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
 ---
 
@@ -1359,7 +1370,7 @@ const response = await pw_absorb_rewards(agent, params);
 ```typescript
 {
   wallet_id: uint32;
-  fee: uint64;
+  fee?: uint64;
 }
 ```
 ### response:
@@ -1367,8 +1378,14 @@ const response = await pw_absorb_rewards(agent, params);
 {
   state: PoolWalletInfo;
   transaction: TransactionRecord;
-}
+} | {
+  success: False;
+  error: "not_initialized";
+};
 ```
+For content of `PoolWalletInfo`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
+
 For content of `TransactionRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
@@ -1393,7 +1410,13 @@ const response = await pw_status(agent, params);
 {
   state: PoolWalletInfo;
   unconfirmed_transactions: TransactionRecord[];
+} | {
+  success: False;
+  error: "not_initialized";
 }
 ```
+For content of `PoolWalletInfo`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
+
 For content of `TransactionRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts

@@ -368,6 +368,7 @@ export type TCreate_New_Pool_WalletRequest = {
 };
 
 export type TCreate_New_Pool_WalletResponse = {
+  total_fee: uint64;
   transaction: TransactionRecord;
   launcher_id: str;
   p2_singleton_puzzle_hash: str;
@@ -693,7 +694,7 @@ export async function respond_to_offer(agent: TRPCAgent, data: TResponseToOfferR
 export const get_trade_command = "get_trade";
 export type get_trade_command = typeof get_trade_command;
 export type TGetTradeRequest = {
-  trade_id: bytes;
+  trade_id: str;
 };
 export type TGetTradeResponse = {
   trade: TradeRecordInJson;
@@ -958,13 +959,18 @@ export async function add_rate_limited_funds(agent: TRPCAgent, data: TAddRateLim
 export const pw_join_pool_command = "pw_join_pool";
 export type pw_join_pool_command = typeof pw_join_pool_command;
 export type TPwJoinPoolRequest = {
+  fee?: uint64;
   wallet_id: uint32;
   target_puzzlehash?: string;
   pool_url?: str;
   relative_lock_height: uint32;
 };
 export type TPwJoinPoolResponse = {
+  total_fee: uint64;
   transaction: TransactionRecord;
+} | {
+  success: False;
+  error: "not_initialized";
 };
 export async function pw_join_pool(agent: TRPCAgent, data: TPwJoinPoolRequest){
   return agent.sendMessage<TPwJoinPoolResponse>(chia_wallet_service, pw_join_pool_command, data);
@@ -977,9 +983,14 @@ export const pw_self_pool_command = "pw_self_pool";
 export type pw_self_pool_command = typeof pw_self_pool_command;
 export type TPwSelfPoolRequest = {
   wallet_id: uint32;
+  fee?: uint64;
 };
 export type TPwSelfPoolResponse = {
+  total_fee: uint64;
   transaction: TransactionRecord;
+} | {
+  success: False;
+  error: "not_initialized";
 };
 export async function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest){
   return agent.sendMessage<TPwSelfPoolResponse>(chia_wallet_service, pw_self_pool_command, data);
@@ -992,11 +1003,14 @@ export const pw_absorb_rewards_command = "pw_absorb_rewards";
 export type pw_absorb_rewards_command = typeof pw_absorb_rewards_command;
 export type TPwAbsorbRewardsRequest = {
   wallet_id: uint32;
-  fee: uint64;
+  fee?: uint64;
 };
 export type TPwAbsorbRewardsResponse = {
   state: PoolWalletInfo;
   transaction: TransactionRecord;
+} | {
+  success: False;
+  error: "not_initialized";
 };
 export async function pw_absorb_rewards(agent: TRPCAgent, data: TPwAbsorbRewardsRequest){
   return agent.sendMessage<TPwAbsorbRewardsResponse>(chia_wallet_service, pw_absorb_rewards_command, data);
@@ -1013,6 +1027,9 @@ export type TPwStatusRequest = {
 export type TPwStatusResponse = {
   state: PoolWalletInfo;
   unconfirmed_transactions: TransactionRecord[];
+} | {
+  success: False;
+  error: "not_initialized";
 };
 export async function pw_status(agent: TRPCAgent, data: TPwStatusRequest){
   return agent.sendMessage<TPwStatusResponse>(chia_wallet_service, pw_status_command, data);

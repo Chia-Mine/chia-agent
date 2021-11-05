@@ -48,19 +48,19 @@ Start to monitor message channel via websocket.
 
 ```js
 await daemon.subscribe(service);
-// service: "wallet_ui" or "chia plots create"
+// service: "wallet_ui" or "chia_plotter"
 ```
 
 `wallet_ui`  
 Monitor messages sent to update GUI like connecting nodes, last attempted proof, wallet status, etc.
 
-`chia plots create`  
+`chia_plotter`  
 Monitor plot creation progress.
 
 Messages can be monitored after message event listener is added to daemon instance.
 ```js
 // Subscribe message from `origin`.
-// origin is "chia_wallet", "chia_farmer", "chia_full_node", "chia plots create", etc.
+// origin is "chia_wallet", "chia_farmer", "chia_full_node", "chia_plotter", etc.
 // If origin is set to `undefined` or "all", all incoming messages are passed to the listener function.
 daemon.addMessageListener(origin, (message) => {
   // Content of receiving message depends on origin and command.

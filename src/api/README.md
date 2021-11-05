@@ -152,10 +152,11 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`exit`](./ws/daemon/README.md#exitdaemon)
 - [`register_service`](./ws/daemon/README.md#register_servicedaemon-params)
 - [`get_status`](./ws/daemon/README.md#get_statusdaemon)
+- [`get_plotters`](./ws/daemon/README.md#get_plottersdaemon)
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  
-After subscribing message channels like `wallet_ui` or `chia plots create`,
+After subscribing message channels like `wallet_ui` or `chia_plotter`,
 you need to wait messages in the channel are arrived to your message listener.
 
 #### [daemon](./ws/daemon/README.md#usagesubscription)
