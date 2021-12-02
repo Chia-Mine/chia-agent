@@ -1,5 +1,6 @@
 import {Agent as HttpsAgent, request as httpsRequest, RequestOptions} from "https";
 import {Agent as HttpAgent, OutgoingHttpHeaders, request as httpRequest} from "http";
+import type {checkServerIdentity} from "tls";
 import {existsSync, readFileSync} from "fs";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
@@ -182,14 +183,17 @@ export class RPCAgent {
       const body = data ? JSON.stringify(data) : "{}";
       const pathname = `/${path.replace(/^\/+/, "")}`;
       const METHOD = method.toUpperCase();
-      const options: RequestOptions = {
+      const options: RequestOptions & {checkServerIdentity?: typeof checkServerIdentity;} = {
         protocol: this._protocol + ":", // nodejs's https module requires protocol to include ':'.
         hostname: this._hostname,
         port: `${this._port}`,
         path: pathname,
         method: METHOD,
         agent: this._agent,
-        checkServerIdentity: () => undefined,
+        checkServerIdentity: () => {
+          // Todo: Should write something to verify server identity
+          return undefined;
+        },
         headers: {
           Accept: "application/json, text/plain, */*",
           "User-Agent": userAgent,
