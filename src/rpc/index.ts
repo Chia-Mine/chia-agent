@@ -53,11 +53,13 @@ export type TRPCAgentProps = {
   ca_cert?: string|Buffer;
   client_cert?: string|Buffer;
   client_key?: string|Buffer;
+  skip_hostname_verification?: boolean;
 } | {
   protocol: "https";
   host: string;
   port: number;
   configPath: string;
+  skip_hostname_verification?: boolean;
 } | {
   protocol: "http";
   host: string;
@@ -65,6 +67,7 @@ export type TRPCAgentProps = {
 } | {
   service: TDestination;
   configPath?: string;
+  skip_hostname_verification?: boolean;
 };
 
 const userAgent = "chia-agent/1.0.0";
@@ -77,6 +80,7 @@ export class RPCAgent {
   protected _clientCert?: string|Buffer = "";
   protected _clientKey?: string|Buffer = "";
   protected _agent: HttpsAgent|HttpAgent;
+  protected _skip_hostname_verification: boolean = false;
   
   public constructor(props: TRPCAgentProps) {
     if("protocol" in props){
@@ -91,11 +95,13 @@ export class RPCAgent {
           this._clientCert = certs.clientCert;
           this._clientKey = certs.clientKey;
           this._caCert = certs.caCert;
+          this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
         }
         else{
           this._caCert = props.ca_cert;
           this._clientCert = props.client_cert;
           this._clientKey = props.client_key;
+          this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
         }
     
         this._agent = new HttpsAgent({
@@ -125,6 +131,7 @@ export class RPCAgent {
       this._clientCert = certs.clientCert;
       this._clientKey = certs.clientKey;
       this._caCert = certs.caCert;
+      this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
   
       this._agent = new HttpsAgent({
         host: this._hostname,
@@ -190,15 +197,17 @@ export class RPCAgent {
         path: pathname,
         method: METHOD,
         agent: this._agent,
-        checkServerIdentity: () => {
-          // Todo: Should write something to verify server identity
-          return undefined;
-        },
         headers: {
           Accept: "application/json, text/plain, */*",
           "User-Agent": userAgent,
         } as OutgoingHttpHeaders,
       };
+      
+      if(this._skip_hostname_verification){
+        options.checkServerIdentity = () => {
+          return undefined;
+        };
+      }
       
       if(METHOD === "POST" || METHOD === "PUT" || METHOD === "DELETE"){
         options.headers = {
