@@ -189,6 +189,7 @@ export class RPCAgent {
         path: pathname,
         method: METHOD,
         agent: this._agent,
+        checkServerIdentity: () => undefined,
         headers: {
           Accept: "application/json, text/plain, */*",
           "User-Agent": userAgent,
