@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.1]
+### Added
+- Added `skip_hostname_verification` option for `RPCAgent`
+
 ## [3.0.0]
 ### Minor Breaking Change
 - Service name of plotter was changed:  
@@ -203,6 +207,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[3.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.6...v3.0.0
 [2.0.6]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.5...v2.0.6
 [2.0.5]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.4...v2.0.5
