@@ -19,7 +19,7 @@ export async function on_state_changed_of_wallet(daemon: TDaemon, callback: (e: 
       callback(e);
     }
   };
-  return daemon.addMessageListener(state_changed_command_of_wallet, messageListener);
+  return daemon.addMessageListener(chia_wallet_service, messageListener);
 }
 
 // Whole commands for the service
@@ -32,5 +32,5 @@ export async function on_message_from_wallet(daemon: TDaemon, callback: (e: GetM
       callback(e);
     }
   };
-  return daemon.addMessageListener(state_changed_command_of_wallet, messageListener);
+  return daemon.addMessageListener(chia_wallet_service, messageListener);
 }
