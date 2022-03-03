@@ -3,6 +3,9 @@
 ## [3.0.1]
 ### Added
 - Added `skip_hostname_verification` option for `RPCAgent`
+### Fixed
+- Fixed an issue where wallet WebSocket message from daemon was not captured.  
+  Thank you! @joshpainter
 
 ## [3.0.0]
 ### Minor Breaking Change
