@@ -29,11 +29,12 @@ If `configPath` is omitted, `chia-agent` tries to search from default config fil
 options = {
   service: "farmer"|"harvester"|"full_node"|"wallet";
   configPath?: string;
+  skip_hostname_verification?: boolean;
 }
 ```
 example
 ```js
-const agent = new RPCAgent({service: "full_node"});
+const agent = new RPCAgent({service: "full_node", skip_hostname_verification: true});
 ```
 
 ---
@@ -47,6 +48,7 @@ options = {
   ca_cert: string|Buffer;
   client_cert: string|Buffer;
   client_key: string|Buffer;
+  skip_hostname_verification?: boolean;
 }
 ```
 example
@@ -58,6 +60,7 @@ const agent = new RPCAgent({
   ca_cert: fs.readFileSync("..."),
   client_cert: fs.readFileSync("..."),
   client_key: fs.readFileSync("..."),
+  skip_hostname_verification: true,
 });
 ```
 
@@ -71,6 +74,7 @@ const agent = new RPCAgent({
   host: string;
   port: number;
   configPath: string;
+  skip_hostname_verification?: boolean;
 }
 ```
 example
@@ -80,6 +84,7 @@ const agent = new RPCAgent({
   host: "localhost",
   port: 8555,
   configPath: "...",
+  skip_hostname_verification: true,
 });
 ```
 
