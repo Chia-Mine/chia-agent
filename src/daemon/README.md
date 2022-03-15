@@ -54,6 +54,9 @@ await daemon.subscribe(service);
 `wallet_ui`  
 Monitor messages sent to update GUI like connecting nodes, last attempted proof, wallet status, etc.
 
+`metrics`  
+Monitor messages to measure internal app states.
+
 `chia_plotter`  
 Monitor plot creation progress.
 

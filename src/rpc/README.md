@@ -27,7 +27,7 @@ There are several ways to specify connection info.
 If `configPath` is omitted, `chia-agent` tries to search from default config file path.
 ```typescript
 options = {
-  service: "farmer"|"harvester"|"full_node"|"wallet";
+  service: "farmer"|"harvester"|"full_node"|"wallet"|"crawler";
   configPath?: string;
   skip_hostname_verification?: boolean;
 }

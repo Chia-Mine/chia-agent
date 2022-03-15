@@ -4,7 +4,7 @@ There are 2 kinds of APIs in chia.
 `RPC API` and `Websocket API`
 
 ### RPC API
-RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`, `crawler`.
 
 RPC API is just an async function with a traditional request/response style.
 
@@ -174,7 +174,7 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  
-After subscribing message channels like `wallet_ui` or `chia_plotter`,
+After subscribing message channels like `wallet_ui`, `metrics` or `chia_plotter`,
 you need to wait messages in the channel are arrived to your message listener.
 
 #### [daemon](./ws/daemon/README.md#usagesubscription)
