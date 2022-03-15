@@ -48,11 +48,14 @@ Start to monitor message channel via websocket.
 
 ```js
 await daemon.subscribe(service);
-// service: "wallet_ui" or "chia_plotter"
+// service: "wallet_ui", "metrics" or "chia_plotter"
 ```
 
 `wallet_ui`  
 Monitor messages sent to update GUI like connecting nodes, last attempted proof, wallet status, etc.
+
+`metrics`  
+Monitor messages to measure internal app states.
 
 `chia_plotter`  
 Monitor plot creation progress.

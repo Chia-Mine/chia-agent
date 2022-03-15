@@ -4,7 +4,7 @@ There are 2 kinds of APIs in chia.
 `RPC API` and `Websocket API`
 
 ### RPC API
-RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`.
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`, `crawler`.
 
 RPC API is just an async function with a traditional request/response style.
 
@@ -26,6 +26,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_blockchain_state`](./rpc/full_node/README.md#get_blockchain_stateagent)
 - [`get_block`](./rpc/full_node/README.md#get_blockagent-params)
 - [`get_blocks`](./rpc/full_node/README.md#get_blocksagent-params)
+- [`get_block_count_metrics`](./rpc/full_node/README.md#get_block_count_metricsagent)
 - [`get_block_record_by_height`](./rpc/full_node/README.md#get_block_record_by_heightagent-params)
 - [`get_block_record`](./rpc/full_node/README.md#get_block_recordagent-params)
 - [`get_block_records`](./rpc/full_node/README.md#get_block_recordsagent-params)
@@ -56,6 +57,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 
 #### [Wallet RPC API](./rpc/wallet/README.md#usage)
 - [`log_in`](./rpc/wallet/README.md#log_inagent-params)
+- [`get_logged_in_fingerprint`](./rpc/wallet/README.md#get_logged_in_fingerprintagent)
 - [`get_public_keys`](./rpc/wallet/README.md#get_public_keysagent)
 - [`get_private_key`](./rpc/wallet/README.md#get_private_keyagent-params)
 - [`generate_mnemonic`](./rpc/wallet/README.md#generate_mnemonicagent)
@@ -65,6 +67,7 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`delete_all_keys`](./rpc/wallet/README.md#delete_all_keysagent)
 - [`get_sync_status`](./rpc/wallet/README.md#get_sync_statusagent)
 - [`get_height_info`](./rpc/wallet/README.md#get_height_infoagent)
+- [`push_tx`](./rpc/wallet/README.md#push_txagent-params)
 - [`farm_block`](./rpc/wallet/README.md#farm_blockagent-params)
 - [`get_initial_freeze_period_of_wallet`](./rpc/wallet/README.md#get_initial_freeze_period_of_walletagent)
 - [`get_network_info_of_wallet`](./rpc/wallet/README.md#get_network_info_of_walletagent)
@@ -76,21 +79,24 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_next_address`](./rpc/wallet/README.md#get_next_addressagent-params)
 - [`send_transaction`](./rpc/wallet/README.md#send_transactionagent-params)
 - [`send_transaction_multi`](./rpc/wallet/README.md#send_transaction_multiagent-params)
-- [`create_backup`](./rpc/wallet/README.md#create_backupagent-params)
 - [`get_transaction_count`](./rpc/wallet/README.md#get_transaction_countagent-params)
 - [`get_farmed_amount`](./rpc/wallet/README.md#get_farmed_amountagent)
 - [`create_signed_transaction`](./rpc/wallet/README.md#create_signed_transactionagent-params)
 - [`delete_unconfirmed_transactions`](./rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
-- [`cc_set_name`](./rpc/wallet/README.md#cc_set_nameagent-params)
-- [`cc_get_name`](./rpc/wallet/README.md#cc_get_nameagent-params)
-- [`cc_spend`](./rpc/wallet/README.md#cc_spendagent-params)
-- [`cc_get_colour`](./rpc/wallet/README.md#cc_get_colouragent-params)
+- [`cat_set_name`](./rpc/wallet/README.md#cat_set_nameagent-params)
+- [`cat_asset_id_to_name`](./rpc/wallet/README.md#cat_asset_id_to_nameagent-params)
+- [`cat_get_name`](./rpc/wallet/README.md#cat_get_nameagent-params)
+- [`cat_spend`](./rpc/wallet/README.md#cat_spendagent-params)
+- [`cat_get_asset_id`](./rpc/wallet/README.md#cat_get_asset_idagent-params)
 - [`create_offer_for_ids`](./rpc/wallet/README.md#create_offer_for_idsagent-params)
-- [`get_discrepancies_for_offer`](./rpc/wallet/README.md#get_discrepancies_for_offeragent-params)
-- [`respond_to_offer`](./rpc/wallet/README.md#respond_to_offeragent-params)
-- [`get_trade`](./rpc/wallet/README.md#get_tradeagent-params)
-- [`get_all_trades`](./rpc/wallet/README.md#get_all_tradesagent)
-- [`cancel_trade`](./rpc/wallet/README.md#cancel_tradeagent-params)
+- [`get_offer_summary`](./rpc/wallet/README.md#get_offer_summaryagent-params)
+- [`check_offer_validity`](./rpc/wallet/README.md#check_offer_validityagent-params)
+- [`take_offer`](./rpc/wallet/README.md#take_offeragent-params)
+- [`get_offer`](./rpc/wallet/README.md#get_offeragent-params)
+- [`get_all_offers`](./rpc/wallet/README.md#get_all_offersagent-params)
+- [`get_offers_count`](./rpc/wallet/README.md#get_offers_countagent)
+- [`cancel_offer`](./rpc/wallet/README.md#cancel_offeragent-params)
+- [`get_cat_list`](./rpc/wallet/README.md#get_cat_listagent)
 - [`did_update_recovery_ids`](./rpc/wallet/README.md#did_update_recovery_idsagent-params)
 - [`did_get_pubkey`](./rpc/wallet/README.md#did_get_pubkeyagent-params)
 - [`did_get_did`](./rpc/wallet/README.md#did_get_didagent-params)
@@ -114,6 +120,17 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`put_farmer`](./rpc/pool/README.md#put_farmeragent-params)
 - [`partial`](./rpc/pool/README.md#partialagent-params)
 - [`login`](./rpc/pool/README.md#loginagent-params)
+
+#### [Crawler RPC API](./rpc/crawler/README.md#usage)
+- [`get_peer_counts`](./rpc/crawler/README.md#get_peer_countsagent)
+- [`get_ips_after_timestamp`](./rpc/crawler/README.md#get_ips_after_timestampagent-params)
+
+#### [Common RPC API](./rpc/common/README.md#usage)
+- [`get_connections`](./rpc/common/README.md#get_connectionsagent-params)
+- [`open_connection`](./rpc/common/README.md#open_connectionagent-params)
+- [`close_connection`](./rpc/common/README.md#close_connectionagent-params)
+- [`stop_node`](./rpc/common/README.md#stop_nodeagent)
+- [`get_routes`](./rpc/common/README.md#get_routesagent)
 
 ### Websocket API
 Websocket API is used to connect to chia `daemon`.  
@@ -152,11 +169,12 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`exit`](./ws/daemon/README.md#exitdaemon)
 - [`register_service`](./ws/daemon/README.md#register_servicedaemon-params)
 - [`get_status`](./ws/daemon/README.md#get_statusdaemon)
+- [`get_version`](./ws/daemon/README.md#get_versiondaemon)
 - [`get_plotters`](./ws/daemon/README.md#get_plottersdaemon)
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  
-After subscribing message channels like `wallet_ui` or `chia_plotter`,
+After subscribing message channels like `wallet_ui`, `metrics` or `chia_plotter`,
 you need to wait messages in the channel are arrived to your message listener.
 
 #### [daemon](./ws/daemon/README.md#usagesubscription)
@@ -166,18 +184,36 @@ you need to wait messages in the channel are arrived to your message listener.
 - [`state_changed`](./ws/chia_plots_create/README.md#on_state_changed_of_plots)
 
 #### [farmer](./ws/farmer/README.md#usage)
+- [`get_connections`](./ws/farmer/README.md#on_get_connections)
 - [`new_farming_info`](./ws/farmer/README.md#on_new_farming_info)
 - [`new_signage_point`](./ws/farmer/README.md#on_new_signage_point)
 - [`new_plots`](./ws/farmer/README.md#on_new_plots)
 
 #### [full_node](./ws/full_node/README.md#usage)
+- [`get_connections`](./ws/full_node/README.md#on_get_connections)
 - [`get_blockchain_state`](./ws/full_node/README.md#on_get_blockchain_state)
+- [`block`](./ws/full_node/README.md#on_block)
+- [`signage_point`](./ws/full_node/README.md#on_signage_point)
 
 #### [harvester](./ws/harvester/README.md#usage)
+- [`get_connections`](./ws/harvester/README.md#on_get_connections)
 - [`get_plots`](./ws/harvester/README.md#on_get_plots)
 
 #### [wallet](./ws/wallet/README.md#usage)
+- [`get_connections`](./ws/wallet/README.md#on_get_connections)
+- [`sync_changed`](./ws/wallet/README.md#on_sync_changed_of_wallet)
 - [`state_changed`](./ws/wallet/README.md#on_state_changed_of_wallet)
+- [`coin_add`](./ws/wallet/README.md#on_coin_added)
+
+#### [Crawler](./ws/crawler/README.md#usage)
+- [`loaded_initial_peers`](./ws/crawler/README.md#on_loaded_initial_peers)
+- [`crawl_batch_completed`](./ws/crawler/README.md#on_crawl_batch_completed)
+
+#### [Timelord](./ws/timelord/README.md#usage)
+- [`finished_pot`](./ws/timelord/README.md#on_finished_pot)
+- [`new_compact_proof`](./ws/timelord/README.md#on_new_compact_proof)
+- [`skipping_peak`](./ws/timelord/README.md#on_skipping_peak)
+- [`new_peak`](./ws/timelord/README.md#on_new_peak)
 
 ### Log
 

@@ -1,4 +1,4 @@
-import {G1Element, G2Element, str, uint64} from "../types/_python_types_";
+import {G1Element, str} from "../types/_python_types_";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 
 export type PoolWalletConfig = {
@@ -8,5 +8,4 @@ export type PoolWalletConfig = {
   target_puzzle_hash: bytes32;
   p2_singleton_puzzle_hash: bytes32;
   owner_public_key: G1Element;
-  authentication_public_key: G1Element;
 };

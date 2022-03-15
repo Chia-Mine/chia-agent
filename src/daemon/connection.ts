@@ -1,7 +1,7 @@
 import {readFileSync, existsSync} from "fs";
 import {getConfig, defaultDaemonCertPath, defaultDaemonKeyPath, getPathFromConfig} from "../config";
 import * as WS from "ws";
-import {OpenEvent} from "ws";
+import {Event} from "ws";
 import {getLogger} from "../logger";
 
 function create(url: string) {
@@ -31,7 +31,7 @@ function create(url: string) {
 
 const defaultTimeoutInMs = 50000;
 
-export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEvent: OpenEvent }> {
+export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEvent: Event }> {
   return new Promise((resolve, reject) => {
     const ws = create(url);
     let timer: ReturnType<typeof setTimeout> | null = null;

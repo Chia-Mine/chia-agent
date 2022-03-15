@@ -37,7 +37,7 @@ const {on_state_changed_of_plots} = require("chia-agent/api/ws");
 const daemon = getDaemon();
 await daemon.connect();
 const unsubscribe = await on_state_changed_of_plots(daemon, (event) => {
-  // Format of `event` object is desribed below.
+  // Format of `event` object is described below.
   ...
 });
 ...
@@ -51,7 +51,7 @@ unsubscribe(); // Stop subscribing messages
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: string;
+  destination: "wallet_ui";
 }
 ```
 #### data:

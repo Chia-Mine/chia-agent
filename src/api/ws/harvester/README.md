@@ -26,6 +26,46 @@ const unsubscribe = await on_message_from_harvester(daemon, (event) => {
 
 ---
 
+### `on_get_connections`
+Capture broadcast message of command `get_connections` from `chia_harvester` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_get_connections} = require("chia-agent/api/ws/harvester");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_get_connections(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_harvester";
+  command: "get_connections";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  connections: TConnectionGeneral[];
+}
+```
+For content of `TConnectionGeneral`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/types.ts
+
+---
+
 ### `on_get_plots`
 Capture broadcast message of command `get_plots` from `chia_harvester` service.
 
@@ -37,7 +77,7 @@ const {on_get_plots} = require("chia-agent/api/ws");
 const daemon = getDaemon();
 await daemon.connect();
 const unsubscribe = await on_get_plots(daemon, (event) => {
-  // Format of `event` object is desribed below.
+  // Format of `event` object is described below.
   ...
 });
 ...
@@ -52,7 +92,7 @@ unsubscribe(); // Stop subscribing messages
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: string;
+  destination: "wallet_ui";
 }
 ```
 #### data:

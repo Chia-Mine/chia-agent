@@ -1,4 +1,4 @@
-import type {CloseEvent, ErrorEvent, MessageEvent, OpenEvent} from "ws";
+import type {CloseEvent, ErrorEvent, MessageEvent, Event} from "ws";
 import * as WS from "ws";
 import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
@@ -9,11 +9,11 @@ import {register_service_command} from "../api/ws/daemon";
 import {GetMessageType} from "../api/types";
 
 export type EventType = "open" | "message" | "error" | "close";
-export type Event = OpenEvent | MessageEvent | ErrorEvent | CloseEvent;
-export type EventListener<T=Event> = (ev: T) => unknown;
+export type WsEvent = Event | MessageEvent | ErrorEvent | CloseEvent;
+export type EventListener<T=WsEvent> = (ev: T) => unknown;
 
 type EventListenerOf<T> =
-  T extends "open" ? EventListener<OpenEvent>
+  T extends "open" ? EventListener<Event>
     : T extends "message" ? EventListener<MessageEvent>
       : T extends "error" ? EventListener<ErrorEvent>
         : T extends "close" ? EventListener<CloseEvent> : never;
@@ -62,7 +62,7 @@ class Daemon {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
   protected _responseQueue: {[request_id: string]: (value: (WsMessage | PromiseLike<WsMessage>)) => void} = {};
-  protected _openEventListeners: Array<(e: OpenEvent) => unknown> = [];
+  protected _openEventListeners: Array<(e: Event) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
   protected _closeEventListeners: Array<(e: CloseEvent) => unknown> = [];
@@ -196,7 +196,7 @@ class Daemon {
   
   public addEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>){
     if(type === "open"){
-      this._openEventListeners.push(listener as EventListener<OpenEvent>);
+      this._openEventListeners.push(listener as EventListener<Event>);
     }
     else if(type === "message"){
       this._messageEventListeners.push(listener as EventListener<MessageEvent>);
@@ -276,7 +276,7 @@ class Daemon {
     this._messageListeners = {};
   }
   
-  protected async onOpen(event: OpenEvent, url: string){
+  protected async onOpen(event: Event, url: string){
     getLogger().info("ws connection opened");
     this._connectedUrl = url;
     this._openEventListeners.forEach(l => l(event));

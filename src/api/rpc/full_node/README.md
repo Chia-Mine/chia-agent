@@ -101,6 +101,7 @@ const response = await get_blocks(agent, params);
   start: int;
   end: int;
   exclude_header_hash?: bool;
+  exclude_reorged?: bool;
 }
 ```
 ### response
@@ -111,6 +112,27 @@ const response = await get_blocks(agent, params);
 ```
 For content of `FullBlock`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/full_block.ts
+
+---
+
+## `get_block_count_metrics(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_block_count_metrics} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_block_count_metrics(agent);
+```
+### response
+```typescript
+{
+  metrics: {
+    compact_blocks: int;
+    uncompact_blocks: int;
+    hint_count: int;
+  };
+}
+```
 
 ---
 
@@ -350,10 +372,10 @@ const response = await get_coin_records_by_puzzle_hash(agent, params);
 ### response
 ```typescript
 {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 }
 ```
-For content of `CoinRecord`,  
+For content of `CoinRecordBackwardCompatible`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
 
 ---
@@ -378,10 +400,10 @@ const response = await get_coin_records_by_puzzle_hashes(agent, params);
 ### response
 ```typescript
 {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 }
 ```
-For content of `CoinRecord`,  
+For content of `CoinRecordBackwardCompatible`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
 
 ---
@@ -403,10 +425,10 @@ const response = await get_coin_record_by_name(agent, params);
 ### response
 ```typescript
 {
-  coin_record: CoinRecord;
+  coin_record: CoinRecordBackwardCompatible;
 }
 ```
-For content of `CoinRecord`,  
+For content of `CoinRecordBackwardCompatible`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
 
 ---
@@ -431,10 +453,10 @@ const response = await get_coin_records_by_names(agent, params);
 ### response
 ```typescript
 {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 }
 ```
-For content of `CoinRecord`,  
+For content of `CoinRecordBackwardCompatible`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
 
 
@@ -460,10 +482,10 @@ const response = await get_coin_records_by_parent_ids(agent, params);
 ### response
 ```typescript
 {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 }
 ```
-For content of `CoinRecord`,  
+For content of `CoinRecordBackwardCompatible`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
 
 ---

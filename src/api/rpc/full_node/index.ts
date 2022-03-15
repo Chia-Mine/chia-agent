@@ -2,7 +2,7 @@ import {FullBlock} from "../../chia/types/full_block";
 import {BlockRecord} from "../../chia/consensus/block_record";
 import {bool, float, int, Optional, str, uint128, uint32, uint64} from "../../chia/types/_python_types_";
 import {UnfinishedHeaderBlock} from "../../chia/types/unfinished_header_block";
-import {CoinRecord} from "../../chia/types/coin_record";
+import {CoinRecord, CoinRecordBackwardCompatible} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {MempoolItem} from "../../chia/types/mempool_item";
@@ -32,6 +32,13 @@ export type TGetBlockchainStateResponse = {
     sub_slot_iters: uint64;
     space: uint128;
     mempool_size: int;
+    mempool_cost: int;
+    "mempool_min_fees": {
+      "cost_5000000": float,
+    },
+    "mempool_max_total_cost": int,
+    "block_max_cost": int,
+    "node_id": str,
   };
 };
 export async function get_blockchain_state(agent: TRPCAgent) {
@@ -60,12 +67,28 @@ export type TGetBlocksRequest = {
   start: int;
   end: int;
   exclude_header_hash?: bool;
+  exclude_reorged?: bool;
 };
 export type TGetBlocksResponse = {
   blocks: FullBlock[] | Array<FullBlock & {header_hash: str}>;
 }
 export async function get_blocks(agent: TRPCAgent, data: TGetBlocksRequest) {
   return agent.sendMessage<TGetBlocksResponse>(chia_full_node_service, get_blocks_command, data);
+}
+
+
+
+export const get_block_count_metrics_command = "get_block_count_metrics";
+export type get_block_count_metrics_command = typeof get_block_count_metrics_command;
+export type TGetBlockCountMetricsResponse = {
+  metrics: {
+    "compact_blocks": int,
+    "uncompact_blocks": int,
+    "hint_count": int,
+  };
+}
+export async function get_block_count_metrics(agent: TRPCAgent) {
+  return agent.sendMessage<TGetBlockCountMetricsResponse>(chia_full_node_service, get_block_count_metrics_command);
 }
 
 
@@ -214,7 +237,7 @@ export type TGetCoinRecordsByPuzzleHashRequest = {
   include_spent_coins: bool;
 };
 export type TGetCoinRecordsByPuzzleHashResponse = {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 };
 export async function get_coin_records_by_puzzle_hash(agent: TRPCAgent, data: TGetCoinRecordsByPuzzleHashRequest) {
   return agent.sendMessage<TGetCoinRecordsByPuzzleHashResponse>(chia_full_node_service, get_coin_records_by_puzzle_hash_command, data);
@@ -231,7 +254,7 @@ export type TGetCoinRecordsByPuzzleHashesRequest = {
   include_spent_coins: bool;
 };
 export type TGetCoinRecordsByPuzzleHashesResponse = {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 };
 export async function get_coin_records_by_puzzle_hashes(agent: TRPCAgent, data: TGetCoinRecordsByPuzzleHashesRequest) {
   return agent.sendMessage<TGetCoinRecordsByPuzzleHashesResponse>(chia_full_node_service, get_coin_records_by_puzzle_hashes_command, data);
@@ -245,7 +268,7 @@ export type TGetCoinRecordByNameRequest = {
   name: str;
 };
 export type TGetCoinRecordByNameResponse = {
-  coin_record: CoinRecord;
+  coin_record: CoinRecordBackwardCompatible;
 };
 export async function get_coin_record_by_name(agent: TRPCAgent, data: TGetCoinRecordByNameRequest) {
   return agent.sendMessage<TGetCoinRecordByNameResponse>(chia_full_node_service, get_coin_record_by_name_command, data);
@@ -262,7 +285,7 @@ export type TGetCoinRecordsByNamesRequest = {
   include_spent_coins?: bool;
 };
 export type TGetCoinRecordsByNamesResponse = {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 };
 export async function get_coin_records_by_names(agent: TRPCAgent, data: TGetCoinRecordsByNamesRequest) {
   return agent.sendMessage<TGetCoinRecordsByNamesResponse>(chia_full_node_service, get_coin_records_by_names_command, data);
@@ -280,7 +303,7 @@ export type TGetCoinRecordsByParentIdsRequest = {
   include_spent_coins?: bool;
 };
 export type TGetCoinRecordsByParentIdsResponse = {
-  coin_records: CoinRecord[];
+  coin_records: CoinRecordBackwardCompatible[];
 };
 
 

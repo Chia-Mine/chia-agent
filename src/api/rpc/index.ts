@@ -31,6 +31,7 @@ export {
   set_pool_payout_instructions,
   get_pool_state,
 } from "./farmer/index";
+
 import type {
   TGetAdditionsAndRemovalsResponse,
   TGetAllMempoolItemsResponse,
@@ -41,6 +42,7 @@ import type {
   TGetBlockResponse,
   TGetBlockchainStateResponse,
   TGetBlocksResponse,
+  TGetBlockCountMetricsResponse,
   TGetRecentSignagePointOrEOSCommandResponse,
   TGetCoinRecordByNameResponse,
   TGetCoinRecordsByPuzzleHashResponse,
@@ -72,6 +74,7 @@ export {
   TGetBlockchainStateResponse,
   TGetBlocksRequest,
   TGetBlocksResponse,
+  TGetBlockCountMetricsResponse,
   TGetRecentSignagePointOrEOSCommandRequest,
   TGetRecentSignagePointOrEOSCommandResponse,
   TGetCoinRecordByNameRequest,
@@ -101,6 +104,7 @@ export {
   get_block_records,
   get_blockchain_state,
   get_blocks,
+  get_block_count_metrics,
   get_recent_signage_point_or_eos,
   get_coin_record_by_name,
   get_coin_records_by_puzzle_hash,
@@ -147,12 +151,13 @@ import type {
   chia_wallet_service,
   TAddKeyResponse,
   TAddRateLimitedFundsResponse,
-  TCancelTradeResponse,
-  TCcGetColourResponse,
-  TCcGetNameResponse,
-  TCcSetNameResponse,
-  TCcSpendResponse,
-  TCreateBackupResponse,
+  TCancelOfferResponse,
+  TCatGetAssetIdResponse,
+  TCatGetNameResponse,
+  TCatAssetIdToNameResponse,
+  TCatSetNameResponse,
+  TCatSpendResponse,
+  TCheckOfferValidityResponse,
   TCreateNewWalletResponse,
   TCreateOfferForIdsResponse,
   TCreateSignedTransactionResponse,
@@ -169,32 +174,38 @@ import type {
   TDidUpdateRecoveryIdsResponse,
   TFarmBlockResponse,
   TGenerateMnemonicResponse,
-  TGetAllTradesResponse,
-  TGetDiscrepanciesForOfferResponse,
+  TGetAllOffersResponse,
+  TGetCatListResponse,
   TGetFarmedAmountResponse,
   TGetHeightInfoResponse,
   TGetInitialFreezePeriodResponseOfWallet,
+  TGetLoggedInFingerprintResponse,
   TGetNetworkInfoResponseOfWallet,
   TGetNextAddressResponse,
+  TGetOfferResponse,
+  TGetOffersCountResponse,
+  TGetOfferSummaryResponse,
   TGetPrivateKeyResponse,
   TGetPublicKeysResponse,
   TGetSyncStatusResponse,
-  TGetTradeResponse,
   TGetTransactionCountResponse,
   TGetTransactionResponse,
   TGetTransactionsResponse,
   TGetWalletBalanceResponse,
   TGetWalletsResponse,
   TLoginResponse,
+  TPushTxResponse as TPushTxResponseOfWallet,
   TPwJoinPoolRequest,
   TPwSelfPoolRequest,
   TPwAbsorbRewardsResponse,
   TPwStatusResponse,
-  TResponseToOfferResponse,
   TRlSetUserInfoResponse,
   TSendClawbackTransactionResponse,
   TSendTransactionResponse,
-  TSendTransactionMultiResponse, TPwJoinPoolResponse, TPwSelfPoolResponse,
+  TSendTransactionMultiResponse,
+  TTakeOfferResponse,
+  TPwJoinPoolResponse,
+  TPwSelfPoolResponse,
 } from "./wallet/index";
 export {
   chia_wallet_service,
@@ -203,26 +214,28 @@ export {
   TAddRateLimitedFundsRequest,
   TAddRateLimitedFundsResponse,
   TAdditions,
-  TCancelTradeRequest,
-  TCancelTradeResponse,
-  TCcGetColourRequest,
-  TCcGetColourResponse,
-  TCcGetNameRequest,
-  TCcGetNameResponse,
-  TCcSetNameRequest,
-  TCcSetNameResponse,
-  TCcSpendRequest,
-  TCcSpendResponse,
-  TCreateBackupRequest,
-  TCreateBackupResponse,
+  TCancelOfferRequest,
+  TCancelOfferResponse,
+  TCatGetAssetIdRequest,
+  TCatGetAssetIdResponse,
+  TCatGetNameRequest,
+  TCatGetNameResponse,
+  TCatAssetIdToNameRequest,
+  TCatAssetIdToNameResponse,
+  TCatSetNameRequest,
+  TCatSetNameResponse,
+  TCatSpendRequest,
+  TCatSpendResponse,
+  TCheckOfferValidityRequest,
+  TCheckOfferValidityResponse,
   TCreateNewWalletRequest,
   TCreateNewWalletResponse,
   TCreateOfferForIdsRequest,
   TCreateOfferForIdsResponse,
   TCreateSignedTransactionRequest,
   TCreateSignedTransactionResponse,
-  TCreate_New_CC_WalletRequest,
-  TCreate_New_CC_WalletResponse,
+  TCreate_New_CAT_WalletRequest,
+  TCreate_New_CAT_WalletResponse,
   TCreate_New_DID_WalletRequest,
   TCreate_New_DID_WalletResponse,
   TCreate_New_RL_WalletRequest,
@@ -253,16 +266,21 @@ export {
   TFarmBlockResponse,
   TGenerateMnemonicRequest,
   TGenerateMnemonicResponse,
-  TGetAllTradesRequest,
-  TGetAllTradesResponse,
-  TGetDiscrepanciesForOfferRequest,
-  TGetDiscrepanciesForOfferResponse,
+  TGetAllOffersRequest,
+  TGetAllOffersResponse,
+  TGetCatListResponse,
   TGetFarmedAmountRequest,
   TGetFarmedAmountResponse,
   TGetHeightInfoRequest,
   TGetHeightInfoResponse,
   TGetInitialFreezePeriodRequestOfWallet,
   TGetInitialFreezePeriodResponseOfWallet,
+  TGetLoggedInFingerprintResponse,
+  TGetOfferRequest,
+  TGetOfferResponse,
+  TGetOffersCountResponse,
+  TGetOfferSummaryRequest,
+  TGetOfferSummaryResponse,
   TGetNetworkInfoRequestOfWallet,
   TGetNetworkInfoResponseOfWallet,
   TGetNextAddressRequest,
@@ -273,8 +291,6 @@ export {
   TGetPublicKeysResponse,
   TGetSyncStatusRequest,
   TGetSyncStatusResponse,
-  TGetTradeRequest,
-  TGetTradeResponse,
   TGetTransactionCountRequest,
   TGetTransactionCountResponse,
   TGetTransactionRequest,
@@ -287,6 +303,8 @@ export {
   TGetWalletsResponse,
   TLoginRequest,
   TLoginResponse,
+  TPushTxRequest as TPushTxRequestOfWallet,
+  TPushTxResponse as TPushTxResponseOfWallet,
   TPwJoinPoolRequest,
   TPwJoinPoolResponse,
   TPwSelfPoolRequest,
@@ -295,8 +313,6 @@ export {
   TPwAbsorbRewardsResponse,
   TPwStatusRequest,
   TPwStatusResponse,
-  TResponseToOfferRequest,
-  TResponseToOfferResponse,
   TRlSetUserInfoRequest,
   TRlSetUserInfoResponse,
   TSendClawbackTransactionRequest,
@@ -305,14 +321,17 @@ export {
   TSendTransactionResponse,
   TSendTransactionMultiRequest,
   TSendTransactionMultiResponse,
+  TTakeOfferRequest,
+  TTakeOfferResponse,
   add_key,
   add_rate_limited_funds,
-  cancel_trade,
-  cc_get_colour,
-  cc_get_name,
-  cc_set_name,
-  cc_spend,
-  create_backup,
+  cancel_offer,
+  cat_get_asset_id,
+  cat_get_name,
+  cat_asset_id_to_name,
+  cat_set_name,
+  cat_spend,
+  check_offer_validity,
   create_new_wallet,
   create_offer_for_ids,
   create_signed_transaction,
@@ -329,34 +348,75 @@ export {
   did_update_recovery_ids,
   farm_block,
   generate_mnemonic,
-  get_all_trades,
-  get_discrepancies_for_offer,
+  get_all_offers,
+  get_cat_list,
   get_farmed_amount,
   get_height_info,
   get_initial_freeze_period_of_wallet,
+  get_logged_in_fingerprint,
+  get_offer,
+  get_offers_count,
+  get_offer_summary,
   get_network_info_of_wallet,
   get_next_address,
   get_private_key,
   get_public_keys,
   get_sync_status,
-  get_trade,
   get_transaction,
   get_transaction_count,
   get_transactions,
   get_wallet_balance,
   get_wallets,
   log_in,
+  push_tx as push_tx_wallet,
   pw_join_pool,
   pw_self_pool,
   pw_absorb_rewards,
   pw_status,
-  respond_to_offer,
   rl_set_user_info,
   send_clawback_transaction,
   send_transaction,
   send_transaction_multi,
+  take_offer,
 } from "./wallet/index";
 
+import type {
+  TGetIpsAfterTimestampResponse,
+  TGetPeerCountsResponse,
+} from "./crawler/index";
+export {
+  chia_crawler_service,
+  TGetIpsAfterTimestampRequest,
+  TGetIpsAfterTimestampResponse,
+  TGetPeerCountsResponse,
+  get_ips_after_timestamp,
+  get_peer_counts,
+} from "./crawler/index";
+
+
+import type {
+  TGetConnectionsResponse,
+  TOpenConnectionResponse,
+  TCloseConnectionResponse,
+  TStopNodeResponse,
+  TGetRoutesResponse,
+} from "./common/index";
+export {
+  chia_common_service,
+  TGetConnectionsRequest,
+  TGetConnectionsResponse,
+  TOpenConnectionRequest,
+  TOpenConnectionResponse,
+  TCloseConnectionRequest,
+  TCloseConnectionResponse,
+  TStopNodeResponse,
+  TGetRoutesResponse,
+  get_connections,
+  open_connection,
+  close_connection,
+  stop_node,
+  get_routes,
+} from "./common/index";
 
 
 export type RpcFarmerMessage =
@@ -378,6 +438,7 @@ export type RpcFullNodeMessage =
   | TGetBlockRecordsResponse
   | TGetBlockchainStateResponse
   | TGetBlocksResponse
+  | TGetBlockCountMetricsResponse
   | TGetRecentSignagePointOrEOSCommandResponse
   | TGetCoinRecordByNameResponse
   | TGetCoinRecordsByPuzzleHashResponse
@@ -400,12 +461,13 @@ export type RpcHarvesterMessage =
 export type RpcWalletMessage =
   TAddKeyResponse
   | TAddRateLimitedFundsResponse
-  | TCancelTradeResponse
-  | TCcGetColourResponse
-  | TCcGetNameResponse
-  | TCcSetNameResponse
-  | TCcSpendResponse
-  | TCreateBackupResponse
+  | TCancelOfferResponse
+  | TCatGetAssetIdResponse
+  | TCatGetNameResponse
+  | TCatAssetIdToNameResponse
+  | TCatSetNameResponse
+  | TCatSpendResponse
+  | TCheckOfferValidityResponse
   | TCreateNewWalletResponse
   | TCreateOfferForIdsResponse
   | TCreateSignedTransactionResponse
@@ -422,32 +484,56 @@ export type RpcWalletMessage =
   | TDidUpdateRecoveryIdsResponse
   | TFarmBlockResponse
   | TGenerateMnemonicResponse
-  | TGetAllTradesResponse
-  | TGetDiscrepanciesForOfferResponse
+  | TGetAllOffersResponse
+  | TGetCatListResponse
   | TGetFarmedAmountResponse
   | TGetHeightInfoResponse
   | TGetInitialFreezePeriodResponseOfWallet
+  | TGetLoggedInFingerprintResponse
+  | TGetOfferResponse
+  | TGetOffersCountResponse
+  | TGetOfferSummaryResponse
   | TGetNetworkInfoResponseOfWallet
   | TGetNextAddressResponse
   | TGetPrivateKeyResponse
   | TGetPublicKeysResponse
   | TGetSyncStatusResponse
-  | TGetTradeResponse
   | TGetTransactionResponse
   | TGetTransactionCountResponse
   | TGetTransactionsResponse
   | TGetWalletBalanceResponse
   | TGetWalletsResponse
   | TLoginResponse
+  | TPushTxResponseOfWallet
   | TPwJoinPoolResponse
   | TPwSelfPoolResponse
   | TPwAbsorbRewardsResponse
   | TPwStatusResponse
-  | TResponseToOfferResponse
   | TRlSetUserInfoResponse
   | TSendClawbackTransactionResponse
   | TSendTransactionResponse
   | TSendTransactionMultiResponse
+  | TTakeOfferResponse
 ;
 
-export type RpcMessage = RpcFarmerMessage | RpcFullNodeMessage | RpcHarvesterMessage | RpcWalletMessage;
+export type RpcCrawlerMessage = 
+  TGetIpsAfterTimestampResponse
+  | TGetPeerCountsResponse
+;
+
+export type RpcCommonMessage =
+  TGetConnectionsResponse
+  | TOpenConnectionResponse
+  | TCloseConnectionResponse
+  | TStopNodeResponse
+  | TGetRoutesResponse
+;
+
+export type RpcMessage =
+  RpcFarmerMessage
+  | RpcFullNodeMessage
+  | RpcHarvesterMessage
+  | RpcWalletMessage
+  | RpcCrawlerMessage
+  | RpcCommonMessage
+;

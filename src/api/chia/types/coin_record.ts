@@ -5,7 +5,10 @@ export type CoinRecord = {
   coin: Coin;
   confirmed_block_index: uint32
   spent_block_index: uint32;
-  spent: bool;
   coinbase: bool;
   timestamp: uint64; //  # Timestamp of the block at height confirmed_block_index
+};
+
+export type CoinRecordBackwardCompatible = CoinRecord & {
+  spent: bool;
 };

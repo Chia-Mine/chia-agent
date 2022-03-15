@@ -26,6 +26,80 @@ const unsubscribe = await on_message_from_wallet(daemon, (event) => {
 
 ---
 
+### `on_get_connections`
+Capture broadcast message of command `get_connections` from `chia_wallet` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_get_connections} = require("chia-agent/api/ws/wallet");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_get_connections(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_wallet";
+  command: "get_connections";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  connections: TConnectionGeneral[];
+}
+```
+For content of `TConnectionGeneral`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/types.ts
+
+---
+
+### `on_sync_changed_of_wallet`
+Capture broadcast message of command `sync_changed` from `chia_wallet` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_sync_changed_of_wallet} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_sync_changed_of_wallet(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_wallet";
+  command: "sync_changed";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{}
+```
+
 ### `on_state_changed_of_wallet`
 Capture broadcast message of command `state_changed` from `chia_wallet` service.
 
@@ -37,7 +111,7 @@ const {on_state_changed_of_wallet} = require("chia-agent/api/ws");
 const daemon = getDaemon();
 await daemon.connect();
 const unsubscribe = await on_state_changed_of_wallet(daemon, (event) => {
-  // Format of `event` object is desribed below.
+  // Format of `event` object is described below.
   ...
 });
 ...
@@ -52,15 +126,58 @@ unsubscribe(); // Stop subscribing messages
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: string;
+  destination: "wallet_ui";
 }
 ```
 #### data:
 ```typescript
 {
-  state: unknown;
-  wallet_id?: unknown;
-  additional_data?: unknown;
+  state: "add_connection" | "new_block" | "wallet_created";
+} | {
+  state: "coin_removed" | "coin_added" | "pending_transaction";
+  wallet_id: uint32;
+} | {
+  state: "tx_update";
+  wallet_id: uint32;
+  additional_data: {transaction: TransactionRecord};
 }
 ```
-@TODO Replace `unknown` to actual type.
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+### `on_coin_added`
+Capture broadcast message of command `coin_added` from `chia_wallet` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_coin_added} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_coin_added(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_wallet";
+  command: "coin_added";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  state: "coin_added";
+  wallet_id: uint32;
+}
+```

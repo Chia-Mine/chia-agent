@@ -1,5 +1,115 @@
 # Changelog
 
+## [4.0.0]
+### Breaking Change
+- At chia-blockchain@1.3.0, in `chia/consensus/cost_calculator.py`,  
+  `NPCResult.clvm_cost` was renamed to `NPCResult.cost`.  
+  As a result, the RPC APIs below might be incompatible between `1.2.11` and `1.3.0`.
+  - `get_all_mempool_items` Of FullNode RPC API
+  - `get_mempool_item_by_tx_id` Of FullNode RPC API
+- In `chia/pools/pool_config.py`,
+  `authentication_public_key` was removed from `PoolWalletConfig`.  
+  As a result, the RPC APIs below might be incompatible between `1.2.11` and `1.3.0`.
+  - `get_pool_state` of Farmer RPC API
+- In `chia/types/coin_record.py`, `CoinRecord.spent` was removed and turned into a getter method.  
+  As a result, the RPC APIs below might be incompatible between `1.2.11` and `1.3.0`.
+  - `get_additions_and_removals` of FullNode RPC API
+- Wallet RPC API `create_backup` was removed
+- Wallet RPC API `get_discrepancies_for_offer` was removed
+- Wallet RPC API `respond_to_offer` was removed
+- Wallet RPC API `get_trade` was removed
+- Wallet RPC API `get_all_trades` was removed
+- Wallet RPC API `cancel_trade` was removed
+- Wallet RPC API `cc_set_name` was renamed to `cat_set_name`
+- Wallet RPC API `cc_get_name` was renamed to `cat_get_name`
+- Wallet RPC API `cc_spend` was renamed to `cat_spend`
+- Wallet RPC API `cc_get_colour` was renamed to `cat_get_asset_id`
+- The request parameter of Wallet RPC API `create_offer_for_ids` was changed and incompatible with older API.
+- The request parameter of Wallet RPC API `create_new_wallet` was changed and incompatible with older API.
+### Removed
+- Removed `create_backup` of Wallet RPC API
+- Removed `get_discrepancies_for_offer` of Wallet RPC API
+- Removed `respond_to_offer` of Wallet RPC API
+- Removed `get_trade` of Wallet RPC API
+- Removed `get_all_trades` of Wallet RPC API
+- Removed `cancel_trade` of Wallet RPC API
+- Removed `TradeRecordInJson` at `src/api/chia/wallet/util/trade_utils.ts`
+### Added
+- Added `metrics` service
+- [Common RPC API](./src/api/rpc/common)
+  - [`get_connections`](./src/api/rpc/common/README.md#get_connectionsagent-params)
+  - [`open_connection`](./src/api/rpc/common/README.md#open_connectionagent-params)
+  - [`close_connection`](./src/api/rpc/common/README.md#close_connectionagent-params)
+  - [`stop_node`](./src/api/rpc/common/README.md#stop_nodeagent)
+  - [`get_routes`](./src/api/rpc/common/README.md#get_routesagent)
+- [Timelord WebSocket API](./src/api/ws/timelord/README.md#usage)
+  - [`finished_pot`](./src/api/ws/timelord/README.md#on_finished_pot)
+  - [`new_compact_proof`](./src/api/ws/timelord/README.md#on_new_compact_proof)
+  - [`skipping_peak`](./src/api/ws/timelord/README.md#on_skipping_peak)
+  - [`new_peak`](./src/api/ws/timelord/README.md#on_new_peak)
+- [Crawler RPC API](./src/api/rpc/crawler)
+  - [`get_peer_counts`](./src/api/rpc/crawler/README.md#get_peer_countsagent)
+  - [`get_ips_after_timestamp`](./src/api/rpc/crawler/README.md#get_ips_after_timestampagent-params)
+- [Crawler WebSocket API](./src/api/ws/crawler)
+  - [`on_message_from_crawler`](./src/api/ws/crawler/README.md#on_message_from_crawler)
+  - [`on_loaded_initial_peers`](./src/api/ws/crawler/README.md#on_loaded_initial_peers)
+  - [`on_crawl_batch_completed`](./src/api/ws/crawler/README.md#on_crawl_batch_completed)
+- [New farmer WebSocket API](./src/api/ws/farmer)
+  - [`get_connections`](./src/api/ws/farmer/README.md#on_get_connections)
+- [New FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_block_count_metrics`](./src/api/rpc/full_node/README.md#get_block_count_metricsagent)
+- [New FullNode WebSocket API](./src/api/ws/full_node)
+  - [`get_connections`](./src/api/ws/full_node/README.md#on_get_connections)
+  - [`block`](./src/api/ws/full_node/README.md#on_block)
+  - [`signage_point`](./src/api/ws/full_node/README.md#on_signage_point)
+- [New harvester WebSocket API](./src/api/ws/harvester)
+  - [`get_connections`](./src/api/ws/harvester/README.md#on_get_connections)
+- [New wallet RPC API](./src/api/rpc/wallet)
+  - [`get_logged_in_fingerprint`](./src/api/rpc/wallet/README.md#get_logged_in_fingerprintagent)
+  - [`push_tx`](./src/api/rpc/wallet/README.md#push_txagent-params)
+  - [`cat_asset_id_to_name`](./src/api/rpc/wallet/README.md#cat_asset_id_to_nameagent-params)
+  - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
+  - [`check_offer_validity`](./src/api/rpc/wallet/README.md#check_offer_validityagent-params)
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+  - [`get_offer`](./src/api/rpc/wallet/README.md#get_offeragent-params)
+  - [`get_all_offers`](./src/api/rpc/wallet/README.md#get_all_offersagent-params)
+  - [`get_offers_count`](./src/api/rpc/wallet/README.md#get_offers_countagent)
+  - [`cancel_offer`](./src/api/rpc/wallet/README.md#cancel_offeragent-params)
+  - [`get_cat_list`](./src/api/rpc/wallet/README.md#get_cat_listagent)
+- [New wallet WebSocket API](./src/api/ws/wallet)
+  - [`get_connections`](./src/api/ws/wallet/README.md#on_get_connections)
+  - [`sync_changed`](./src/api/ws/wallet/README.md#on_sync_changed_of_wallet)
+  - [`coin_added`](./src/api/ws/wallet/README.md#on_coin_added)
+- [New daemon API](./src/api/ws/daemon)
+  - [`get_version`](./src/api/ws/daemon/README.md#get_versiondaemon)
+### Changed
+- Renamed `NPCResult.clvm_cost` to `NPCResult.cost`
+- Removed `authentication_public_key` from `PoolWalletConfig`
+- Set actual value to `destination` property on websocket APIs. (i.e. `wallet_ui`, `metrics`)
+- Updated [`get_blockchain_state`](./src/api/rpc/full_node/README.md#get_blockchain_stateagent) of FullNode RPC API
+- Updated [`get_blocks`](./src/api/rpc/full_node/README.md#get_blocksagent-params) of FullNode RPC API
+- Renamed `cc_set_name` of Wallet RPC API to [`cat_set_name`](./src/api/rpc/wallet/README.md#cat_set_nameagent-params)
+- Renamed `cc_get_name` of Wallet RPC API to [`cat_get_name`](./src/api/rpc/wallet/README.md#cat_get_nameagent-params)
+- Renamed `cc_spend` of Wallet RPC API to [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+- Renamed `cc_get_colour` of Wallet RPC API to [`cat_get_asset_id`](./src/api/rpc/wallet/README.md#cat_get_asset_idagent-params)
+- Updated [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params) of Wallet RPC API
+- Updated [`log_in`](./src/api/rpc/wallet/README.md#log_inagent-params) of Wallet RPC API
+- Updated [`add_key`](./src/api/rpc/wallet/README.md#add_keyagent-params) of Wallet RPC API
+- Updated [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params) of Wallet RPC API
+- Updated [`get_wallet_balance`](./src/api/rpc/wallet/README.md#get_wallet_balanceagent-params) of Wallet RPC API
+- Updated [`get_transaction`](./src/api/rpc/wallet/README.md#get_transactionagent-params) of Wallet RPC API
+- Updated [`get_transactions`](./src/api/rpc/wallet/README.md#get_transactionsagent-params) of Wallet RPC API
+- Updated [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params) of Wallet RPC API
+- Updated [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params) of Wallet RPC API
+- Updated [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params) of Wallet RPC API
+- Updated [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params) of Wallet RPC API
+- Updated [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params) of Wallet RPC API
+- Updated [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params) of Wallet RPC API
+- Added `memos` to `TransactionRecord` in `src/api/chia/wallet/transaction_record.ts`.
+- Renamed `COLOURED_COIN` to `CAT` of `WalletType` in `src/api/chia/wallet/util/wallet_type.ts`.
+### Fixed
+- Replaced `unknown` type with actual type for `on_state_changed_of_wallet` in wallet WebSocket API
+
 ## [3.0.1]
 ### Added
 - Added `skip_hostname_verification` option for `RPCAgent`
@@ -210,6 +320,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[4.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.1...v4.0.0
 [3.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.6...v3.0.0
 [2.0.6]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.5...v2.0.6
