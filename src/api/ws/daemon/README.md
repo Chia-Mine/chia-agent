@@ -694,6 +694,25 @@ const response = await get_status(daemon);
 
 ---
 
+## `get_version(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_version} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_version(daemon);
+```
+### response:
+```typescript
+{
+  success: bool;
+  version: string;
+}
+```
+
+---
+
 ## `get_plotters(daemon)`
 ### Usage
 ```js
@@ -754,7 +773,7 @@ const {on_keyring_status_changed} = require("chia-agent/api/ws");
 const daemon = getDaemon();
 await daemon.connect();
 const unsubscribe = await on_keyring_status_changed(daemon, (event) => {
-  // Format of `event` object is desribed below.
+  // Format of `event` object is described below.
   ...
 });
 ...

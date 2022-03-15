@@ -26,6 +26,46 @@ const unsubscribe = await on_message_from_farmer(daemon, (event) => {
 
 ---
 
+### `on_get_connections`
+Capture broadcast message of command `get_connections` from `chia_farmer` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_get_connections} = require("chia-agent/api/ws/farmer");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_get_connections(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "get_connections";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  connections: TConnectionGeneral[];
+}
+```
+For content of `TConnectionGeneral`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/types.ts
+
+---
+
 ### `on_new_farming_info`
 Capture broadcast message of command `new_farming_info` from `chia_farmer` service.
 
@@ -37,7 +77,7 @@ const {on_new_farming_info} = require("chia-agent/api/ws");
 const daemon = getDaemon();
 await daemon.connect();
 const unsubscribe = await on_new_farming_info(daemon, (event) => {
-  // Format of `event` object is desribed below.
+  // Format of `event` object is described below.
   ...
 });
 ...
@@ -52,7 +92,7 @@ unsubscribe(); // Stop subscribing messages
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: string;
+  destination: "wallet_ui";
 }
 ```
 #### data:
@@ -82,7 +122,7 @@ const {on_new_signage_point} = require("chia-agent/api/ws");
 const daemon = getDaemon();
 await daemon.connect();
 const unsubscribe = await on_new_signage_point(daemon, (event) => {
-  // Format of `event` object is desribed below.
+  // Format of `event` object is described below.
   ...
 });
 ...
@@ -97,7 +137,7 @@ unsubscribe(); // Stop subscribing messages
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: string;
+  destination: "wallet_ui";
 }
 ```
 #### data:
@@ -126,7 +166,7 @@ const {on_new_plots} = require("chia-agent/api/ws");
 const daemon = getDaemon();
 await daemon.connect();
 const unsubscribe = await on_new_plots(daemon, (event) => {
-  // Format of `event` object is desribed below.
+  // Format of `event` object is described below.
   ...
 });
 ...
@@ -137,11 +177,11 @@ unsubscribe(); // Stop subscribing messages
 ```typescript
 {
   origin: "chia_farmer";
-  command: "get_harvesters";
+  command: "get_harvesters"; // This is not a typo. See https://github.com/Chia-Network/chia-blockchain/blob/773d692fc5a7ee539392c78902857c3c03e00560/chia/rpc/farmer_rpc_api.py#L50
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: string;
+  destination: "wallet_ui";
 }
 ```
 #### data:

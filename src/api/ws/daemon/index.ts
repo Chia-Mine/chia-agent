@@ -453,6 +453,20 @@ export async function get_status(daemon: TDaemon) {
 
 
 
+export const get_version_command = "get_version";
+export type get_version_command = typeof get_version_command;
+export type TGetVersionRequest = {
+};
+export type TGetVersionResponse = {
+  success: bool;
+  version: string;
+};
+export async function get_version(daemon: TDaemon) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_version_command, TGetVersionResponse>>(daemon_service, get_version_command);
+}
+
+
+
 export const get_plotters_command = "get_plotters";
 export type get_plotters_command = typeof get_plotters_command;
 export type TGetPlottersRequest = {
