@@ -1,5 +1,5 @@
-const {RPCAgent} = require("../../dist");
-const {get_network_info_of_full_node} = require("../../dist/api/rpc/full_node");
+const {RPCAgent} = require("../../build");
+const {get_network_info_of_full_node} = require("../../build/api/rpc/full_node");
 
 test("get_network_info_of_full_node", async () => {
   const agent = new RPCAgent({service: "full_node"});

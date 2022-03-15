@@ -1,5 +1,5 @@
-const {getDaemon} = require("../../dist");
-const {on_new_signage_point} = require("../../dist/api/ws/farmer");
+const {getDaemon} = require("../../build");
+const {on_new_signage_point} = require("../../build/api/ws/farmer");
 
 const timeout = 60000;
 
