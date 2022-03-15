@@ -48,7 +48,7 @@ Start to monitor message channel via websocket.
 
 ```js
 await daemon.subscribe(service);
-// service: "wallet_ui" or "chia_plotter"
+// service: "wallet_ui", "metrics" or "chia_plotter"
 ```
 
 `wallet_ui`  

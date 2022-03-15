@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "node ./pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./build --outDir ./build",
-    "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist"
+    "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist",
+    "test": "jest"
   },
   "keywords": [
     "chia",
@@ -30,17 +31,18 @@
     "node": ">=12.13.0"
   },
   "dependencies": {
-    "ws": "^7.4.6",
+    "ws": "^8.5.0",
     "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@types/node": "^15.0.2",
-    "@types/ws": "^7.4.4",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "eslint": "^7.8.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsdoc": "^30.4.1",
+    "jest": "^27.5.1",
     "typescript": "^4.2.4"
   }
 }
