@@ -14,26 +14,26 @@
 - In `chia/types/coin_record.py`, `CoinRecord.spent` was removed and turned into a getter method.  
   As a result, the RPC APIs below might be incompatible between `1.2.11` and `1.3.0`.
   - `get_additions_and_removals` of FullNode RPC API
-- Wallet RPC API [`create_backup`] was removed
-- Wallet RPC API [`get_discrepancies_for_offer`] was removed
-- Wallet RPC API [`respond_to_offer`] was removed
-- Wallet RPC API [`get_trade`] was removed
-- Wallet RPC API [`get_all_trades`] was removed
-- Wallet RPC API [`cancel_trade`] was removed
-- Wallet RPC API [`cc_set_name`] was renamed to [`cat_set_name`]
-- Wallet RPC API [`cc_get_name`] was renamed to [`cat_get_name`]
-- Wallet RPC API [`cc_spend`] was renamed to [`cat_spend`]
-- Wallet RPC API [`cc_get_colour`] was renamed to [`cat_get_asset_id`]
-- The request parameter of Wallet RPC API [`create_offer_for_ids`] was changed and incompatible with older API.
-- The request parameter of Wallet RPC API [`create_new_wallet`] was changed and incompatible with older API.
+- Wallet RPC API `create_backup` was removed
+- Wallet RPC API `get_discrepancies_for_offer` was removed
+- Wallet RPC API `respond_to_offer` was removed
+- Wallet RPC API `get_trade` was removed
+- Wallet RPC API `get_all_trades` was removed
+- Wallet RPC API `cancel_trade` was removed
+- Wallet RPC API `cc_set_name` was renamed to `cat_set_name`
+- Wallet RPC API `cc_get_name` was renamed to `cat_get_name`
+- Wallet RPC API `cc_spend` was renamed to `cat_spend`
+- Wallet RPC API `cc_get_colour` was renamed to `cat_get_asset_id`
+- The request parameter of Wallet RPC API `create_offer_for_ids` was changed and incompatible with older API.
+- The request parameter of Wallet RPC API `create_new_wallet` was changed and incompatible with older API.
 ### Removed
-- Removed [`create_backup`] of Wallet RPC API
-- Removed [`get_discrepancies_for_offer`] of Wallet RPC API
-- Removed [`respond_to_offer`] of Wallet RPC API
-- Removed [`get_trade`] of Wallet RPC API
-- Removed [`get_all_trades`] of Wallet RPC API
-- Removed [`cancel_trade`] of Wallet RPC API
-- Removed [`TradeRecordInJson`] at `src/api/chia/wallet/util/trade_utils.ts`
+- Removed `create_backup` of Wallet RPC API
+- Removed `get_discrepancies_for_offer` of Wallet RPC API
+- Removed `respond_to_offer` of Wallet RPC API
+- Removed `get_trade` of Wallet RPC API
+- Removed `get_all_trades` of Wallet RPC API
+- Removed `cancel_trade` of Wallet RPC API
+- Removed `TradeRecordInJson` at `src/api/chia/wallet/util/trade_utils.ts`
 ### Added
 - Added `metrics` service
 - [Common RPC API](./src/api/rpc/common)
@@ -88,10 +88,10 @@
 - Set actual value to `destination` property on websocket APIs. (i.e. `wallet_ui`, `metrics`)
 - Updated [`get_blockchain_state`](./src/api/rpc/full_node/README.md#get_blockchain_stateagent) of FullNode RPC API
 - Updated [`get_blocks`](./src/api/rpc/full_node/README.md#get_blocksagent-params) of FullNode RPC API
-- Renamed [`cc_set_name`] of Wallet RPC API to [`cat_set_name`](./src/api/rpc/wallet/README.md#cat_set_nameagent-params)
-- Renamed [`cc_get_name`] of Wallet RPC API to [`cat_get_name`](./src/api/rpc/wallet/README.md#cat_get_nameagent-params)
-- Renamed [`cc_spend`] of Wallet RPC API to [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
-- Renamed [`cc_get_colour`] of Wallet RPC API to [`cat_get_asset_id`](./src/api/rpc/wallet/README.md#cat_get_asset_idagent-params)
+- Renamed `cc_set_name` of Wallet RPC API to [`cat_set_name`](./src/api/rpc/wallet/README.md#cat_set_nameagent-params)
+- Renamed `cc_get_name` of Wallet RPC API to [`cat_get_name`](./src/api/rpc/wallet/README.md#cat_get_nameagent-params)
+- Renamed `cc_spend` of Wallet RPC API to [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+- Renamed `cc_get_colour` of Wallet RPC API to [`cat_get_asset_id`](./src/api/rpc/wallet/README.md#cat_get_asset_idagent-params)
 - Updated [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params) of Wallet RPC API
 - Updated [`log_in`](./src/api/rpc/wallet/README.md#log_inagent-params) of Wallet RPC API
 - Updated [`add_key`](./src/api/rpc/wallet/README.md#add_keyagent-params) of Wallet RPC API
