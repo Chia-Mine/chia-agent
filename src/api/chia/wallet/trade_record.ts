@@ -22,6 +22,7 @@ export type TradeRecordConvenience = {
   summary: {
     offered: Record<str, int>; // {[asset_id]: amount}
     requested: Record<str, int>; // {[asset_id]: amount}
+    fees: int;
   };
   pending: Record<str, int>; // {[asset_id]: amount}
 } & Omit<TradeRecord, "offer">;

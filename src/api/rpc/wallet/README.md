@@ -344,13 +344,19 @@ const response = await get_network_info_of_wallet(agent);
 
 ---
 
-## `get_wallets(agent)`
+## `get_wallets(agent, params)`
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
 const {get_wallets} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
-const response = await get_wallets(agent);
+const response = await get_wallets(agent, params);
+```
+### params:
+```typescript
+{
+  type?: int;
+}
 ```
 ### response:
 ```typescript
@@ -783,6 +789,32 @@ const response = await delete_unconfirmed_transactions(agent, params);
 
 ---
 
+## `select_coins(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {select_coins} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await select_coins(agent, params);
+```
+### params:
+```typescript
+{
+  amount: uint64;
+  wallet_id: uint32;
+}
+```
+### response:
+```typescript
+{
+  coins: Coin[];
+}
+```
+For content of `Coin`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
+
+---
+
 ## `cat_set_name(agent, params)`
 ### Usage
 ```js
@@ -851,6 +883,29 @@ const response = await cat_get_name(agent, params);
 {
   wallet_id: int;
   name: str;
+}
+```
+
+
+---
+
+## `get_stray_cats(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_stray_cats} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_stray_cats(agent);
+```
+### response:
+```typescript
+{
+  stray_cats: Array<{
+    asset_id: str;
+    name: str;
+    first_seen_height: int;
+    sender_puzzle_hash: str;
+  }>;
 }
 ```
 
@@ -1491,6 +1546,7 @@ const response = await pw_absorb_rewards(agent, params);
 {
   wallet_id: uint32;
   fee?: uint64;
+  max_spends_in_tx?: int;
 }
 ```
 ### response:

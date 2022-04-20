@@ -262,12 +262,13 @@ export async function get_network_info_of_wallet(agent: TRPCAgent){
 export const get_wallets_command = "get_wallets";
 export type get_wallets_command = typeof get_wallets_command;
 export type TGetWalletsRequest = {
+  type?: int;
 };
 export type TGetWalletsResponse = {
   wallets: WalletInfo[];
 };
-export async function get_wallets(agent: TRPCAgent){
-  return agent.sendMessage<TGetWalletsResponse>(chia_wallet_service, get_wallets_command);
+export async function get_wallets(agent: TRPCAgent, data: TGetWalletsRequest){
+  return agent.sendMessage<TGetWalletsResponse>(chia_wallet_service, get_wallets_command, data);
 }
 
 
@@ -583,6 +584,22 @@ export async function delete_unconfirmed_transactions(agent: TRPCAgent, data: TD
 
 
 
+export const select_coins_command = "select_coins";
+export type select_coins_command = typeof select_coins_command;
+export type TSelectCoinsRequest = {
+  amount: uint64;
+  wallet_id: uint32;
+};
+export type TSelectCoinsResponse = {
+  coins: Coin[];
+};
+export async function select_coins(agent: TRPCAgent, data: TSelectCoinsRequest){
+  return agent.sendMessage<TSelectCoinsResponse>(chia_wallet_service, select_coins_command, data);
+}
+
+
+
+
 // # CATs and Trading
 export const cat_set_name_command = "cat_set_name";
 export type cat_set_name_command = typeof cat_set_name_command;
@@ -627,6 +644,23 @@ export type TCatGetNameResponse = {
 };
 export async function cat_get_name(agent: TRPCAgent, data: TCatGetNameRequest){
   return agent.sendMessage<TCatGetNameResponse>(chia_wallet_service, cat_get_name_command, data);
+}
+
+
+
+
+export const get_stray_cats_command = "get_stray_cats";
+export type get_stray_cats_command = typeof get_stray_cats_command;
+export type TGetStrayCatsResponse = {
+  stray_cats: Array<{
+    asset_id: str;
+    name: str;
+    first_seen_height: int;
+    sender_puzzle_hash: str;
+  }>;
+};
+export async function get_stray_cats(agent: TRPCAgent){
+  return agent.sendMessage<TGetStrayCatsResponse>(chia_wallet_service, get_stray_cats_command);
 }
 
 
@@ -1088,6 +1122,7 @@ export type pw_absorb_rewards_command = typeof pw_absorb_rewards_command;
 export type TPwAbsorbRewardsRequest = {
   wallet_id: uint32;
   fee?: uint64;
+  max_spends_in_tx?: int;
 };
 export type TPwAbsorbRewardsResponse = {
   state: PoolWalletInfo;

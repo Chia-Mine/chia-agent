@@ -1,5 +1,38 @@
 # Changelog
 
+## [5.0.0]
+### Breaking Change
+- At chia-blockchain@1.3.4, in `chia/consensus/cost_calculator.py`,  
+  `NPCResult.npc_list` was removed and `NPCResult.conds` was added.  
+  As a result, the RPC APIs below might be incompatible between `1.3.3` and `1.3.4`.
+  - `get_all_mempool_items` Of FullNode RPC API
+  - `get_mempool_item_by_tx_id` Of FullNode RPC API
+### Added
+- [New FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_coin_records_by_hint`](./src/api/rpc/full_node/README.md#get_coin_records_by_hintagent-params)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`select_coins`](./src/api/rpc/wallet/README.md#select_coinsagent-params)
+  - [`get_stray_cats`](./src/api/rpc/wallet/README.md#get_stray_catsagent)
+### Changed
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - Updated [`get_additions_and_removals`](./src/api/rpc/full_node/README.md#get_additions_and_removalsagent-params)
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - Updated [`get_wallets`](./src/api/rpc/wallet/README.md#get_walletsagent-params)
+  - Updated [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
+- The following APIs changed because a new property was added to `TradeRecord` class at `chia/wallet/trade_record.py`  
+  This is not a breaking change because just adding a property is backward compatible. 
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+  - [`get_offer`](./src/api/rpc/wallet/README.md#get_offeragent-params)
+  - [`get_all_offers`](./src/api/rpc/wallet/README.md#get_all_offersagent-params)
+### Fixed
+- Fixed issues where the following full_node RPC APIs were not exported from `api/rpc/index.ts`.
+  - `get_coin_record_by_names`
+  - `get_coin_records_by_parent_ids`
+- Fixed issues where the following wallet RPC APIs were not exported from `api/rpc/index.ts`.
+  - `delete_unconfirmed_transactions`
+- Fixed an issue where README description of `get_blockchain_state` of FullNode RPC API was missing some properties.
+
 ## [4.0.0]
 ### Breaking Change
 - At chia-blockchain@1.3.0, in `chia/consensus/cost_calculator.py`,  
@@ -320,6 +353,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[5.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v4.0.0...v5.0.0
 [4.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.1...v4.0.0
 [3.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v2.0.6...v3.0.0

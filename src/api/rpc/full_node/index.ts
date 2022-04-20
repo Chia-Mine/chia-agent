@@ -33,12 +33,12 @@ export type TGetBlockchainStateResponse = {
     space: uint128;
     mempool_size: int;
     mempool_cost: int;
-    "mempool_min_fees": {
-      "cost_5000000": float,
+    mempool_min_fees: {
+      cost_5000000: float,
     },
-    "mempool_max_total_cost": int,
-    "block_max_cost": int,
-    "node_id": str,
+    mempool_max_total_cost: int,
+    block_max_cost: int,
+    node_id: str,
   };
 };
 export async function get_blockchain_state(agent: TRPCAgent) {
@@ -170,8 +170,8 @@ export type TGetAdditionsAndRemovalsRequest = {
   header_hash: str;
 };
 export type TGetAdditionsAndRemovalsResponse = {
-  additions: CoinRecord[];
-  removals: CoinRecord[];
+  additions: CoinRecordBackwardCompatible[];
+  removals: CoinRecordBackwardCompatible[];
 };
 export async function get_additions_and_removals(agent: TRPCAgent, data: TGetAdditionsAndRemovalsRequest) {
   return agent.sendMessage<TGetAdditionsAndRemovalsResponse>(chia_full_node_service, get_additions_and_removals_command, data);
@@ -305,6 +305,29 @@ export type TGetCoinRecordsByParentIdsRequest = {
 export type TGetCoinRecordsByParentIdsResponse = {
   coin_records: CoinRecordBackwardCompatible[];
 };
+export async function get_coin_records_by_parent_ids(agent: TRPCAgent, data: TGetCoinRecordsByParentIdsRequest) {
+  return agent.sendMessage<TGetCoinRecordsByParentIdsResponse>(chia_full_node_service, get_coin_records_by_parent_ids_command, data);
+}
+
+
+
+
+
+export const get_coin_records_by_hint_command = "get_coin_records_by_hint";
+export type get_coin_records_by_hint_command = typeof get_coin_records_by_hint_command;
+export type TGetCoinRecordsByHintRequest = {
+  hint: str;
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
+};
+export type TGetCoinRecordsByHintResponse = {
+  coin_records: CoinRecordBackwardCompatible[];
+};
+export async function get_coin_records_by_hint(agent: TRPCAgent, data: TGetCoinRecordsByHintRequest) {
+  return agent.sendMessage<TGetCoinRecordsByHintResponse>(chia_full_node_service, get_coin_records_by_hint_command, data);
+}
+
 
 
 
