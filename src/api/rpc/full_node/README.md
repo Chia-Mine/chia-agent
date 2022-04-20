@@ -54,6 +54,13 @@ const response = await get_blockchain_state(agent);
     sub_slot_iters: uint64;
     space: uint128;
     mempool_size: int;
+    mempool_cost: int;
+    mempool_min_fees: {
+      cost_5000000: float,
+    },
+    mempool_max_total_cost: int,
+      block_max_cost: int,
+      node_id: str,
   };
 }
 ```
@@ -272,11 +279,11 @@ const response = await get_additions_and_removals(agent, params);
 ### response
 ```typescript
 {
-  additions: CoinRecord[];
-  removals: CoinRecord[];
+  additions: CoinRecordBackwardCompatible[];
+  removals: CoinRecordBackwardCompatible[];
 }
 ```
-For content of `CoinRecord`,  
+For content of `CoinRecordBackwardCompatible`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
 
 ---
@@ -474,6 +481,35 @@ const response = await get_coin_records_by_parent_ids(agent, params);
 ```typescript
 {
   parent_ids: str[];
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
+}
+```
+### response
+```typescript
+{
+  coin_records: CoinRecordBackwardCompatible[];
+}
+```
+For content of `CoinRecordBackwardCompatible`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
+
+
+---
+
+## `get_coin_records_by_hint(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_coin_records_by_hint} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_coin_records_by_hint(agent, params);
+```
+### params
+```typescript
+{
+  hint: str;
   start_height?: uint32;
   end_height?: uint32;
   include_spent_coins?: bool;

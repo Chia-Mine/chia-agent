@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `chia 1.3.x`.  
+Supports all RPC/Websocket API available at `chia 1.3.4`.  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
@@ -22,8 +22,8 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`0269797b0ae12add512c9a6c9a3ffe422724c4b9`](https://github.com/Chia-Network/chia-blockchain/tree/0269797b0ae12add512c9a6c9a3ffe422724c4b9) of [chia-blockchain 1.3.x](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/0269797b0ae12add512c9a6c9a3ffe422724c4b9...main)
+- [`d154105a6b35f94649f15bca4e3fb8a11a39e70e`](https://github.com/Chia-Network/chia-blockchain/tree/d154105a6b35f94649f15bca4e3fb8a11a39e70e) of [chia-blockchain 1.3.4](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the latest chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/d154105a6b35f94649f15bca4e3fb8a11a39e70e...main)
 - [`374e7e6dc2d6d7941bb650f0e4ac5c01db104569`](https://github.com/Chia-Network/pool-reference/tree/374e7e6dc2d6d7941bb650f0e4ac5c01db104569) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
   - [Diff to the latest pool-reference](https://github.com/Chia-Network/pool-reference/compare/374e7e6dc2d6d7941bb650f0e4ac5c01db104569...main)
 

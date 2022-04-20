@@ -45,8 +45,11 @@ import type {
   TGetBlockCountMetricsResponse,
   TGetRecentSignagePointOrEOSCommandResponse,
   TGetCoinRecordByNameResponse,
+  TGetCoinRecordsByNamesResponse,
   TGetCoinRecordsByPuzzleHashResponse,
   TGetCoinRecordsByPuzzleHashesResponse,
+  TGetCoinRecordsByParentIdsResponse,
+  TGetCoinRecordsByHintResponse,
   TGetInitialFreezePeriodResponseOfFullNode,
   TGetMempoolItemByTxIdResponse,
   TGetNetworkInfoResponseOfFullNode,
@@ -77,12 +80,18 @@ export {
   TGetBlockCountMetricsResponse,
   TGetRecentSignagePointOrEOSCommandRequest,
   TGetRecentSignagePointOrEOSCommandResponse,
+  TGetCoinRecordsByNamesRequest,
+  TGetCoinRecordsByNamesResponse,
   TGetCoinRecordByNameRequest,
   TGetCoinRecordByNameResponse,
   TGetCoinRecordsByPuzzleHashRequest,
   TGetCoinRecordsByPuzzleHashResponse,
   TGetCoinRecordsByPuzzleHashesRequest,
   TGetCoinRecordsByPuzzleHashesResponse,
+  TGetCoinRecordsByParentIdsRequest,
+  TGetCoinRecordsByParentIdsResponse,
+  TGetCoinRecordsByHintRequest,
+  TGetCoinRecordsByHintResponse,
   TGetInitialFreezePeriodRequestOfFullNode,
   TGetInitialFreezePeriodResponseOfFullNode,
   TGetMempoolItemByTxIdRequest,
@@ -107,8 +116,11 @@ export {
   get_block_count_metrics,
   get_recent_signage_point_or_eos,
   get_coin_record_by_name,
+  get_coin_records_by_names,
   get_coin_records_by_puzzle_hash,
   get_coin_records_by_puzzle_hashes,
+  get_coin_records_by_parent_ids,
+  get_coin_records_by_hint,
   get_initial_freeze_period_of_full_node,
   get_mempool_item_by_tx_id,
   get_network_info_of_full_node,
@@ -154,6 +166,7 @@ import type {
   TCancelOfferResponse,
   TCatGetAssetIdResponse,
   TCatGetNameResponse,
+  TGetStrayCatsResponse,
   TCatAssetIdToNameResponse,
   TCatSetNameResponse,
   TCatSpendResponse,
@@ -161,6 +174,8 @@ import type {
   TCreateNewWalletResponse,
   TCreateOfferForIdsResponse,
   TCreateSignedTransactionResponse,
+  TDeleteUnconfirmedTransactionsResponse,
+  TSelectCoinsResponse,
   TDeleteAllKeysResponse,
   TDeleteKeyResponse,
   TDidCreateAttestResponse,
@@ -220,6 +235,7 @@ export {
   TCatGetAssetIdResponse,
   TCatGetNameRequest,
   TCatGetNameResponse,
+  TGetStrayCatsResponse,
   TCatAssetIdToNameRequest,
   TCatAssetIdToNameResponse,
   TCatSetNameRequest,
@@ -234,6 +250,10 @@ export {
   TCreateOfferForIdsResponse,
   TCreateSignedTransactionRequest,
   TCreateSignedTransactionResponse,
+  TDeleteUnconfirmedTransactionsRequest,
+  TDeleteUnconfirmedTransactionsResponse,
+  TSelectCoinsRequest,
+  TSelectCoinsResponse,
   TCreate_New_CAT_WalletRequest,
   TCreate_New_CAT_WalletResponse,
   TCreate_New_DID_WalletRequest,
@@ -328,6 +348,7 @@ export {
   cancel_offer,
   cat_get_asset_id,
   cat_get_name,
+  get_stray_cats,
   cat_asset_id_to_name,
   cat_set_name,
   cat_spend,
@@ -335,6 +356,8 @@ export {
   create_new_wallet,
   create_offer_for_ids,
   create_signed_transaction,
+  delete_unconfirmed_transactions,
+  select_coins,
   delete_all_keys,
   delete_key,
   did_create_attest,
@@ -441,8 +464,11 @@ export type RpcFullNodeMessage =
   | TGetBlockCountMetricsResponse
   | TGetRecentSignagePointOrEOSCommandResponse
   | TGetCoinRecordByNameResponse
+  | TGetCoinRecordsByNamesResponse
   | TGetCoinRecordsByPuzzleHashResponse
   | TGetCoinRecordsByPuzzleHashesResponse
+  | TGetCoinRecordsByParentIdsResponse
+  | TGetCoinRecordsByHintResponse
   | TGetInitialFreezePeriodResponseOfFullNode
   | TGetMempoolItemByTxIdResponse
   | TGetNetworkInfoResponseOfFullNode
@@ -464,6 +490,7 @@ export type RpcWalletMessage =
   | TCancelOfferResponse
   | TCatGetAssetIdResponse
   | TCatGetNameResponse
+  | TGetStrayCatsResponse
   | TCatAssetIdToNameResponse
   | TCatSetNameResponse
   | TCatSpendResponse
@@ -471,6 +498,8 @@ export type RpcWalletMessage =
   | TCreateNewWalletResponse
   | TCreateOfferForIdsResponse
   | TCreateSignedTransactionResponse
+  | TDeleteUnconfirmedTransactionsResponse
+  | TSelectCoinsResponse
   | TDeleteAllKeysResponse
   | TDeleteKeyResponse
   | TDidCreateAttestResponse
