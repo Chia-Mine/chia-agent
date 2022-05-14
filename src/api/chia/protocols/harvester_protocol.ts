@@ -11,9 +11,3 @@ export type Plot = {
   file_size: uint64;
   time_modified: uint64;
 };
-
-export type RespondPlots = {
-  plots: Plot[];
-  failed_to_open_filenames: str[];
-  no_key_filenames: str[];
-};

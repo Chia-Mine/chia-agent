@@ -5,7 +5,7 @@ import {uint32, uint64} from "../../chia/types/_python_types_";
 import {TDaemon} from "../../../daemon/index";
 import {GetMessageType, TConnectionGeneral, wallet_ui_service} from "../../types";
 import {WsMessage} from "../index";
-import {TGetHarvestersResponse} from "../../rpc/farmer/index";
+import {Receiver} from "../../chia/plot-sync/receiver";
 
 export const chia_farmer_service = "chia_farmer";
 export type chia_farmer_service = typeof chia_farmer_service;
@@ -63,13 +63,28 @@ export async function on_new_signage_point(daemon: TDaemon, callback: (e: GetMes
   return daemon.addMessageListener(chia_farmer_service, messageListener);
 }
 
-export const new_plots_command = "get_harvesters"; // not "new_plots" for now. See https://github.com/Chia-Network/chia-blockchain/blob/773d692fc5a7ee539392c78902857c3c03e00560/chia/rpc/farmer_rpc_api.py#L50
-export type new_plots_command = typeof new_plots_command;
-export type TNewPlotsBroadCast = TGetHarvestersResponse;
-export async function on_new_plots(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, new_plots_command, TNewPlotsBroadCast>) => unknown){
+export const harvester_update_command = "harvester_update";
+export type harvester_update_command = typeof harvester_update_command;
+export type THarvesterUpdateBroadCast = Receiver<true>;
+export async function on_harvester_update(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, harvester_update_command, THarvesterUpdateBroadCast>) => unknown){
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsMessage) => {
-    if(e.origin === chia_farmer_service && e.command === new_plots_command){
+    if(e.origin === chia_farmer_service && e.command === harvester_update_command){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
+
+export const harvester_removed_command = "harvester_removed";
+export type harvester_removed_command = typeof harvester_removed_command;
+export type THarvesterRemovedBroadCast = {
+  node_id: bytes32;
+};
+export async function on_harvester_removed(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, harvester_removed_command, THarvesterRemovedBroadCast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_farmer_service && e.command === harvester_removed_command){
       callback(e);
     }
   };
@@ -77,8 +92,18 @@ export async function on_new_plots(daemon: TDaemon, callback: (e: GetMessageType
 }
 
 // Whole commands for the service
-export type chia_farmer_commands = get_connections_command | new_farming_info_command | new_signage_point_command | new_plots_command;
-export type TChiaFarmerBroadcast = TGetConnectionsBroadCast | TNewFarmingInfoBroadCast | TNewSignagePointBroadCast | TNewPlotsBroadCast;
+export type chia_farmer_commands = get_connections_command
+  | new_farming_info_command
+  | new_signage_point_command
+  | harvester_update_command
+  | harvester_removed_command
+;
+export type TChiaFarmerBroadcast = TGetConnectionsBroadCast
+  | TNewFarmingInfoBroadCast
+  | TNewSignagePointBroadCast
+  | THarvesterUpdateBroadCast
+  | THarvesterRemovedBroadCast
+;
 export async function on_message_from_farmer(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, chia_farmer_commands, TChiaFarmerBroadcast>) => unknown){
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsMessage) => {

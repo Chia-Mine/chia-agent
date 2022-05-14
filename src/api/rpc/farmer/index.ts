@@ -1,9 +1,10 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
-import {bool, int, str, uint64, uint8} from "../../chia/types/_python_types_";
+import {bool, int, Optional, str, uint64, uint8} from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TRPCAgent} from "../../../rpc/index";
-import {RespondPlots} from "../../chia/protocols/harvester_protocol";
 import {PoolState} from "../../chia/farmer/farmer";
+import {Receiver} from "../../chia/plot-sync/receiver";
+import {Plot} from "../../chia/protocols/harvester_protocol";
 
 export const chia_farmer_service = "chia_farmer";
 export type chia_farmer_service = typeof chia_farmer_service;
@@ -102,22 +103,115 @@ export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSe
 }
 
 
-export type HarvesterObject = RespondPlots & {
-  connection: {
-    node_id: str;
-    host: str;
-    port: int; // type of socket.getpeername[1]
-  };
-};
 export const get_harvesters_command = "get_harvesters";
 export type get_harvesters_command = typeof get_harvesters_command;
 export type TGetHarvestersRequest = {
 };
 export type TGetHarvestersResponse = {
-  harvesters: HarvesterObject[];
+  harvesters: Receiver[];
 };
 export async function get_harvesters(agent: TRPCAgent){
   return agent.sendMessage<TGetHarvestersResponse>(chia_farmer_service, get_harvesters_command);
+}
+
+
+
+export const get_harvesters_summary_command = "get_harvesters_summary";
+export type get_harvesters_summary_command = typeof get_harvesters_summary_command;
+export type TGetHarvestersSummaryResponse = {
+  harvesters: Receiver<true>[];
+};
+export async function get_harvesters_summary(agent: TRPCAgent){
+  return agent.sendMessage<TGetHarvestersSummaryResponse>(chia_farmer_service, get_harvesters_summary_command);
+}
+
+
+
+export const get_harvester_plots_valid_command = "get_harvester_plots_valid";
+export type get_harvester_plots_valid_command = typeof get_harvester_plots_valid_command;
+export type TGetHarvesterPlotsValidRequest = {
+  node_id: bytes32;
+  page: int;
+  page_size: int;
+  filter: Array<{key: str; value: Optional<str>}>;
+  sort_key: str;
+  reverse: bool;
+};
+export type TGetHarvesterPlotsValidResponse = {
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: Plot[];
+};
+export async function get_harvester_plots_valid(agent: TRPCAgent, param: TGetHarvesterPlotsValidRequest){
+  return agent.sendMessage<TGetHarvesterPlotsValidResponse>(chia_farmer_service, get_harvester_plots_valid_command, param);
+}
+
+
+
+export const get_harvester_plots_invalid_command = "get_harvester_plots_invalid";
+export type get_harvester_plots_invalid_command = typeof get_harvester_plots_invalid_command;
+export type TGetHarvesterPlotsInvalidRequest = {
+  node_id: bytes32
+  page: int;
+  page_size: int;
+  filter: str[];
+  reverse: bool;
+};
+export type TGetHarvesterPlotsInvalidResponse = {
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: str[];
+};
+export async function get_harvester_plots_invalid(agent: TRPCAgent, param: TGetHarvesterPlotsInvalidRequest){
+  return agent.sendMessage<TGetHarvesterPlotsInvalidResponse>(chia_farmer_service, get_harvester_plots_invalid_command, param);
+}
+
+
+
+export const get_harvester_plots_keys_missing_command = "get_harvester_plots_keys_missing";
+export type get_harvester_plots_keys_missing_command = typeof get_harvester_plots_keys_missing_command;
+export type TGetHarvesterPlotsKeysMissingRequest = {
+  node_id: bytes32
+  page: int;
+  page_size: int;
+  filter: str[];
+  reverse: bool;
+};
+export type TGetHarvesterPlotsKeysMissingResponse = {
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: str[];
+};
+export async function get_harvester_plots_keys_missing(agent: TRPCAgent, param: TGetHarvesterPlotsKeysMissingRequest){
+  return agent.sendMessage<TGetHarvesterPlotsKeysMissingResponse>(chia_farmer_service, get_harvester_plots_keys_missing_command, param);
+}
+
+
+
+export const get_harvester_plots_duplicates_command = "get_harvester_plots_duplicates";
+export type get_harvester_plots_duplicates_command = typeof get_harvester_plots_duplicates_command;
+export type TGetHarvesterPlotsDuplicatesRequest = {
+  node_id: bytes32
+  page: int;
+  page_size: int;
+  filter: str[];
+  reverse: bool;
+};
+export type TGetHarvesterPlotsDuplicatesResponse = {
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: str[];
+};
+export async function get_harvester_plots_duplicates(agent: TRPCAgent, param: TGetHarvesterPlotsDuplicatesRequest){
+  return agent.sendMessage<TGetHarvesterPlotsDuplicatesResponse>(chia_farmer_service, get_harvester_plots_duplicates_command, param);
 }
 
 

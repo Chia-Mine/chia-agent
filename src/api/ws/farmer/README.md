@@ -155,17 +155,17 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/far
 
 ---
 
-### `on_new_plots`
-Capture broadcast message of command `on_new_plots` from `chia_farmer` service.
+### `on_harvester_update`
+Capture broadcast message of command `on_harvester_update` from `chia_farmer` service.
 
 #### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
-const {on_new_plots} = require("chia-agent/api/ws");
+const {on_harvester_update} = require("chia-agent/api/ws");
 
 const daemon = getDaemon();
 await daemon.connect();
-const unsubscribe = await on_new_plots(daemon, (event) => {
+const unsubscribe = await on_harvester_update(daemon, (event) => {
   // Format of `event` object is described below.
   ...
 });
@@ -177,7 +177,7 @@ unsubscribe(); // Stop subscribing messages
 ```typescript
 {
   origin: "chia_farmer";
-  command: "get_harvesters"; // This is not a typo. See https://github.com/Chia-Network/chia-blockchain/blob/773d692fc5a7ee539392c78902857c3c03e00560/chia/rpc/farmer_rpc_api.py#L50
+  command: "harvester_update";
   ack: boolean;
   data: /*See below*/;
   request_id: string;
@@ -187,8 +187,61 @@ unsubscribe(); // Stop subscribing messages
 #### data:
 ```typescript
 {
-  harvesters: HarvesterObject[];
+  connection: {
+    node_id: bytes32;
+    host: str;
+    port: int;
+  };
+  plots: int;
+  failed_to_open_filenames: int;
+  no_key_filenames: int;
+  duplicates: int;
+  total_plot_size: int;
+  syncing: {
+    initial: bool;
+    plot_files_processed: uint32;
+    plot_files_total: uint32;
+  } | None;
+  last_sync_time: Optional<float>;
 }
 ```
-For content of `HarvesterObject`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/farmer/index.ts
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+
+---
+
+### `on_harvester_removed`
+Capture broadcast message of command `on_harvester_removed` from `chia_farmer` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_harvester_removed} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_harvester_removed(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "harvester_removed";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  node_id: bytes32;
+}
+```

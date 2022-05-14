@@ -185,18 +185,198 @@ const response = await get_harvesters(agent);
 ### response:
 ```typescript
 {
-  plots: Plot[];
-  failed_to_open_filenames: str[];
-  no_key_filenames: str[];
-  connection: {
-    node_id: str;
-    host: str;
-    port: int; // type of socket.getpeername[1]
-  };
+  harvesters: Array<{
+    connection: {
+      node_id: bytes32;
+      host: str;
+      port: int;
+    };
+    plots: Plot[];
+    failed_to_open_filenames: str[];
+    no_key_filenames: str[];
+    duplicates: str[];
+    total_plot_size: int;
+    syncing: {
+      initial: bool;
+      plot_files_processed: uint32;
+      plot_files_total: uint32;
+    } | None;
+    last_sync_time: Optional<float>;
+  }>;
 }
 ```
 For content of `Plot`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+
+---
+
+## `get_harvesters_summary(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_harvesters_summary} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_harvesters_summary(agent);
+```
+### response:
+```typescript
+{
+  harvesters: Array<{
+    connection: {
+      node_id: bytes32;
+      host: str;
+      port: int;
+    };
+    plots: int;
+    failed_to_open_filenames: int;
+    no_key_filenames: int;
+    duplicates: int;
+    total_plot_size: int;
+    syncing: {
+      initial: bool;
+      plot_files_processed: uint32;
+      plot_files_total: uint32;
+    } | None;
+    last_sync_time: Optional<float>;
+  }>;
+}
+```
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+
+---
+
+## `get_harvester_plots_valid(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_harvester_plots_valid} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_harvester_plots_valid(agent, params);
+```
+### params:
+```typescript
+{
+  node_id: bytes32
+  page: int;
+  page_size: int;
+  filter: Array<{key: str; value: Optional<str>}>;
+  sort_key: str;
+  reverse: bool;
+}
+```
+### response:
+```typescript
+{
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: Plot[];
+}
+```
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+
+---
+
+## `get_harvester_plots_invalid(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_harvester_plots_invalid} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_harvester_plots_invalid(agent, params);
+```
+### params:
+```typescript
+{
+  node_id: bytes32
+  page: int;
+  page_size: int;
+  filter: str[];
+  reverse: bool;
+}
+```
+### response:
+```typescript
+{
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: str[];
+}
+```
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+
+---
+
+## `get_harvester_plots_keys_missing(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_harvester_plots_keys_missing} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_harvester_plots_keys_missing(agent, params);
+```
+### params:
+```typescript
+{
+  node_id: bytes32
+  page: int;
+  page_size: int;
+  filter: str[];
+  reverse: bool;
+}
+```
+### response:
+```typescript
+{
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: str[];
+}
+```
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+
+---
+
+## `get_harvester_plots_duplicates(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_harvester_plots_duplicates} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await get_harvester_plots_duplicates(agent, params);
+```
+### params:
+```typescript
+{
+  node_id: bytes32
+  page: int;
+  page_size: int;
+  filter: str[];
+  reverse: bool;
+}
+```
+### response:
+```typescript
+{
+  node_id: str;
+  page: int;
+  page_count: int;
+  total_count: int;
+  plots: str[];
+}
+```
+For content of `Plot`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/harvester_protocol.ts
+
 ---
 
 ## `get_pool_login_link(agent, params)`
