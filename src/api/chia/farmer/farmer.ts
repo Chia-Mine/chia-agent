@@ -1,4 +1,4 @@
-import {float, int, Optional, str, uint64, uint8} from "../types/_python_types_";
+import {float, int, str, uint64, uint8} from "../types/_python_types_";
 import {PoolWalletConfig} from "../pools/pool_config";
 import {ErrorResponse} from "../protocols/pool_protocol";
 
@@ -39,7 +39,8 @@ export type PoolState = {
   pool_errors_24h: ErrorResponse[];
   authentication_token_timeout: uint8;
   pool_config: PoolWalletConfig;
-  p2_singleton_puzzle_hash: str;
+  p2_singleton_puzzle_hash: str; // This property is added at `get_pool_state()` in chia/rpc/farmer_rpc_api.py
+  plot_count: int; // This property is added at `get_pool_state()` in chia/rpc/farmer_rpc_api.py
 };
 
 // depends: rpc_response in get_plots, by: get_plots of Farmer API

@@ -4,8 +4,14 @@ import type {
   TGetSignagePointsResponse,
   TSetRewardTargetResponse,
   TGetHarvestersResponse,
+  TGetHarvestersSummaryResponse,
+  TGetHarvesterPlotsValidResponse,
+  TGetHarvesterPlotsInvalidResponse,
+  TGetHarvesterPlotsKeysMissingResponse,
+  TGetHarvesterPlotsDuplicatesResponse,
   TSetPayoutInstructionsResponse,
   TGetPoolStateResponse,
+  TGetPoolLinkResponse,
 } from "./farmer/index";
 export {
   chia_farmer_service,
@@ -19,15 +25,32 @@ export {
   TSetRewardTargetResponse,
   TGetHarvestersRequest,
   TGetHarvestersResponse,
+  TGetHarvestersSummaryResponse,
+  TGetHarvesterPlotsValidRequest,
+  TGetHarvesterPlotsValidResponse,
+  TGetHarvesterPlotsInvalidRequest,
+  TGetHarvesterPlotsInvalidResponse,
+  TGetHarvesterPlotsKeysMissingRequest,
+  TGetHarvesterPlotsKeysMissingResponse,
+  TGetHarvesterPlotsDuplicatesRequest,
+  TGetHarvesterPlotsDuplicatesResponse,
   TSetPayoutInstructionsRequest,
   TSetPayoutInstructionsResponse,
   TGetPoolStateRequest,
   TGetPoolStateResponse,
+  TGetPoolLinkRequest,
+  TGetPoolLinkResponse,
   get_reward_targets,
   get_signage_point,
   get_signage_points,
   set_reward_targets,
   get_harvesters,
+  get_harvesters_summary,
+  get_harvester_plots_valid,
+  get_harvester_plots_invalid,
+  get_harvester_plots_keys_missing,
+  get_harvester_plots_duplicates,
+  get_pool_login_link,
   set_pool_payout_instructions,
   get_pool_state,
 } from "./farmer/index";
@@ -448,8 +471,14 @@ export type RpcFarmerMessage =
   | TGetSignagePointsResponse
   | TSetRewardTargetResponse
   | TGetHarvestersResponse
+  | TGetHarvestersSummaryResponse
+  | TGetHarvesterPlotsValidResponse
+  | TGetHarvesterPlotsInvalidResponse
+  | TGetHarvesterPlotsKeysMissingResponse
+  | TGetHarvesterPlotsDuplicatesResponse
   | TSetPayoutInstructionsResponse
   | TGetPoolStateResponse
+  | TGetPoolLinkResponse
 ;
 export type RpcFullNodeMessage =
   TGetAdditionsAndRemovalsResponse

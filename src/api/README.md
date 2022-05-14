@@ -20,6 +20,11 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`get_pool_state`](./rpc/farmer/README.md#get_pool_stateagent)
 - [`set_payout_instructions`](./rpc/farmer/README.md#set_payout_instructionsagent-params)
 - [`get_harvesters`](./rpc/farmer/README.md#get_harvestersagent)
+- [`get_harvesters_summary`](./rpc/farmer/README.md#get_harvesters_summaryagent)
+- [`get_harvester_plots_valid`](./rpc/farmer/README.md#get_harvester_plots_validagent-params)
+- [`get_harvester_plots_invalid`](./rpc/farmer/README.md#get_harvester_plots_invalidagent-params)
+- [`get_harvester_plots_keys_missing`](./rpc/farmer/README.md#get_harvester_plots_keys_missingagent-params)
+- [`get_harvester_plots_duplicates`](./rpc/farmer/README.md#get_harvester_plots_duplicatesagent-params)
 - [`get_pool_login_link`](./rpc/farmer/README.md#get_pool_login_linkagent-params)
 
 #### [Full Node RPC API](./rpc/full_node/README.md#usage)
@@ -190,7 +195,8 @@ you need to wait messages in the channel are arrived to your message listener.
 - [`get_connections`](./ws/farmer/README.md#on_get_connections)
 - [`new_farming_info`](./ws/farmer/README.md#on_new_farming_info)
 - [`new_signage_point`](./ws/farmer/README.md#on_new_signage_point)
-- [`new_plots`](./ws/farmer/README.md#on_new_plots)
+- [`harvester_updated`](./ws/farmer/README.md#on_harvester_update)
+- [`harvester_removed`](./ws/farmer/README.md#on_harvester_removed)
 
 #### [full_node](./ws/full_node/README.md#usage)
 - [`get_connections`](./ws/full_node/README.md#on_get_connections)

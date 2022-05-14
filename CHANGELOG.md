@@ -1,5 +1,36 @@
 # Changelog
 
+## [6.0.0]
+### Minor Breaking Change
+- At chia-blockchain@1.3.5, a farmer websocket API `new_plots` was replaced by  
+  `harvester_update` and `harvester_removed`.  
+  This change is not critical because in application's point of view it may just miss new plot info but
+  farming will continue without problem.
+### Removed
+- [Farmer WebSocket API](./src/api/ws/farmer)
+  - `on_new_plots`
+### Added
+- [New Farmer WebSocket API](./src/api/ws/farmer)
+  - [`harvester_updated`](./src/api/ws/farmer/README.md#on_harvester_update)
+  - [`harvester_removed`](./src/api/ws/farmer/README.md#on_harvester_removed)
+- [New Farmer RPC API](./src/api/rpc/farmer)
+  - [`get_harvesters_summary`](./src/api/rpc/farmer/README.md#get_harvesters_summaryagent)
+  - [`get_harvester_plots_valid`](./src/api/rpc/farmer/README.md#get_harvester_plots_validagent-params)
+  - [`get_harvester_plots_invalid`](./src/api/rpc/farmer/README.md#get_harvester_plots_invalidagent-params)
+  - [`get_harvester_plots_keys_missing`](./src/api/rpc/farmer/README.md#get_harvester_plots_keys_missingagent-params)
+  - [`get_harvester_plots_duplicates`](./src/api/rpc/farmer/README.md#get_harvester_plots_duplicatesagent-params)
+### Changed
+- `Plot` type at `chia/harvester/harvester.py` was changed.  
+  (Removed deprecated `plot-seed` and change the type of `time_modified` to `int` from `float`)  
+  As a result, the following APIs are affected:
+  - `get_plots` of Harvester RPC API
+  - `on_get_plots` of Harvester WebSocket API
+- [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
+  - `plot_count` property is added
+### Fixed
+- Fixed an issue where README description of `get_harvesters`(Farmer RPC API) did not reflect actual API format
+- Added missing `get_pool_login_link` of Farmer RPC API to `./src/api/rpc/index.ts`
+
 ## [5.0.0]
 ### Breaking Change
 - At chia-blockchain@1.3.4, in `chia/consensus/cost_calculator.py`,  
@@ -353,6 +384,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[6.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v4.0.0...v5.0.0
 [4.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.1...v4.0.0
 [3.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.0...v3.0.1

@@ -4,11 +4,13 @@ import type {
   get_connections_command as get_connections_farmer_command,
   new_farming_info_command,
   new_signage_point_command,
-  new_plots_command,
+  harvester_update_command,
+  harvester_removed_command,
   TGetConnectionsBroadCast as TGetConnectionsFarmerBroadCast,
   TNewFarmingInfoBroadCast,
   TNewSignagePointBroadCast,
-  TNewPlotsBroadCast,
+  THarvesterUpdateBroadCast,
+  THarvesterRemovedBroadCast,
 } from "./farmer/index";
 export {
   chia_farmer_service,
@@ -16,12 +18,14 @@ export {
   TGetConnectionsBroadCast as TGetConnectionsFarmerBroadCast,
   TNewSignagePointBroadCast,
   TNewFarmingInfoBroadCast,
-  TNewPlotsBroadCast,
+  THarvesterUpdateBroadCast,
+  THarvesterRemovedBroadCast,
   on_message_from_farmer,
   on_get_connections as on_get_connections_farmer,
   on_new_farming_info,
   on_new_signage_point,
-  on_new_plots,
+  on_harvester_update,
+  on_harvester_removed,
 } from "./farmer/index";
 
 import type {
@@ -288,7 +292,8 @@ export {
 export type WsFarmerMessage =
   GetMessageType<chia_farmer_service, new_farming_info_command, TNewFarmingInfoBroadCast>
   | GetMessageType<chia_farmer_service, new_signage_point_command, TNewSignagePointBroadCast>
-  | GetMessageType<chia_farmer_service, new_plots_command, TNewPlotsBroadCast>
+  | GetMessageType<chia_farmer_service, harvester_update_command, THarvesterUpdateBroadCast>
+  | GetMessageType<chia_farmer_service, harvester_removed_command, THarvesterRemovedBroadCast>
   | GetMessageType<chia_farmer_service, get_connections_farmer_command, TGetConnectionsFarmerBroadCast>
   ;
 
