@@ -3,13 +3,13 @@
 ## [7.0.0]
 ### Breaking Change
 - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
-  - Changed name of a property to `backup_data` from `filename`.
+  - Renamed `filename` to `backup_data`.
 - [`did_get_recovery_list`](./src/api/rpc/wallet/README.md#did_get_recovery_listagent-params)
-  - Changed name of a property to `recovery_list` from `recover_list`.
+  - Renamed `recover_list` to `recovery_list`.
 - [`did_recovery_spend`](./src/api/rpc/wallet/README.md#did_recovery_spendagent-params)
-  - Changed name of a property to `attest_data` from `attest_filenames`.
-  - Changed the type of `success` response property to `bool` from `SpendBundle`
-  - Added `spend_bundle` to response
+  - Renamed `attest_filenames` to `attest_data`.
+  - Changed the type of `success` response property to `bool` from `SpendBundle`.
+  - Added `spend_bundle` to response.
 - [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
   - Removed `filename` from request.
   - Added `attest_data` to response.
@@ -55,26 +55,26 @@
 - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
   - Added `infos` to response parameter
 - [`did_update_recovery_ids`](./src/api/rpc/wallet/README.md#did_update_recovery_idsagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
 - [`did_get_did`](./src/api/rpc/wallet/README.md#did_get_didagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
 - [`did_get_recovery_list`](./src/api/rpc/wallet/README.md#did_get_recovery_listagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
-  - Changed name of a property to `recovery_list` from `recover_list`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+  - Renamed `recover_list` to `recovery_list`.
 - [`did_recovery_spend`](./src/api/rpc/wallet/README.md#did_recovery_spendagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
-  - Changed name of a property to `attest_data` from `attest_filenames`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+  - Renamed `attest_filenames` to `attest_data`.
   - Changed response dict format
 - [`did_get_pubkey`](./src/api/rpc/wallet/README.md#did_get_pubkeyagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
 - [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
   - Removed `filename` from request.
   - Added `attest_data` to response.
 - [`did_get_information_needed_for_recovery`](./src/api/rpc/wallet/README.md#did_get_information_needed_for_recoveryagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
 - [`did_create_backup_file`](./src/api/rpc/wallet/README.md#did_create_backup_fileagent-params)
-  - Changed a type of `wallet_id` to `uint32` from `int`.
+  - Changed the type of `wallet_id` to `uint32` from `int`.
   - Removed `filename` from request.
   - Added `backup_data` to response.
 - `TradeRecordConvenience` type at `chia/wallet/trade_record.py` was changed.  
