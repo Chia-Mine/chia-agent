@@ -24,8 +24,8 @@ yarn add chia-agent
 This code is compatible with:  
 - [`bd35cb183bd9cd752dc9df5ffba3efd437011c90`](https://github.com/Chia-Network/chia-blockchain/tree/bd35cb183bd9cd752dc9df5ffba3efd437011c90) of [chia-blockchain 1.4.0](https://github.com/Chia-Network/chia-blockchain)  
   - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/bd35cb183bd9cd752dc9df5ffba3efd437011c90...main)
-- [`374e7e6dc2d6d7941bb650f0e4ac5c01db104569`](https://github.com/Chia-Network/pool-reference/tree/374e7e6dc2d6d7941bb650f0e4ac5c01db104569) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
-  - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/374e7e6dc2d6d7941bb650f0e4ac5c01db104569...main)
+- [`495f71e3acc93b18f10cfa9aac6a5b68cc7064c2`](https://github.com/Chia-Network/pool-reference/tree/495f71e3acc93b18f10cfa9aac6a5b68cc7064c2) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
+  - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/495f71e3acc93b18f10cfa9aac6a5b68cc7064c2...main)
 
 ## API
 There are 2 kinds of APIs in chia.  
