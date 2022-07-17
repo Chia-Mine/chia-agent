@@ -47,6 +47,7 @@ export const get_reward_targets_command = "get_reward_targets";
 export type get_reward_targets_command = typeof get_reward_targets_command;
 export type TGetRewardTargetRequest = {
   search_for_private_key: bool;
+  max_ph_to_search?: int;
 };
 export type TGetRewardTargetResponse = {
   farmer_target: str;
