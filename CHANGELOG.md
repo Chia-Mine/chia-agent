@@ -1,5 +1,95 @@
 # Changelog
 
+## [7.0.0]
+### Breaking Change
+- [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+  - Renamed `filename` to `backup_data`.
+- [`did_get_recovery_list`](./src/api/rpc/wallet/README.md#did_get_recovery_listagent-params)
+  - Renamed `recover_list` to `recovery_list`.
+- [`did_recovery_spend`](./src/api/rpc/wallet/README.md#did_recovery_spendagent-params)
+  - Renamed `attest_filenames` to `attest_data`.
+  - Changed the type of `success` response property to `bool` from `SpendBundle`.
+  - Added `spend_bundle` to response.
+- [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
+  - Removed `filename` from request.
+  - Added `attest_data` to response.
+- [`did_create_backup_file`](./src/api/rpc/wallet/README.md#did_create_backup_fileagent-params)
+  - Removed `filename` from request.
+  - Added `backup_data` to response.
+### Added
+- [New Farmer WebSocket API](./src/api/ws/farmer)
+  - [`on_proof`](./src/api/ws/farmer/README.md#on_proof)
+  - [`on_submitted_partial`](./src/api/ws/farmer/README.md#on_submitted_partial)
+- [New Harvester WebSocket API](./src/api/ws/harvester)
+  - [`on_farming_info`](./src/api/ws/harvester/README.md#on_farming_info)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`did_set_wallet_name`](./src/api/rpc/wallet/README.md#did_set_wallet_nameagent-params)
+  - [`did_get_wallet_name`](./src/api/rpc/wallet/README.md#did_get_wallet_nameagent-params)
+  - [`did_update_metadata`](./src/api/rpc/wallet/README.md#did_update_metadataagent-params)
+  - [`did_get_metadata`](./src/api/rpc/wallet/README.md#did_get_metadataagent-params)
+  - [`did_get_current_coin_info`](./src/api/rpc/wallet/README.md#did_get_current_coin_infoagent-params)
+  - [`did_transfer_did`](./src/api/rpc/wallet/README.md#did_transfer_didagent-params)
+  - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+  - [`nft_get_nfts`](./src/api/rpc/wallet/README.md#nft_get_nftsagent-params)
+  - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+  - [`nft_get_by_did`](./src/api/rpc/wallet/README.md#nft_get_by_didagent-params)
+  - [`nft_get_wallet_did`](./src/api/rpc/wallet/README.md#nft_get_wallet_didagent-params)
+  - [`nft_get_wallets_with_dids`](./src/api/rpc/wallet/README.md#nft_get_wallets_with_didsagent)
+  - [`nft_set_nft_status`](./src/api/rpc/wallet/README.md#nft_set_nft_statusagent-params)
+  - [`nft_transfer_nft`](./src/api/rpc/wallet/README.md#nft_transfer_nftagent-params)
+  - [`nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+  - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+### Changed
+- [`get_reward_targets`](./src/api/rpc/farmer/README.md#get_reward_targetsagent-params)
+  - Added `max_ph_to_search` to request parameter
+- [`check_delete_key`](./src/api/rpc/wallet/README.md#check_delete_keyagent-params)
+  - Added `max_ph_to_search` to request parameter
+- [`get_wallets`](./src/api/rpc/wallet/README.md#get_walletsagent-params)
+  - Added `include_data` to request parameter
+- [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+  - Added `metadata` and `wallet_name` to request parameter for DID wallet
+  - Changed parameter name from `filename` and `backup_data` for request parameter for DID wallet recovery
+  - Added NFT Wallet type
+- [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+  - Added `driver_dict` to request parameter
+- [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
+  - Added `infos` to response parameter
+- [`did_update_recovery_ids`](./src/api/rpc/wallet/README.md#did_update_recovery_idsagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+- [`did_get_did`](./src/api/rpc/wallet/README.md#did_get_didagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+- [`did_get_recovery_list`](./src/api/rpc/wallet/README.md#did_get_recovery_listagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+  - Renamed `recover_list` to `recovery_list`.
+- [`did_recovery_spend`](./src/api/rpc/wallet/README.md#did_recovery_spendagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+  - Renamed `attest_filenames` to `attest_data`.
+  - Changed response dict format
+- [`did_get_pubkey`](./src/api/rpc/wallet/README.md#did_get_pubkeyagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+- [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+  - Removed `filename` from request.
+  - Added `attest_data` to response.
+- [`did_get_information_needed_for_recovery`](./src/api/rpc/wallet/README.md#did_get_information_needed_for_recoveryagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+- [`did_create_backup_file`](./src/api/rpc/wallet/README.md#did_create_backup_fileagent-params)
+  - Changed the type of `wallet_id` to `uint32` from `int`.
+  - Removed `filename` from request.
+  - Added `backup_data` to response.
+- `TradeRecordConvenience` type at `chia/wallet/trade_record.py` was changed.  
+  (Added `infos` property to `summary` dict)  
+  As a result, the following APIs are affected:
+  - `create_offer_for_ids` of Wallet RPC API
+  - `take_offer` of Wallet RPC API
+  - `get_offer` of Wallet RPC API
+  - `get_all_offers` of Wallet RPC API
+- Renamed `DISTRIBUTED_ID` to `DECENTRALIZED_ID` of `WalletType` in `src/api/chia/wallet/util/wallet_type.ts`.
+- Added `NFT` to `WalletType` in `src/api/chia/wallet/util/wallet_type.ts`.
+### Fixed
+- Fixed an issue where README description for `did_get_pubkey` was wrong.
+- Fixed an issue where the type of `pubkey` response property for `did_get_pubkey` was wrong.
+
 ## [6.0.0]
 ### Minor Breaking Change
 - At chia-blockchain@1.3.5, a farmer websocket API `new_plots` was replaced by  
@@ -384,6 +474,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[7.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v4.0.0...v5.0.0
 [4.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v3.0.1...v4.0.0

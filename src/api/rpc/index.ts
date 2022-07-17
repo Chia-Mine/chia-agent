@@ -201,15 +201,31 @@ import type {
   TSelectCoinsResponse,
   TDeleteAllKeysResponse,
   TDeleteKeyResponse,
+  TDidSetWalletNameResponse,
+  TDidGetWalletNameResponse,
   TDidCreateAttestResponse,
   TDidCreateBackupFileResponse,
+  TDidTransferDidResponse,
   TDidGetDidResponse,
   TDidGetInformationNeededForRecoveryResponse,
   TDidGetPubkeyResponse,
   TDidGetRecoveryListResponse,
+  TDidGetCurrentCoinInfoResponse,
+  TDidGetMetadataResponse,
   TDidRecoverySpendResponse,
   TDidSpendResponse,
   TDidUpdateRecoveryIdsResponse,
+  TDidUpdateMetadataResponse,
+  TNftMintNftResponse,
+  TNftGetNftsResponse,
+  TNftSetNftDidResponse,
+  TNftGetByDidResponse,
+  TNftGetWalletDidResponse,
+  TNftGetWalletsWithDidsResponse,
+  TNftSetNftStatusResponse,
+  TNftTransferNftResponse,
+  TNftGetInfoResponse,
+  TNftAddUriResponse,
   TFarmBlockResponse,
   TGenerateMnemonicResponse,
   TGetAllOffersResponse,
@@ -287,24 +303,55 @@ export {
   TDeleteAllKeysResponse,
   TDeleteKeyRequest,
   TDeleteKeyResponse,
+  TDidSetWalletNameRequest,
+  TDidSetWalletNameResponse,
+  TDidGetWalletNameRequest,
+  TDidGetWalletNameResponse,
   TDidCreateAttestRequest,
   TDidCreateAttestResponse,
   TDidCreateBackupFileRequest,
   TDidCreateBackupFileResponse,
+  TDidTransferDidRequest,
+  TDidTransferDidResponse,
   TDidGetDidRequest,
   TDidGetDidResponse,
   TDidGetInformationNeededForRecoveryRequest,
   TDidGetInformationNeededForRecoveryResponse,
+  TDidGetCurrentCoinInfoRequest,
+  TDidGetCurrentCoinInfoResponse,
   TDidGetPubkeyRequest,
   TDidGetPubkeyResponse,
   TDidGetRecoveryListRequest,
   TDidGetRecoveryListResponse,
+  TDidGetMetadataRequest,
+  TDidGetMetadataResponse,
   TDidRecoverySpendRequest,
   TDidRecoverySpendResponse,
   TDidSpendRequest,
   TDidSpendResponse,
   TDidUpdateRecoveryIdsRequest,
   TDidUpdateRecoveryIdsResponse,
+  TDidUpdateMetadataRequest,
+  TDidUpdateMetadataResponse,
+  TNftMintNftRequest,
+  TNftMintNftResponse,
+  TNftGetNftsRequest,
+  TNftGetNftsResponse,
+  TNftSetNftDidRequest,
+  TNftSetNftDidResponse,
+  TNftGetByDidRequest,
+  TNftGetByDidResponse,
+  TNftGetWalletDidRequest,
+  TNftGetWalletDidResponse,
+  TNftGetWalletsWithDidsResponse,
+  TNftSetNftStatusRequest,
+  TNftSetNftStatusResponse,
+  TNftTransferNftRequest,
+  TNftTransferNftResponse,
+  TNftGetInfoRequest,
+  TNftGetInfoResponse,
+  TNftAddUriRequest,
+  TNftAddUriResponse,
   TFarmBlockRequest,
   TFarmBlockResponse,
   TGenerateMnemonicRequest,
@@ -383,15 +430,31 @@ export {
   select_coins,
   delete_all_keys,
   delete_key,
+  did_set_wallet_name,
+  did_get_wallet_name,
   did_create_attest,
   did_create_backup_file,
+  did_transfer_did,
   did_get_did,
   did_get_information_needed_for_recovery,
+  did_get_current_coin_info,
   did_get_pubkey,
   did_get_recovery_list,
+  did_get_metadata,
   did_recovery_spend,
   did_spend,
   did_update_recovery_ids,
+  did_update_metadata,
+  nft_mint_nft,
+  nft_get_nfts,
+  nft_set_nft_did,
+  nft_get_by_did,
+  nft_get_wallet_did,
+  nft_get_wallets_with_dids,
+  nft_set_nft_status,
+  nft_transfer_nft,
+  nft_get_info,
+  nft_add_uri,
   farm_block,
   generate_mnemonic,
   get_all_offers,
@@ -531,15 +594,31 @@ export type RpcWalletMessage =
   | TSelectCoinsResponse
   | TDeleteAllKeysResponse
   | TDeleteKeyResponse
+  | TDidSetWalletNameResponse
+  | TDidGetWalletNameResponse
   | TDidCreateAttestResponse
   | TDidCreateBackupFileResponse
+  | TDidTransferDidResponse
   | TDidGetDidResponse
   | TDidGetInformationNeededForRecoveryResponse
+  | TDidGetCurrentCoinInfoResponse
   | TDidGetPubkeyResponse
   | TDidGetRecoveryListResponse
+  | TDidGetMetadataResponse
   | TDidRecoverySpendResponse
   | TDidSpendResponse
   | TDidUpdateRecoveryIdsResponse
+  | TDidUpdateMetadataResponse
+  | TNftMintNftResponse
+  | TNftGetNftsResponse
+  | TNftSetNftDidResponse
+  | TNftGetByDidResponse
+  | TNftGetWalletDidResponse
+  | TNftGetWalletsWithDidsResponse
+  | TNftSetNftStatusResponse
+  | TNftTransferNftResponse
+  | TNftGetInfoResponse
+  | TNftAddUriResponse
   | TFarmBlockResponse
   | TGenerateMnemonicResponse
   | TGetAllOffersResponse

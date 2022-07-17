@@ -8,7 +8,7 @@ import {
   Optional,
   str,
   True,
-  uint128,
+  uint128, uint16,
   uint32,
   uint64,
   uint8
@@ -20,6 +20,8 @@ import {TRPCAgent} from "../../../rpc";
 import {PoolWalletInfo} from "../../chia/pools/pool_wallet_info";
 import {TradeRecordConvenience} from "../../chia/wallet/trade_record";
 import {CAT} from "../../chia/wallet/cat_wallet/cat_constants";
+import {TDriverDict} from "../../chia/wallet/puzzle_drivers";
+import {NFTInfo} from "../../chia/wallet/nft_wallet/nft_info";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -147,6 +149,7 @@ export const check_delete_key_command = "check_delete_key";
 export type check_delete_key_command = typeof check_delete_key_command;
 export type TCheckDeleteKeyRequest = {
   fingerprint: int;
+  max_ph_to_search?: int;
 };
 export type TCheckDeleteKeyResponse = {
   fingerprint: int;
@@ -263,6 +266,7 @@ export const get_wallets_command = "get_wallets";
 export type get_wallets_command = typeof get_wallets_command;
 export type TGetWalletsRequest = {
   type?: int;
+  include_data?: bool;
 };
 export type TGetWalletsResponse = {
   wallets: WalletInfo[];
@@ -322,11 +326,13 @@ export type TCreate_New_DID_WalletRequest = {
   backup_dids: str[];
   num_of_backup_ids_needed: uint64;
   amount: int;
+  metadata?: Record<str, str>;
+  wallet_name?: str;
 } | {
   fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "recovery";
-  filename: str;
+  backup_data: str;
 };
 export type TCreate_New_DID_WalletResponse = {
   success: True;
@@ -344,6 +350,18 @@ export type TCreate_New_DID_WalletResponse = {
   pubkey: str;
   backup_dids: bytes[];
   num_verifications_required: uint64;
+};
+
+export type TCreate_New_NFT_WalletRequest = {
+  fee?: uint64;
+  wallet_type: "nft_wallet";
+  did_id?: str;
+  name?: str;
+};
+export type TCreate_New_NFT_WalletResponse = {
+  success: True;
+  type: uint8;
+  wallet_id: uint32;
 };
 
 export type TCreate_New_Pool_WalletRequest = {
@@ -375,8 +393,16 @@ export type TCreate_New_Pool_WalletResponse = {
 
 export const create_new_wallet_command = "create_new_wallet";
 export type create_new_wallet_command = typeof create_new_wallet_command;
-export type TCreateNewWalletRequest = TCreate_New_CAT_WalletRequest | TCreate_New_RL_WalletRequest | TCreate_New_DID_WalletRequest | TCreate_New_Pool_WalletRequest;
-export type TCreateNewWalletResponse = TCreate_New_CAT_WalletResponse | TCreate_New_RL_WalletResponse | TCreate_New_DID_WalletResponse | TCreate_New_Pool_WalletResponse;
+export type TCreateNewWalletRequest = TCreate_New_CAT_WalletRequest
+  | TCreate_New_RL_WalletRequest
+  | TCreate_New_DID_WalletRequest
+  | TCreate_New_NFT_WalletRequest
+  | TCreate_New_Pool_WalletRequest;
+export type TCreateNewWalletResponse = TCreate_New_CAT_WalletResponse
+  | TCreate_New_RL_WalletResponse
+  | TCreate_New_DID_WalletResponse
+  | TCreate_New_NFT_WalletResponse
+  | TCreate_New_Pool_WalletResponse;
 export async function create_new_wallet(agent: TRPCAgent, data: TCreateNewWalletRequest){
   return agent.sendMessage<TCreateNewWalletResponse>(chia_wallet_service, create_new_wallet_command, data);
 }
@@ -601,6 +627,18 @@ export async function select_coins(agent: TRPCAgent, data: TSelectCoinsRequest){
 
 
 // # CATs and Trading
+export const get_cat_list_command = "get_cat_list";
+export type get_cat_list_command = typeof get_cat_list_command;
+export type TGetCatListResponse = {
+  cat_list: CAT[];
+};
+export async function get_cat_list(agent: TRPCAgent){
+  return agent.sendMessage<TGetCatListResponse>(chia_wallet_service, get_cat_list_command);
+}
+
+
+
+
 export const cat_set_name_command = "cat_set_name";
 export type cat_set_name_command = typeof cat_set_name_command;
 export type TCatSetNameRequest = {
@@ -708,6 +746,7 @@ export type TCreateOfferForIdsRequest = {
   offer: Record<int, int>;
   fee?: uint64;
   validate_only?: bool;
+  driver_dict?: TDriverDict;
 };
 export type TCreateOfferForIdsResponse = {
   offer: str;
@@ -730,6 +769,7 @@ export type TGetOfferSummaryResponse = {
     offered: Record<str, int>;
     requested: Record<str, int>;
     fees: int;
+    infos: TDriverDict;
   };
 };
 export async function get_offer_summary(agent: TRPCAgent, data: TGetOfferSummaryRequest){
@@ -839,23 +879,48 @@ export async function cancel_offer(agent: TRPCAgent, data: TCancelOfferRequest){
 
 
 
-export const get_cat_list_command = "get_cat_list";
-export type get_cat_list_command = typeof get_cat_list_command;
-export type TGetCatListResponse = {
-  cat_list: CAT[];
+// # DID Wallet
+export const did_set_wallet_name_command = "did_set_wallet_name";
+export type did_set_wallet_name_command = typeof did_set_wallet_name_command;
+export type TDidSetWalletNameRequest = {
+  wallet_id: uint32;
+  name: str;
 };
-export async function get_cat_list(agent: TRPCAgent){
-  return agent.sendMessage<TGetCatListResponse>(chia_wallet_service, get_cat_list_command);
+export type TDidSetWalletNameResponse = {
+  success: True;
+  wallet_id: uint32;
+} | {
+  success: False;
+  error: str;
+};
+export async function did_set_wallet_name(agent: TRPCAgent, data: TDidSetWalletNameRequest){
+  return agent.sendMessage<TDidSetWalletNameResponse>(chia_wallet_service, did_set_wallet_name_command, data);
 }
 
 
 
 
-// # DID Wallet
+export const did_get_wallet_name_command = "did_get_wallet_name";
+export type did_get_wallet_name_command = typeof did_get_wallet_name_command;
+export type TDidGetWalletNameRequest = {
+  wallet_id: uint32;
+};
+export type TDidGetWalletNameResponse = {
+  success: True;
+  wallet_id: uint32;
+  name: str;
+};
+export async function did_get_wallet_name(agent: TRPCAgent, data: TDidGetWalletNameRequest){
+  return agent.sendMessage<TDidGetWalletNameResponse>(chia_wallet_service, did_get_wallet_name_command, data);
+}
+
+
+
+
 export const did_update_recovery_ids_command = "did_update_recovery_ids";
 export type did_update_recovery_ids_command = typeof did_update_recovery_ids_command;
 export type TDidUpdateRecoveryIdsRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
   new_list: str[];
   num_verifications_required?: uint64;
 };
@@ -864,6 +929,28 @@ export type TDidUpdateRecoveryIdsResponse = {
 };
 export async function did_update_recovery_ids(agent: TRPCAgent, data: TDidUpdateRecoveryIdsRequest){
   return agent.sendMessage<TDidUpdateRecoveryIdsResponse>(chia_wallet_service, did_update_recovery_ids_command, data);
+}
+
+
+
+
+export const did_update_metadata_command = "did_update_metadata";
+export type did_update_metadata_command = typeof did_update_metadata_command;
+export type TDidUpdateMetadataRequest = {
+  wallet_id: uint32;
+  metadata?: Record<str, str>;
+  fee?: uint64;
+};
+export type TDidUpdateMetadataResponse = {
+  success: True;
+  wallet_id: uint32;
+  spend_bundle: SpendBundle;
+} | {
+  success: False;
+  error: str;
+};
+export async function did_update_metadata(agent: TRPCAgent, data: TDidUpdateMetadataRequest){
+  return agent.sendMessage<TDidUpdateMetadataResponse>(chia_wallet_service, did_update_metadata_command, data);
 }
 
 
@@ -889,11 +976,11 @@ export async function did_spend(agent: TRPCAgent, data: TDidSpendRequest){
 export const did_get_pubkey_command = "did_get_pubkey";
 export type did_get_pubkey_command = typeof did_get_pubkey_command;
 export type TDidGetPubkeyRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export type TDidGetPubkeyResponse = {
   success: bool;
-  pubkey: bytes;
+  pubkey: str;
 };
 export async function did_get_pubkey(agent: TRPCAgent){
   return agent.sendMessage<TDidGetPubkeyResponse>(chia_wallet_service, did_get_pubkey_command);
@@ -905,11 +992,11 @@ export async function did_get_pubkey(agent: TRPCAgent){
 export const did_get_did_command = "did_get_did";
 export type did_get_did_command = typeof did_get_did_command;
 export type TDidGetDidRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export type TDidGetDidResponse = {
   success: bool;
-  wallet_id: int;
+  wallet_id: uint32;
   my_did: str;
   coin_id?: bytes32;
 };
@@ -923,13 +1010,16 @@ export async function did_get_did(agent: TRPCAgent, data: TDidGetDidRequest){
 export const did_recovery_spend_command = "did_recovery_spend";
 export type did_recovery_spend_command = typeof did_recovery_spend_command;
 export type TDidRecoverySpendRequest = {
-  wallet_id: int;
-  attest_filenames: str[];
+  wallet_id: uint32;
+  attest_data: str[];
   pubkey?: str;
   puzhash?: str;
 };
 export type TDidRecoverySpendResponse = {
-  success: SpendBundle;
+  success: True;
+  spend_bundle: SpendBundle;
+} | {
+  success: False;
 };
 export async function did_recovery_spend(agent: TRPCAgent, data: TDidRecoverySpendRequest){
   return agent.sendMessage<TDidRecoverySpendResponse>(chia_wallet_service, did_recovery_spend_command, data);
@@ -941,12 +1031,12 @@ export async function did_recovery_spend(agent: TRPCAgent, data: TDidRecoverySpe
 export const did_get_recovery_list_command = "did_get_recovery_list";
 export type did_get_recovery_list_command = typeof did_get_recovery_list_command;
 export type TDidGetRecoveryListRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export type TDidGetRecoveryListResponse = {
   success: bool;
-  wallet_id: int;
-  recover_list: str[];
+  wallet_id: uint32;
+  recovery_list: str[];
   num_required: uint64;
 };
 export async function did_get_recovery_list(agent: TRPCAgent, data: TDidGetRecoveryListRequest){
@@ -956,18 +1046,35 @@ export async function did_get_recovery_list(agent: TRPCAgent, data: TDidGetRecov
 
 
 
+export const did_get_metadata_command = "did_get_metadata";
+export type did_get_metadata_command = typeof did_get_metadata_command;
+export type TDidGetMetadataRequest = {
+  wallet_id: uint32;
+};
+export type TDidGetMetadataResponse = {
+  success: True;
+  wallet_id: uint32;
+  metadata: Record<str, str>
+};
+export async function did_get_metadata(agent: TRPCAgent, data: TDidGetMetadataRequest){
+  return agent.sendMessage<TDidGetMetadataResponse>(chia_wallet_service, did_get_metadata_command, data);
+}
+
+
+
+
 export const did_create_attest_command = "did_create_attest";
 export type did_create_attest_command = typeof did_create_attest_command;
 export type TDidCreateAttestRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
   coin_name: str;
   puzhash: str;
-  filename: str;
 };
 export type TDidCreateAttestResponse = {
   success: True;
   message_spend_bundle: str;
   info: [str, str, uint64];
+  attest_data: str;
 } | {
   success: False;
 };
@@ -980,11 +1087,11 @@ export async function did_create_attest(agent: TRPCAgent, data: TDidCreateAttest
 export const did_get_information_needed_for_recovery_command = "did_get_information_needed_for_recovery";
 export type did_get_information_needed_for_recovery_command = typeof did_get_information_needed_for_recovery_command;
 export type TDidGetInformationNeededForRecoveryRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export type TDidGetInformationNeededForRecoveryResponse = {
   success: bool;
-  wallet_id: int;
+  wallet_id: uint32;
   my_did: str;
   coin_name: str;
   newpuzhash: Optional<bytes32>;
@@ -997,21 +1104,272 @@ export async function did_get_information_needed_for_recovery(agent: TRPCAgent, 
 
 
 
+export const did_get_current_coin_info_command = "did_get_current_coin_info";
+export type did_get_current_coin_info_command = typeof did_get_current_coin_info_command;
+export type TDidGetCurrentCoinInfoRequest = {
+  wallet_id: uint32;
+};
+export type TDidGetCurrentCoinInfoResponse = {
+  success: True;
+  wallet_id: uint32;
+  my_did: str;
+  did_parent: bytes32;
+  did_innerpuz: bytes32;
+  did_amount: uint64;
+};
+export async function did_get_current_coin_info(agent: TRPCAgent, data: TDidGetCurrentCoinInfoRequest){
+  return agent.sendMessage<TDidGetCurrentCoinInfoResponse>(chia_wallet_service, did_get_current_coin_info_command, data);
+}
+
+
+
 
 export const did_create_backup_file_command = "did_create_backup_file";
 export type did_create_backup_file_command = typeof did_create_backup_file_command;
 export type TDidCreateBackupFileRequest = {
-  wallet_id: int;
-  filename: str;
+  wallet_id: uint32;
 };
 export type TDidCreateBackupFileResponse = {
-  wallet_id: int;
-  success: bool;
+  wallet_id: uint32;
+  success: True;
+  backup_data: str;
 };
 export async function did_create_backup_file(agent: TRPCAgent, data: TDidCreateBackupFileRequest){
   return agent.sendMessage<TDidCreateBackupFileResponse>(chia_wallet_service, did_create_backup_file_command, data);
 }
 
+
+
+
+export const did_transfer_did_command = "did_transfer_did";
+export type did_transfer_did_command = typeof did_transfer_did_command;
+export type TDidTransferDidRequest = {
+  wallet_id: uint32;
+  inner_address: str;
+  fee?: uint64;
+  with_recovery_info?: bool;
+};
+export type TDidTransferDidResponse = {
+  success: True;
+  transaction: TransactionRecordConvenience;
+  transaction_id: bytes32;
+};
+export async function did_transfer_did(agent: TRPCAgent, data: TDidTransferDidRequest){
+  return agent.sendMessage<TDidTransferDidResponse>(chia_wallet_service, did_transfer_did_command, data);
+}
+
+
+
+
+// # NFT Wallet
+export const nft_mint_nft_command = "nft_mint_nft";
+export type nft_mint_nft_command = typeof nft_mint_nft_command;
+export type TNftMintNftRequest = {
+  wallet_id: uint32;
+  royalty_address?: str;
+  target_address?: str;
+  uris: str[]; // Reference: NFTInfo.data_uris at chia/wallet/nft_wallet/nft_info.py
+  meta_uris: str[]; // Reference: chia/wallet/nft_wallet/nft_info.py
+  license_uris: str[]; // Reference: chia/wallet/nft_wallet/nft_info.py
+  hash: str;
+  series_number: uint64;
+  series_total: uint64;
+  meta_hash?: str;
+  license_hash?: str;
+  fee?: uint64;
+  did_id?: str;
+  royalty_percentage?: uint16;
+};
+export type TNftMintNftResponse = {
+  wallet_id: uint32;
+  success: True;
+  spend_bundle: SpendBundle;
+};
+export async function nft_mint_nft(agent: TRPCAgent, data: TNftMintNftRequest){
+  return agent.sendMessage<TNftMintNftResponse>(chia_wallet_service, nft_mint_nft_command, data);
+}
+
+
+
+
+export const nft_get_nfts_command = "nft_get_nfts";
+export type nft_get_nfts_command = typeof nft_get_nfts_command;
+export type TNftGetNftsRequest = {
+  wallet_id: uint32;
+};
+export type TNftGetNftsResponse = {
+  wallet_id: uint32;
+  success: True;
+  nft_list: NFTInfo[];
+};
+export async function nft_get_nfts(agent: TRPCAgent, data: TNftGetNftsRequest){
+  return agent.sendMessage<TNftGetNftsResponse>(chia_wallet_service, nft_get_nfts_command, data);
+}
+
+
+
+
+export const nft_set_nft_did_command = "nft_set_nft_did";
+export type nft_set_nft_did_command = typeof nft_set_nft_did_command;
+export type TNftSetNftDidRequest = {
+  wallet_id: uint32;
+  did_id: str;
+  nft_coin_id: str;
+  fee?: uint64;
+};
+export type TNftSetNftDidResponse = {
+  wallet_id: uint32;
+  success: True;
+  spend_bundle: SpendBundle;
+} | {
+  success: False;
+  error: str;
+};
+export async function nft_set_nft_did(agent: TRPCAgent, data: TNftSetNftDidRequest){
+  return agent.sendMessage<TNftSetNftDidResponse>(chia_wallet_service, nft_set_nft_did_command, data);
+}
+
+
+
+
+export const nft_get_by_did_command = "nft_get_by_did";
+export type nft_get_by_did_command = typeof nft_get_by_did_command;
+export type TNftGetByDidRequest = {
+  did_id?: str;
+};
+export type TNftGetByDidResponse = {
+  wallet_id: uint32;
+  success: True;
+} | {
+  success: False;
+  error: str;
+};
+export async function nft_get_by_did(agent: TRPCAgent, data: TNftGetByDidRequest){
+  return agent.sendMessage<TNftGetByDidResponse>(chia_wallet_service, nft_get_by_did_command, data);
+}
+
+
+
+
+export const nft_get_wallet_did_command = "nft_get_wallet_did";
+export type nft_get_wallet_did_command = typeof nft_get_wallet_did_command;
+export type TNftGetWalletDidRequest = {
+  wallet_id: uint32;
+};
+export type TNftGetWalletDidResponse = {
+  did_id: Optional<str>;
+  success: True;
+} | {
+  success: False;
+  error: str;
+};
+export async function nft_get_wallet_did(agent: TRPCAgent, data: TNftGetWalletDidRequest){
+  return agent.sendMessage<TNftGetWalletDidResponse>(chia_wallet_service, nft_get_wallet_did_command, data);
+}
+
+
+
+
+export const nft_get_wallets_with_dids_command = "nft_get_wallets_with_dids";
+export type nft_get_wallets_with_dids_command = typeof nft_get_wallets_with_dids_command;
+export type TNftGetWalletsWithDidsResponse = {
+  success: True;
+  nft_wallets: Array<{
+    wallet_id: uint32;
+    did_id: str;
+    did_wallet_id: uint32;
+  }>;
+};
+export async function nft_get_wallets_with_dids(agent: TRPCAgent){
+  return agent.sendMessage<TNftGetWalletsWithDidsResponse>(chia_wallet_service, nft_get_wallets_with_dids_command);
+}
+
+
+
+
+export const nft_set_nft_status_command = "nft_set_nft_status";
+export type nft_set_nft_status_command = typeof nft_set_nft_status_command;
+export type TNftSetNftStatusRequest = {
+  wallet_id: uint32;
+  coin_id: str;
+  in_transaction: bool;
+};
+export type TNftSetNftStatusResponse = {
+  success: True;
+} | {
+  success: False;
+  error: str;
+};
+export async function nft_set_nft_status(agent: TRPCAgent, data: TNftSetNftStatusRequest){
+  return agent.sendMessage<TNftSetNftStatusResponse>(chia_wallet_service, nft_set_nft_status_command, data);
+}
+
+
+
+
+export const nft_transfer_nft_command = "nft_transfer_nft";
+export type nft_transfer_nft_command = typeof nft_transfer_nft_command;
+export type TNftTransferNftRequest = {
+  wallet_id: uint32;
+  target_address: str;
+  nft_coin_id: str;
+  fee?: uint64;
+};
+export type TNftTransferNftResponse = {
+  success: True;
+  wallet_id: uint32;
+  spend_bundle: SpendBundle;
+} | {
+  success: False;
+  error: str;
+};
+export async function nft_transfer_nft(agent: TRPCAgent, data: TNftTransferNftRequest){
+  return agent.sendMessage<TNftTransferNftResponse>(chia_wallet_service, nft_transfer_nft_command, data);
+}
+
+
+
+
+export const nft_get_info_command = "nft_get_info";
+export type nft_get_info_command = typeof nft_get_info_command;
+export type TNftGetInfoRequest = {
+  coin_id: str;
+  latest?: bool;
+};
+export type TNftGetInfoResponse = {
+  success: True;
+  nft_info: NFTInfo;
+} | {
+  success: False;
+  error: str;
+};
+export async function nft_get_info(agent: TRPCAgent, data: TNftGetInfoRequest){
+  return agent.sendMessage<TNftGetInfoResponse>(chia_wallet_service, nft_get_info_command, data);
+}
+
+
+
+
+export const nft_add_uri_command = "nft_add_uri";
+export type nft_add_uri_command = typeof nft_add_uri_command;
+export type TNftAddUriRequest = {
+  wallet_id: uint32;
+  uri: str;
+  key: str;
+  nft_coin_id: str;
+  fee?: uint64;
+};
+export type TNftAddUriResponse = {
+  success: True;
+  wallet_id: uint32;
+  spend_bundle: SpendBundle;
+} | {
+  success: False;
+  error: str;
+};
+export async function nft_add_uri(agent: TRPCAgent, data: TNftAddUriRequest){
+  return agent.sendMessage<TNftAddUriResponse>(chia_wallet_service, nft_add_uri_command, data);
+}
 
 
 

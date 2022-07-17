@@ -94,6 +94,7 @@ const response = await get_reward_targets(agent, params);
 ```typescript
 {
   search_for_private_key: bool;
+  max_ph_to_search?: int;
 }
 ```
 ### response:

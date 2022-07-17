@@ -3,6 +3,7 @@
 import {bool, bytes, int, Optional, str, uint32, uint64, uint8} from "../types/_python_types_";
 import {Coin} from "../types/blockchain_format/coin";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
+import {TDriverDict} from "./puzzle_drivers";
 
 export type TradeRecord = {
   confirmed_at_index: uint32;
@@ -22,6 +23,7 @@ export type TradeRecordConvenience = {
   summary: {
     offered: Record<str, int>; // {[asset_id]: amount}
     requested: Record<str, int>; // {[asset_id]: amount}
+    infos: TDriverDict;
     fees: int;
   };
   pending: Record<str, int>; // {[asset_id]: amount}

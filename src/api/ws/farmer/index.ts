@@ -1,7 +1,7 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
-import {NewSignagePoint} from "../../chia/protocols/farmer_protocol";
+import {DeclareProofOfSpace, NewSignagePoint} from "../../chia/protocols/farmer_protocol";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {uint32, uint64} from "../../chia/types/_python_types_";
+import {bool, float, str, uint32, uint64} from "../../chia/types/_python_types_";
 import {TDaemon} from "../../../daemon/index";
 import {GetMessageType, TConnectionGeneral, wallet_ui_service} from "../../types";
 import {WsMessage} from "../index";
@@ -91,18 +91,57 @@ export async function on_harvester_removed(daemon: TDaemon, callback: (e: GetMes
   return daemon.addMessageListener(chia_farmer_service, messageListener);
 }
 
+export const proof_command = "proof";
+export type proof_command = typeof proof_command;
+export type TProofBroadCast = {
+  proof: DeclareProofOfSpace;
+  passed_filter: bool;
+};
+export async function on_proof(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, proof_command, TProofBroadCast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_farmer_service && e.command === proof_command){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
+
+export const submitted_partial_command = "submitted_partial";
+export type submitted_partial_command = typeof submitted_partial_command;
+export type TSubmittedPartialBroadCast = {
+  launcher_id: str;
+  pool_url: str;
+  current_difficulty: uint64;
+  points_acknowledged_since_start: uint64;
+  points_acknowledged_24h: Array<[float, uint64]>; // [(time.time(), new_difficulty)]
+};
+export async function on_submitted_partial(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, submitted_partial_command, TSubmittedPartialBroadCast>) => unknown){
+  await daemon.subscribe(wallet_ui_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_farmer_service && e.command === submitted_partial_command){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
+
 // Whole commands for the service
 export type chia_farmer_commands = get_connections_command
   | new_farming_info_command
   | new_signage_point_command
   | harvester_update_command
   | harvester_removed_command
+  | proof_command
+  | submitted_partial_command
 ;
 export type TChiaFarmerBroadcast = TGetConnectionsBroadCast
   | TNewFarmingInfoBroadCast
   | TNewSignagePointBroadCast
   | THarvesterUpdateBroadCast
   | THarvesterRemovedBroadCast
+  | TProofBroadCast
+  | TSubmittedPartialBroadCast
 ;
 export async function on_message_from_farmer(daemon: TDaemon, callback: (e: GetMessageType<chia_farmer_service, chia_farmer_commands, TChiaFarmerBroadcast>) => unknown){
   await daemon.subscribe(wallet_ui_service);

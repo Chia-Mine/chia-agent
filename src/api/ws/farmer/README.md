@@ -245,3 +245,86 @@ unsubscribe(); // Stop subscribing messages
   node_id: bytes32;
 }
 ```
+
+---
+
+### `on_proof`
+Capture broadcast message of command `on_proof` from `chia_farmer` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_proof} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_proof(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "proof";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  proof: DeclareProofOfSpace;
+  passed_filter: bool;
+}
+```
+For content of `DeclareProofOfSpace`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/farmer_protocol.ts
+
+---
+
+### `on_submitted_partial`
+Capture broadcast message of command `on_proof` from `chia_farmer` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_submitted_partial} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_submitted_partial(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "submitted_partial";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  launcher_id: str;
+  pool_url: str;
+  current_difficulty: uint64;
+  points_acknowledged_since_start: uint64;
+  points_acknowledged_24h: Array<[float, uint64]>; // [(time.time(), new_difficulty)]
+}
+```

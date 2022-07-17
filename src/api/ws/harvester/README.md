@@ -105,3 +105,45 @@ unsubscribe(); // Stop subscribing messages
 ```
 For content of `Plot`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/harvester/harvester.ts
+
+---
+
+### `on_farming_info`
+Capture broadcast message of command `farming_info` from `chia_harvester` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_farming_info} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_farming_info(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_harvester";
+  command: "farming_info";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "metrics";
+}
+```
+#### data:
+```typescript
+{
+  challenge_hash: str;
+  total_plots: int;
+  found_proofs: int;
+  eligible_plots: int;
+  time: float;
+}
+```

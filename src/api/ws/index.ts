@@ -6,11 +6,15 @@ import type {
   new_signage_point_command,
   harvester_update_command,
   harvester_removed_command,
+  proof_command,
+  submitted_partial_command,
   TGetConnectionsBroadCast as TGetConnectionsFarmerBroadCast,
   TNewFarmingInfoBroadCast,
   TNewSignagePointBroadCast,
   THarvesterUpdateBroadCast,
   THarvesterRemovedBroadCast,
+  TProofBroadCast,
+  TSubmittedPartialBroadCast,
 } from "./farmer/index";
 export {
   chia_farmer_service,
@@ -20,12 +24,16 @@ export {
   TNewFarmingInfoBroadCast,
   THarvesterUpdateBroadCast,
   THarvesterRemovedBroadCast,
+  TProofBroadCast,
+  TSubmittedPartialBroadCast,
   on_message_from_farmer,
   on_get_connections as on_get_connections_farmer,
   on_new_farming_info,
   on_new_signage_point,
   on_harvester_update,
   on_harvester_removed,
+  on_proof,
+  on_submitted_partial,
 } from "./farmer/index";
 
 import type {
@@ -57,17 +65,21 @@ import type {
   chia_harvester_service,
   get_connections_command as get_connections_harvester_command,
   get_plots_command,
+  farming_info_command,
   TGetConnectionsBroadCast as TGetConnectionsHarvesterBroadCast,
   TGetPlotsBroadCast,
+  TFarmingInfoBroadCast,
 } from "./harvester/index";
 export {
   chia_harvester_service,
   TGetConnectionsBroadCast as TGetConnectionsHarvesterBroadCast,
   TChiaHarvesterBroadcast,
   TGetPlotsBroadCast,
+  TFarmingInfoBroadCast,
   on_message_from_harvester,
   on_get_connections as on_get_connections_harvester,
-  on_get_plots, 
+  on_get_plots,
+  on_farming_info,
 } from "./harvester/index";
 
 import type {
@@ -295,6 +307,8 @@ export type WsFarmerMessage =
   | GetMessageType<chia_farmer_service, harvester_update_command, THarvesterUpdateBroadCast>
   | GetMessageType<chia_farmer_service, harvester_removed_command, THarvesterRemovedBroadCast>
   | GetMessageType<chia_farmer_service, get_connections_farmer_command, TGetConnectionsFarmerBroadCast>
+  | GetMessageType<chia_farmer_service, proof_command, TProofBroadCast>
+  | GetMessageType<chia_farmer_service, submitted_partial_command, TSubmittedPartialBroadCast>
   ;
 
 export type WsFullNodeMessage =
@@ -306,6 +320,7 @@ export type WsFullNodeMessage =
 
 export type WsHarvesterMessage =
   GetMessageType<chia_harvester_service, get_plots_command, TGetPlotsBroadCast>
+  | GetMessageType<chia_harvester_service, farming_info_command, TFarmingInfoBroadCast>
   | GetMessageType<chia_harvester_service, get_connections_harvester_command, TGetConnectionsHarvesterBroadCast>
   ;
 
