@@ -495,6 +495,7 @@ export type TSendTransactionRequest = {
   fee: int;
   address: str;
   memos?: str[];
+  min_coin_amount?: uint128;
 };
 export type TSendTransactionResponse = {
   transaction: TransactionRecordConvenience;
@@ -582,6 +583,7 @@ export type create_signed_transaction_command = typeof create_signed_transaction
 export type TCreateSignedTransactionRequest = {
   additions: TAdditions[];
   fee?: uint64;
+  min_coin_amount?: uint128;
   coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
@@ -621,6 +623,35 @@ export type TSelectCoinsResponse = {
 };
 export async function select_coins(agent: TRPCAgent, data: TSelectCoinsRequest){
   return agent.sendMessage<TSelectCoinsResponse>(chia_wallet_service, select_coins_command, data);
+}
+
+
+
+
+export const get_current_derivation_index_command = "get_current_derivation_index";
+export type get_current_derivation_index_command = typeof get_current_derivation_index_command;
+export type TGetCurrentDerivationIndexResponse = {
+  success: True;
+  index: Optional<uint32>;
+};
+export async function get_current_derivation_index(agent: TRPCAgent){
+  return agent.sendMessage<TGetCurrentDerivationIndexResponse>(chia_wallet_service, get_current_derivation_index_command);
+}
+
+
+
+
+export const extend_derivation_index_command = "extend_derivation_index";
+export type extend_derivation_index_command = typeof extend_derivation_index_command;
+export type TExtendDerivationIndexRequest = {
+  index: uint32;
+};
+export type TExtendDerivationIndexResponse = {
+  success: True;
+  index: Optional<uint32>;
+};
+export async function extend_derivation_index(agent: TRPCAgent, data: TExtendDerivationIndexRequest){
+  return agent.sendMessage<TExtendDerivationIndexResponse>(chia_wallet_service, extend_derivation_index_command, data);
 }
 
 
@@ -712,6 +743,7 @@ export type TCatSpendRequest = {
   memos?: str[];
   amount: uint64;
   fee: uint64;
+  min_coin_amount?: uint128;
 };
 export type TCatSpendResponse = {
   transaction: TransactionRecordConvenience;
@@ -747,6 +779,7 @@ export type TCreateOfferForIdsRequest = {
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
+  min_coin_amount?: uint128;
 };
 export type TCreateOfferForIdsResponse = {
   offer: str;
@@ -799,6 +832,7 @@ export type take_offer_command = typeof take_offer_command;
 export type TTakeOfferRequest = {
   offer: str;
   fee?: uint64;
+  min_coin_amount?: uint128;
 };
 export type TTakeOfferResponse = {
   trade_record: TradeRecordConvenience;
@@ -1172,8 +1206,8 @@ export type TNftMintNftRequest = {
   meta_uris: str[]; // Reference: chia/wallet/nft_wallet/nft_info.py
   license_uris: str[]; // Reference: chia/wallet/nft_wallet/nft_info.py
   hash: str;
-  series_number: uint64;
-  series_total: uint64;
+  edition_number: uint64;
+  edition_total: uint64;
   meta_hash?: str;
   license_hash?: str;
   fee?: uint64;

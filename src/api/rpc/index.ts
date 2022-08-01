@@ -199,6 +199,8 @@ import type {
   TCreateSignedTransactionResponse,
   TDeleteUnconfirmedTransactionsResponse,
   TSelectCoinsResponse,
+  TGetCurrentDerivationIndexResponse,
+  TExtendDerivationIndexResponse,
   TDeleteAllKeysResponse,
   TDeleteKeyResponse,
   TDidSetWalletNameResponse,
@@ -293,6 +295,9 @@ export {
   TDeleteUnconfirmedTransactionsResponse,
   TSelectCoinsRequest,
   TSelectCoinsResponse,
+  TGetCurrentDerivationIndexResponse,
+  TExtendDerivationIndexRequest,
+  TExtendDerivationIndexResponse,
   TCreate_New_CAT_WalletRequest,
   TCreate_New_CAT_WalletResponse,
   TCreate_New_DID_WalletRequest,
@@ -428,6 +433,8 @@ export {
   create_signed_transaction,
   delete_unconfirmed_transactions,
   select_coins,
+  get_current_derivation_index,
+  extend_derivation_index,
   delete_all_keys,
   delete_key,
   did_set_wallet_name,
@@ -592,6 +599,8 @@ export type RpcWalletMessage =
   | TCreateSignedTransactionResponse
   | TDeleteUnconfirmedTransactionsResponse
   | TSelectCoinsResponse
+  | TGetCurrentDerivationIndexResponse
+  | TExtendDerivationIndexResponse
   | TDeleteAllKeysResponse
   | TDeleteKeyResponse
   | TDidSetWalletNameResponse
