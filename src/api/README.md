@@ -90,6 +90,8 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`create_signed_transaction`](./rpc/wallet/README.md#create_signed_transactionagent-params)
 - [`delete_unconfirmed_transactions`](./rpc/wallet/README.md#delete_unconfirmed_transactionsagent-params)
 - [`select_coins`](./rpc/wallet/README.md#select_coinsagent-params)
+- [`get_current_derivation_index`](./rpc/wallet/README.md#get_current_derivation_indexagent)
+- [`extend_derivation_index`](./rpc/wallet/README.md#extend_derivation_indexagent-params)
 - [`get_cat_list`](./rpc/wallet/README.md#get_cat_listagent)
 - [`cat_set_name`](./rpc/wallet/README.md#cat_set_nameagent-params)
 - [`cat_asset_id_to_name`](./rpc/wallet/README.md#cat_asset_id_to_nameagent-params)

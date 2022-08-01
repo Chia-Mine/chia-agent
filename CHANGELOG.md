@@ -1,5 +1,29 @@
 # Changelog
 
+## [8.0.0]
+### Breaking Change
+- [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+  - Renamed `series_number` to `edition_number`.
+  - Renamed `series_total` to `edition_total`.
+### Added
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_current_derivation_index`](./src/api/rpc/wallet/README.md#get_current_derivation_indexagent)
+  - [`extend_derivation_index`](./src/api/rpc/wallet/README.md#extend_derivation_indexagent-params)
+### Changed
+- [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+  - Added `min_coin_amount` to request parameter
+- [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+  - Added `min_coin_amount` to request parameter
+- [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+  - Added `min_coin_amount` to request parameter
+- [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+  - Added `min_coin_amount` to request parameter
+- [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+  - Renamed `series_number` to `edition_number`.
+  - Renamed `series_total` to `edition_total`.
+- [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+  - Added `min_coin_amount` to request parameter
+
 ## [7.0.0]
 ### Breaking Change
 - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
@@ -474,6 +498,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[8.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v4.0.0...v5.0.0

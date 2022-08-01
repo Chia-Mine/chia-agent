@@ -642,6 +642,7 @@ const response = await send_transaction(agent, params);
   fee: int;
   address: str;
   memos?: str[];
+  min_coin_amount?: uint128;
 }
 ```
 ### response:
@@ -757,6 +758,7 @@ const response = await create_signed_transaction(agent, params);
 {
   additions: TAdditions[];
   fee?: uint64;
+  min_coin_amount?: uint128;
   coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
@@ -829,6 +831,48 @@ const response = await select_coins(agent, params);
 ```
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
+
+---
+
+## `get_current_derivation_index(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_current_derivation_index} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_current_derivation_index(agent);
+```
+### response:
+```typescript
+{
+  success: True;
+  index: Optional<uint32>;
+}
+```
+
+---
+
+## `extend_derivation_index(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {extend_derivation_index} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await extend_derivation_index(agent, params);
+```
+### params:
+```typescript
+{
+  index: uint32;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  index: Optional<uint32>;
+}
+```
 
 ---
 
@@ -963,6 +1007,7 @@ const response = await cat_spend(agent, params);
   memos?: str[];
   amount: uint64;
   fee: uint64;
+  min_coin_amount?: uint128;
 }
 ```
 ### response:
@@ -1016,6 +1061,7 @@ const response = await create_offer_for_ids(agent, params);
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
+  min_coin_amount?: uint128;
 }
 ```
 ### response:
@@ -1097,6 +1143,7 @@ const response = await take_offer(agent, params);
 {
   offer: str;
   fee?: uint64;
+  min_coin_amount?: uint128;
 }
 ```
 ### response:
@@ -1607,8 +1654,8 @@ const response = await nft_mint_nft(agent, params);
   meta_uris: str[]; // Reference: chia/wallet/nft_wallet/nft_info.py
   license_uris: str[]; // Reference: chia/wallet/nft_wallet/nft_info.py
   hash: str;
-  series_number: uint64;
-  series_total: uint64;
+  edition_number: uint64;
+  edition_total: uint64;
   meta_hash?: str;
   license_hash?: str;
   fee?: uint64;
