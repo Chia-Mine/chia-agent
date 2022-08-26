@@ -133,3 +133,20 @@ const response = await get_routes(agent);
   routes: str[];
 }
 ```
+
+---
+
+## `healthz(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {healthz} = require("chia-agent/api/rpc/common");
+const agent = new RPCAgent({service: "crawler"}); // Can be any service like full_node, harvester, etc...
+const response = await healthz(agent);
+```
+### response:
+```typescript
+{
+  success: "true";
+}
+```

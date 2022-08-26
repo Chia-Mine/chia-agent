@@ -1,5 +1,78 @@
 # Changelog
 
+## [9.0.0]
+### Breaking Change
+`series_total` and `series_number` in `NFTInfo` class have been renamed to `edition_total` and `edition_number`  
+(defined in `chia/wallet/nft_wallet/nft_info.py`.)  
+As a result, the following Wallet RPC APIs in `chia-blockchain@1.5.1` become not compatible with `chia-blockchain@1.5.0`
+- [`nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+  - `nft_info.series_total` was renamed to `nft_info.edition_total`
+  - `nft_info.series_number` was renamed to `nft_info.edition_number`
+- [`nft_get_nfts`](./src/api/rpc/wallet/README.md#nft_get_nftsagent-params)
+  - `nft_list.series_total` was renamed to `nft_list.edition_total`
+  - `nft_list.series_number` was renamed to `nft_list.edition_number`
+### Added
+- [New FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_block_spends`](./src/api/rpc/full_node/README.md#get_block_spendsagent-params)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`cancel_offers`](./src/api/rpc/wallet/README.md#cancel_offersagent-params)
+### Changed
+- [Farmer RPC API](./src/api/rpc/farmer)
+  - [`get_harvester_plots_valid`](./src/api/rpc/farmer/README.md#get_harvester_plots_validagent-params)
+  - [`get_harvester_plots_invalid`](./src/api/rpc/farmer/README.md#get_harvester_plots_invalidagent-params)
+  - [`get_harvester_plots_keys_missing`](./src/api/rpc/farmer/README.md#get_harvester_plots_keys_missingagent-params)
+  - [`get_harvester_plots_duplicates`](./src/api/rpc/farmer/README.md#get_harvester_plots_duplicatesagent-params)
+    - Changed type of `page` to `uint32` from `int`
+    - Changed type of `page_size` to `uint32` from `int`
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_wallets`](./src/api/rpc/wallet/README.md#get_walletsagent-params)
+    - Added `fingerprint` to response
+  - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+    - Added new error response
+  - [`get_wallet_balance`](./src/api/rpc/wallet/README.md#get_wallet_balanceagent-params)
+    - Added `wallet_type` to response
+    - Added `asset_id` to response
+  - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+    - Changed request type of `wallet_id` to `uint32` from `int`
+    - Changed request type of `min_coin_amount` to `uint64` from `uint128`
+  - [`select_coins`](./src/api/rpc/wallet/README.md#select_coinsagent-params)
+    - Added `min_coin_amount` to request.
+    - Added `excluded_coins` to request.
+  - [`cat_set_name`](./src/api/rpc/wallet/README.md#cat_set_nameagent-params)
+    - Changed type of `wallet_id` to `uint32` from `int`
+  - [`cat_get_name`](./src/api/rpc/wallet/README.md#cat_get_nameagent-params)
+    - Changed type of `wallet_id` to `uint32` from `int`
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+    - Changed type of `wallet_id` to `uint32` from `int`
+    - Changed request type of `min_coin_amount` to `uint64` from `uint128`
+  - [`cat_get_asset_id`](./src/api/rpc/wallet/README.md#cat_get_asset_idagent-params)
+    - Changed type of `wallet_id` to `uint32` from `int`
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+    - Changed request type of `min_coin_amount` to `uint64` from `uint128`
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+    - Changed request type of `min_coin_amount` to `uint64` from `uint128`
+  - [`send_clawback_transaction`](./src/api/rpc/wallet/README.md#send_clawback_transactionagent-params)
+    - Changed type of `wallet_id` to `uint32` from `int`
+  - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+    - Changed request type of `min_coin_amount` to `uint64` from `uint128`
+    - Added `excluded_coins` to request.
+  - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
+  - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
+  - [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
+    - Removed error response
+  - [`nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+    - `nft_info.series_total` was renamed to `nft_info.edition_total`
+    - `nft_info.series_number` was renamed to `nft_info.edition_number`
+  - [`nft_get_nfts`](./src/api/rpc/wallet/README.md#nft_get_nftsagent-params)
+    - `nft_list.series_total` was renamed to `nft_list.edition_total`
+    - `nft_list.series_number` was renamed to `nft_list.edition_number`
+- [Wallet WebSocket API](./src/api/ws/wallet)
+  - Added `added_stray_cat`, `new_derivation_index` events
+### Fixed
+- Fixed an issue where type information of `get_puzzle_and_solution` was missing.
+- Fixed an issue where event destination of `sync_changed` and `coin_added` Wallet WebSocket API was not correct.
+- Fixed an issue where `healthz` common RPC API was missing.
+
 ## [8.0.0]
 ### Breaking Change
 - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
@@ -498,6 +571,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[9.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v8.0.0...v9.0.0
 [8.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v5.0.0...v6.0.0

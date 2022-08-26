@@ -270,6 +270,7 @@ export type TGetWalletsRequest = {
 };
 export type TGetWalletsResponse = {
   wallets: WalletInfo[];
+  fingerprint?: int;
 };
 export async function get_wallets(agent: TRPCAgent, data: TGetWalletsRequest){
   return agent.sendMessage<TGetWalletsResponse>(chia_wallet_service, get_wallets_command, data);
@@ -391,6 +392,11 @@ export type TCreate_New_Pool_WalletResponse = {
   p2_singleton_puzzle_hash: str;
 };
 
+export type TCreateWalletErrorResponse = {
+  success: False;
+  error: str;
+};
+
 export const create_new_wallet_command = "create_new_wallet";
 export type create_new_wallet_command = typeof create_new_wallet_command;
 export type TCreateNewWalletRequest = TCreate_New_CAT_WalletRequest
@@ -402,7 +408,8 @@ export type TCreateNewWalletResponse = TCreate_New_CAT_WalletResponse
   | TCreate_New_RL_WalletResponse
   | TCreate_New_DID_WalletResponse
   | TCreate_New_NFT_WalletResponse
-  | TCreate_New_Pool_WalletResponse;
+  | TCreate_New_Pool_WalletResponse
+  | TCreateWalletErrorResponse;
 export async function create_new_wallet(agent: TRPCAgent, data: TCreateNewWalletRequest){
   return agent.sendMessage<TCreateNewWalletResponse>(chia_wallet_service, create_new_wallet_command, data);
 }
@@ -424,7 +431,9 @@ export type TGetWalletBalanceResponse = {
     max_send_amount: uint64;
     unspent_coin_count: int;
     pending_coin_removal_count: int;
+    wallet_type: int;
     fingerprint?: int;
+    asset_id?: str;
   };
 };
 export async function get_wallet_balance(agent: TRPCAgent, data: TGetWalletBalanceRequest){
@@ -490,12 +499,12 @@ export async function get_next_address(agent: TRPCAgent, data: TGetNextAddressRe
 export const send_transaction_command = "send_transaction";
 export type send_transaction_command = typeof send_transaction_command;
 export type TSendTransactionRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
   amount: int;
   fee: int;
   address: str;
   memos?: str[];
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 };
 export type TSendTransactionResponse = {
   transaction: TransactionRecordConvenience;
@@ -583,8 +592,9 @@ export type create_signed_transaction_command = typeof create_signed_transaction
 export type TCreateSignedTransactionRequest = {
   additions: TAdditions[];
   fee?: uint64;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
   coins?: Coin[];
+  exclude_coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
 };
@@ -617,6 +627,8 @@ export type select_coins_command = typeof select_coins_command;
 export type TSelectCoinsRequest = {
   amount: uint64;
   wallet_id: uint32;
+  min_coin_amount?: uint64;
+  excluded_coins?: Coin[];
 };
 export type TSelectCoinsResponse = {
   coins: Coin[];
@@ -673,11 +685,11 @@ export async function get_cat_list(agent: TRPCAgent){
 export const cat_set_name_command = "cat_set_name";
 export type cat_set_name_command = typeof cat_set_name_command;
 export type TCatSetNameRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
   name: str;
 };
 export type TCatSetNameResponse = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export async function cat_set_name(agent: TRPCAgent, data: TCatSetNameRequest){
   return agent.sendMessage<TCatSetNameResponse>(chia_wallet_service, cat_set_name_command, data);
@@ -705,10 +717,10 @@ export async function cat_asset_id_to_name(agent: TRPCAgent, data: TCatAssetIdTo
 export const cat_get_name_command = "cat_get_name";
 export type cat_get_name_command = typeof cat_get_name_command;
 export type TCatGetNameRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export type TCatGetNameResponse = {
-  wallet_id: int;
+  wallet_id: uint32;
   name: str;
 };
 export async function cat_get_name(agent: TRPCAgent, data: TCatGetNameRequest){
@@ -738,12 +750,12 @@ export async function get_stray_cats(agent: TRPCAgent){
 export const cat_spend_command = "cat_spend";
 export type cat_spend_command = typeof cat_spend_command;
 export type TCatSpendRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
   inner_address: str;
   memos?: str[];
   amount: uint64;
   fee: uint64;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 };
 export type TCatSpendResponse = {
   transaction: TransactionRecordConvenience;
@@ -759,11 +771,11 @@ export async function cat_spend(agent: TRPCAgent, data: TCatSpendRequest){
 export const cat_get_asset_id_command = "cat_get_asset_id";
 export type cat_get_asset_id_command = typeof cat_get_asset_id_command;
 export type TCatGetAssetIdRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export type TCatGetAssetIdResponse = {
   asset_id: str;
-  wallet_id: int;
+  wallet_id: uint32;
 };
 export async function cat_get_asset_id(agent: TRPCAgent, data: TCatGetAssetIdRequest){
   return agent.sendMessage<TCatGetAssetIdResponse>(chia_wallet_service, cat_get_asset_id_command, data);
@@ -779,7 +791,7 @@ export type TCreateOfferForIdsRequest = {
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 };
 export type TCreateOfferForIdsResponse = {
   offer: str;
@@ -832,7 +844,7 @@ export type take_offer_command = typeof take_offer_command;
 export type TTakeOfferRequest = {
   offer: str;
   fee?: uint64;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 };
 export type TTakeOfferResponse = {
   trade_record: TradeRecordConvenience;
@@ -908,6 +920,25 @@ export type TCancelOfferRequest = {
 export type TCancelOfferResponse = {};
 export async function cancel_offer(agent: TRPCAgent, data: TCancelOfferRequest){
   return agent.sendMessage<TCancelOfferResponse>(chia_wallet_service, cancel_offer_command, data);
+}
+
+
+
+
+export const cancel_offers_command = "cancel_offers";
+export type cancel_offers_command = typeof cancel_offers_command;
+export type TCancelOffersRequest = {
+  secure: bool;
+  batch_fee?: uint64;
+  batch_size?: int;
+  cancel_all?: bool;
+  asset_id?: str;
+};
+export type TCancelOffersResponse = {
+  success: True;
+};
+export async function cancel_offers(agent: TRPCAgent, data: TCancelOffersRequest){
+  return agent.sendMessage<TCancelOffersResponse>(chia_wallet_service, cancel_offers_command, data);
 }
 
 
@@ -1433,7 +1464,7 @@ export async function rl_set_user_info(agent: TRPCAgent, data: TRlSetUserInfoReq
 export const send_clawback_transaction_command = "send_clawback_transaction:";
 export type send_clawback_transaction_command = typeof send_clawback_transaction_command;
 export type TSendClawbackTransactionRequest = {
-  wallet_id: int;
+  wallet_id: uint32;
   fee: int;
 };
 export type TSendClawbackTransactionResponse = {
@@ -1498,9 +1529,6 @@ export type TPwSelfPoolResponse = {
   total_fee: uint64;
   transaction: TransactionRecord;
   fee_transaction: Optional<TransactionRecord>;
-} | {
-  success: False;
-  error: "not_initialized";
 };
 export async function pw_self_pool(agent: TRPCAgent, data: TPwSelfPoolRequest){
   return agent.sendMessage<TPwSelfPoolResponse>(chia_wallet_service, pw_self_pool_command, data);
@@ -1520,9 +1548,6 @@ export type TPwAbsorbRewardsResponse = {
   state: PoolWalletInfo;
   transaction: TransactionRecord;
   fee_transaction: Optional<TransactionRecord>;
-} | {
-  success: False;
-  error: "not_initialized";
 };
 export async function pw_absorb_rewards(agent: TRPCAgent, data: TPwAbsorbRewardsRequest){
   return agent.sendMessage<TPwAbsorbRewardsResponse>(chia_wallet_service, pw_absorb_rewards_command, data);
@@ -1539,9 +1564,6 @@ export type TPwStatusRequest = {
 export type TPwStatusResponse = {
   state: PoolWalletInfo;
   unconfirmed_transactions: TransactionRecord[];
-} | {
-  success: False;
-  error: "not_initialized";
 };
 export async function pw_status(agent: TRPCAgent, data: TPwStatusRequest){
   return agent.sendMessage<TPwStatusResponse>(chia_wallet_service, pw_status_command, data);

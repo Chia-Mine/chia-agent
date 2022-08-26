@@ -58,3 +58,13 @@ export type TGetRoutesResponse = {
 export async function get_routes(agent: TRPCAgent) {
   return agent.sendMessage<TGetRoutesResponse>(chia_common_service, get_routes_command);
 }
+
+
+export const healthz_command = "healthz";
+export type healthz_command = typeof healthz_command;
+export type THealthzResponse = {
+  success: "true";
+};
+export async function healthz(agent: TRPCAgent) {
+  return agent.sendMessage<THealthzResponse>(chia_common_service, healthz_command);
+}
