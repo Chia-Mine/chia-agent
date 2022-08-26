@@ -528,6 +528,7 @@ import type {
   TCloseConnectionResponse,
   TStopNodeResponse,
   TGetRoutesResponse,
+  THealthzResponse,
 } from "./common/index";
 export {
   chia_common_service,
@@ -539,11 +540,13 @@ export {
   TCloseConnectionResponse,
   TStopNodeResponse,
   TGetRoutesResponse,
+  THealthzResponse,
   get_connections,
   open_connection,
   close_connection,
   stop_node,
   get_routes,
+  healthz,
 } from "./common/index";
 
 
@@ -688,6 +691,7 @@ export type RpcCommonMessage =
   | TCloseConnectionResponse
   | TStopNodeResponse
   | TGetRoutesResponse
+  | THealthzResponse
 ;
 
 export type RpcMessage =

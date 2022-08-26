@@ -71,6 +71,7 @@ As a result, the following Wallet RPC APIs in `chia-blockchain@1.5.1` become not
 ### Fixed
 - Fixed an issue where type information of `get_puzzle_and_solution` was missing.
 - Fixed an issue where event destination of `sync_changed` and `coin_added` Wallet WebSocket API was not correct.
+- Fixed an issue where `healthz` common RPC API was missing.
 
 ## [8.0.0]
 ### Breaking Change
