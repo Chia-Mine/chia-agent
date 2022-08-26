@@ -1,5 +1,5 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
-import {bool, int, Optional, str, uint64, uint8} from "../../chia/types/_python_types_";
+import {bool, int, Optional, str, uint32, uint64, uint8} from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TRPCAgent} from "../../../rpc/index";
 import {PoolState} from "../../chia/farmer/farmer";
@@ -132,16 +132,16 @@ export const get_harvester_plots_valid_command = "get_harvester_plots_valid";
 export type get_harvester_plots_valid_command = typeof get_harvester_plots_valid_command;
 export type TGetHarvesterPlotsValidRequest = {
   node_id: bytes32;
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_size: uint32;
   filter: Array<{key: str; value: Optional<str>}>;
   sort_key: str;
   reverse: bool;
 };
 export type TGetHarvesterPlotsValidResponse = {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_count: uint32;
   total_count: int;
   plots: Plot[];
 };
@@ -155,15 +155,15 @@ export const get_harvester_plots_invalid_command = "get_harvester_plots_invalid"
 export type get_harvester_plots_invalid_command = typeof get_harvester_plots_invalid_command;
 export type TGetHarvesterPlotsInvalidRequest = {
   node_id: bytes32
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_count: uint32;
   filter: str[];
   reverse: bool;
 };
 export type TGetHarvesterPlotsInvalidResponse = {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_count: uint32;
   total_count: int;
   plots: str[];
 };
@@ -177,15 +177,15 @@ export const get_harvester_plots_keys_missing_command = "get_harvester_plots_key
 export type get_harvester_plots_keys_missing_command = typeof get_harvester_plots_keys_missing_command;
 export type TGetHarvesterPlotsKeysMissingRequest = {
   node_id: bytes32
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_count: uint32;
   filter: str[];
   reverse: bool;
 };
 export type TGetHarvesterPlotsKeysMissingResponse = {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_count: uint32;
   total_count: int;
   plots: str[];
 };
@@ -199,15 +199,15 @@ export const get_harvester_plots_duplicates_command = "get_harvester_plots_dupli
 export type get_harvester_plots_duplicates_command = typeof get_harvester_plots_duplicates_command;
 export type TGetHarvesterPlotsDuplicatesRequest = {
   node_id: bytes32
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_count: uint32;
   filter: str[];
   reverse: bool;
 };
 export type TGetHarvesterPlotsDuplicatesResponse = {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_count: uint32;
   total_count: int;
   plots: str[];
 };

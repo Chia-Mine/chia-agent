@@ -13,8 +13,8 @@ export type NFTInfo = {
   metadata_hash: bytes;
   license_uris: str[];
   license_hash: bytes;
-  series_total: uint64;
-  series_number: uint64;
+  edition_total: uint64;
+  edition_number: uint64;
   updater_puzhash: bytes32;
   chain_info: str;
   mint_height: uint32;

@@ -364,6 +364,7 @@ const response = await get_wallets(agent, params);
 ```typescript
 {
   wallets: WalletInfo[];
+  fingerprint?: int;
 }
 ```
 For content of `WalletInfo`,  
@@ -453,7 +454,7 @@ type TCreate_New_Pool_WalletRequest = {
 };
 ```
 ### response:
-One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_RL_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`
+One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_RL_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`, `TCreateWalletErrorResponse`
 ```typescript
 type TCreate_New_CAT_WalletResponse = {
   type: uint8;
@@ -503,6 +504,11 @@ type TCreate_New_Pool_WalletResponse = {
   launcher_id: str;
   p2_singleton_puzzle_hash: str;
 };
+
+type TCreateWalletErrorResponse = {
+  success: False;
+  error: str;
+};
 ```
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
@@ -537,7 +543,9 @@ const response = await get_wallet_balance(agent, params);
     max_send_amount: uint64;
     unspent_coin_count: int;
     pending_coin_removal_count: int;
+    wallet_type: int;
     fingerprint?: int;
+    asset_id?: str;
   }
 }
 ```
@@ -637,12 +645,12 @@ const response = await send_transaction(agent, params);
 ### params:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
   amount: int;
   fee: int;
   address: str;
   memos?: str[];
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 }
 ```
 ### response:
@@ -758,7 +766,7 @@ const response = await create_signed_transaction(agent, params);
 {
   additions: TAdditions[];
   fee?: uint64;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
   coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
@@ -821,6 +829,8 @@ const response = await select_coins(agent, params);
 {
   amount: uint64;
   wallet_id: uint32;
+  min_coin_amount?: uint64;
+  excluded_coins?: Coin[];
 }
 ```
 ### response:
@@ -906,14 +916,14 @@ const response = await cat_set_name(agent, params);
 ### params:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
   name: str;
 }
 ```
 ### response:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
 }
 ```
 
@@ -955,13 +965,13 @@ const response = await cat_get_name(agent, params);
 ### params:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
 }
 ```
 ### response:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
   name: str;
 }
 ```
@@ -1002,12 +1012,12 @@ const response = await cat_spend(agent, params);
 ### params:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
   inner_address: str;
   memos?: str[];
   amount: uint64;
   fee: uint64;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 }
 ```
 ### response:
@@ -1033,14 +1043,14 @@ const response = await cat_get_asset_id(agent, params);
 ### params:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
 }
 ```
 ### response:
 ```typescript
 {
   asset_id: str;
-  wallet_id: int;
+  wallet_id: uint32;
 }
 ```
 
@@ -1061,7 +1071,7 @@ const response = await create_offer_for_ids(agent, params);
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 }
 ```
 ### response:
@@ -1143,7 +1153,7 @@ const response = await take_offer(agent, params);
 {
   offer: str;
   fee?: uint64;
-  min_coin_amount?: uint128;
+  min_coin_amount?: uint64;
 }
 ```
 ### response:
@@ -1255,6 +1265,33 @@ const response = await cancel_offer(agent, params);
 ### response:
 ```typescript
 {}
+```
+
+---
+
+## `cancel_offers(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {cancel_offers} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await cancel_offers(agent, params);
+```
+### params:
+```typescript
+{
+  secure: bool;
+  batch_fee?: uint64;
+  batch_size?: int;
+  cancel_all?: bool;
+  asset_id?: str;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+}
 ```
 
 ---
@@ -1977,7 +2014,7 @@ const response = await send_clawback_transaction(agent, params);
 ### params:
 ```typescript
 {
-  wallet_id: int;
+  wallet_id: uint32;
   fee: int;
 }
 ```
@@ -2073,9 +2110,6 @@ const response = await pw_self_pool(agent, params);
   total_fee: uint64;
   transaction: TransactionRecord;
   fee_transaction: Optional<TransactionRecord>;
-} | {
-  success: False;
-  error: "not_initialized";
 };
 ```
 For content of `TransactionRecord`,  
@@ -2105,9 +2139,6 @@ const response = await pw_absorb_rewards(agent, params);
   state: PoolWalletInfo;
   transaction: TransactionRecord;
   fee_transaction: Optional<TransactionRecord>;
-} | {
-  success: False;
-  error: "not_initialized";
 };
 ```
 For content of `PoolWalletInfo`,  
@@ -2137,9 +2168,6 @@ const response = await pw_status(agent, params);
 {
   state: PoolWalletInfo;
   unconfirmed_transactions: TransactionRecord[];
-} | {
-  success: False;
-  error: "not_initialized";
 }
 ```
 For content of `PoolWalletInfo`,  

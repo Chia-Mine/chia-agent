@@ -219,6 +219,31 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/blo
 
 ---
 
+## `get_block_spends(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_block_spends} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_block_spends(agent, params);
+```
+### params
+```typescript
+{
+  header_hash: str;
+}
+```
+### response
+```typescript
+{
+  block_spends: CoinSpend[];
+}
+```
+For content of `CoinSpend`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/cons_spends.ts
+
+---
+
 ## `get_unfinished_block_headers(agent)`
 ### Usage
 ```js

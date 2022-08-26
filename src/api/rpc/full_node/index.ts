@@ -2,7 +2,7 @@ import {FullBlock} from "../../chia/types/full_block";
 import {BlockRecord} from "../../chia/consensus/block_record";
 import {bool, float, int, Optional, str, uint128, uint32, uint64} from "../../chia/types/_python_types_";
 import {UnfinishedHeaderBlock} from "../../chia/types/unfinished_header_block";
-import {CoinRecord, CoinRecordBackwardCompatible} from "../../chia/types/coin_record";
+import {CoinRecordBackwardCompatible} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {MempoolItem} from "../../chia/types/mempool_item";
@@ -132,6 +132,20 @@ export type TGetBlockRecordsResponse = {
 };
 export async function get_block_records(agent: TRPCAgent, data: TGetBlockRecordsRequest) {
   return agent.sendMessage<TGetBlockRecordsResponse>(chia_full_node_service, get_block_records_command, data);
+}
+
+
+
+export const get_block_spends_command = "get_block_spends";
+export type get_block_spends_command = typeof get_block_spends_command;
+export type TGetBlockSpendsRequest = {
+  header_hash: str;
+};
+export type TGetBlockSpendsResponse = {
+  block_spends: CoinSpend[];
+};
+export async function get_block_spends(agent: TRPCAgent, data: TGetBlockSpendsRequest) {
+  return agent.sendMessage<TGetBlockSpendsResponse>(chia_full_node_service, get_block_spends_command, data);
 }
 
 

@@ -259,8 +259,8 @@ const response = await get_harvester_plots_valid(agent, params);
 ```typescript
 {
   node_id: bytes32
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_size: uint32;
   filter: Array<{key: str; value: Optional<str>}>;
   sort_key: str;
   reverse: bool;
@@ -270,8 +270,8 @@ const response = await get_harvester_plots_valid(agent, params);
 ```typescript
 {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_size: uint32;
   total_count: int;
   plots: Plot[];
 }
@@ -293,8 +293,8 @@ const response = await get_harvester_plots_invalid(agent, params);
 ```typescript
 {
   node_id: bytes32
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_size: uint32;
   filter: str[];
   reverse: bool;
 }
@@ -303,8 +303,8 @@ const response = await get_harvester_plots_invalid(agent, params);
 ```typescript
 {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_size: uint32;
   total_count: int;
   plots: str[];
 }
@@ -326,8 +326,8 @@ const response = await get_harvester_plots_keys_missing(agent, params);
 ```typescript
 {
   node_id: bytes32
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_size: uint32;
   filter: str[];
   reverse: bool;
 }
@@ -336,8 +336,8 @@ const response = await get_harvester_plots_keys_missing(agent, params);
 ```typescript
 {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_size: uint32;
   total_count: int;
   plots: str[];
 }
@@ -359,8 +359,8 @@ const response = await get_harvester_plots_duplicates(agent, params);
 ```typescript
 {
   node_id: bytes32
-  page: int;
-  page_size: int;
+  page: uint32;
+  page_size: uint32;
   filter: str[];
   reverse: bool;
 }
@@ -369,8 +369,8 @@ const response = await get_harvester_plots_duplicates(agent, params);
 ```typescript
 {
   node_id: str;
-  page: int;
-  page_count: int;
+  page: uint32;
+  page_size: uint32;
   total_count: int;
   plots: str[];
 }

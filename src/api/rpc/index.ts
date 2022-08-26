@@ -62,6 +62,7 @@ import type {
   TGetBlockRecordByHeightResponse,
   TGetBlockRecordResponse,
   TGetBlockRecordsResponse,
+  TGetBlockSpendsResponse,
   TGetBlockResponse,
   TGetBlockchainStateResponse,
   TGetBlocksResponse,
@@ -79,6 +80,7 @@ import type {
   TGetNetworkSpaceResponse,
   TGetUnfinishedBlockHeadersResponse,
   TPushTxResponse,
+  TGetPuzzleAndSolutionResponse,
 } from "./full_node/index";
 export {
   chia_full_node_service,
@@ -94,6 +96,8 @@ export {
   TGetBlockRecordResponse,
   TGetBlockRecordsRequest,
   TGetBlockRecordsResponse,
+  TGetBlockSpendsRequest,
+  TGetBlockSpendsResponse,
   TGetBlockRequest,
   TGetBlockResponse,
   TGetBlockchainStateRequest,
@@ -127,6 +131,8 @@ export {
   TGetUnfinishedBlockHeadersResponse,
   TPushTxRequest,
   TPushTxResponse,
+  TGetPuzzleAndSolutionRequest,
+  TGetPuzzleAndSolutionResponse,
   get_additions_and_removals,
   get_all_mempool_items,
   get_all_mempool_tx_ids,
@@ -134,6 +140,7 @@ export {
   get_block_record,
   get_block_record_by_height,
   get_block_records,
+  get_block_spends,
   get_blockchain_state,
   get_blocks,
   get_block_count_metrics,
@@ -150,6 +157,7 @@ export {
   get_network_space,
   get_unfinished_block_headers,
   push_tx,
+  get_puzzle_and_solution,
 } from "./full_node/index";
 
 import type {
@@ -187,6 +195,7 @@ import type {
   TAddKeyResponse,
   TAddRateLimitedFundsResponse,
   TCancelOfferResponse,
+  TCancelOffersResponse,
   TCatGetAssetIdResponse,
   TCatGetNameResponse,
   TGetStrayCatsResponse,
@@ -272,6 +281,8 @@ export {
   TAdditions,
   TCancelOfferRequest,
   TCancelOfferResponse,
+  TCancelOffersRequest,
+  TCancelOffersResponse,
   TCatGetAssetIdRequest,
   TCatGetAssetIdResponse,
   TCatGetNameRequest,
@@ -421,6 +432,7 @@ export {
   add_key,
   add_rate_limited_funds,
   cancel_offer,
+  cancel_offers,
   cat_get_asset_id,
   cat_get_name,
   get_stray_cats,
@@ -558,6 +570,7 @@ export type RpcFullNodeMessage =
   | TGetBlockRecordByHeightResponse
   | TGetBlockRecordResponse
   | TGetBlockRecordsResponse
+  | TGetBlockSpendsResponse
   | TGetBlockchainStateResponse
   | TGetBlocksResponse
   | TGetBlockCountMetricsResponse
@@ -574,6 +587,7 @@ export type RpcFullNodeMessage =
   | TGetNetworkSpaceResponse
   | TGetUnfinishedBlockHeadersResponse
   | TPushTxResponse
+  | TGetPuzzleAndSolutionResponse
 ;
 export type RpcHarvesterMessage =
   TAddPlotDirectoryResponse
@@ -587,6 +601,7 @@ export type RpcWalletMessage =
   TAddKeyResponse
   | TAddRateLimitedFundsResponse
   | TCancelOfferResponse
+  | TCancelOffersResponse
   | TCatGetAssetIdResponse
   | TCatGetNameResponse
   | TGetStrayCatsResponse

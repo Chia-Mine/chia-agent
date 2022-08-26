@@ -22,23 +22,10 @@ export async function on_get_connections(daemon: TDaemon, callback: (e: GetMessa
   return daemon.addMessageListener(chia_wallet_service, messageListener);
 }
 
-export const sync_changed_command_of_wallet = "sync_changed";
-export type sync_changed_command_of_wallet = typeof sync_changed_command_of_wallet;
-export type TSyncChangedBroadCastOfWallet = {};
-export async function on_sync_changed_of_wallet(daemon: TDaemon, callback: (e: GetMessageType<chia_wallet_service, sync_changed_command_of_wallet, TSyncChangedBroadCastOfWallet>) => unknown){
-  await daemon.subscribe(metrics_service);
-  const messageListener = (e: WsMessage) => {
-    if(e.origin === chia_wallet_service && e.command === sync_changed_command_of_wallet){
-      callback(e);
-    }
-  };
-  return daemon.addMessageListener(chia_wallet_service, messageListener);
-}
-
 export const state_changed_command_of_wallet = "state_changed";
 export type state_changed_command_of_wallet = typeof state_changed_command_of_wallet;
 export type TStateChangedBroadCastOfWallet = {
-  state: "add_connection" | "new_block" | "wallet_created";
+  state: "add_connection" | "new_block" | "wallet_created" | "added_stray_cat";
 } | {
   state: "coin_removed" | "coin_added" | "pending_transaction";
   wallet_id: uint32;
@@ -46,11 +33,29 @@ export type TStateChangedBroadCastOfWallet = {
   state: "tx_update";
   wallet_id: uint32;
   additional_data: {transaction: TransactionRecord};
+} | {
+  state: "new_derivation_index",
+  additional_data: {index: uint32};
 };
 export async function on_state_changed_of_wallet(daemon: TDaemon, callback: (e: GetMessageType<chia_wallet_service, state_changed_command_of_wallet, TStateChangedBroadCastOfWallet>) => unknown){
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsMessage) => {
     if(e.origin === chia_wallet_service && e.command === state_changed_command_of_wallet){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_wallet_service, messageListener);
+}
+
+// "sync_changed" and "coin_added" below are for metrics services.
+
+export const sync_changed_command_of_wallet = "sync_changed";
+export type sync_changed_command_of_wallet = typeof sync_changed_command_of_wallet;
+export type TSyncChangedBroadCastOfWallet = {};
+export async function on_sync_changed_of_wallet(daemon: TDaemon, callback: (e: GetMessageType<chia_wallet_service, sync_changed_command_of_wallet, TSyncChangedBroadCastOfWallet>) => unknown){
+  await daemon.subscribe(metrics_service);
+  const messageListener = (e: WsMessage) => {
+    if(e.origin === chia_wallet_service && e.command === sync_changed_command_of_wallet){
       callback(e);
     }
   };
