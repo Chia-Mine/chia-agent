@@ -1,5 +1,14 @@
 # Changelog
 
+## [9.0.1]
+### Fixed
+- Fixed an issue where wallet `state_changed` events(notified via WebSocket API) below were missing.
+  - did_coin_added
+  - nft_coin_added
+  - nft_coin_removed
+  - nft_coin_updated
+  - nft_coin_did_set
+
 ## [9.0.0]
 ### Breaking Change
 `series_total` and `series_number` in `NFTInfo` class have been renamed to `edition_total` and `edition_number`  
@@ -571,6 +580,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[9.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v8.0.0...v9.0.0
 [8.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v6.0.0...v7.0.0

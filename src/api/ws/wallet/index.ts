@@ -27,7 +27,8 @@ export type state_changed_command_of_wallet = typeof state_changed_command_of_wa
 export type TStateChangedBroadCastOfWallet = {
   state: "add_connection" | "new_block" | "wallet_created" | "added_stray_cat";
 } | {
-  state: "coin_removed" | "coin_added" | "pending_transaction";
+  state: "coin_removed" | "coin_added" | "pending_transaction" | "did_coin_added" | "nft_coin_added"
+    | "nft_coin_removed" | "nft_coin_updated" | "nft_coin_did_set";
   wallet_id: uint32;
 } | {
   state: "tx_update";
