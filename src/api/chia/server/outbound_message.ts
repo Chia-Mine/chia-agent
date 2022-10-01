@@ -5,4 +5,5 @@ export type NodeType =
   | 4 // TIMELORD
   | 5 // INTRODUCER
   | 6 // WALLET
+  | 7 // DATA_LAYER
   ;

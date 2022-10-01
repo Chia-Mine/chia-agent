@@ -4,13 +4,24 @@ There are 2 kinds of APIs in chia.
 `RPC API` and `Websocket API`
 
 ### RPC API
-RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`, `crawler`.
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`,
+`wallet`, `data_layer`, `crawler`.
 
 RPC API is just an async function with a traditional request/response style.
 
 ### [RPCAgent](../rpc/README.md)
 See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/README.md).
 
+
+### Common RPC API Error Response
+If an exception is raised in RPC server, error response will be returned in the following format:
+```typescript
+{
+  error: string;
+  success: false;
+}
+```
+In order to keep description simple, the above error response is omitted in RPC API documents below.
 
 #### [Farmer RPC API](./rpc/farmer/README.md#usage)
 - [`get_reward_targets`](./rpc/farmer/README.md#get_reward_targetsagent-params)
@@ -140,6 +151,18 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`pw_self_pool`](./rpc/wallet/README.md#pw_self_poolagent-params)
 - [`pw_absorb_rewards`](./rpc/wallet/README.md#pw_absorb_rewardsagent-params)
 - [`pw_status`](./rpc/wallet/README.md#pw_statusagent-params)
+- [`create_new_dl`](./rpc/wallet/README.md#create_new_dlagent-params)
+- [`dl_track_new`](./rpc/wallet/README.md#dl_track_newagent-params)
+- [`dl_stop_tracking`](./rpc/wallet/README.md#dl_stop_trackingagent-params)
+- [`dl_latest_singleton`](./rpc/wallet/README.md#dl_latest_singletonagent-params)
+- [`dl_singletons_by_root`](./rpc/wallet/README.md#dl_singletons_by_rootagent-params)
+- [`dl_update_root`](./rpc/wallet/README.md#dl_update_rootagent-params)
+- [`dl_update_multiple`](./rpc/wallet/README.md#dl_update_multipleagent-params)
+- [`dl_history`](./rpc/wallet/README.md#dl_historyagent-params)
+- [`dl_owned_singletons`](./rpc/wallet/README.md#dl_owned_singletonsagent-params)
+- [`dl_get_mirrors`](./rpc/wallet/README.md#dl_get_mirrorsagent-params)
+- [`dl_new_mirror`](./rpc/wallet/README.md#dl_new_mirroragent-params)
+- [`dl_delete_mirror`](./rpc/wallet/README.md#dl_delete_mirroragent-params)
 
 #### [Pool API](./rpc/pool/README.md#usage)
 - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
@@ -148,6 +171,34 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 - [`put_farmer`](./rpc/pool/README.md#put_farmeragent-params)
 - [`partial`](./rpc/pool/README.md#partialagent-params)
 - [`login`](./rpc/pool/README.md#loginagent-params)
+
+#### [Data Layer API](./rpc/data_layer/README.md#usage)
+- [`create_data_store`](./rpc/data_layer/README.md#create_data_storeagent-params)
+- [`get_owned_stores`](./rpc/data_layer/README.md#get_owned_storesagent)
+- [`batch_update`](./rpc/data_layer/README.md#batch_updateagent-params)
+- [`get_value`](./rpc/data_layer/README.md#get_valueagent-params)
+- [`get_keys`](./rpc/data_layer/README.md#get_keysagent-params)
+- [`get_keys_values`](./rpc/data_layer/README.md#get_keys_valuesagent-params)
+- [`get_ancestors`](./rpc/data_layer/README.md#get_ancestorsagent-params)
+- [`get_root`](./rpc/data_layer/README.md#get_rootagent-params)
+- [`get_local_root`](./rpc/data_layer/README.md#get_local_rootagent-params)
+- [`get_roots`](./rpc/data_layer/README.md#get_rootsagent-params)
+- [`delete_key`](./rpc/data_layer/README.md#delete_keyagent-params)
+- [`insert`](./rpc/data_layer/README.md#insertagent-params)
+- [`subscribe`](./rpc/data_layer/README.md#subscribeagent-params)
+- [`unsubscribe`](./rpc/data_layer/README.md#unsubscribeagent-params)
+- [`add_mirror`](./rpc/data_layer/README.md#add_mirroragent-params)
+- [`delete_mirror`](./rpc/data_layer/README.md#delete_mirroragent-params)
+- [`get_mirrors`](./rpc/data_layer/README.md#get_mirrorsagent-params)
+- [`remove_subscriptions`](./rpc/data_layer/README.md#remove_subscriptionsagent-params)
+- [`subscriptions`](./rpc/data_layer/README.md#subscriptionsagent)
+- [`get_kv_diff`](./rpc/data_layer/README.md#get_kv_diffagent-params)
+- [`get_root_history`](./rpc/data_layer/README.md#get_root_historyagent-params)
+- [`add_missing_files`](./rpc/data_layer/README.md#add_missing_filesagent-params)
+- [`make_offer`](./rpc/data_layer/README.md#make_offeragent-params)
+- [`take_offer`](./rpc/data_layer/README.md#take_offeragent-params)
+- [`verify_offer`](./rpc/data_layer/README.md#verify_offeragent-params)
+- [`cancel_offer`](./rpc/data_layer/README.md#cancel_offeragent-params)
 
 #### [Crawler RPC API](./rpc/crawler/README.md#usage)
 - [`get_peer_counts`](./rpc/crawler/README.md#get_peer_countsagent)

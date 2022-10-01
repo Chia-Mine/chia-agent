@@ -1099,6 +1099,7 @@ const response = await get_offer_summary(agent, params);
 ```typescript
 {
   offer: str;
+  advanced?: bool;
 }
 ```
 ### response:
@@ -1154,6 +1155,7 @@ const response = await take_offer(agent, params);
   offer: str;
   fee?: uint64;
   min_coin_amount?: uint64;
+  solver?: Record<str, any>;
 }
 ```
 ### response:
@@ -2174,4 +2176,310 @@ For content of `PoolWalletInfo`,
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
 
 For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `create_new_dl(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {create_new_dl} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await create_new_dl(agent, params);
+```
+### params:
+```typescript
+{
+  root: str;
+  fee?: uint64;
+}
+```
+### response:
+```typescript
+{
+  success: False;
+  error: str;
+} | {
+  success: True;
+  transactions: TransactionRecordConvenience[];
+  launcher_id: bytes32;
+}
+```
+For content of `TransactionRecordConvenience`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dl_track_new(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_track_new} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_track_new(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+}
+```
+### response:
+```typescript
+{
+}
+```
+
+---
+
+## `dl_stop_tracking(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_stop_tracking} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_stop_tracking(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+}
+```
+### response:
+```typescript
+{
+}
+```
+
+---
+
+## `dl_latest_singleton(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_latest_singleton} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_latest_singleton(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+  only_confirmed?: bool;
+}
+```
+### response:
+```typescript
+{
+  singleton: Optional<SingletonRecord>;
+}
+```
+For content of `SingletonRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/lineage_proof.ts
+
+---
+
+## `dl_singletons_by_root(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_singletons_by_root} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_singletons_by_root(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+  root: str;
+}
+```
+### response:
+```typescript
+{
+  singletons: SingletonRecord[];
+}
+```
+For content of `SingletonRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/lineage_proof.ts
+
+---
+
+## `dl_update_root(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_update_root} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_update_root(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+  new_root: str;
+  fee?: uint64;
+}
+```
+### response:
+```typescript
+{
+  tx_record: TransactionRecordConvenience;
+}
+```
+For content of `TransactionRecordConvenience`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dl_update_multiple(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_update_multiple} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_update_multiple(agent, params);
+```
+### params:
+```typescript
+{
+  updates: Record<str, str>; // {[launcher_id]: root}
+}
+```
+### response:
+```typescript
+{
+  tx_records: TransactionRecordConvenience[];
+}
+```
+For content of `TransactionRecordConvenience`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dl_history(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_history} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_history(agent, params);
+```
+### params:
+```typescript
+{
+  min_generation?: uint32;
+  max_generation?: uint32;
+  num_results?: uint32;
+}
+```
+### response:
+```typescript
+{
+  history: SingletonRecord[];
+  count: int;
+}
+```
+For content of `SingletonRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/lineage_proof.ts
+
+---
+
+## `dl_owned_singletons(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_owned_singletons} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_owned_singletons(agent);
+```
+### response:
+```typescript
+{
+  singletons: SingletonRecord[];
+  count: int;
+}
+```
+For content of `SingletonRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/lineage_proof.ts
+
+---
+
+## `dl_get_mirrors(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_get_mirrors} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_get_mirrors(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+}
+```
+### response:
+```typescript
+{
+  mirrors: Mirror[];
+}
+```
+For content of `Mirror`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer_wallet.ts
+
+---
+
+## `dl_new_mirror(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_new_mirror} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_new_mirror(agent, params);
+```
+### params:
+```typescript
+{
+  launcher_id: str;
+  amount: uint64;
+  urls: str[];
+  fee?: uint64;
+}
+```
+### response:
+```typescript
+{
+  transactions: TransactionRecordConvenience[];
+}
+```
+For content of `TransactionRecordConvenience`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dl_delete_mirror(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_delete_mirror} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_delete_mirror(agent, params);
+```
+### params:
+```typescript
+{
+  coin_id: str;
+  fee?: uint64;
+}
+```
+### response:
+```typescript
+{
+  transactions: TransactionRecordConvenience[];
+}
+```
+For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts

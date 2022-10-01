@@ -96,7 +96,7 @@ unsubscribe(); // Stop subscribing messages
 #### data:
 ```typescript
 {
-  state: "add_connection" | "new_block" | "wallet_created" | "added_stray_cat";
+  state: "add_connection" | "new_block" | "wallet_created" | "added_stray_cat" | "offer_added" | "offer_cancelled";
 } | {
   state: "coin_removed" | "coin_added" | "pending_transaction" | "did_coin_added" | "nft_coin_added"
     | "nft_coin_removed" | "nft_coin_updated" | "nft_coin_did_set";

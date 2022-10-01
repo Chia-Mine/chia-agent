@@ -6,7 +6,7 @@ import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
 import {RpcMessage} from "../api/rpc/index";
 
-type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"daemon"|"pool";
+type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"data_layer"|"daemon"|"pool";
 
 export function getConnectionInfoFromConfig(destination: TDestination, config: TConfig){
   let hostname = "localhost";
@@ -25,6 +25,9 @@ export function getConnectionInfoFromConfig(destination: TDestination, config: T
   }
   else if(destination === "wallet"){
     port = +(config["/wallet/rpc_port"] as string);
+  }
+  else if(destination === "data_layer"){
+    port = +(config["/data_layer/rpc_port"] as string);
   }
   else if(destination === "pool"){
     const pool_url = config["/pool/pool_list/0/pool_url"] as string;
@@ -68,6 +71,11 @@ export type TRPCAgentProps = {
   service: TDestination;
   configPath?: string;
   skip_hostname_verification?: boolean;
+};
+
+export type ErrorResponse = {
+  error: string;
+  success: false;
 };
 
 const userAgent = "chia-agent/1.0.0";
@@ -178,7 +186,11 @@ export class RPCAgent {
     return {clientCert, clientKey, caCert};
   }
   
-  public async sendMessage<M extends RpcMessage = RpcMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M> {
+  public async sendMessage<M extends RpcMessage = RpcMessage>(
+    destination: string,
+    command: string,
+    data?: Record<string, unknown>,
+  ): Promise<M | ErrorResponse> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     

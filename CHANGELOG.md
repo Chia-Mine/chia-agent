@@ -1,5 +1,57 @@
 # Changelog
 
+## [9.1.0]
+### Added
+- Added Common RPC API Error format description and type
+- [New DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`create_data_store`](./src/api/rpc/data_layer/README.md#create_data_storeagent-params)
+  - [`get_owned_stores`](./src/api/rpc/data_layer/README.md#get_owned_storesagent)
+  - [`batch_update`](./src/api/rpc/data_layer/README.md#batch_updateagent-params)
+  - [`get_value`](./src/api/rpc/data_layer/README.md#get_valueagent-params)
+  - [`get_keys`](./src/api/rpc/data_layer/README.md#get_keysagent-params)
+  - [`get_keys_values`](./src/api/rpc/data_layer/README.md#get_keys_valuesagent-params)
+  - [`get_ancestors`](./src/api/rpc/data_layer/README.md#get_ancestorsagent-params)
+  - [`get_root`](./src/api/rpc/data_layer/README.md#get_rootagent-params)
+  - [`get_local_root`](./src/api/rpc/data_layer/README.md#get_local_rootagent-params)
+  - [`get_roots`](./src/api/rpc/data_layer/README.md#get_rootsagent-params)
+  - [`delete_key`](./src/api/rpc/data_layer/README.md#delete_keyagent-params)
+  - [`insert`](./src/api/rpc/data_layer/README.md#insertagent-params)
+  - [`subscribe`](./src/api/rpc/data_layer/README.md#subscribeagent-params)
+  - [`unsubscribe`](./src/api/rpc/data_layer/README.md#unsubscribeagent-params)
+  - [`add_mirror`](./src/api/rpc/data_layer/README.md#add_mirroragent-params)
+  - [`delete_mirror`](./src/api/rpc/data_layer/README.md#delete_mirroragent-params)
+  - [`get_mirrors`](./src/api/rpc/data_layer/README.md#get_mirrorsagent-params)
+  - [`remove_subscriptions`](./src/api/rpc/data_layer/README.md#remove_subscriptionsagent-params)
+  - [`subscriptions`](./src/api/rpc/data_layer/README.md#subscriptionsagent)
+  - [`get_kv_diff`](./src/api/rpc/data_layer/README.md#get_kv_diffagent-params)
+  - [`get_root_history`](./src/api/rpc/data_layer/README.md#get_root_historyagent-params)
+  - [`add_missing_files`](./src/api/rpc/data_layer/README.md#add_missing_filesagent-params)
+  - [`make_offer`](./src/api/rpc/data_layer/README.md#make_offeragent-params)
+  - [`take_offer`](./src/api/rpc/data_layer/README.md#take_offeragent-params)
+  - [`verify_offer`](./src/api/rpc/data_layer/README.md#verify_offeragent-params)
+  - [`cancel_offer`](./src/api/rpc/data_layer/README.md#cancel_offeragent-params)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`create_new_dl`](./src/api/rpc/wallet/README.md#create_new_dlagent-params)
+  - [`dl_track_new`](./src/api/rpc/wallet/README.md#dl_track_newagent-params)
+  - [`dl_stop_tracking`](./src/api/rpc/wallet/README.md#dl_stop_trackingagent-params)
+  - [`dl_latest_singleton`](./src/api/rpc/wallet/README.md#dl_latest_singletonagent-params)
+  - [`dl_singletons_by_root`](./src/api/rpc/wallet/README.md#dl_singletons_by_rootagent-params)
+  - [`dl_update_root`](./src/api/rpc/wallet/README.md#dl_update_rootagent-params)
+  - [`dl_update_multiple`](./src/api/rpc/wallet/README.md#dl_update_multipleagent-params)
+  - [`dl_history`](./src/api/rpc/wallet/README.md#dl_historyagent-params)
+  - [`dl_owned_singletons`](./src/api/rpc/wallet/README.md#dl_owned_singletonsagent-params)
+  - [`dl_get_mirrors`](./src/api/rpc/wallet/README.md#dl_get_mirrorsagent-params)
+  - [`dl_new_mirror`](./src/api/rpc/wallet/README.md#dl_new_mirroragent-params)
+  - [`dl_delete_mirror`](./src/api/rpc/wallet/README.md#dl_delete_mirroragent-params)
+- [New Wallet WebSocket API](./src/api/ws/wallet)
+  - Added `offer_added`, `offer_cancelled` to `state_changed` event.
+### Changed
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
+    - Added `advanced` request parameter
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+    - Added `solver` request parameter
+
 ## [9.0.1]
 ### Fixed
 - Fixed an issue where wallet `state_changed` events(notified via WebSocket API) below were missing.
@@ -580,6 +632,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[9.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.1...v9.1.0
 [9.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v8.0.0...v9.0.0
 [8.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v7.0.0...v8.0.0
