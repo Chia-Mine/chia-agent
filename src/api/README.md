@@ -4,13 +4,24 @@ There are 2 kinds of APIs in chia.
 `RPC API` and `Websocket API`
 
 ### RPC API
-RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`, `crawler`.
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`,
+`wallet`, `data_layer`, `crawler`.
 
 RPC API is just an async function with a traditional request/response style.
 
 ### [RPCAgent](../rpc/README.md)
 See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/README.md).
 
+
+### Common RPC API Error Response
+If an exception is raised in RPC server, error response will be returned in the following format:
+```typescript
+{
+  error: string;
+  success: false;
+}
+```
+In order to keep description simple, the above error response is omitted in RPC API documents below.
 
 #### [Farmer RPC API](./rpc/farmer/README.md#usage)
 - [`get_reward_targets`](./rpc/farmer/README.md#get_reward_targetsagent-params)

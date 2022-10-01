@@ -73,6 +73,11 @@ export type TRPCAgentProps = {
   skip_hostname_verification?: boolean;
 };
 
+export type ErrorResponse = {
+  error: string;
+  success: false;
+};
+
 const userAgent = "chia-agent/1.0.0";
 
 export class RPCAgent {
@@ -181,7 +186,11 @@ export class RPCAgent {
     return {clientCert, clientKey, caCert};
   }
   
-  public async sendMessage<M extends RpcMessage = RpcMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M> {
+  public async sendMessage<M extends RpcMessage = RpcMessage>(
+    destination: string,
+    command: string,
+    data?: Record<string, unknown>,
+  ): Promise<M | ErrorResponse> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     

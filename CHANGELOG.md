@@ -2,6 +2,7 @@
 
 ## [9.1.0]
 ### Added
+- Added Common RPC API Error format description and type
 - [New DataLayer RPC API](./src/api/rpc/data_layer)
   - [`create_data_store`](./src/api/rpc/data_layer/README.md#create_data_storeagent-params)
   - [`get_owned_stores`](./src/api/rpc/data_layer/README.md#get_owned_storesagent)
