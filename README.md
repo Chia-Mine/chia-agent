@@ -6,7 +6,7 @@ Supports all RPC/Websocket API available at `chia 1.5.1`.
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
-- retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`, `pool`, `crawler`.
+- retrieve latest data from RPC servers like `farmer`, `harvester`, `full_node`, `wallet`, `pool`, `data_layer`, `crawler`.
 - send email when proof is found.
 - trigger scripts when target event is observed.
 - start/stop services.
@@ -32,7 +32,7 @@ There are 2 kinds of APIs in chia.
 `RPC API` and `Websocket API`.
 
 ### RPC API
-RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`, `crawler`.
+RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`, `wallet`, `data_layer`, `crawler`.
 
 RPC API is just an async function in a traditional request/response style.
 

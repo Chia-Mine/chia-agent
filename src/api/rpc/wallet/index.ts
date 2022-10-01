@@ -22,6 +22,7 @@ import {TradeRecordConvenience} from "../../chia/wallet/trade_record";
 import {CAT} from "../../chia/wallet/cat_wallet/cat_constants";
 import {TDriverDict} from "../../chia/wallet/puzzle_drivers";
 import {NFTInfo} from "../../chia/wallet/nft_wallet/nft_info";
+import {Mirror, SingletonRecord} from "../../chia/data_layer/data_layer_wallet";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -808,6 +809,7 @@ export const get_offer_summary_command = "get_offer_summary";
 export type get_offer_summary_command = typeof get_offer_summary_command;
 export type TGetOfferSummaryRequest = {
   offer: str;
+  advanced?: bool;
 };
 export type TGetOfferSummaryResponse = {
   summary: {
@@ -845,6 +847,7 @@ export type TTakeOfferRequest = {
   offer: str;
   fee?: uint64;
   min_coin_amount?: uint64;
+  solver?: Record<str, any>;
 };
 export type TTakeOfferResponse = {
   trade_record: TradeRecordConvenience;
@@ -1567,4 +1570,197 @@ export type TPwStatusResponse = {
 };
 export async function pw_status(agent: TRPCAgent, data: TPwStatusRequest){
   return agent.sendMessage<TPwStatusResponse>(chia_wallet_service, pw_status_command, data);
+}
+
+
+
+
+export const create_new_dl_command = "create_new_dl";
+export type create_new_dl_command = typeof create_new_dl_command;
+export type TCreateNewDlRequest = {
+  root: str;
+  fee?: uint64;
+};
+export type TCreateNewDlResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  transactions: TransactionRecordConvenience[];
+  launcher_id: bytes32;
+};
+export async function create_new_dl(agent: TRPCAgent, data: TCreateNewDlRequest){
+  return agent.sendMessage<TCreateNewDlResponse>(chia_wallet_service, create_new_dl_command, data);
+}
+
+
+
+
+export const dl_track_new_command = "dl_track_new";
+export type dl_track_new_command = typeof dl_track_new_command;
+export type TDlTrackNewRequest = {
+  launcher_id: str;
+};
+export type TDlTrackNewResponse = {
+};
+export async function dl_track_new(agent: TRPCAgent, data: TDlTrackNewRequest){
+  return agent.sendMessage<TDlTrackNewResponse>(chia_wallet_service, dl_track_new_command, data);
+}
+
+
+
+
+export const dl_stop_tracking_command = "dl_stop_tracking";
+export type dl_stop_tracking_command = typeof dl_stop_tracking_command;
+export type TDlStopTrackingRequest = {
+  launcher_id: str;
+};
+export type TDlStopTrackingResponse = {
+};
+export async function dl_stop_tracking(agent: TRPCAgent, data: TDlStopTrackingRequest){
+  return agent.sendMessage<TDlStopTrackingResponse>(chia_wallet_service, dl_stop_tracking_command, data);
+}
+
+
+
+
+export const dl_latest_singleton_command = "dl_latest_singleton";
+export type dl_latest_singleton_command = typeof dl_latest_singleton_command;
+export type TDlLatestSingletonRequest = {
+  launcher_id: str;
+  only_confirmed?: bool;
+};
+export type TDlLatestSingletonResponse = {
+  singleton: Optional<SingletonRecord>;
+};
+export async function dl_latest_singleton(agent: TRPCAgent, data: TDlLatestSingletonRequest){
+  return agent.sendMessage<TDlLatestSingletonResponse>(chia_wallet_service, dl_latest_singleton_command, data);
+}
+
+
+
+
+export const dl_singletons_by_root_command = "dl_singletons_by_root";
+export type dl_singletons_by_root_command = typeof dl_singletons_by_root_command;
+export type TDlSingletonsByRootRequest = {
+  launcher_id: str;
+  root: str;
+};
+export type TDlSingletonsByRootResponse = {
+  singletons: SingletonRecord[];
+};
+export async function dl_singletons_by_root(agent: TRPCAgent, data: TDlSingletonsByRootRequest){
+  return agent.sendMessage<TDlSingletonsByRootResponse>(chia_wallet_service, dl_singletons_by_root_command, data);
+}
+
+
+
+
+export const dl_update_root_command = "dl_update_root";
+export type dl_update_root_command = typeof dl_update_root_command;
+export type TDlUpdateRootRequest = {
+  launcher_id: str;
+  new_root: str;
+  fee?: uint64;
+};
+export type TDlUpdateRootResponse = {
+  tx_record: TransactionRecordConvenience;
+};
+export async function dl_update_root(agent: TRPCAgent, data: TDlUpdateRootRequest){
+  return agent.sendMessage<TDlUpdateRootResponse>(chia_wallet_service, dl_update_root_command, data);
+}
+
+
+
+
+export const dl_update_multiple_command = "dl_update_multiple";
+export type dl_update_multiple_command = typeof dl_update_multiple_command;
+export type TDlUpdateMultipleRequest = {
+  updates: Record<str, str>; // {[launcher_id]: root}
+};
+export type TDlUpdateMultipleResponse = {
+  tx_records: TransactionRecordConvenience[];
+};
+export async function dl_update_multiple(agent: TRPCAgent, data: TDlUpdateMultipleRequest){
+  return agent.sendMessage<TDlUpdateMultipleResponse>(chia_wallet_service, dl_update_multiple_command, data);
+}
+
+
+
+
+export const dl_history_command = "dl_history";
+export type dl_history_command = typeof dl_history_command;
+export type TDlHistoryRequest = {
+  min_generation?: uint32;
+  max_generation?: uint32;
+  num_results?: uint32;
+};
+export type TDlHistoryResponse = {
+  history: SingletonRecord[];
+  count: int;
+};
+export async function dl_history(agent: TRPCAgent, data: TDlHistoryRequest){
+  return agent.sendMessage<TDlHistoryResponse>(chia_wallet_service, dl_history_command, data);
+}
+
+
+
+
+export const dl_owned_singletons_command = "dl_owned_singletons";
+export type dl_owned_singletons_command = typeof dl_owned_singletons_command;
+export type TDlOwnedSingletonsResponse = {
+  singletons: SingletonRecord[];
+  count: int;
+};
+export async function dl_owned_singletons(agent: TRPCAgent){
+  return agent.sendMessage<TDlOwnedSingletonsResponse>(chia_wallet_service, dl_owned_singletons_command);
+}
+
+
+
+
+export const dl_get_mirrors_command = "dl_get_mirrors";
+export type dl_get_mirrors_command = typeof dl_get_mirrors_command;
+export type TDlGetMirrorsRequest = {
+  launcher_id: str;
+};
+export type TDlGetMirrorsResponse = {
+  mirrors: Mirror[];
+};
+export async function dl_get_mirrors(agent: TRPCAgent, data: TDlGetMirrorsRequest){
+  return agent.sendMessage<TDlGetMirrorsResponse>(chia_wallet_service, dl_get_mirrors_command, data);
+}
+
+
+
+
+export const dl_new_mirror_command = "dl_new_mirror";
+export type dl_new_mirror_command = typeof dl_new_mirror_command;
+export type TDlNewMirrorRequest = {
+  launcher_id: str;
+  amount: uint64;
+  urls: str[];
+  fee?: uint64;
+};
+export type TDlNewMirrorResponse = {
+  transactions: TransactionRecordConvenience[];
+};
+export async function dl_new_mirror(agent: TRPCAgent, data: TDlNewMirrorRequest){
+  return agent.sendMessage<TDlNewMirrorResponse>(chia_wallet_service, dl_new_mirror_command, data);
+}
+
+
+
+
+export const dl_delete_mirror_command = "dl_delete_mirror";
+export type dl_delete_mirror_command = typeof dl_delete_mirror_command;
+export type TDlDeleteMirrorRequest = {
+  coin_id: str;
+  fee?: uint64;
+};
+export type TDlDeleteMirrorResponse = {
+  transactions: TransactionRecordConvenience[];
+};
+export async function dl_delete_mirror(agent: TRPCAgent, data: TDlDeleteMirrorRequest){
+  return agent.sendMessage<TDlDeleteMirrorResponse>(chia_wallet_service, dl_delete_mirror_command, data);
 }
