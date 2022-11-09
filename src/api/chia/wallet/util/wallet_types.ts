@@ -1,7 +1,7 @@
 export const WalletType = {
 // # Wallet Types
   STANDARD_WALLET: 0,
-  RATE_LIMITED: 1,
+  // RATE_LIMITED: 1, // Deprecated at chia-blockchain@1.6.1
   ATOMIC_SWAP: 2,
   AUTHORIZED_PAYEE: 3,
   MULTI_SIG: 4,

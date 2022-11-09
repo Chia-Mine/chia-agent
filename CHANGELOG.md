@@ -1,5 +1,79 @@
 # Changelog
 
+## [9.2.0]
+### Minor breaking change
+- `add_private_key` daemon WebSocket API now deprecated `passphrase` request param  
+  and added `label` param.
+- `program` property was removed from `MempoolItem` class.  
+  See [MempoolItem](./src/api/chia/types/mempool_item.ts) for more detail.  
+  This impacts on API response below:
+  - [`get_all_mempool_items`](./src/api/rpc/full_node/README.md#get_all_mempool_itemsagent)
+    of FullNode RPC API
+  - [`get_mempool_item_by_tx_id`](./src/api/rpc/full_node/README.md#get_mempool_item_by_tx_idagent-params)
+    of FullNode RPC API
+### Removed
+- [Wallet RPC API](./src/api/rpc/wallet)  
+  (Code will remain awhile on chia-agent for backward compatibility. Only document is removed for now.)
+  - Removed `rl_set_user_info`
+  - Removed `send_clawback_transaction`
+  - Removed `add_rate_limited_funds`
+  - Removed RL Wallet type from `create_new_wallet` API
+- Removed `RATE_LIMITED` from [`WalletType`](./src/api/chia/wallet/util/wallet_types.ts)
+### Added 
+- [New Daemon WebSocket API](./src/api/ws/daemon)
+  - [`get_key`](./src/api/ws/daemon/README.md#get_keydaemon-params)
+  - [`get_keys`](./src/api/ws/daemon/README.md#get_keysdaemon-params)
+  - [`set_label`](./src/api/ws/daemon/README.md#set_labeldaemon-params)
+  - [`delete_label`](./src/api/ws/daemon/README.md#delete_labeldaemon-params)
+  - [`running_services`](./src/api/ws/daemon/README.md#running_servicesdaemon)
+  - Added support for Bladebit2 plotting option
+- [New FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_fee_estimate`](./src/api/rpc/full_node/README.md#get_fee_estimateagent-params)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`push_transactions`](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
+  - [`get_notifications`](./src/api/rpc/wallet/README.md#get_notificationsagent-params)
+  - [`delete_notifications`](./src/api/rpc/wallet/README.md#delete_notificationsagent-params)
+  - [`send_notification`](./src/api/rpc/wallet/README.md#send_notificationagent-params)
+  - [`sign_message_by_address`](./src/api/rpc/wallet/README.md#sign_message_by_addressagent-params)
+  - [`sign_message_by_id`](./src/api/rpc/wallet/README.md#sign_message_by_idagent-params)
+  - [`nft_calculate_royalties`](./src/api/rpc/wallet/README.md#nft_calculate_royaltiesagent-params)
+  - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
+### Changed
+- [Daemon WebSocket API](./src/api/rpc/wallet)
+  - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
+    - Removed `passphrase` request parameter
+    - Added `label` request parameter
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`get_value`](./src/api/rpc/data_layer/README.md#get_valueagent-params)
+    - Added `root_hash` request parameter
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - `program` property was removed from `MempoolItem` class.  
+    See [MempoolItem](./src/api/chia/types/mempool_item.ts) for more detail.
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`nft_get_nfts`](./src/api/rpc/wallet/README.md#nft_get_nftsagent-params)
+    - Made `wallet_id` optional request parameter
+    - Added `start_index`, `num`, `ignore_size_limit` request parameters
+  - [`nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+    - Added `ignore_size_limit` request parameters
+  - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+    - Removed error response
+  - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+    - Added `signed_txs` to response
+- [Common RPC API](./src/api/rpc/common)
+  - [`healthz`](./src/api/rpc/common/README.md#healthzagent)
+    - Changed `success` type to `True` from `"true"`
+- `p2_address`, `minter_did`, `off_chain_metadata` were added to `NFTInfo` class.  
+  This impacts on API response below:
+  - [`nft_get_nfts`](./src/api/rpc/wallet/README.md#nft_get_nftsagent-params)
+  - [`nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+### Fixed
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+    - Fixed an issue where `did_id` request param was described to be required
+- [Common RPC API](./src/api/rpc/common)
+  - [`get_routes`](./src/api/rpc/common/README.md#get_routesagent)
+    - Added missing `success` response parameter.
+
 ## [9.1.0]
 ### Added
 - Added Common RPC API Error format description and type
@@ -632,6 +706,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[9.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.1.0...v9.2.0
 [9.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.1...v9.1.0
 [9.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v8.0.0...v9.0.0

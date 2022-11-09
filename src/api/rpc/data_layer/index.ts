@@ -56,6 +56,7 @@ export type get_value_command = typeof get_value_command;
 export type TGetValueRequest = {
   id: str;
   key: str;
+  root_hash?: str;
 };
 export type TGetValueResponse = {
   value: str|None;

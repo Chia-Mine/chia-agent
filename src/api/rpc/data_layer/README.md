@@ -118,6 +118,7 @@ const response = await get_value(agent, params);
 {
   id: str;
   key: str;
+  root_hash?: str;
 }
 ```
 ### response:

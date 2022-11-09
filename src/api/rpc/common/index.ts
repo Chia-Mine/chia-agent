@@ -1,4 +1,4 @@
-import {str, uint16} from "../../chia/types/_python_types_";
+import {str, True, uint16} from "../../chia/types/_python_types_";
 import {TRPCAgent} from "../../../rpc/index";
 import {TConnectionGeneral} from "../../types";
 import {TConnectionFullNode} from "../../ws/full_node/index";
@@ -53,6 +53,7 @@ export async function stop_node(agent: TRPCAgent) {
 export const get_routes_command = "get_routes";
 export type get_routes_command = typeof get_routes_command;
 export type TGetRoutesResponse = {
+  success: True;
   routes: str[];
 };
 export async function get_routes(agent: TRPCAgent) {
@@ -63,7 +64,7 @@ export async function get_routes(agent: TRPCAgent) {
 export const healthz_command = "healthz";
 export type healthz_command = typeof healthz_command;
 export type THealthzResponse = {
-  success: "true";
+  success: True;
 };
 export async function healthz(agent: TRPCAgent) {
   return agent.sendMessage<THealthzResponse>(chia_common_service, healthz_command);
