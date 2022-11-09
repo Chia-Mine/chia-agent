@@ -660,3 +660,40 @@ const response = await get_mempool_item_by_tx_id(agent, params);
 ```
 For content of `MempoolItem`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mempool_item.ts
+
+---
+
+## `get_fee_estimate(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_fee_estimate} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_fee_estimate(agent, params);
+```
+### params
+```typescript
+{
+  spend_bundle?: SpendBundle;
+  cost?: uint64;
+  target_times: int[];
+}
+```
+### response
+```typescript
+{
+  estimates: uint64[];
+  target_times: int[];
+  current_fee_rate: uint64;
+  mempool_size: CLVMCost
+  mempool_max_size: CLVMCost;
+  full_node_synced: bool;
+  peak_height: uint32;
+  last_peak_timestamp: uint64;
+  node_time_utc: int;
+}
+```
+For content of `SpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `CLVMCost`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/clvm_cost.ts

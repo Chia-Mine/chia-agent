@@ -99,7 +99,7 @@ const response = await start_plotting(daemon, params);
   f?: str; // farmer public key.
   p?: str; // pool public key.
   c?: str; // pool contract address.
-} & (chiapos_params | bladebit_params | madmax_params)
+} & (chiapos_params | bladebit_params | bladebit2_params | madmax_params)
 ```
 ### chiapos_params:
 ```typescript
@@ -119,6 +119,28 @@ const response = await start_plotting(daemon, params);
   plotter: "bladebit";
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
+  no_cpu_affinity?: bool; // Default: False
+}
+```
+### bladebit2_params:
+```typescript
+{
+  plotter: "bladebit2";
+  w?: bool; // Warm start. Default: False
+  m?: bool; // Disable NUMA. Default: False
+  no_cpu_affinity?: bool; // Default: False
+  t1: str; // Temp directory
+  t2?: str; // Temp2 directory
+  u?: int; // Buckets
+  cache?: str;
+  f1_threads?: int;
+  fp_threads?: int;
+  c_threads?: int;
+  p2_threads?: int;
+  p3_threads?: int;
+  alternate?: bool; // Default: False
+  no_t1_direct?: bool; // Default: False
+  no_t2_direct?: bool; // Default: False
 }
 ```
 ### madmax_params:
@@ -192,6 +214,25 @@ const response = await stop_service(daemon, {service: "..."});
 
 ---
 
+## `running_services(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {running_services} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await running_services(daemon);
+```
+### response:
+```typescript
+{
+  success: bool;
+  running_services: str[];
+}
+```
+
+---
+
 ## `is_running(daemon, params)`
 ### Usage
 ```js
@@ -233,7 +274,7 @@ const response = await add_private_key(daemon, params);
   kc_user?: str;
   kc_testing?: bool;
   mnemonic?: str;
-  passphrase?: str;
+  label?: str;
 }
 ```
 ### response:
@@ -408,6 +449,126 @@ const response = await get_key_for_fingerprint(daemon, params);
   error?: str;
   pk: str;
   entropy: str;
+}
+```
+
+---
+
+## `get_key(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_key} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_key(daemon, params);
+```
+### params:
+```typescript
+{
+  fingerprint: uint32;
+  include_secrets?: bool;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  key: KeyData;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+}
+```
+For content of `KeyData`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/util/keychain.ts
+
+---
+
+## `get_keys(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_keys} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_keys(daemon, params);
+```
+### params:
+```typescript
+{
+  include_secrets?: bool;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  keys: KeyData[];
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+}
+```
+For content of `KeyData`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/util/keychain.ts
+
+---
+
+## `set_label(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {set_label} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await set_label(daemon, params);
+```
+### params:
+```typescript
+{
+  fingerprint: uint32;
+  label: str;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+}
+```
+
+---
+
+## `delete_label(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {delete_label} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await delete_label(daemon, params);
+```
+### params:
+```typescript
+{
+  fingerprint: uint32;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
 }
 ```
 

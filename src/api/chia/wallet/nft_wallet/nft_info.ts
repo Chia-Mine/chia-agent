@@ -19,6 +19,9 @@ export type NFTInfo = {
   chain_info: str;
   mint_height: uint32;
   supports_did: bool;
+  p2_address: bytes32;
   pending_transaction: bool;
+  minter_did: Optional<bytes32>;
   launcher_puzhash: bytes32;
+  off_chain_metadata: Optional<str>;
 };

@@ -81,6 +81,7 @@ import type {
   TGetUnfinishedBlockHeadersResponse,
   TPushTxResponse,
   TGetPuzzleAndSolutionResponse,
+  TGetFeeEstimateResponse,
 } from "./full_node/index";
 export {
   chia_full_node_service,
@@ -158,6 +159,9 @@ export {
   TGetPuzzleAndSolutionRequest,
   TGetPuzzleAndSolutionResponse,
   get_puzzle_and_solution,
+  TGetFeeEstimateRequest,
+  TGetFeeEstimateResponse,
+  get_fee_estimate,
 } from "./full_node/index";
 
 import type {
@@ -210,6 +214,13 @@ import type {
   TSelectCoinsResponse,
   TGetCurrentDerivationIndexResponse,
   TExtendDerivationIndexResponse,
+  TGetNotificationsResponse,
+  TDeleteNotificationsResponse,
+  TSendNotificationResponse,
+  TSignMessageByAddressResponse,
+  TSignMessageByIdResponse,
+  TNftCalculateRoyaltiesResponse,
+  TNftMintBulkResponse,
   TDeleteAllKeysResponse,
   TDeleteKeyResponse,
   TDidSetWalletNameResponse,
@@ -260,6 +271,7 @@ import type {
   TGetWalletsResponse,
   TLoginResponse,
   TPushTxResponse as TPushTxResponseOfWallet,
+  TPushTransactionsResponse,
   TPwJoinPoolRequest,
   TPwSelfPoolRequest,
   TPwAbsorbRewardsResponse,
@@ -339,6 +351,27 @@ export {
   TExtendDerivationIndexRequest,
   TExtendDerivationIndexResponse,
   extend_derivation_index,
+  TGetNotificationsRequest,
+  TGetNotificationsResponse,
+  get_notifications,
+  TDeleteNotificationsRequest,
+  TDeleteNotificationsResponse,
+  delete_notifications,
+  TSendNotificationRequest,
+  TSendNotificationResponse,
+  send_notification,
+  TSignMessageByAddressRequest,
+  TSignMessageByAddressResponse,
+  sign_message_by_address,
+  TSignMessageByIdRequest,
+  TSignMessageByIdResponse,
+  sign_message_by_id,
+  TNftCalculateRoyaltiesRequest,
+  TNftCalculateRoyaltiesResponse,
+  nft_calculate_royalties,
+  TNftMintBulkRequest,
+  TNftMintBulkResponse,
+  nft_mint_bulk,
   TCreate_New_CAT_WalletRequest,
   TCreate_New_CAT_WalletResponse,
   TCreate_New_DID_WalletRequest,
@@ -491,6 +524,9 @@ export {
   TPushTxRequest as TPushTxRequestOfWallet,
   TPushTxResponse as TPushTxResponseOfWallet,
   push_tx as push_tx_wallet,
+  TPushTransactionsRequest,
+  TPushTransactionsResponse,
+  push_transactions,
   TPwJoinPoolRequest,
   TPwJoinPoolResponse,
   pw_join_pool,
@@ -746,6 +782,7 @@ export type RpcFullNodeMessage =
   | TGetUnfinishedBlockHeadersResponse
   | TPushTxResponse
   | TGetPuzzleAndSolutionResponse
+  | TGetFeeEstimateResponse
 ;
 export type RpcHarvesterMessage =
   TAddPlotDirectoryResponse
@@ -774,6 +811,13 @@ export type RpcWalletMessage =
   | TSelectCoinsResponse
   | TGetCurrentDerivationIndexResponse
   | TExtendDerivationIndexResponse
+  | TGetNotificationsResponse
+  | TDeleteNotificationsResponse
+  | TSendNotificationResponse
+  | TSignMessageByAddressResponse
+  | TSignMessageByIdResponse
+  | TNftCalculateRoyaltiesResponse
+  | TNftMintBulkResponse
   | TDeleteAllKeysResponse
   | TDeleteKeyResponse
   | TDidSetWalletNameResponse
@@ -824,6 +868,7 @@ export type RpcWalletMessage =
   | TGetWalletsResponse
   | TLoginResponse
   | TPushTxResponseOfWallet
+  | TPushTransactionsResponse
   | TPwJoinPoolResponse
   | TPwSelfPoolResponse
   | TPwAbsorbRewardsResponse

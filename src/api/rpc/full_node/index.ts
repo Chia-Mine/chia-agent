@@ -10,6 +10,7 @@ import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
 import {CoinSpend} from "../../chia/types/coin_spend";
+import {CLVMCost} from "../../chia/types/clvm_cost";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -410,4 +411,28 @@ export type TGetMempoolItemByTxIdResponse = {
 };
 export async function get_mempool_item_by_tx_id(agent: TRPCAgent, data: TGetMempoolItemByTxIdRequest) {
   return agent.sendMessage<TGetMempoolItemByTxIdResponse>(chia_full_node_service, get_mempool_item_by_tx_id_command, data);
+}
+
+
+
+export const get_fee_estimate_command = "get_fee_estimate";
+export type get_fee_estimate_command = typeof get_fee_estimate_command;
+export type TGetFeeEstimateRequest = {
+  spend_bundle?: SpendBundle;
+  cost?: uint64;
+  target_times: int[];
+};
+export type TGetFeeEstimateResponse = {
+  estimates: uint64[];
+  target_times: int[];
+  current_fee_rate: uint64;
+  mempool_size: CLVMCost
+  mempool_max_size: CLVMCost;
+  full_node_synced: bool;
+  peak_height: uint32;
+  last_peak_timestamp: uint64;
+  node_time_utc: int;
+};
+export async function get_fee_estimate(agent: TRPCAgent, data: TGetFeeEstimateRequest) {
+  return agent.sendMessage<TGetFeeEstimateResponse>(chia_full_node_service, get_fee_estimate_command, data);
 }

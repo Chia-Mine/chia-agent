@@ -1,9 +1,8 @@
 import {SpendBundle} from "./spend_bundle";
-import {SerializedProgram} from "./blockchain_format/program";
 import {Coin} from "./blockchain_format/coin";
 import {bytes32} from "./blockchain_format/sized_bytes";
 import {NPCResult} from "../consensus/cost_calculator";
-import {uint64} from "./_python_types_";
+import {uint32, uint64} from "./_python_types_";
 
 export type MempoolItem = {
   spend_bundle: SpendBundle;
@@ -13,5 +12,5 @@ export type MempoolItem = {
   spend_bundle_name: bytes32;
   additions: Coin[];
   removals: Coin[];
-  program: SerializedProgram;
+  height_added_to_mempool: uint32;
 };

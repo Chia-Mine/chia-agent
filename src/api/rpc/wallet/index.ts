@@ -213,11 +213,23 @@ export async function get_height_info(agent: TRPCAgent){
 export const push_tx_command = "push_tx";
 export type push_tx_command = typeof push_tx_command;
 export type TPushTxRequest = {
-  spend_bundle: str; // streamable binary in hex string 
+  spend_bundle: str; // SpendBundle serialized to hex string 
 };
 export type TPushTxResponse = {};
 export async function push_tx(agent: TRPCAgent, data: TPushTxRequest){
   return agent.sendMessage<TPushTxResponse>(chia_wallet_service, push_tx_command, data);
+}
+
+
+
+export const push_transactions_command = "push_transactions";
+export type push_transactions_command = typeof push_transactions_command;
+export type TPushTransactionsRequest = {
+  transactions: str; // TransactionRecord serialized to hex string 
+};
+export type TPushTransactionsResponse = {};
+export async function push_transactions(agent: TRPCAgent, data: TPushTransactionsRequest){
+  return agent.sendMessage<TPushTransactionsResponse>(chia_wallet_service, push_transactions_command, data);
 }
 
 
@@ -591,6 +603,7 @@ export type TPuzzleAnnouncement = {
 export const create_signed_transaction_command = "create_signed_transaction";
 export type create_signed_transaction_command = typeof create_signed_transaction_command;
 export type TCreateSignedTransactionRequest = {
+  wallet_id?: uint32;
   additions: TAdditions[];
   fee?: uint64;
   min_coin_amount?: uint64;
@@ -600,6 +613,7 @@ export type TCreateSignedTransactionRequest = {
   puzzle_announcements?: TPuzzleAnnouncement[];
 };
 export type TCreateSignedTransactionResponse = {
+  signed_txs: TransactionRecordConvenience[];
   signed_tx: TransactionRecordConvenience;
 };
 export async function create_signed_transaction(agent: TRPCAgent, data: TCreateSignedTransactionRequest){
@@ -665,6 +679,98 @@ export type TExtendDerivationIndexResponse = {
 };
 export async function extend_derivation_index(agent: TRPCAgent, data: TExtendDerivationIndexRequest){
   return agent.sendMessage<TExtendDerivationIndexResponse>(chia_wallet_service, extend_derivation_index_command, data);
+}
+
+
+
+
+export const get_notifications_command = "get_notifications";
+export type get_notifications_command = typeof get_notifications_command;
+export type TGetNotificationsRequest = {
+  ids?: str[];
+  start?: int;
+  end?: int;
+};
+export type TGetNotificationsResponse = {
+  notifications: Array<{
+    id: str;
+    message: str;
+    amount: uint64;
+  }>;
+};
+export async function get_notifications(agent: TRPCAgent, data: TGetNotificationsRequest){
+  return agent.sendMessage<TGetNotificationsResponse>(chia_wallet_service, get_notifications_command, data);
+}
+
+
+
+
+export const delete_notifications_command = "delete_notifications";
+export type delete_notifications_command = typeof delete_notifications_command;
+export type TDeleteNotificationsRequest = {
+  ids?: str[];
+};
+export type TDeleteNotificationsResponse = {
+};
+export async function delete_notifications(agent: TRPCAgent, data: TDeleteNotificationsRequest){
+  return agent.sendMessage<TDeleteNotificationsResponse>(chia_wallet_service, delete_notifications_command, data);
+}
+
+
+
+
+export const send_notification_command = "send_notification";
+export type send_notification_command = typeof send_notification_command;
+export type TSendNotificationRequest = {
+  target: str;
+  message: str;
+  amount: uint64;
+  fee?: uint64;
+};
+export type TSendNotificationResponse = {
+  tx: TransactionRecordConvenience;
+};
+export async function send_notification(agent: TRPCAgent, data: TSendNotificationRequest){
+  return agent.sendMessage<TSendNotificationResponse>(chia_wallet_service, send_notification_command, data);
+}
+
+
+
+
+export const sign_message_by_address_command = "sign_message_by_address";
+export type sign_message_by_address_command = typeof sign_message_by_address_command;
+export type TSignMessageByAddressRequest = {
+  address: str;
+  message: str;
+};
+export type TSignMessageByAddressResponse = {
+  success: True;
+  pubkey: str;
+  signature: str;
+};
+export async function sign_message_by_address(agent: TRPCAgent, data: TSignMessageByAddressRequest){
+  return agent.sendMessage<TSignMessageByAddressResponse>(chia_wallet_service, sign_message_by_address_command, data);
+}
+
+
+
+
+export const sign_message_by_id_command = "sign_message_by_id";
+export type sign_message_by_id_command = typeof sign_message_by_id_command;
+export type TSignMessageByIdRequest = {
+  id: str;
+  message: str;
+};
+export type TSignMessageByIdResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  pubkey: str;
+  signature: str;
+};
+export async function sign_message_by_id(agent: TRPCAgent, data: TSignMessageByIdRequest){
+  return agent.sendMessage<TSignMessageByIdResponse>(chia_wallet_service, sign_message_by_id_command, data);
 }
 
 
@@ -1263,7 +1369,10 @@ export async function nft_mint_nft(agent: TRPCAgent, data: TNftMintNftRequest){
 export const nft_get_nfts_command = "nft_get_nfts";
 export type nft_get_nfts_command = typeof nft_get_nfts_command;
 export type TNftGetNftsRequest = {
-  wallet_id: uint32;
+  wallet_id?: uint32;
+  start_index?: int;
+  num?: int;
+  ignore_size_limit?: bool;
 };
 export type TNftGetNftsResponse = {
   wallet_id: uint32;
@@ -1281,7 +1390,7 @@ export const nft_set_nft_did_command = "nft_set_nft_did";
 export type nft_set_nft_did_command = typeof nft_set_nft_did_command;
 export type TNftSetNftDidRequest = {
   wallet_id: uint32;
-  did_id: str;
+  did_id?: str;
   nft_coin_id: str;
   fee?: uint64;
 };
@@ -1403,6 +1512,7 @@ export type nft_get_info_command = typeof nft_get_info_command;
 export type TNftGetInfoRequest = {
   coin_id: str;
   latest?: bool;
+  ignore_size_limit?: bool;
 };
 export type TNftGetInfoResponse = {
   success: True;
@@ -1431,12 +1541,76 @@ export type TNftAddUriResponse = {
   success: True;
   wallet_id: uint32;
   spend_bundle: SpendBundle;
-} | {
-  success: False;
-  error: str;
 };
 export async function nft_add_uri(agent: TRPCAgent, data: TNftAddUriRequest){
   return agent.sendMessage<TNftAddUriResponse>(chia_wallet_service, nft_add_uri_command, data);
+}
+
+
+
+
+export const nft_calculate_royalties_command = "nft_calculate_royalties";
+export type nft_calculate_royalties_command = typeof nft_calculate_royalties_command;
+export type TNftCalculateRoyaltiesRequest = {
+  royalty_assets?: Array<{
+    asset: str;
+    royalty_address: str;
+    royalty_percentage: uint16;
+  }>;
+  fungible_assets?: Array<{
+    asset: str;
+    amount: uint64
+  }>;
+};
+export type TNftCalculateRoyaltiesResponse = Record<str, Array<{
+  asset: str;
+  address: str;
+  amount: uint64;
+}>>;
+export async function nft_calculate_royalties(agent: TRPCAgent, data: TNftCalculateRoyaltiesRequest){
+  return agent.sendMessage<TNftCalculateRoyaltiesResponse>(chia_wallet_service, nft_calculate_royalties_command, data);
+}
+
+
+
+
+export const nft_mint_bulk_command = "nft_mint_bulk";
+export type nft_mint_bulk_command = typeof nft_mint_bulk_command;
+export type TNftMintBulkRequest = {
+  wallet_id: uint32;
+  royalty_address?: str;
+  royalty_percentage?: uint16;
+  metadata_list: Array<{
+    uris: str[];
+    meta_uris: str[];
+    license_uris: str[];
+    hash: str;
+    edition_number?: uint64;
+    edition_total?: uint64;
+    meta_hash?: str;
+    license_hash?: str;
+  }>;
+  target_list?: str[];
+  mint_number_start?: int;
+  mint_total?: int;
+  xch_coins?: Coin[];
+  xch_change_target?: str;
+  new_innerpuzhash?: str;
+  new_p2_puzhash?: str;
+  did_coin?: Coin;
+  did_lineage_parent?: str;
+  mint_from_did?: bool;
+  fee?: uint64;
+};
+export type TNftMintBulkResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  spend_bundle: SpendBundle;
+};
+export async function nft_mint_bulk(agent: TRPCAgent, data: TNftMintBulkRequest){
+  return agent.sendMessage<TNftMintBulkResponse>(chia_wallet_service, nft_mint_bulk_command, data);
 }
 
 

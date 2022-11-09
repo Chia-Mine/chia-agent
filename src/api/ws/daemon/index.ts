@@ -1,11 +1,12 @@
 // The daemon service currently does not provide state_change event as of v1.1.5.
 import {GetMessageType, wallet_ui_service} from "../../types";
 import {TDaemon} from "../../../daemon/index";
-import {bool, int, None, Optional, str, True} from "../../chia/types/_python_types_";
+import {bool, False, int, None, Optional, str, True, uint32} from "../../chia/types/_python_types_";
 import {WsMessage} from "../index";
 import {chiapos_install_info} from "../../chia/plotters/chiapos";
 import {bladebit_install_info} from "../../chia/plotters/bladebit";
 import {madmax_install_info} from "../../chia/plotters/maxmax";
+import {KeyData} from "../../chia/util/keychain";
 
 export const daemon_service = "daemon";
 export type daemon_service = typeof daemon_service;
@@ -73,6 +74,25 @@ export type TBladeBitParams = {
   plotter: "bladebit";
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
+  no_cpu_affinity?: bool; // Default: False
+};
+export type TBladeBit2Params = {
+  plotter: "bladebit2";
+  w?: bool; // Warm start. Default: False
+  m?: bool; // Disable NUMA. Default: False
+  no_cpu_affinity?: bool; // Default: False
+  t1: str; // Temp directory
+  t2?: str; // Temp2 directory
+  u?: int; // Buckets
+  cache?: str;
+  f1_threads?: int;
+  fp_threads?: int;
+  c_threads?: int;
+  p2_threads?: int;
+  p3_threads?: int;
+  alternate?: bool; // Default: False
+  no_t1_direct?: bool; // Default: False
+  no_t2_direct?: bool; // Default: False
 };
 export type TMadMaxParams = {
   plotter: "madmax";
@@ -83,7 +103,7 @@ export type TMadMaxParams = {
   K?: int; // Thread multiplier for phase 2. Default: 1
   G?: bool; // Alternate tmpdir/tmp2dir. Default: False
 };
-export type TStartPlottingRequest = TCommonPlottingParams & (TChiaPosParams | TBladeBitParams | TMadMaxParams);
+export type TStartPlottingRequest = TCommonPlottingParams & (TChiaPosParams | TBladeBitParams | TBladeBit2Params | TMadMaxParams);
 export type TStartPlottingResponse = {
   success: bool;
   ids: str[];
@@ -124,6 +144,18 @@ export async function stop_service(daemon: TDaemon, data: TStopServiceRequest) {
 
 
 
+export const running_services_command = "running_services";
+export type running_services_command = typeof running_services_command;
+export type TRunningServicesResponse = {
+  success: bool;
+  running_services: str[];
+};
+export async function running_services(daemon: TDaemon) {
+  return daemon.sendMessage<GetMessageType<daemon_service, running_services_command, TRunningServicesResponse>>(daemon_service, running_services_command);
+}
+
+
+
 export const is_running_command = "is_running";
 export type is_running_command = typeof is_running_command;
 export type TIsRunningRequest = {
@@ -146,7 +178,7 @@ export type TAddPrivateKeyRequest = {
   kc_user?: str;
   kc_testing?: bool;
   mnemonic?: str;
-  passphrase?: str;
+  label?: str;
 };
 export type TAddPrivateKeyResponse = {
   success: bool;
@@ -261,6 +293,82 @@ export type TGetKeyForFingerprintResponse = {
 };
 export async function get_key_for_fingerprint(daemon: TDaemon, data: TGetKeyForFingerprintRequest) {
   return daemon.sendMessage<GetMessageType<daemon_service, get_key_for_fingerprint_command, TGetKeyForFingerprintResponse>>(daemon_service, get_key_for_fingerprint_command, data);
+}
+
+
+
+export const get_key_command = "get_key";
+export type get_key_command = typeof get_key_command;
+export type TGetKeyRequest = {
+  fingerprint: uint32;
+  include_secrets?: bool;
+};
+export type TGetKeyResponse = {
+  success: True;
+  key: KeyData;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+};
+export async function get_key(daemon: TDaemon, data: TGetKeyRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_key_command, TGetKeyResponse>>(daemon_service, get_key_command, data);
+}
+
+
+
+export const get_keys_command = "get_keys";
+export type get_keys_command = typeof get_keys_command;
+export type TGetKeysRequest = {
+  include_secrets?: bool;
+};
+export type TGetKeysResponse = {
+  success: True;
+  keys: KeyData[];
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+};
+export async function get_keys(daemon: TDaemon, data: TGetKeysRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, get_keys_command, TGetKeysResponse>>(daemon_service, get_keys_command, data);
+}
+
+
+
+export const set_label_command = "set_label";
+export type set_label_command = typeof set_label_command;
+export type TSetLabelRequest = {
+  fingerprint: uint32;
+  label: str;
+};
+export type TSetLabelResponse = {
+  success: True;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+};
+export async function set_label(daemon: TDaemon, data: TSetLabelRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, set_label_command, TSetLabelResponse>>(daemon_service, set_label_command, data);
+}
+
+
+
+export const delete_label_command = "delete_label";
+export type delete_label_command = typeof delete_label_command;
+export type TDeleteLabelRequest = {
+  fingerprint: uint32;
+};
+export type TDeleteLabelResponse = {
+  success: True;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+};
+export async function delete_label(daemon: TDaemon, data: TDeleteLabelRequest) {
+  return daemon.sendMessage<GetMessageType<daemon_service, delete_label_command, TDeleteLabelResponse>>(daemon_service, delete_label_command, data);
 }
 
 
