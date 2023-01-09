@@ -2,7 +2,6 @@
 import {GetMessageType, wallet_ui_service} from "../../types";
 import {TDaemon} from "../../../daemon/index";
 import {bool, False, int, None, Optional, str, True, uint32} from "../../chia/types/_python_types_";
-import {WsMessage} from "../index";
 import {chiapos_install_info} from "../../chia/plotters/chiapos";
 import {bladebit_install_info} from "../../chia/plotters/bladebit";
 import {madmax_install_info} from "../../chia/plotters/maxmax";
@@ -19,8 +18,9 @@ export type TPingResponse = {
   success: True;
   value: str;
 };
+export type WsPingMessage = GetMessageType<daemon_service, ping_command, TPingResponse>;
 export async function ping(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, ping_command, TPingResponse>>(daemon_service, ping_command);
+  return daemon.sendMessage<WsPingMessage>(daemon_service, ping_command);
 }
 
 
@@ -38,8 +38,9 @@ export type TStartServiceResponse = {
   service: TService;
   error: Optional<str>;
 };
+export type WsStartServiceMessage = GetMessageType < daemon_service, start_service_command, TStartServiceResponse>;
 export async function start_service(daemon: TDaemon, data: TStartServiceRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, start_service_command, TStartServiceResponse>>(daemon_service, start_service_command, data);
+  return daemon.sendMessage<WsStartServiceMessage>(daemon_service, start_service_command, data);
 }
 
 
@@ -109,8 +110,9 @@ export type TStartPlottingResponse = {
   ids: str[];
   service_name: str; // should be 'chia_plotter'
 };
+export type WsStartPlottingMessage = GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>;
 export async function start_plotting(daemon: TDaemon, data: TStartPlottingRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, start_plotting_command, TStartPlottingResponse>>(daemon_service, start_plotting_command, data);
+  return daemon.sendMessage<WsStartPlottingMessage>(daemon_service, start_plotting_command, data);
 }
 
 
@@ -123,8 +125,9 @@ export type TStopPlottingRequest = {
 export type TStopPlottingResponse = {
   success: bool;
 };
+export type WsStopPlottingMessage = GetMessageType<daemon_service, stop_plotting_command, TStopPlottingResponse>;
 export async function stop_plotting(daemon: TDaemon, data: TStopPlottingRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, stop_plotting_command, TStopPlottingResponse>>(daemon_service, stop_plotting_command, data);
+  return daemon.sendMessage<WsStopPlottingMessage>(daemon_service, stop_plotting_command, data);
 }
 
 
@@ -138,8 +141,9 @@ export type TStopServiceResponse = {
   success: bool;
   service_name: str;
 };
+export type WsStopServiceMessage = GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>;
 export async function stop_service(daemon: TDaemon, data: TStopServiceRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, stop_service_command, TStopServiceResponse>>(daemon_service, stop_service_command, data);
+  return daemon.sendMessage<WsStopServiceMessage>(daemon_service, stop_service_command, data);
 }
 
 
@@ -150,8 +154,9 @@ export type TRunningServicesResponse = {
   success: bool;
   running_services: str[];
 };
+export type WsRunningServicesMessage = GetMessageType<daemon_service, running_services_command, TRunningServicesResponse>;
 export async function running_services(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, running_services_command, TRunningServicesResponse>>(daemon_service, running_services_command);
+  return daemon.sendMessage<WsRunningServicesMessage>(daemon_service, running_services_command);
 }
 
 
@@ -166,8 +171,9 @@ export type TIsRunningResponse = {
   service_name: str;
   is_running: bool;
 };
+export type WsIsRunningMessage = GetMessageType<daemon_service, is_running_command, TIsRunningResponse>;
 export async function is_running(daemon: TDaemon, data: TIsRunningRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, is_running_command, TIsRunningResponse>>(daemon_service, is_running_command, data);
+  return daemon.sendMessage<WsIsRunningMessage>(daemon_service, is_running_command, data);
 }
 
 
@@ -185,8 +191,9 @@ export type TAddPrivateKeyResponse = {
   error?: str;
   error_details?: {message: str};
 };
+export type WsAddPrivateKeyMessage = GetMessageType<daemon_service, add_private_key_command, TAddPrivateKeyResponse>;
 export async function add_private_key(daemon: TDaemon, data: TAddPrivateKeyRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, add_private_key_command, TAddPrivateKeyResponse>>(daemon_service, add_private_key_command, data);
+  return daemon.sendMessage<WsAddPrivateKeyMessage>(daemon_service, add_private_key_command, data);
 }
 
 
@@ -203,8 +210,9 @@ export type TCheckKeysResponse = {
   error?: str;
   error_details?: {message: str};
 };
+export type WsCheckKeysMessage = GetMessageType<daemon_service, check_keys_command, TCheckKeysResponse>;
 export async function check_keys(daemon: TDaemon, data: TCheckKeysRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, check_keys_command, TCheckKeysResponse>>(daemon_service, check_keys_command, data);
+  return daemon.sendMessage<WsCheckKeysMessage>(daemon_service, check_keys_command, data);
 }
 
 
@@ -220,8 +228,9 @@ export type TDeleteAllKeysResponse = {
   error?: str;
   error_details?: {message: str};
 };
+export type WsDeleteAllKeysMessage = GetMessageType<daemon_service, delete_all_keys_command, TDeleteAllKeysResponse>;
 export async function delete_all_keys(daemon: TDaemon, data: TDeleteAllKeysRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, delete_all_keys_command, TDeleteAllKeysResponse>>(daemon_service, delete_all_keys_command, data);
+  return daemon.sendMessage<WsDeleteAllKeysMessage>(daemon_service, delete_all_keys_command, data);
 }
 
 
@@ -238,8 +247,9 @@ export type TDeleteKeyByFingerprintResponse = {
   error?: str;
   error_details?: {message: str};
 };
+export type WsDeleteKeyByFingerprintMessage = GetMessageType<daemon_service, delete_key_by_fingerprint_command, TDeleteKeyByFingerprintResponse>;
 export async function delete_key_by_fingerprint(daemon: TDaemon, data: TDeleteKeyByFingerprintRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, delete_key_by_fingerprint_command, TDeleteKeyByFingerprintResponse>>(daemon_service, delete_key_by_fingerprint_command, data);
+  return daemon.sendMessage<WsDeleteKeyByFingerprintMessage>(daemon_service, delete_key_by_fingerprint_command, data);
 }
 
 
@@ -255,8 +265,9 @@ export type TGetAllPrivateKeysResponse = {
   error?: str;
   private_keys: Array<{pk: str; entropy: str}>;
 };
+export type WsGetAllPrivateKeysMessage = GetMessageType<daemon_service, get_all_private_keys_command, TGetAllPrivateKeysResponse>;
 export async function get_all_private_keys(daemon: TDaemon, data: TGetAllPrivateKeysRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_all_private_keys_command, TGetAllPrivateKeysResponse>>(daemon_service, get_all_private_keys_command, data);
+  return daemon.sendMessage<WsGetAllPrivateKeysMessage>(daemon_service, get_all_private_keys_command, data);
 }
 
 
@@ -272,8 +283,9 @@ export type TGetFirstPrivateKeyResponse = {
   error?: str;
   private_key: {pk: str; entropy: str};
 };
+export type WsGetFirstPrivateKeyMessage = GetMessageType<daemon_service, get_first_private_key_command, TGetFirstPrivateKeyResponse>;
 export async function get_first_private_key(daemon: TDaemon, data: TGetFirstPrivateKeyRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_first_private_key_command, TGetFirstPrivateKeyResponse>>(daemon_service, get_first_private_key_command, data);
+  return daemon.sendMessage<WsGetFirstPrivateKeyMessage>(daemon_service, get_first_private_key_command, data);
 }
 
 
@@ -291,8 +303,9 @@ export type TGetKeyForFingerprintResponse = {
   pk: str;
   entropy: str;
 };
+export type WsGetKeyForFingerprintMessage = GetMessageType<daemon_service, get_key_for_fingerprint_command, TGetKeyForFingerprintResponse>;
 export async function get_key_for_fingerprint(daemon: TDaemon, data: TGetKeyForFingerprintRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_key_for_fingerprint_command, TGetKeyForFingerprintResponse>>(daemon_service, get_key_for_fingerprint_command, data);
+  return daemon.sendMessage<WsGetKeyForFingerprintMessage>(daemon_service, get_key_for_fingerprint_command, data);
 }
 
 
@@ -311,8 +324,9 @@ export type TGetKeyResponse = {
   error: "keyring is locked" | "key not found" | "malformed request";
   error_details?: {message: str} | {fingerprint: int};
 };
+export type WsGetKeyMessage = GetMessageType<daemon_service, get_key_command, TGetKeyResponse>;
 export async function get_key(daemon: TDaemon, data: TGetKeyRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_key_command, TGetKeyResponse>>(daemon_service, get_key_command, data);
+  return daemon.sendMessage<WsGetKeyMessage>(daemon_service, get_key_command, data);
 }
 
 
@@ -330,8 +344,9 @@ export type TGetKeysResponse = {
   error: "keyring is locked" | "key not found" | "malformed request";
   error_details?: {message: str} | {fingerprint: int};
 };
+export type WsGetKeysMessage = GetMessageType<daemon_service, get_keys_command, TGetKeysResponse>;
 export async function get_keys(daemon: TDaemon, data: TGetKeysRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_keys_command, TGetKeysResponse>>(daemon_service, get_keys_command, data);
+  return daemon.sendMessage<WsGetKeysMessage>(daemon_service, get_keys_command, data);
 }
 
 
@@ -349,8 +364,9 @@ export type TSetLabelResponse = {
   error: "keyring is locked" | "key not found" | "malformed request";
   error_details?: {message: str} | {fingerprint: int};
 };
+export type WsSetLabelMessage = GetMessageType<daemon_service, set_label_command, TSetLabelResponse>;
 export async function set_label(daemon: TDaemon, data: TSetLabelRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, set_label_command, TSetLabelResponse>>(daemon_service, set_label_command, data);
+  return daemon.sendMessage<WsSetLabelMessage>(daemon_service, set_label_command, data);
 }
 
 
@@ -367,8 +383,9 @@ export type TDeleteLabelResponse = {
   error: "keyring is locked" | "key not found" | "malformed request";
   error_details?: {message: str} | {fingerprint: int};
 };
+export type WsDeleteLabelMessage = GetMessageType<daemon_service, delete_label_command, TDeleteLabelResponse>;
 export async function delete_label(daemon: TDaemon, data: TDeleteLabelRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, delete_label_command, TDeleteLabelResponse>>(daemon_service, delete_label_command, data);
+  return daemon.sendMessage<WsDeleteLabelMessage>(daemon_service, delete_label_command, data);
 }
 
 
@@ -379,8 +396,9 @@ export type TIsKeyringLockedResponse = {
   success: bool;
   is_keyring_locked: bool;
 };
+export type WsIsKeyringLockedMessage = GetMessageType<daemon_service, is_keyring_locked_command, TIsKeyringLockedResponse>;
 export async function is_keyring_locked(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, is_keyring_locked_command, TIsKeyringLockedResponse>>(daemon_service, is_keyring_locked_command);
+  return daemon.sendMessage<WsIsKeyringLockedMessage>(daemon_service, is_keyring_locked_command);
 }
 
 
@@ -402,8 +420,9 @@ export type TKeyringStatusResponse = {
     min_length: int;
   };
 };
+export type WsKeyringStateMessage = GetMessageType<daemon_service, keyring_status_command, TKeyringStatusResponse>;
 export async function keyring_status(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, keyring_status_command, TKeyringStatusResponse>>(daemon_service, keyring_status_command);
+  return daemon.sendMessage<WsKeyringStateMessage>(daemon_service, keyring_status_command);
 }
 
 
@@ -417,8 +436,9 @@ export type TUnlockKeyringResponse = {
   success: bool;
   error: str|None;
 };
+export type WsUnlockKeyringMessage = GetMessageType<daemon_service, unlock_keyring_command, TUnlockKeyringResponse>;
 export async function unlock_keyring(daemon: TDaemon, data: TUnlockKeyringRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, unlock_keyring_command, TUnlockKeyringResponse>>(daemon_service, unlock_keyring_command, data);
+  return daemon.sendMessage<WsUnlockKeyringMessage>(daemon_service, unlock_keyring_command, data);
 }
 
 
@@ -432,8 +452,9 @@ export type TValidateKeyringPassphraseResponse = {
   success: bool;
   error: str|None;
 };
+export type WsValidateKeyringPassphraseMessage = GetMessageType<daemon_service, validate_keyring_passphrase_command, TValidateKeyringPassphraseResponse>;
 export async function validate_keyring_passphrase(daemon: TDaemon, data: TValidateKeyringPassphraseRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, validate_keyring_passphrase_command, TValidateKeyringPassphraseResponse>>(daemon_service, validate_keyring_passphrase_command, data);
+  return daemon.sendMessage<WsValidateKeyringPassphraseMessage>(daemon_service, validate_keyring_passphrase_command, data);
 }
 
 
@@ -450,8 +471,9 @@ export type TMigrateKeyringResponse = {
   success: bool;
   error: str|None;
 };
+export type WsMigrateKeyringMessage = GetMessageType<daemon_service, migrate_keyring_command, TMigrateKeyringResponse>;
 export async function migrate_keyring(daemon: TDaemon, data: TMigrateKeyringRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, migrate_keyring_command, TMigrateKeyringResponse>>(daemon_service, migrate_keyring_command, data);
+  return daemon.sendMessage<WsMigrateKeyringMessage>(daemon_service, migrate_keyring_command, data);
 }
 
 
@@ -468,8 +490,9 @@ export type TSetKeyringPassphraseResponse = {
   success: bool;
   error: str;
 };
+export type WsSetKeyringPassphraseMessage = GetMessageType<daemon_service, set_keyring_passphrase_command, TSetKeyringPassphraseResponse>;
 export async function set_keyring_passphrase(daemon: TDaemon, data: TSetKeyringPassphraseRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, set_keyring_passphrase_command, TSetKeyringPassphraseResponse>>(daemon_service, set_keyring_passphrase_command, data);
+  return daemon.sendMessage<WsSetKeyringPassphraseMessage>(daemon_service, set_keyring_passphrase_command, data);
 }
 
 
@@ -483,8 +506,9 @@ export type TRemoveKeyringPassphraseResponse = {
   success: bool;
   error: str;
 };
+export type WsRemoveKeyringPassphraseMessage = GetMessageType<daemon_service, remove_keyring_passphrase_command, TRemoveKeyringPassphraseResponse>
 export async function remove_keyring_passphrase(daemon: TDaemon, data: TRemoveKeyringPassphraseRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, remove_keyring_passphrase_command, TRemoveKeyringPassphraseResponse>>(daemon_service, remove_keyring_passphrase_command, data);
+  return daemon.sendMessage<WsRemoveKeyringPassphraseMessage>(daemon_service, remove_keyring_passphrase_command, data);
 }
 
 
@@ -498,8 +522,9 @@ export type TNotifyKeyringMigrationCompletedResponse = {
   success: bool;
   error: str;
 };
+export type WsNotifyKeyringMigrationCompletedMessage = GetMessageType<daemon_service, notify_keyring_migration_completed_command, TNotifyKeyringMigrationCompletedResponse>;
 export async function notify_keyring_migration_completed(daemon: TDaemon, data: TNotifyKeyringMigrationCompletedRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, notify_keyring_migration_completed_command, TNotifyKeyringMigrationCompletedResponse>>(daemon_service, notify_keyring_migration_completed_command, data);
+  return daemon.sendMessage<WsNotifyKeyringMigrationCompletedMessage>(daemon_service, notify_keyring_migration_completed_command, data);
 }
 
 
@@ -511,8 +536,9 @@ export type TExitRequest = {
 export type TExitResponse = {
   success: bool;
 };
+export type WsExitMessage = GetMessageType<daemon_service, exit_command, TExitResponse>;
 export async function exit(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, exit_command, TExitResponse>>(daemon_service, exit_command);
+  return daemon.sendMessage<WsExitMessage>(daemon_service, exit_command);
 }
 
 
@@ -541,8 +567,9 @@ export type TRegisterServiceResponse = {
   service: str;
   queue: TPlotQueue[];
 };
+export type WsRegisterServiceMessage = GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>;
 export async function register_service(daemon: TDaemon, data: TRegisterServiceRequest) {
-  return daemon.sendMessage<GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>>(daemon_service, register_service_command, data);
+  return daemon.sendMessage<WsRegisterServiceMessage>(daemon_service, register_service_command, data);
 }
 
 
@@ -555,8 +582,9 @@ export type TGetStatusResponse = {
   success: True;
   genesis_initialized: True;
 };
+export type WsGetStatusMessage = GetMessageType<daemon_service, get_status_command, TGetStatusResponse>;
 export async function get_status(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_status_command, TGetStatusResponse>>(daemon_service, get_status_command);
+  return daemon.sendMessage<WsGetStatusMessage>(daemon_service, get_status_command);
 }
 
 
@@ -569,8 +597,9 @@ export type TGetVersionResponse = {
   success: bool;
   version: string;
 };
+export type WsGetVersionMessage = GetMessageType<daemon_service, get_version_command, TGetVersionResponse>;
 export async function get_version(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_version_command, TGetVersionResponse>>(daemon_service, get_version_command);
+  return daemon.sendMessage<WsGetVersionMessage>(daemon_service, get_version_command);
 }
 
 
@@ -587,8 +616,9 @@ export type TGetPlottersResponse = {
     madmax?: madmax_install_info;
   }
 };
+export type WsGetPlottersMessage = GetMessageType<daemon_service, get_plotters_command, TGetPlottersResponse>;
 export async function get_plotters(daemon: TDaemon) {
-  return daemon.sendMessage<GetMessageType<daemon_service, get_plotters_command, TGetPlottersResponse>>(daemon_service, get_plotters_command);
+  return daemon.sendMessage<WsGetPlottersMessage>(daemon_service, get_plotters_command);
 }
 
 
@@ -599,12 +629,48 @@ export type keyring_status_changed_command = typeof keyring_status_changed_comma
 export type TKeyringStatusChangedBroadCast = {
   keyring_status_changed: TKeyringStatusResponse;
 };
-export async function on_keyring_status_changed(daemon: TDaemon, callback: (e: GetMessageType<daemon_service, keyring_status_changed_command, TKeyringStatusChangedBroadCast>) => unknown){
+export type WsKeyringStatusChangedMessage = GetMessageType<daemon_service, keyring_status_changed_command, TKeyringStatusChangedBroadCast>;
+export async function on_keyring_status_changed(daemon: TDaemon, callback: (e: WsKeyringStatusChangedMessage) => unknown){
   await daemon.subscribe(wallet_ui_service);
-  const messageListener = (e: WsMessage) => {
+  const messageListener = (e: WsDaemonMessage) => {
     if(e.origin === daemon_service && e.command === keyring_status_changed_command){
       callback(e);
     }
   };
   return daemon.addMessageListener(daemon_service, messageListener);
 }
+
+export type WsDaemonMessage =
+  WsExitMessage
+  | WsGetStatusMessage
+  | WsGetVersionMessage
+  | WsGetPlottersMessage
+  | WsRunningServicesMessage
+  | WsIsRunningMessage
+  | WsPingMessage
+  | WsRegisterServiceMessage
+  | WsStartPlottingMessage
+  | WsStartServiceMessage
+  | WsStopPlottingMessage
+  | WsStopServiceMessage
+  | WsAddPrivateKeyMessage
+  | WsCheckKeysMessage
+  | WsDeleteAllKeysMessage
+  | WsDeleteKeyByFingerprintMessage
+  | WsGetAllPrivateKeysMessage
+  | WsGetFirstPrivateKeyMessage
+  | WsGetKeyForFingerprintMessage
+  | WsGetKeyMessage
+  | WsGetKeysMessage
+  | WsSetLabelMessage
+  | WsDeleteLabelMessage
+  | WsIsKeyringLockedMessage
+  | WsKeyringStateMessage
+  | WsUnlockKeyringMessage
+  | WsValidateKeyringPassphraseMessage
+  | WsMigrateKeyringMessage
+  | WsSetKeyringPassphraseMessage
+  | WsRemoveKeyringPassphraseMessage
+  | WsNotifyKeyringMigrationCompletedMessage
+  | WsKeyringStatusChangedMessage
+;

@@ -1,7 +1,8 @@
 import {str, True, uint16} from "../../chia/types/_python_types_";
 import {TRPCAgent} from "../../../rpc/index";
-import {TConnectionGeneral} from "../../types";
+import {GetMessageType, ResType, TConnectionGeneral} from "../../types";
 import {TConnectionFullNode} from "../../ws/full_node/index";
+import {TDaemon} from "../../../daemon/index";
 
 export const chia_common_service = "";
 export type chia_common_service = typeof chia_common_service;
@@ -14,8 +15,10 @@ export type TGetConnectionsRequest = {
 export type TGetConnectionsResponse = {
   connections: TConnectionGeneral[] | TConnectionFullNode[];
 };
-export async function get_connections(agent: TRPCAgent, params: TGetConnectionsRequest) {
-  return agent.sendMessage<TGetConnectionsResponse>(chia_common_service, get_connections_command, params);
+export type WsGetConnectionsMessage = GetMessageType<chia_common_service, get_connections_command, TGetConnectionsResponse>;
+export async function get_connections<T extends TRPCAgent|TDaemon>(agent: T, params: TGetConnectionsRequest) {
+  type R = ResType<T, TGetConnectionsResponse, WsGetConnectionsMessage>;
+  return agent.sendMessage<R>(chia_common_service, get_connections_command, params);
 }
 
 
@@ -26,8 +29,10 @@ export type TOpenConnectionRequest = {
   port: uint16;
 };
 export type TOpenConnectionResponse = {};
-export async function open_connection(agent: TRPCAgent, params: TOpenConnectionRequest) {
-  return agent.sendMessage<TOpenConnectionResponse>(chia_common_service, open_connection_command, params);
+export type WsOpenConnectionMessage = GetMessageType<chia_common_service, open_connection_command, TOpenConnectionResponse>;
+export async function open_connection<T extends TRPCAgent|TDaemon>(agent: T, params: TOpenConnectionRequest) {
+  type R = ResType<T, TOpenConnectionResponse, WsOpenConnectionMessage>;
+  return agent.sendMessage<R>(chia_common_service, open_connection_command, params);
 }
 
 
@@ -37,16 +42,20 @@ export type TCloseConnectionRequest = {
   node_id: str;
 };
 export type TCloseConnectionResponse = {};
-export async function close_connection(agent: TRPCAgent, params: TCloseConnectionRequest) {
-  return agent.sendMessage<TCloseConnectionResponse>(chia_common_service, close_connection_command, params);
+export type WsCloseConnectionMessage = GetMessageType<chia_common_service, close_connection_command, TCloseConnectionResponse>;
+export async function close_connection<T extends TRPCAgent|TDaemon>(agent: T, params: TCloseConnectionRequest) {
+  type R = ResType<T, TCloseConnectionResponse, WsCloseConnectionMessage>;
+  return agent.sendMessage<R>(chia_common_service, close_connection_command, params);
 }
 
 
 export const stop_node_command = "stop_node";
 export type stop_node_command = typeof stop_node_command;
 export type TStopNodeResponse = {};
-export async function stop_node(agent: TRPCAgent) {
-  return agent.sendMessage<TStopNodeResponse>(chia_common_service, stop_node_command);
+export type WsStopNodeMessage = GetMessageType<chia_common_service, stop_node_command, TStopNodeResponse>;
+export async function stop_node<T extends TRPCAgent|TDaemon>(agent: T) {
+  type R = ResType<T, TStopNodeResponse, WsStopNodeMessage>;
+  return agent.sendMessage<R>(chia_common_service, stop_node_command);
 }
 
 
@@ -56,8 +65,10 @@ export type TGetRoutesResponse = {
   success: True;
   routes: str[];
 };
-export async function get_routes(agent: TRPCAgent) {
-  return agent.sendMessage<TGetRoutesResponse>(chia_common_service, get_routes_command);
+export type WsGetRoutesMessage = GetMessageType<chia_common_service, get_routes_command, TGetRoutesResponse>;
+export async function get_routes<T extends TRPCAgent|TDaemon>(agent: T) {
+  type R = ResType<T, TGetRoutesResponse, WsGetRoutesMessage>;
+  return agent.sendMessage<R>(chia_common_service, get_routes_command);
 }
 
 
@@ -66,6 +77,26 @@ export type healthz_command = typeof healthz_command;
 export type THealthzResponse = {
   success: True;
 };
-export async function healthz(agent: TRPCAgent) {
-  return agent.sendMessage<THealthzResponse>(chia_common_service, healthz_command);
+export type WsHealthzMessage = GetMessageType<chia_common_service, healthz_command, THealthzResponse>;
+export async function healthz<T extends TRPCAgent|TDaemon>(agent: T) {
+  type R = ResType<T, THealthzResponse, WsHealthzMessage>;
+  return agent.sendMessage<R>(chia_common_service, healthz_command);
 }
+
+export type RpcCommonMessage =
+  TGetConnectionsResponse
+  | TOpenConnectionResponse
+  | TCloseConnectionResponse
+  | TStopNodeResponse
+  | TGetRoutesResponse
+  | THealthzResponse
+;
+
+export type RpcCommonMessageOnWs =
+  WsGetConnectionsMessage
+  | WsOpenConnectionMessage
+  | WsCloseConnectionMessage
+  | WsStopNodeMessage
+  | WsGetRoutesMessage
+  | WsHealthzMessage
+;

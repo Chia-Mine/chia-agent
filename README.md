@@ -61,6 +61,13 @@ console.log(res.plots[0]);
   time_modified: 1619540745
 }
 */
+
+// Or you can request RPC API via daemon websocket like this
+const {getDaemon, setLogLevel} = require("chia-agent");
+const {get_plots} = require("chia-agent/api/rpc");
+const daemon = getDaemon();
+await daemon.connect(); // connect to local daemon using config file.
+const res = await get_plots(daemon);
 ```
 
 ### Websocket API

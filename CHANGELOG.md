@@ -1,5 +1,38 @@
 # Changelog
 
+## [9.2.1]
+### Changed
+- Eased type requirement of `daemon.sendMessage()` and `agent.sendMessage()`  
+  You can request **RPC** API on Daemon WebSocket channel like this:
+```typescript
+const {getDaemon} = require("chia-agent");
+// Or
+// import {getDaemon} from "chia-agent"; 
+const {get_harvesters_summary} = require("chia-agent/api/rpc/farmer");
+// Or
+// import {get_harvesters_summary} from "chia-agent/api/rpc/farmer";
+const daemon = getDaemon();
+await daemon.connect();
+res = await get_harvesters_summary(daemon);
+// or specify service name and API command
+res = await daemon.sendMessage("chia_farmer", "get_harvesters_summary");
+/*
+{
+  ack: true,
+  command: 'get_harvesters_summary',
+  data: { harvesters: [ [Object] ], success: true },
+  destination: 'chia_agent',
+  origin: 'chia_farmer',
+  request_id: '4e31c04df234538901d9270932d04301b5b3a1a895d762144400852b8167973f'
+}
+ */
+```
+  Please note that when you use RPC API, you can directly request to the RPC endpoint of the service(full_node/farmer/...).
+  However, when you request RPC API on Daemon WebSocket channel, you get a response from the service
+  which the daemon is connecting to.
+  In other word, you can choose the exact ip:port of a service if you use RPC API,
+  while it is the daemon which chooses the services it connects to if you use Daemon WebSocket channel.
+
 ## [9.2.0]
 ### Minor breaking change
 - `add_private_key` daemon WebSocket API now deprecated `passphrase` request param  
@@ -706,6 +739,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+
+[9.2.1]: https://github.com/Chia-Mine/chia-agent/compare/v9.2.0...v9.2.1
 [9.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.1.0...v9.2.0
 [9.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.1...v9.1.0
 [9.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.0...v9.0.1

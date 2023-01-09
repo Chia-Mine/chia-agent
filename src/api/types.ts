@@ -1,6 +1,8 @@
 import {NodeType} from "./chia/server/outbound_message";
 import {float, int, str, uint16} from "./chia/types/_python_types_";
 import {bytes32} from "./chia/types/blockchain_format/sized_bytes";
+import {TRPCAgent} from "../rpc/index";
+import {TDaemon} from "../daemon/index";
 
 export type GetMessageType<O extends string, C extends string, D> = {
   origin: O;
@@ -10,6 +12,8 @@ export type GetMessageType<O extends string, C extends string, D> = {
   request_id: string;
   destination: string;
 };
+
+export type ResType<T extends TRPCAgent | TDaemon, A, D> = T extends TRPCAgent ? A : D;
 
 export const wallet_ui_service = "wallet_ui";
 export const metrics_service = "metrics";
