@@ -71,14 +71,16 @@ export type TChiaPosParams = {
   e: bool; // disable bitfield plotting
   overrideK: bool; // Set true only if you want to use k < 32
 };
-export type TBladeBitParams = {
+export type TBladeBitRamParams = {
   plotter: "bladebit";
+  plot_type: "ramplot";
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
 };
-export type TBladeBit2Params = {
-  plotter: "bladebit2";
+export type TBladeBitDiskParams = {
+  plotter: "bladebit";
+  plot_type: "diskplot";
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
@@ -104,7 +106,7 @@ export type TMadMaxParams = {
   K?: int; // Thread multiplier for phase 2. Default: 1
   G?: bool; // Alternate tmpdir/tmp2dir. Default: False
 };
-export type TStartPlottingRequest = TCommonPlottingParams & (TChiaPosParams | TBladeBitParams | TBladeBit2Params | TMadMaxParams);
+export type TStartPlottingRequest = TCommonPlottingParams & (TChiaPosParams | TBladeBitRamParams | TBladeBitDiskParams | TMadMaxParams);
 export type TStartPlottingResponse = {
   success: bool;
   ids: str[];
@@ -411,8 +413,6 @@ export type TKeyringStatusResponse = {
   passphrase_support_enabled: bool;
   can_save_passphrase: bool;
   user_passphrase_is_set: bool;
-  needs_migration: bool;
-  can_remove_legacy_keys: bool;
   can_set_passphrase_hint: bool;
   passphrase_hint: str;
   passphrase_requirements: {} | {

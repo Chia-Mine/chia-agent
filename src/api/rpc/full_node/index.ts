@@ -28,7 +28,7 @@ export type TGetBlockchainStateResponse = {
     sync: {
       sync_mode: bool;
       synced: bool;
-      sync_tip_height: uint32; // full_node_rpc_api.py declares Optional<uint32> but it seems 
+      sync_tip_height: uint32; // full_node_rpc_api.py declares Optional<uint32> but it seems `None` would never be set
       sync_progress_height: uint32;
     },
     difficulty: uint64;
@@ -455,6 +455,7 @@ export const get_mempool_item_by_tx_id_command = "get_mempool_item_by_tx_id";
 export type get_mempool_item_by_tx_id_command = typeof get_mempool_item_by_tx_id_command;
 export type TGetMempoolItemByTxIdRequest = {
   tx_id: str;
+  include_pending?: bool;
 };
 export type TGetMempoolItemByTxIdResponse = {
   mempool_item: MempoolItem;

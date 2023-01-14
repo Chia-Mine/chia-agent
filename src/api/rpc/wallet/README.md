@@ -645,6 +645,9 @@ const response = await send_transaction(agent, params);
   address: str;
   memos?: str[];
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coin_ids?: str[];
 }
 ```
 ### response:
@@ -673,9 +676,26 @@ const response = await send_transaction_multi(agent, params);
   wallet_id: uint32;
   additions: TAdditions[];
   fee?: uint64;
+  min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coins?: Coin[];
   coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
+}
+|
+{
+  wallet_id: uint32;
+  additions: TAdditions[];
+  fee: uint64;
+  amount: uint64;
+  inner_address: str;
+  memos?: str;
+  min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coin_ids?: str[];
 }
 ```
 ### response:
@@ -758,10 +778,14 @@ const response = await create_signed_transaction(agent, params);
 ### params:
 ```typescript
 {
+  wallet_id?: uint32;
   additions: TAdditions[];
   fee?: uint64;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
   coins?: Coin[];
+  exclude_coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
 }
@@ -825,6 +849,8 @@ const response = await select_coins(agent, params);
   amount: uint64;
   wallet_id: uint32;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  excluded_coin_amounts?: uint64[];
   excluded_coins?: Coin[];
 }
 ```
@@ -836,6 +862,80 @@ const response = await select_coins(agent, params);
 ```
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
+
+---
+
+## `get_spendable_coins(agent, params)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_spendable_coins} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_spendable_coins(agent, params);
+```
+
+### params:
+
+```typescript
+{
+  wallet_id: uint32;
+  min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  excluded_coin_amounts?: Optional<uint64[]>;
+  excluded_coins?: Coin[];
+  excluded_coin_ids?: str[];
+}
+```
+
+### response:
+
+```typescript
+{
+  confirmed_records: CoinRecord[];
+  unconfirmed_removals: CoinRecord[];
+  unconfirmed_additions: Coin[];
+}
+```
+For content of `CoinRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_records.ts
+For content of `Coin`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
+
+---
+
+## `get_coin_records_by_names(agent, params)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_coin_records_by_names} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_coin_records_by_names(agent, params);
+```
+
+### params:
+
+```typescript
+{
+  names: str[];
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
+}
+```
+
+### response:
+
+```typescript
+{
+  coin_records: CoinRecord[];
+}
+```
+For content of `CoinRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_records.ts
 
 ---
 
@@ -959,6 +1059,42 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 
 ---
 
+## `verify_signature(agent, params)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {verify_signature} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await verify_signature(agent, params);
+```
+
+### params:
+
+```typescript
+{
+  pubkey: str;
+  signature: str;
+  address?: str;
+}
+```
+
+### response:
+
+```typescript
+{
+  isValid: True;
+}
+|
+{
+  isValid: False;
+  error: str;
+}
+```
+
+---
+
 ## `sign_message_by_address(agent, params)`
 ### Usage
 ```js
@@ -1009,6 +1145,7 @@ const response = await sign_message_by_id(agent, params);
     success: True;
     pubkey: str;
     signature: str;
+    latest_coin_id: str;
 }
 ```
 
@@ -1087,6 +1224,47 @@ const response = await nft_mint_bulk(agent, params);
   error: str;
 } | {
   success: True;
+  spend_bundle: SpendBundle;
+  nft_id_list: str[];
+}
+```
+For content of `SpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+
+---
+
+## `nft_set_did_bulk(agent, params)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {nft_set_did_bulk} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await nft_set_did_bulk(agent, params);
+```
+
+### params:
+
+```typescript
+{
+  nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
+  did_id?: str;
+  fee?: uint64;
+}
+```
+
+### response:
+
+```typescript
+{
+  success: False;
+  error: str;
+}
+|
+{
+  success: True;
+  wallet_id: uint32[];
   spend_bundle: SpendBundle;
 }
 ```
@@ -1222,11 +1400,15 @@ const response = await cat_spend(agent, params);
 ```typescript
 {
   wallet_id: uint32;
+  additions?: TAdditions[];
+  fee: uint64;
+  amount: uint64;
   inner_address: str;
   memos?: str[];
-  amount: uint64;
-  fee: uint64;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coin_ids?: str[];
 }
 ```
 ### response:
@@ -1281,6 +1463,8 @@ const response = await create_offer_for_ids(agent, params);
   validate_only?: bool;
   driver_dict?: TDriverDict;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  solver?: Record<str, any>;
 }
 ```
 ### response:
@@ -1364,6 +1548,7 @@ const response = await take_offer(agent, params);
   offer: str;
   fee?: uint64;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
   solver?: Record<str, any>;
 }
 ```
@@ -1856,6 +2041,122 @@ const response = await did_create_backup_file(agent, params);
 
 ---
 
+## `did_message_spend(agent, params)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_message_spend} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_message_spend(agent, params);
+```
+
+### params:
+
+```typescript
+{
+  wallet_id: uint32;
+  coin_announcements: str[];
+  puzzle_announcements: str[];
+}
+```
+
+### response:
+
+```typescript
+{
+  success: False;
+  error: str;
+}
+|
+{
+  success: True;
+  spend_bundle: SpendBundle;
+}
+```
+
+---
+
+## `did_get_info(agent, params)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_get_info} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_get_info(agent, params);
+```
+
+### params:
+
+```typescript
+{
+  coin_id: str;
+  latest?: bool;
+}
+```
+
+### response:
+
+```typescript
+{
+  success: False;
+  error: str;
+}
+|
+{
+  success: True;
+  latest_coin: str;
+  p2_address: str;
+  public_key: str;
+  recovery_list_hash: str;
+  num_verification: int;
+  metadata: Record<str, str>;
+  launcher_id: str;
+  full_puzzle: str; // hex bytes of serialized CLVM program
+  hints: str[];
+}
+```
+
+---
+
+## `did_find_lost_did(agent, params)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {did_find_lost_did} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await did_find_lost_did(agent, params);
+```
+
+### params:
+
+```typescript
+{
+  coin_id: str;
+}
+```
+
+### response:
+
+```typescript
+{
+  success: False;
+  error: str;
+}
+|
+{
+  success: True;
+  latest_coin_id: str;
+}
+```
+
+---
+
 ## `did_transfer_did(agent, params)`
 ### Usage
 ```js
@@ -1919,6 +2220,7 @@ const response = await nft_mint_nft(agent, params);
   wallet_id: uint32;
   success: True;
   spend_bundle: SpendBundle;
+  nft_id: Optional<str>;
 }
 ```
 For content of `SpendBundle`,  

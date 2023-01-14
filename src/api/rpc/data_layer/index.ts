@@ -2,7 +2,7 @@ import {TRPCAgent} from "../../../rpc/index";
 import {bool, None, Optional, str, uint64} from "../../chia/types/_python_types_";
 import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {OfferMarshalled, OfferStoreMarshalled} from "../../chia/data_layer/data_layer_util";
+import {OfferMarshalled, OfferStoreMarshalled, SyncStatus} from "../../chia/data_layer/data_layer_util";
 import {TCancelOfferResponseDL, TTakeOfferResponseDL} from "../index";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
@@ -455,6 +455,21 @@ export async function cancel_offer<T extends TRPCAgent|TDaemon>(agent: T, params
   return agent.sendMessage<R>(chia_data_layer_service, cancel_offer_command, params);
 }
 
+
+export const get_sync_status_command = "get_sync_status";
+export type get_sync_status_command = typeof get_sync_status_command;
+export type TGetSyncStatusRequest = {
+  id: str;
+};
+export type TGetSyncStatusResponse = {
+  sync_status: SyncStatus;
+};
+export type WsGetSyncStatusMessage = GetMessageType<chia_data_layer_service, get_sync_status_command, TGetSyncStatusResponse>;
+export async function get_sync_status<T extends TRPCAgent | TDaemon>(agent: T, params: TGetSyncStatusRequest) {
+  type R = ResType<T, TGetSyncStatusResponse, WsGetSyncStatusMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_sync_status_command, params);
+}
+
 export type RpcDataLayerMessage =
   TCreateDataStoreResponse
   | TGetOwnedStoresResponse
@@ -482,6 +497,7 @@ export type RpcDataLayerMessage =
   | TTakeOfferResponseDL
   | TVerifyOfferResponse
   | TCancelOfferResponseDL
+  | TGetSyncStatusResponse
 ;
 
 export type RpcDataLayerMessageOnWs =
@@ -511,4 +527,5 @@ export type RpcDataLayerMessageOnWs =
   | WsTakeOfferMessageDL
   | WsVerifyOfferMessage
   | WsCancelOfferMessageDL
+  | WsGetSyncStatusMessage
 ;

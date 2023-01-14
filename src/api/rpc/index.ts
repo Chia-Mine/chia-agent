@@ -522,6 +522,9 @@ export {
   TCancelOfferRequest as TCancelOfferRequestDL,
   TCancelOfferResponse as TCancelOfferResponseDL,
   cancel_offer as cancel_offer_dl,
+  TGetSyncStatusRequest as TGetSyncStatusRequestDL,
+  TGetSyncStatusResponse as TGetSyncStatusResponseDL,
+  get_sync_status as get_sync_status_dl,
 } from "./data_layer/index"
 
 import type {RpcCrawlerMessage} from "./crawler/index";

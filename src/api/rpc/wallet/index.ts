@@ -8,7 +8,8 @@ import {
   Optional,
   str,
   True,
-  uint128, uint16,
+  uint128,
+  uint16,
   uint32,
   uint64,
   uint8
@@ -26,6 +27,7 @@ import {Mirror, SingletonRecord} from "../../chia/data_layer/data_layer_wallet";
 import {TPushTxResponseOfWallet} from "../index";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
+import {CoinRecord} from "../../chia/types/coin_record";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -565,6 +567,9 @@ export type TSendTransactionRequest = {
   address: str;
   memos?: str[];
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coin_ids?: str[];
 };
 export type TSendTransactionResponse = {
   transaction: TransactionRecordConvenience;
@@ -585,9 +590,24 @@ export type TSendTransactionMultiRequest = {
   wallet_id: uint32;
   additions: TAdditions[];
   fee?: uint64;
+  min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coins?: Coin[];
   coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
+} | {
+  wallet_id: uint32;
+  additions: TAdditions[];
+  fee: uint64;
+  amount: uint64;
+  inner_address: str;
+  memos: str;
+  min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coin_ids?: str[];
 };
 export type TSendTransactionMultiResponse = {
   transaction: TransactionRecordConvenience;
@@ -662,6 +682,8 @@ export type TCreateSignedTransactionRequest = {
   additions: TAdditions[];
   fee?: uint64;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
   coins?: Coin[];
   exclude_coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
@@ -702,6 +724,8 @@ export type TSelectCoinsRequest = {
   amount: uint64;
   wallet_id: uint32;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  excluded_coin_amounts?: uint64[];
   excluded_coins?: Coin[];
 };
 export type TSelectCoinsResponse = {
@@ -714,6 +738,44 @@ export async function select_coins<T extends TRPCAgent | TDaemon>(agent: T, data
 }
 
 
+export const get_spendable_coins_command = "get_spendable_coins";
+export type get_spendable_coins_command = typeof get_spendable_coins_command;
+export type TGetSpendableCoinsRequest = {
+  wallet_id: uint32;
+  min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  excluded_coin_amounts?: Optional<uint64[]>;
+  excluded_coins?: Coin[];
+  excluded_coin_ids?: str[];
+};
+export type TGetSpendableCoinsResponse = {
+  confirmed_records: CoinRecord[];
+  unconfirmed_removals: CoinRecord[];
+  unconfirmed_additions: Coin[];
+};
+export type WsGetSpendableCoinsMessage = GetMessageType<chia_wallet_service, get_spendable_coins_command, TGetSpendableCoinsResponse>;
+export async function get_spendable_coins<T extends TRPCAgent | TDaemon>(agent: T, data: TGetSpendableCoinsRequest) {
+  type R = ResType<T, TGetSpendableCoinsResponse, WsGetSpendableCoinsMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, get_spendable_coins_command, data);
+}
+
+
+export const get_coin_records_by_names_command = "get_coin_records_by_names";
+export type get_coin_records_by_names_command = typeof get_coin_records_by_names_command;
+export type TGetCoinRecordsByNamesRequest = {
+  names: str[];
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
+};
+export type TGetCoinRecordsByNamesResponse = {
+  coin_records: CoinRecord[];
+};
+export type WsGetCoinRecordsByNamesMessage = GetMessageType<chia_wallet_service, get_coin_records_by_names_command, TGetCoinRecordsByNamesResponse>;
+export async function get_coin_records_by_names<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordsByNamesRequest) {
+  type R = ResType<T, TGetCoinRecordsByNamesResponse, WsGetCoinRecordsByNamesMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, get_coin_records_by_names_command, data);
+}
 
 
 export const get_current_derivation_index_command = "get_current_derivation_index";
@@ -806,6 +868,24 @@ export async function send_notification<T extends TRPCAgent | TDaemon>(agent: T,
 }
 
 
+export const verify_signature_command = "verify_signature";
+export type verify_signature_command = typeof verify_signature_command;
+export type TVerifySignatureRequest = {
+  pubkey: str;
+  signature: str;
+  address?: str;
+};
+export type TVerifySignatureResponse = {
+  isValid: True;
+} | {
+  isValid: False;
+  error: str;
+};
+export type WsVerifySignatureMessage = GetMessageType<chia_wallet_service, verify_signature_command, TVerifySignatureResponse>;
+export async function verify_signature<T extends TRPCAgent | TDaemon>(agent: T, data: TVerifySignatureRequest) {
+  type R = ResType<T, TVerifySignatureResponse, WsVerifySignatureMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, verify_signature_command, data);
+}
 
 
 export const sign_message_by_address_command = "sign_message_by_address";
@@ -841,6 +921,7 @@ export type TSignMessageByIdResponse = {
   success: True;
   pubkey: str;
   signature: str;
+  latest_coin_id: str;
 };
 export type WsSignMessageByIdMessage = GetMessageType<chia_wallet_service, sign_message_by_id_command, TSignMessageByIdResponse>;
 export async function sign_message_by_id<T extends TRPCAgent | TDaemon>(agent: T, data: TSignMessageByIdRequest){
@@ -943,11 +1024,15 @@ export const cat_spend_command = "cat_spend";
 export type cat_spend_command = typeof cat_spend_command;
 export type TCatSpendRequest = {
   wallet_id: uint32;
+  additions?: TAdditions[];
+  fee: uint64;
+  amount: uint64;
   inner_address: str;
   memos?: str[];
-  amount: uint64;
-  fee: uint64;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  exclude_coin_amounts?: uint64[];
+  exclude_coin_ids?: str[];
 };
 export type TCatSpendResponse = {
   transaction: TransactionRecordConvenience;
@@ -988,6 +1073,8 @@ export type TCreateOfferForIdsRequest = {
   validate_only?: bool;
   driver_dict?: TDriverDict;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
+  solver?: Record<str, any>;
 };
 export type TCreateOfferForIdsResponse = {
   offer: str;
@@ -1048,6 +1135,7 @@ export type TTakeOfferRequest = {
   offer: str;
   fee?: uint64;
   min_coin_amount?: uint64;
+  max_coin_amount?: uint64;
   solver?: Record<str, any>;
 };
 export type TTakeOfferResponse = {
@@ -1448,6 +1536,72 @@ export async function did_create_backup_file<T extends TRPCAgent | TDaemon>(agen
 }
 
 
+export const did_message_spend_command = "did_message_spend";
+export type did_message_spend_command = typeof did_message_spend_command;
+export type TDidMessageSpendRequest = {
+  wallet_id: uint32;
+  coin_announcements: str[];
+  puzzle_announcements: str[];
+};
+export type TDidMessageSpendResponse = {
+  success: False;
+  error: str;
+} |{
+  success: True;
+  spend_bundle: SpendBundle;
+};
+export type WsDidMessageSpendMessage = GetMessageType<chia_wallet_service, did_message_spend_command, TDidMessageSpendResponse>;
+export async function did_message_spend<T extends TRPCAgent | TDaemon>(agent: T, data: TDidMessageSpendRequest) {
+  type R = ResType<T, TDidMessageSpendResponse, WsDidMessageSpendMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, did_message_spend_command, data);
+}
+
+
+export const did_get_info_command = "did_get_info";
+export type did_get_info_command = typeof did_get_info_command;
+export type TDidGetInfoRequest = {
+  coin_id: str;
+  latest?: bool;
+};
+export type TDidGetInfoResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  latest_coin: str;
+  p2_address: str;
+  public_key: str;
+  recovery_list_hash: str;
+  num_verification: int;
+  metadata: Record<str, str>;
+  launcher_id: str;
+  full_puzzle: str; // hex bytes of serialized CLVM program
+  hints: str[];
+};
+export type WsDidGetInfoMessage = GetMessageType<chia_wallet_service, did_get_info_command, TDidGetInfoResponse>;
+export async function did_get_info<T extends TRPCAgent | TDaemon>(agent: T, data: TDidGetInfoRequest) {
+  type R = ResType<T, TDidGetInfoResponse, WsDidGetInfoMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, did_get_info_command, data);
+}
+
+
+export const did_find_lost_did_command = "did_find_lost_did";
+export type did_find_lost_did_command = typeof did_find_lost_did_command;
+export type TDidFindLostDidRequest = {
+  coin_id: str;
+};
+export type TDidFindLostDidResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  latest_coin_id: str;
+};
+export type WsDidFindLostDidMessage = GetMessageType<chia_wallet_service, did_find_lost_did_command, TDidFindLostDidResponse>;
+export async function did_find_lost_did<T extends TRPCAgent | TDaemon>(agent: T, data: TDidFindLostDidRequest) {
+  type R = ResType<T, TDidFindLostDidResponse, WsDidFindLostDidMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, did_find_lost_did_command, data);
+}
 
 
 export const did_transfer_did_command = "did_transfer_did";
@@ -1495,6 +1649,7 @@ export type TNftMintNftResponse = {
   wallet_id: uint32;
   success: True;
   spend_bundle: SpendBundle;
+  nft_id: Optional<str>;
 };
 export type WsNftMintNftMessage = GetMessageType<chia_wallet_service, nft_mint_nft_command, TNftMintNftResponse>;
 export async function nft_mint_nft<T extends TRPCAgent | TDaemon>(agent: T, data: TNftMintNftRequest){
@@ -1550,6 +1705,26 @@ export async function nft_set_nft_did<T extends TRPCAgent | TDaemon>(agent: T, d
 }
 
 
+export const nft_set_did_bulk_command = "nft_set_did_bulk";
+export type nft_set_did_bulk_command = typeof nft_set_did_bulk_command;
+export type TNftSetDidBulkRequest = {
+  nft_coin_list: Array<{nft_coin_id: str; wallet_id: uint32;}>;
+  did_id?: str;
+  fee?: uint64;
+};
+export type TNftSetDidBulkResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  wallet_id: uint32[];
+  spend_bundle: SpendBundle;
+};
+export type WsNftSetDidBulkMessage = GetMessageType<chia_wallet_service, nft_set_did_bulk_command, TNftSetDidBulkResponse>;
+export async function nft_set_did_bulk<T extends TRPCAgent | TDaemon>(agent: T, data: TNftSetDidBulkRequest) {
+  type R = ResType<T, TNftSetDidBulkResponse, WsNftSetDidBulkMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, nft_set_did_bulk_command, data);
+}
 
 
 export const nft_get_by_did_command = "nft_get_by_did";
@@ -1767,6 +1942,7 @@ export type TNftMintBulkResponse = {
 } | {
   success: True;
   spend_bundle: SpendBundle;
+  nft_id_list: str[];
 };
 export type WsNftMintBulkMessage = GetMessageType<chia_wallet_service, nft_mint_bulk_command, TNftMintBulkResponse>;
 export async function nft_mint_bulk<T extends TRPCAgent | TDaemon>(agent: T, data: TNftMintBulkRequest){
@@ -2155,6 +2331,8 @@ export type RpcWalletMessage =
   | TCreateSignedTransactionResponse
   | TDeleteUnconfirmedTransactionsResponse
   | TSelectCoinsResponse
+  | TGetSpendableCoinsResponse
+  | TGetCoinRecordsByNamesResponse
   | TGetCurrentDerivationIndexResponse
   | TExtendDerivationIndexResponse
   | TGetNotificationsResponse
@@ -2162,8 +2340,10 @@ export type RpcWalletMessage =
   | TSendNotificationResponse
   | TSignMessageByAddressResponse
   | TSignMessageByIdResponse
+  | TVerifySignatureResponse
   | TNftCalculateRoyaltiesResponse
   | TNftMintBulkResponse
+  | TNftSetDidBulkResponse
   | TDeleteAllKeysResponse
   | TDeleteKeyResponse
   | TCheckDeleteKeyResponse
@@ -2172,6 +2352,9 @@ export type RpcWalletMessage =
   | TDidCreateAttestResponse
   | TDidCreateBackupFileResponse
   | TDidTransferDidResponse
+  | TDidMessageSpendResponse
+  | TDidGetInfoResponse
+  | TDidFindLostDidResponse
   | TDidGetDidResponse
   | TDidGetInformationNeededForRecoveryResponse
   | TDidGetCurrentCoinInfoResponse
@@ -2256,6 +2439,8 @@ export type RpcWalletMessageOnWs =
   | WsCreateSignedTransactionMessage
   | WsDeleteUnconfirmedTransactionsMessage
   | WsSelectCoinsMessage
+  | WsGetSpendableCoinsMessage
+  | WsGetCoinRecordsByNamesMessage
   | WsGetCurrentDerivationIndexMessage
   | WsExtendDerivationIndexMessage
   | WsGetNotificationsMessage
@@ -2263,8 +2448,10 @@ export type RpcWalletMessageOnWs =
   | WsSendNotificationMessage
   | WsSignMessageByAddressMessage
   | WsSignMessageByIdMessage
+  | WsVerifySignatureMessage
   | WsNftCalculateRoyaltiesMessage
   | WsNftMintBulkMessage
+  | WsNftSetDidBulkMessage
   | WsDeleteAllKeysMessage
   | WsDeleteKeyMessage
   | WsCheckDeleteKeyMessage
@@ -2273,6 +2460,9 @@ export type RpcWalletMessageOnWs =
   | WsDidCreateAttestMessage
   | WsDidCreateBackupFileMessage
   | WsDidTransferDidMessage
+  | WsDidMessageSpendMessage
+  | WsDidGetInfoMessage
+  | WsDidFindLostDidMessage
   | WsDidGetDidMessage
   | WsDidGetInformationNeededForRecoveryMessage
   | WsDidGetCurrentCoinInfoMessage
