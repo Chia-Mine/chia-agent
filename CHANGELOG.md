@@ -69,9 +69,9 @@ As a result of this, `removals` of `MempoolItem` is removed from 2 RPC API respo
   - [`state_changed`](./src/api/ws/wallet/README.md#onstatechangedofwallet)
     - Added `new_on_chain_notification` state.
 - `TBladeBitParams` has been renamed to `TBladeBitRamParams`
-  - `plot_type: "ram"` has been added
+  - `plot_type: "ramplot"` has been added
 - `TBladeBit2Params` has been renamed to `TBladeBitDiskParams`
-  - `plot_type: "disk"` has been added
+  - `plot_type: "diskplot"` has been added
   - `plotter` type has been converted to `"bladebit"` from `"bladebit2"`
 - Eased type requirement of `daemon.sendMessage()` and `agent.sendMessage()`  
   You can request **RPC** API on Daemon WebSocket channel like this:
