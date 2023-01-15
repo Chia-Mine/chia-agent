@@ -47,7 +47,7 @@ const response = await get_blockchain_state(agent);
     sync: {
       sync_mode: bool;
       synced: bool;
-      sync_tip_height: Optional<uint32>;
+      sync_tip_height: uint32;
       sync_progress_height: uint32;
     },
     difficulty: uint64;
@@ -650,6 +650,7 @@ const response = await get_mempool_item_by_tx_id(agent, params);
 ```typescript
 {
   tx_id: str;
+  include_pending ? : bool;
 }
 ```
 ### response

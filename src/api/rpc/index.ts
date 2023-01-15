@@ -1,20 +1,7 @@
-import type {
-  TGetRewardTargetResponse,
-  TGetSignagePointResponse,
-  TGetSignagePointsResponse,
-  TSetRewardTargetResponse,
-  TGetHarvestersResponse,
-  TGetHarvestersSummaryResponse,
-  TGetHarvesterPlotsValidResponse,
-  TGetHarvesterPlotsInvalidResponse,
-  TGetHarvesterPlotsKeysMissingResponse,
-  TGetHarvesterPlotsDuplicatesResponse,
-  TSetPayoutInstructionsResponse,
-  TGetPoolStateResponse,
-  TGetPoolLinkResponse,
-} from "./farmer/index";
+import type {RpcFarmerMessage} from "./farmer/index";
 export {
   chia_farmer_service,
+  RpcFarmerMessage,
   TGetRewardTargetRequest,
   TGetRewardTargetResponse,
   get_reward_targets,
@@ -55,34 +42,7 @@ export {
   get_pool_login_link,
 } from "./farmer/index";
 
-import type {
-  TGetAdditionsAndRemovalsResponse,
-  TGetAllMempoolItemsResponse,
-  TGetAllMempoolTxIdsResponse,
-  TGetBlockRecordByHeightResponse,
-  TGetBlockRecordResponse,
-  TGetBlockRecordsResponse,
-  TGetBlockSpendsResponse,
-  TGetBlockResponse,
-  TGetBlockchainStateResponse,
-  TGetBlocksResponse,
-  TGetBlockCountMetricsResponse,
-  TGetRecentSignagePointOrEOSCommandResponse,
-  TGetCoinRecordByNameResponse,
-  TGetCoinRecordsByNamesResponse,
-  TGetCoinRecordsByPuzzleHashResponse,
-  TGetCoinRecordsByPuzzleHashesResponse,
-  TGetCoinRecordsByParentIdsResponse,
-  TGetCoinRecordsByHintResponse,
-  TGetInitialFreezePeriodResponseOfFullNode,
-  TGetMempoolItemByTxIdResponse,
-  TGetNetworkInfoResponseOfFullNode,
-  TGetNetworkSpaceResponse,
-  TGetUnfinishedBlockHeadersResponse,
-  TPushTxResponse,
-  TGetPuzzleAndSolutionResponse,
-  TGetFeeEstimateResponse,
-} from "./full_node/index";
+import type {RpcFullNodeMessage} from "./full_node/index";
 export {
   chia_full_node_service,
   TGetAdditionsAndRemovalsRequest,
@@ -164,14 +124,7 @@ export {
   get_fee_estimate,
 } from "./full_node/index";
 
-import type {
-  TAddPlotDirectoryResponse,
-  TDeletePlotResponse,
-  TGetPlotDirectoriesResponse,
-  TGetPlotsResponse,
-  TRefreshPlotsResponse,
-  TRemovePlotDirectoryResponse,
-} from "./harvester/index";
+import type {RpcHarvesterMessage} from "./harvester/index";
 export {
   chia_harvester_service,
   TAddPlotDirectoryRequest,
@@ -194,108 +147,7 @@ export {
   remove_plot_directory,
 } from "./harvester/index";
 
-import type {
-  chia_wallet_service,
-  TAddKeyResponse,
-  TAddRateLimitedFundsResponse,
-  TCancelOfferResponse,
-  TCancelOffersResponse,
-  TCatGetAssetIdResponse,
-  TCatGetNameResponse,
-  TGetStrayCatsResponse,
-  TCatAssetIdToNameResponse,
-  TCatSetNameResponse,
-  TCatSpendResponse,
-  TCheckOfferValidityResponse,
-  TCreateNewWalletResponse,
-  TCreateOfferForIdsResponse,
-  TCreateSignedTransactionResponse,
-  TDeleteUnconfirmedTransactionsResponse,
-  TSelectCoinsResponse,
-  TGetCurrentDerivationIndexResponse,
-  TExtendDerivationIndexResponse,
-  TGetNotificationsResponse,
-  TDeleteNotificationsResponse,
-  TSendNotificationResponse,
-  TSignMessageByAddressResponse,
-  TSignMessageByIdResponse,
-  TNftCalculateRoyaltiesResponse,
-  TNftMintBulkResponse,
-  TDeleteAllKeysResponse,
-  TDeleteKeyResponse,
-  TDidSetWalletNameResponse,
-  TDidGetWalletNameResponse,
-  TDidCreateAttestResponse,
-  TDidCreateBackupFileResponse,
-  TDidTransferDidResponse,
-  TDidGetDidResponse,
-  TDidGetInformationNeededForRecoveryResponse,
-  TDidGetPubkeyResponse,
-  TDidGetRecoveryListResponse,
-  TDidGetCurrentCoinInfoResponse,
-  TDidGetMetadataResponse,
-  TDidRecoverySpendResponse,
-  TDidSpendResponse,
-  TDidUpdateRecoveryIdsResponse,
-  TDidUpdateMetadataResponse,
-  TNftMintNftResponse,
-  TNftGetNftsResponse,
-  TNftSetNftDidResponse,
-  TNftGetByDidResponse,
-  TNftGetWalletDidResponse,
-  TNftGetWalletsWithDidsResponse,
-  TNftSetNftStatusResponse,
-  TNftTransferNftResponse,
-  TNftGetInfoResponse,
-  TNftAddUriResponse,
-  TFarmBlockResponse,
-  TGenerateMnemonicResponse,
-  TGetAllOffersResponse,
-  TGetCatListResponse,
-  TGetFarmedAmountResponse,
-  TGetHeightInfoResponse,
-  TGetInitialFreezePeriodResponseOfWallet,
-  TGetLoggedInFingerprintResponse,
-  TGetNetworkInfoResponseOfWallet,
-  TGetNextAddressResponse,
-  TGetOfferResponse,
-  TGetOffersCountResponse,
-  TGetOfferSummaryResponse,
-  TGetPrivateKeyResponse,
-  TGetPublicKeysResponse,
-  TGetSyncStatusResponse,
-  TGetTransactionCountResponse,
-  TGetTransactionResponse,
-  TGetTransactionsResponse,
-  TGetWalletBalanceResponse,
-  TGetWalletsResponse,
-  TLoginResponse,
-  TPushTxResponse as TPushTxResponseOfWallet,
-  TPushTransactionsResponse,
-  TPwJoinPoolRequest,
-  TPwSelfPoolRequest,
-  TPwAbsorbRewardsResponse,
-  TPwStatusResponse,
-  TRlSetUserInfoResponse,
-  TSendClawbackTransactionResponse,
-  TSendTransactionResponse,
-  TSendTransactionMultiResponse,
-  TTakeOfferResponse,
-  TPwJoinPoolResponse,
-  TPwSelfPoolResponse,
-  TCreateNewDlResponse,
-  TDlTrackNewResponse,
-  TDlStopTrackingResponse,
-  TDlLatestSingletonResponse,
-  TDlSingletonsByRootResponse,
-  TDlUpdateRootResponse,
-  TDlUpdateMultipleResponse,
-  TDlHistoryResponse,
-  TDlOwnedSingletonsResponse,
-  TDlGetMirrorsResponse,
-  TDlNewMirrorResponse,
-  TDlDeleteMirrorResponse,
-} from "./wallet/index";
+import type {RpcWalletMessage} from "./wallet/index";
 export {
   chia_wallet_service,
   TAddKeyRequest,
@@ -591,34 +443,7 @@ export {
   dl_delete_mirror,
 } from "./wallet/index";
 
-import {
-  TCreateDataStoreResponse,
-  TGetOwnedStoresResponse,
-  TBatchUpdateResponse,
-  TGetValueResponse,
-  TGetKeysResponse,
-  TGetKeysValuesResponse,
-  TGetAncestorsResponse,
-  TGetRootResponse,
-  TGetLocalRootResponse,
-  TGetRootsResponse,
-  TDeleteKeyResponse as TDeleteKeyResponseDL,
-  TInsertResponse,
-  TSubscribeResponse,
-  TUnsubscribeResponse,
-  TAddMirrorResponse,
-  TDeleteMirrorResponse,
-  TGetMirrorsResponse,
-  TRemoveSubscriptionsResponse,
-  TSubscriptionsResponse,
-  TGetKvDiffResponse,
-  TGetRootHistoryResponse,
-  TAddMissingFilesResponse,
-  TMakeOfferResponse,
-  TTakeOfferResponse as TTakeOfferResponseDL,
-  TVerifyOfferResponse,
-  TCancelOfferResponse as TCancelOfferResponseDL,
-} from "./data_layer/index"
+import type {RpcDataLayerMessage} from "./data_layer/index"
 export {
   chia_data_layer_service,
   TCreateDataStoreRequest,
@@ -697,12 +522,12 @@ export {
   TCancelOfferRequest as TCancelOfferRequestDL,
   TCancelOfferResponse as TCancelOfferResponseDL,
   cancel_offer as cancel_offer_dl,
+  TGetSyncStatusRequest as TGetSyncStatusRequestDL,
+  TGetSyncStatusResponse as TGetSyncStatusResponseDL,
+  get_sync_status as get_sync_status_dl,
 } from "./data_layer/index"
 
-import type {
-  TGetIpsAfterTimestampResponse,
-  TGetPeerCountsResponse,
-} from "./crawler/index";
+import type {RpcCrawlerMessage} from "./crawler/index";
 export {
   chia_crawler_service,
   TGetIpsAfterTimestampRequest,
@@ -713,14 +538,7 @@ export {
 } from "./crawler/index";
 
 
-import type {
-  TGetConnectionsResponse,
-  TOpenConnectionResponse,
-  TCloseConnectionResponse,
-  TStopNodeResponse,
-  TGetRoutesResponse,
-  THealthzResponse,
-} from "./common/index";
+import type {RpcCommonMessage} from "./common/index";
 export {
   chia_common_service,
   TGetConnectionsRequest,
@@ -739,201 +557,6 @@ export {
   get_routes,
   healthz,
 } from "./common/index";
-
-
-export type RpcFarmerMessage =
-  TGetRewardTargetResponse
-  | TGetSignagePointResponse
-  | TGetSignagePointsResponse
-  | TSetRewardTargetResponse
-  | TGetHarvestersResponse
-  | TGetHarvestersSummaryResponse
-  | TGetHarvesterPlotsValidResponse
-  | TGetHarvesterPlotsInvalidResponse
-  | TGetHarvesterPlotsKeysMissingResponse
-  | TGetHarvesterPlotsDuplicatesResponse
-  | TSetPayoutInstructionsResponse
-  | TGetPoolStateResponse
-  | TGetPoolLinkResponse
-;
-export type RpcFullNodeMessage =
-  TGetAdditionsAndRemovalsResponse
-  | TGetAllMempoolItemsResponse
-  | TGetAllMempoolTxIdsResponse
-  | TGetBlockResponse
-  | TGetBlockRecordByHeightResponse
-  | TGetBlockRecordResponse
-  | TGetBlockRecordsResponse
-  | TGetBlockSpendsResponse
-  | TGetBlockchainStateResponse
-  | TGetBlocksResponse
-  | TGetBlockCountMetricsResponse
-  | TGetRecentSignagePointOrEOSCommandResponse
-  | TGetCoinRecordByNameResponse
-  | TGetCoinRecordsByNamesResponse
-  | TGetCoinRecordsByPuzzleHashResponse
-  | TGetCoinRecordsByPuzzleHashesResponse
-  | TGetCoinRecordsByParentIdsResponse
-  | TGetCoinRecordsByHintResponse
-  | TGetInitialFreezePeriodResponseOfFullNode
-  | TGetMempoolItemByTxIdResponse
-  | TGetNetworkInfoResponseOfFullNode
-  | TGetNetworkSpaceResponse
-  | TGetUnfinishedBlockHeadersResponse
-  | TPushTxResponse
-  | TGetPuzzleAndSolutionResponse
-  | TGetFeeEstimateResponse
-;
-export type RpcHarvesterMessage =
-  TAddPlotDirectoryResponse
-  | TDeletePlotResponse
-  | TGetPlotDirectoriesResponse
-  | TGetPlotsResponse
-  | TRefreshPlotsResponse
-  | TRemovePlotDirectoryResponse
-;
-export type RpcWalletMessage =
-  TAddKeyResponse
-  | TAddRateLimitedFundsResponse
-  | TCancelOfferResponse
-  | TCancelOffersResponse
-  | TCatGetAssetIdResponse
-  | TCatGetNameResponse
-  | TGetStrayCatsResponse
-  | TCatAssetIdToNameResponse
-  | TCatSetNameResponse
-  | TCatSpendResponse
-  | TCheckOfferValidityResponse
-  | TCreateNewWalletResponse
-  | TCreateOfferForIdsResponse
-  | TCreateSignedTransactionResponse
-  | TDeleteUnconfirmedTransactionsResponse
-  | TSelectCoinsResponse
-  | TGetCurrentDerivationIndexResponse
-  | TExtendDerivationIndexResponse
-  | TGetNotificationsResponse
-  | TDeleteNotificationsResponse
-  | TSendNotificationResponse
-  | TSignMessageByAddressResponse
-  | TSignMessageByIdResponse
-  | TNftCalculateRoyaltiesResponse
-  | TNftMintBulkResponse
-  | TDeleteAllKeysResponse
-  | TDeleteKeyResponse
-  | TDidSetWalletNameResponse
-  | TDidGetWalletNameResponse
-  | TDidCreateAttestResponse
-  | TDidCreateBackupFileResponse
-  | TDidTransferDidResponse
-  | TDidGetDidResponse
-  | TDidGetInformationNeededForRecoveryResponse
-  | TDidGetCurrentCoinInfoResponse
-  | TDidGetPubkeyResponse
-  | TDidGetRecoveryListResponse
-  | TDidGetMetadataResponse
-  | TDidRecoverySpendResponse
-  | TDidSpendResponse
-  | TDidUpdateRecoveryIdsResponse
-  | TDidUpdateMetadataResponse
-  | TNftMintNftResponse
-  | TNftGetNftsResponse
-  | TNftSetNftDidResponse
-  | TNftGetByDidResponse
-  | TNftGetWalletDidResponse
-  | TNftGetWalletsWithDidsResponse
-  | TNftSetNftStatusResponse
-  | TNftTransferNftResponse
-  | TNftGetInfoResponse
-  | TNftAddUriResponse
-  | TFarmBlockResponse
-  | TGenerateMnemonicResponse
-  | TGetAllOffersResponse
-  | TGetCatListResponse
-  | TGetFarmedAmountResponse
-  | TGetHeightInfoResponse
-  | TGetInitialFreezePeriodResponseOfWallet
-  | TGetLoggedInFingerprintResponse
-  | TGetOfferResponse
-  | TGetOffersCountResponse
-  | TGetOfferSummaryResponse
-  | TGetNetworkInfoResponseOfWallet
-  | TGetNextAddressResponse
-  | TGetPrivateKeyResponse
-  | TGetPublicKeysResponse
-  | TGetSyncStatusResponse
-  | TGetTransactionResponse
-  | TGetTransactionCountResponse
-  | TGetTransactionsResponse
-  | TGetWalletBalanceResponse
-  | TGetWalletsResponse
-  | TLoginResponse
-  | TPushTxResponseOfWallet
-  | TPushTransactionsResponse
-  | TPwJoinPoolResponse
-  | TPwSelfPoolResponse
-  | TPwAbsorbRewardsResponse
-  | TPwStatusResponse
-  | TRlSetUserInfoResponse
-  | TSendClawbackTransactionResponse
-  | TSendTransactionResponse
-  | TSendTransactionMultiResponse
-  | TTakeOfferResponse
-  | TCreateNewDlResponse
-  | TDlTrackNewResponse
-  | TDlStopTrackingResponse
-  | TDlLatestSingletonResponse
-  | TDlSingletonsByRootResponse
-  | TDlUpdateRootResponse
-  | TDlUpdateMultipleResponse
-  | TDlHistoryResponse
-  | TDlOwnedSingletonsResponse
-  | TDlGetMirrorsResponse
-  | TDlNewMirrorResponse
-  | TDlDeleteMirrorResponse
-;
-
-export type RpcDataLayerMessage =
-  TCreateDataStoreResponse
-  | TGetOwnedStoresResponse
-  | TBatchUpdateResponse
-  | TGetValueResponse
-  | TGetKeysResponse
-  | TGetKeysValuesResponse
-  | TGetAncestorsResponse
-  | TGetRootResponse
-  | TGetLocalRootResponse
-  | TGetRootsResponse
-  | TDeleteKeyResponseDL
-  | TInsertResponse
-  | TSubscribeResponse
-  | TUnsubscribeResponse
-  | TAddMirrorResponse
-  | TDeleteMirrorResponse
-  | TGetMirrorsResponse
-  | TRemoveSubscriptionsResponse
-  | TSubscriptionsResponse
-  | TGetKvDiffResponse
-  | TGetRootHistoryResponse
-  | TAddMissingFilesResponse
-  | TMakeOfferResponse
-  | TTakeOfferResponseDL
-  | TVerifyOfferResponse
-  | TCancelOfferResponseDL
-;
-
-export type RpcCrawlerMessage = 
-  TGetIpsAfterTimestampResponse
-  | TGetPeerCountsResponse
-;
-
-export type RpcCommonMessage =
-  TGetConnectionsResponse
-  | TOpenConnectionResponse
-  | TCloseConnectionResponse
-  | TStopNodeResponse
-  | TGetRoutesResponse
-  | THealthzResponse
-;
 
 export type RpcMessage =
   RpcFarmerMessage

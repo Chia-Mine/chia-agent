@@ -1,8 +1,11 @@
 import {TRPCAgent} from "../../../rpc/index";
-import {bool, bytes, None, Optional, str, uint64} from "../../chia/types/_python_types_";
+import {bool, None, Optional, str, uint64} from "../../chia/types/_python_types_";
 import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {OfferMarshalled, OfferStoreMarshalled} from "../../chia/data_layer/data_layer_util";
+import {OfferMarshalled, OfferStoreMarshalled, SyncStatus} from "../../chia/data_layer/data_layer_util";
+import {TCancelOfferResponseDL, TTakeOfferResponseDL} from "../index";
+import {GetMessageType, ResType} from "../../types";
+import {TDaemon} from "../../../daemon/index";
 
 export const chia_data_layer_service = "chia_data_layer";
 export type chia_data_layer_service = typeof chia_data_layer_service;
@@ -16,8 +19,10 @@ export type TCreateDataStoreResponse = {
   txs: TransactionRecord[];
   id: str;
 };
-export async function create_data_store(agent: TRPCAgent, params: TCreateDataStoreRequest) {
-  return agent.sendMessage<TCreateDataStoreResponse>(chia_data_layer_service, create_data_store_command, params);
+export type WsCreateDataStoreMessage = GetMessageType<chia_data_layer_service, create_data_store_command, TCreateDataStoreResponse>;
+export async function create_data_store<T extends TRPCAgent|TDaemon>(agent: T, params: TCreateDataStoreRequest) {
+  type R = ResType<T, TCreateDataStoreResponse, WsCreateDataStoreMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, create_data_store_command, params);
 }
 
 
@@ -26,8 +31,10 @@ export type get_owned_stores_command = typeof get_owned_stores_command;
 export type TGetOwnedStoresResponse = {
   store_ids: str[];
 };
-export async function get_owned_stores(agent: TRPCAgent) {
-  return agent.sendMessage<TGetOwnedStoresResponse>(chia_data_layer_service, get_owned_stores_command);
+export type WsGetOwnedStoresMessage = GetMessageType<chia_data_layer_service, get_owned_stores_command, TGetOwnedStoresResponse>;
+export async function get_owned_stores<T extends TRPCAgent|TDaemon>(agent: T) {
+  type R = ResType<T, TGetOwnedStoresResponse, WsGetOwnedStoresMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_owned_stores_command);
 }
 
 
@@ -46,8 +53,10 @@ export type TBatchUpdateRequest = {
 export type TBatchUpdateResponse = {
   tx_id: bytes32;
 };
-export async function batch_update(agent: TRPCAgent, params: TBatchUpdateRequest) {
-  return agent.sendMessage<TBatchUpdateResponse>(chia_data_layer_service, batch_update_command, params);
+export type WsBatchUpdateMessage = GetMessageType<chia_data_layer_service, batch_update_command, TBatchUpdateResponse>;
+export async function batch_update<T extends TRPCAgent|TDaemon>(agent: T, params: TBatchUpdateRequest) {
+  type R = ResType<T, TBatchUpdateResponse, WsBatchUpdateMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, batch_update_command, params);
 }
 
 
@@ -61,8 +70,10 @@ export type TGetValueRequest = {
 export type TGetValueResponse = {
   value: str|None;
 };
-export async function get_value(agent: TRPCAgent, params: TGetValueRequest) {
-  return agent.sendMessage<TGetValueResponse>(chia_data_layer_service, get_value_command, params);
+export type WsGetValueMessage = GetMessageType<chia_data_layer_service, get_value_command, TGetValueResponse>;
+export async function get_value<T extends TRPCAgent|TDaemon>(agent: T, params: TGetValueRequest) {
+  type R = ResType<T, TGetValueResponse, WsGetValueMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_value_command, params);
 }
 
 
@@ -75,8 +86,10 @@ export type TGetKeysRequest = {
 export type TGetKeysResponse = {
   keys: str[];
 };
-export async function get_keys(agent: TRPCAgent, params: TGetKeysRequest) {
-  return agent.sendMessage<TGetKeysResponse>(chia_data_layer_service, get_keys_command, params);
+export type WsGetKeysMessage = GetMessageType<chia_data_layer_service, get_keys_command, TGetKeysResponse>;
+export async function get_keys<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKeysRequest) {
+  type R = ResType<T, TGetKeysResponse, WsGetKeysMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_keys_command, params);
 }
 
 
@@ -93,8 +106,10 @@ export type TGetKeysValuesResponse = {
     value: str;
   }>;
 };
-export async function get_keys_values(agent: TRPCAgent, params: TGetKeysValuesRequest) {
-  return agent.sendMessage<TGetKeysValuesResponse>(chia_data_layer_service, get_keys_values_command, params);
+export type WsGetKeysValuesMessage = GetMessageType<chia_data_layer_service, get_keys_values_command, TGetKeysValuesResponse>;
+export async function get_keys_values<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKeysValuesRequest) {
+  type R = ResType<T, TGetKeysValuesResponse, WsGetKeysValuesMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_keys_values_command, params);
 }
 
 
@@ -111,8 +126,10 @@ export type TGetAncestorsResponse = {
     right_hash: bytes32;
   }>;
 };
-export async function get_ancestors(agent: TRPCAgent, params: TGetAncestorsRequest) {
-  return agent.sendMessage<TGetAncestorsResponse>(chia_data_layer_service, get_ancestors_command, params);
+export type WsGetAncestorsMessage = GetMessageType<chia_data_layer_service, get_ancestors_command, TGetAncestorsResponse>;
+export async function get_ancestors<T extends TRPCAgent|TDaemon>(agent: T, params: TGetAncestorsRequest) {
+  type R = ResType<T, TGetAncestorsResponse, WsGetAncestorsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_ancestors_command, params);
 }
 
 
@@ -126,8 +143,10 @@ export type TGetRootResponse = {
   confirmed: bool;
   timestamp: uint64;
 };
-export async function get_root(agent: TRPCAgent, params: TGetRootRequest) {
-  return agent.sendMessage<TGetRootResponse>(chia_data_layer_service, get_root_command, params);
+export type WsGetRootMessage = GetMessageType<chia_data_layer_service, get_root_command, TGetRootResponse>;
+export async function get_root<T extends TRPCAgent|TDaemon>(agent: T, params: TGetRootRequest) {
+  type R = ResType<T, TGetRootResponse, WsGetRootMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_root_command, params);
 }
 
 
@@ -139,8 +158,10 @@ export type TGetLocalRootRequest = {
 export type TGetLocalRootResponse = {
   hash: bytes32|None;
 };
-export async function get_local_root(agent: TRPCAgent, params: TGetLocalRootRequest) {
-  return agent.sendMessage<TGetLocalRootResponse>(chia_data_layer_service, get_local_root_command, params);
+export type WsGetLocalRootMessage = GetMessageType<chia_data_layer_service, get_local_root_command, TGetLocalRootResponse>;
+export async function get_local_root<T extends TRPCAgent|TDaemon>(agent: T, params: TGetLocalRootRequest) {
+  type R = ResType<T, TGetLocalRootResponse, WsGetLocalRootMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_local_root_command, params);
 }
 
 
@@ -157,8 +178,10 @@ export type TGetRootsResponse = {
     timestamp: uint64;
   }>;
 };
-export async function get_roots(agent: TRPCAgent, params: TGetRootsRequest) {
-  return agent.sendMessage<TGetRootsResponse>(chia_data_layer_service, get_roots_command, params);
+export type WsGetRootsMessage = GetMessageType<chia_data_layer_service, get_roots_command, TGetRootsResponse>;
+export async function get_roots<T extends TRPCAgent|TDaemon>(agent: T, params: TGetRootsRequest) {
+  type R = ResType<T, TGetRootsResponse, WsGetRootsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_roots_command, params);
 }
 
 
@@ -172,8 +195,10 @@ export type TDeleteKeyRequest = {
 export type TDeleteKeyResponse = {
   tx_id: bytes32;
 };
-export async function delete_key(agent: TRPCAgent, params: TDeleteKeyRequest) {
-  return agent.sendMessage<TDeleteKeyResponse>(chia_data_layer_service, delete_key_command, params);
+export type WsDeleteKeyMessage = GetMessageType<chia_data_layer_service, delete_key_command, TDeleteKeyResponse>;
+export async function delete_key<T extends TRPCAgent|TDaemon>(agent: T, params: TDeleteKeyRequest) {
+  type R = ResType<T, TDeleteKeyResponse, WsDeleteKeyMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, delete_key_command, params);
 }
 
 
@@ -188,8 +213,10 @@ export type TInsertRequest = {
 export type TInsertResponse = {
   tx_id: bytes32;
 };
-export async function insert(agent: TRPCAgent, params: TInsertRequest) {
-  return agent.sendMessage<TInsertResponse>(chia_data_layer_service, insert_command, params);
+export type WsInsertMessage = GetMessageType<chia_data_layer_service, insert_command, TInsertResponse>;
+export async function insert<T extends TRPCAgent|TDaemon>(agent: T, params: TInsertRequest) {
+  type R = ResType<T, TInsertResponse, WsInsertMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, insert_command, params);
 }
 
 
@@ -201,8 +228,10 @@ export type TSubscribeRequest = {
 };
 export type TSubscribeResponse = {
 };
-export async function subscribe(agent: TRPCAgent, params: TSubscribeRequest) {
-  return agent.sendMessage<TSubscribeResponse>(chia_data_layer_service, subscribe_command, params);
+export type WsSubscribeMessage = GetMessageType<chia_data_layer_service, subscribe_command, TSubscribeResponse>;
+export async function subscribe<T extends TRPCAgent|TDaemon>(agent: T, params: TSubscribeRequest) {
+  type R = ResType<T, TSubscribeResponse, WsSubscribeMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, subscribe_command, params);
 }
 
 
@@ -213,8 +242,10 @@ export type TUnsubscribeRequest = {
 };
 export type TUnsubscribeResponse = {
 };
-export async function unsubscribe(agent: TRPCAgent, params: TUnsubscribeRequest) {
-  return agent.sendMessage<TUnsubscribeResponse>(chia_data_layer_service, unsubscribe_command, params);
+export type WsUnsubscribeMessage = GetMessageType<chia_data_layer_service, unsubscribe_command, TUnsubscribeResponse>;
+export async function unsubscribe<T extends TRPCAgent|TDaemon>(agent: T, params: TUnsubscribeRequest) {
+  type R = ResType<T, TUnsubscribeResponse, WsUnsubscribeMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, unsubscribe_command, params);
 }
 
 
@@ -228,8 +259,10 @@ export type TAddMirrorRequest = {
 };
 export type TAddMirrorResponse = {
 };
-export async function add_mirror(agent: TRPCAgent, params: TAddMirrorRequest) {
-  return agent.sendMessage<TAddMirrorResponse>(chia_data_layer_service, add_mirror_command, params);
+export type WsAddMirrorMessage = GetMessageType<chia_data_layer_service, add_mirror_command, TAddMirrorResponse>;
+export async function add_mirror<T extends TRPCAgent|TDaemon>(agent: T, params: TAddMirrorRequest) {
+  type R = ResType<T, TAddMirrorResponse, WsAddMirrorMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, add_mirror_command, params);
 }
 
 
@@ -241,8 +274,10 @@ export type TDeleteMirrorRequest = {
 };
 export type TDeleteMirrorResponse = {
 };
-export async function delete_mirror(agent: TRPCAgent, params: TDeleteMirrorRequest) {
-  return agent.sendMessage<TDeleteMirrorResponse>(chia_data_layer_service, delete_mirror_command, params);
+export type WsDeleteMirrorMessage = GetMessageType<chia_data_layer_service, delete_mirror_command, TDeleteMirrorResponse>;
+export async function delete_mirror<T extends TRPCAgent|TDaemon>(agent: T, params: TDeleteMirrorRequest) {
+  type R = ResType<T, TDeleteMirrorResponse, WsDeleteMirrorMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, delete_mirror_command, params);
 }
 
 
@@ -260,8 +295,10 @@ export type TGetMirrorsResponse = {
     ours: bool;
   }>;
 };
-export async function get_mirrors(agent: TRPCAgent, params: TGetMirrorsRequest) {
-  return agent.sendMessage<TGetMirrorsResponse>(chia_data_layer_service, get_mirrors_command, params);
+export type WsGetMirrorsMessage = GetMessageType<chia_data_layer_service, get_mirrors_command, TGetMirrorsResponse>;
+export async function get_mirrors<T extends TRPCAgent|TDaemon>(agent: T, params: TGetMirrorsRequest) {
+  type R = ResType<T, TGetMirrorsResponse, WsGetMirrorsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_mirrors_command, params);
 }
 
 
@@ -273,8 +310,10 @@ export type TRemoveSubscriptionsRequest = {
 };
 export type TRemoveSubscriptionsResponse = {
 };
-export async function remove_subscriptions(agent: TRPCAgent, params: TRemoveSubscriptionsRequest) {
-  return agent.sendMessage<TRemoveSubscriptionsResponse>(chia_data_layer_service, remove_subscriptions_command, params);
+export type WsRemoveSubscriptionsMessage = GetMessageType<chia_data_layer_service, remove_subscriptions_command, TRemoveSubscriptionsResponse>;
+export async function remove_subscriptions<T extends TRPCAgent|TDaemon>(agent: T, params: TRemoveSubscriptionsRequest) {
+  type R = ResType<T, TRemoveSubscriptionsResponse, WsRemoveSubscriptionsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, remove_subscriptions_command, params);
 }
 
 
@@ -283,8 +322,10 @@ export type subscriptions_command = typeof subscriptions_command;
 export type TSubscriptionsResponse = {
   store_ids: str[];
 };
-export async function subscriptions(agent: TRPCAgent) {
-  return agent.sendMessage<TSubscriptionsResponse>(chia_data_layer_service, subscriptions_command);
+export type WsSubscriptionsMessage = GetMessageType<chia_data_layer_service, subscriptions_command, TSubscriptionsResponse>;
+export async function subscriptions<T extends TRPCAgent|TDaemon>(agent: T) {
+  type R = ResType<T, TSubscriptionsResponse, WsSubscriptionsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, subscriptions_command);
 }
 
 
@@ -302,8 +343,10 @@ export type TGetKvDiffResponse = {
     value: str;
   }>;
 };
-export async function get_kv_diff(agent: TRPCAgent, params: TGetKvDiffRequest) {
-  return agent.sendMessage<TGetKvDiffResponse>(chia_data_layer_service, get_kv_diff_command, params);
+export type WsGetKvDiffMessage = GetMessageType<chia_data_layer_service, get_kv_diff_command, TGetKvDiffResponse>;
+export async function get_kv_diff<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKvDiffRequest) {
+  type R = ResType<T, TGetKvDiffResponse, WsGetKvDiffMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_kv_diff_command, params);
 }
 
 
@@ -319,8 +362,10 @@ export type TGetRootHistoryResponse = {
     timestamp: uint64;
   }>;
 };
-export async function get_root_history(agent: TRPCAgent, params: TGetRootHistoryRequest) {
-  return agent.sendMessage<TGetRootHistoryResponse>(chia_data_layer_service, get_root_history_command, params);
+export type WsGetRootHistoryMessage = GetMessageType<chia_data_layer_service, get_root_history_command, TGetRootHistoryResponse>;
+export async function get_root_history<T extends TRPCAgent|TDaemon>(agent: T, params: TGetRootHistoryRequest) {
+  type R = ResType<T, TGetRootHistoryResponse, WsGetRootHistoryMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_root_history_command, params);
 }
 
 
@@ -333,8 +378,10 @@ export type TAddMissingFilesRequest = {
 };
 export type TAddMissingFilesResponse = {
 };
-export async function add_missing_files(agent: TRPCAgent, params: TAddMissingFilesRequest) {
-  return agent.sendMessage<TAddMissingFilesResponse>(chia_data_layer_service, add_missing_files_command, params);
+export type WsAddMissingFilesMessage = GetMessageType<chia_data_layer_service, add_missing_files_command, TAddMissingFilesResponse>;
+export async function add_missing_files<T extends TRPCAgent|TDaemon>(agent: T, params: TAddMissingFilesRequest) {
+  type R = ResType<T, TAddMissingFilesResponse, WsAddMissingFilesMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, add_missing_files_command, params);
 }
 
 
@@ -349,8 +396,10 @@ export type TMakeOfferResponse = {
   success: bool;
   offer: OfferMarshalled;
 };
-export async function make_offer(agent: TRPCAgent, params: TMakeOfferRequest) {
-  return agent.sendMessage<TMakeOfferResponse>(chia_data_layer_service, make_offer_command, params);
+export type WsMakeOfferMessage = GetMessageType<chia_data_layer_service, make_offer_command, TMakeOfferResponse>;
+export async function make_offer<T extends TRPCAgent|TDaemon>(agent: T, params: TMakeOfferRequest) {
+  type R = ResType<T, TMakeOfferResponse, WsMakeOfferMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, make_offer_command, params);
 }
 
 
@@ -364,8 +413,10 @@ export type TTakeOfferResponse = {
   success: bool;
   trade_id: str;
 };
-export async function take_offer(agent: TRPCAgent, params: TTakeOfferRequest) {
-  return agent.sendMessage<TTakeOfferResponse>(chia_data_layer_service, take_offer_command, params);
+export type WsTakeOfferMessageDL = GetMessageType<chia_data_layer_service, take_offer_command, TTakeOfferResponse>;
+export async function take_offer<T extends TRPCAgent|TDaemon>(agent: T, params: TTakeOfferRequest) {
+  type R = ResType<T, TTakeOfferResponseDL, WsTakeOfferMessageDL>;
+  return agent.sendMessage<R>(chia_data_layer_service, take_offer_command, params);
 }
 
 
@@ -381,8 +432,10 @@ export type TVerifyOfferResponse = {
   error: Optional<str>;
   fee: Optional<uint64>;
 };
-export async function verify_offer(agent: TRPCAgent, params: TVerifyOfferRequest) {
-  return agent.sendMessage<TVerifyOfferResponse>(chia_data_layer_service, verify_offer_command, params);
+export type WsVerifyOfferMessage = GetMessageType<chia_data_layer_service, verify_offer_command, TVerifyOfferResponse>;
+export async function verify_offer<T extends TRPCAgent|TDaemon>(agent: T, params: TVerifyOfferRequest) {
+  type R = ResType<T, TVerifyOfferResponse, WsVerifyOfferMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, verify_offer_command, params);
 }
 
 
@@ -396,6 +449,83 @@ export type TCancelOfferRequest = {
 export type TCancelOfferResponse = {
   success: bool;
 };
-export async function cancel_offer(agent: TRPCAgent, params: TCancelOfferRequest) {
-  return agent.sendMessage<TCancelOfferResponse>(chia_data_layer_service, cancel_offer_command, params);
+export type WsCancelOfferMessageDL = GetMessageType<chia_data_layer_service, cancel_offer_command, TCancelOfferResponse>;
+export async function cancel_offer<T extends TRPCAgent|TDaemon>(agent: T, params: TCancelOfferRequest) {
+  type R = ResType<T, TCancelOfferResponseDL, WsCancelOfferMessageDL>;
+  return agent.sendMessage<R>(chia_data_layer_service, cancel_offer_command, params);
 }
+
+
+export const get_sync_status_command = "get_sync_status";
+export type get_sync_status_command = typeof get_sync_status_command;
+export type TGetSyncStatusRequest = {
+  id: str;
+};
+export type TGetSyncStatusResponse = {
+  sync_status: SyncStatus;
+};
+export type WsGetSyncStatusMessage = GetMessageType<chia_data_layer_service, get_sync_status_command, TGetSyncStatusResponse>;
+export async function get_sync_status<T extends TRPCAgent | TDaemon>(agent: T, params: TGetSyncStatusRequest) {
+  type R = ResType<T, TGetSyncStatusResponse, WsGetSyncStatusMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_sync_status_command, params);
+}
+
+export type RpcDataLayerMessage =
+  TCreateDataStoreResponse
+  | TGetOwnedStoresResponse
+  | TBatchUpdateResponse
+  | TGetValueResponse
+  | TGetKeysResponse
+  | TGetKeysValuesResponse
+  | TGetAncestorsResponse
+  | TGetRootResponse
+  | TGetLocalRootResponse
+  | TGetRootsResponse
+  | TDeleteKeyResponse
+  | TInsertResponse
+  | TSubscribeResponse
+  | TUnsubscribeResponse
+  | TAddMirrorResponse
+  | TDeleteMirrorResponse
+  | TGetMirrorsResponse
+  | TRemoveSubscriptionsResponse
+  | TSubscriptionsResponse
+  | TGetKvDiffResponse
+  | TGetRootHistoryResponse
+  | TAddMissingFilesResponse
+  | TMakeOfferResponse
+  | TTakeOfferResponseDL
+  | TVerifyOfferResponse
+  | TCancelOfferResponseDL
+  | TGetSyncStatusResponse
+;
+
+export type RpcDataLayerMessageOnWs =
+  WsCreateDataStoreMessage
+  | WsGetOwnedStoresMessage
+  | WsBatchUpdateMessage
+  | WsGetValueMessage
+  | WsGetKeysMessage
+  | WsGetKeysValuesMessage
+  | WsGetAncestorsMessage
+  | WsGetRootMessage
+  | WsGetLocalRootMessage
+  | WsGetRootsMessage
+  | WsDeleteKeyMessage
+  | WsInsertMessage
+  | WsSubscribeMessage
+  | WsUnsubscribeMessage
+  | WsAddMirrorMessage
+  | WsDeleteMirrorMessage
+  | WsGetMirrorsMessage
+  | WsRemoveSubscriptionsMessage
+  | WsSubscriptionsMessage
+  | WsGetKvDiffMessage
+  | WsGetRootHistoryMessage
+  | WsAddMissingFilesMessage
+  | WsMakeOfferMessage
+  | WsTakeOfferMessageDL
+  | WsVerifyOfferMessage
+  | WsCancelOfferMessageDL
+  | WsGetSyncStatusMessage
+;

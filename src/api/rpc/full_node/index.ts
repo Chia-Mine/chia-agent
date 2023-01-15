@@ -11,6 +11,8 @@ import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
 import {CoinSpend} from "../../chia/types/coin_spend";
 import {CLVMCost} from "../../chia/types/clvm_cost";
+import {GetMessageType, ResType} from "../../types";
+import {TDaemon} from "../../../daemon/index";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -26,7 +28,7 @@ export type TGetBlockchainStateResponse = {
     sync: {
       sync_mode: bool;
       synced: bool;
-      sync_tip_height: uint32; // full_node_rpc_api.py declares Optional<uint32> but it seems 
+      sync_tip_height: uint32; // full_node_rpc_api.py declares Optional<uint32> but it seems `None` would never be set
       sync_progress_height: uint32;
     },
     difficulty: uint64;
@@ -42,8 +44,10 @@ export type TGetBlockchainStateResponse = {
     node_id: str,
   };
 };
-export async function get_blockchain_state(agent: TRPCAgent) {
-  return agent.sendMessage<TGetBlockchainStateResponse>(chia_full_node_service, get_blockchain_state_command);
+export type WsGetBlockchainStateMessage = GetMessageType<chia_full_node_service, get_blockchain_state_command, TGetBlockchainStateResponse>;
+export async function get_blockchain_state<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetBlockchainStateResponse, WsGetBlockchainStateMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_blockchain_state_command);
 }
 
 
@@ -56,8 +60,10 @@ export type TGetBlockRequest = {
 export type TGetBlockResponse = {
   block: FullBlock;
 }
-export async function get_block(agent: TRPCAgent, data: TGetBlockRequest) {
-  return agent.sendMessage<TGetBlockResponse>(chia_full_node_service, get_block_command, data);
+export type WsGetBlockMessage = GetMessageType<chia_full_node_service, get_block_command, TGetBlockResponse>;
+export async function get_block<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockRequest) {
+  type R = ResType<T, TGetBlockResponse, WsGetBlockMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_command, data);
 }
 
 
@@ -73,8 +79,10 @@ export type TGetBlocksRequest = {
 export type TGetBlocksResponse = {
   blocks: FullBlock[] | Array<FullBlock & {header_hash: str}>;
 }
-export async function get_blocks(agent: TRPCAgent, data: TGetBlocksRequest) {
-  return agent.sendMessage<TGetBlocksResponse>(chia_full_node_service, get_blocks_command, data);
+export type WsGetBlocksMessage = GetMessageType<chia_full_node_service, get_blocks_command, TGetBlocksResponse>;
+export async function get_blocks<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlocksRequest) {
+  type R = ResType<T, TGetBlocksResponse, WsGetBlocksMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_blocks_command, data);
 }
 
 
@@ -88,8 +96,10 @@ export type TGetBlockCountMetricsResponse = {
     "hint_count": int,
   };
 }
-export async function get_block_count_metrics(agent: TRPCAgent) {
-  return agent.sendMessage<TGetBlockCountMetricsResponse>(chia_full_node_service, get_block_count_metrics_command);
+export type WsGetBlockCountMetricsMessage = GetMessageType<chia_full_node_service, get_block_count_metrics_command, TGetBlockCountMetricsResponse>;
+export async function get_block_count_metrics<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetBlockCountMetricsResponse, WsGetBlockCountMetricsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_count_metrics_command);
 }
 
 
@@ -102,8 +112,10 @@ export type TGetBlockRecordByHeightRequest = {
 export type TGetBlockRecordByHeightResponse = {
   block_record: Optional<BlockRecord>;
 };
-export async function get_block_record_by_height(agent: TRPCAgent, data: TGetBlockRecordByHeightRequest) {
-  return agent.sendMessage<TGetBlockRecordByHeightResponse>(chia_full_node_service, get_block_record_by_height_command, data);
+export type WsGetBlockRecordByHeightMessage = GetMessageType<chia_full_node_service, get_block_record_by_height_command, TGetBlockRecordByHeightResponse>;
+export async function get_block_record_by_height<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockRecordByHeightRequest) {
+  type R = ResType<T, TGetBlockRecordByHeightResponse, WsGetBlockRecordByHeightMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_record_by_height_command, data);
 }
 
 
@@ -116,8 +128,10 @@ export type TGetBlockRecordRequest = {
 export type TGetBlockRecordResponse = {
   block_record: BlockRecord;
 };
-export async function get_block_record(agent: TRPCAgent, data: TGetBlockRecordRequest) {
-  return agent.sendMessage<TGetBlockRecordResponse>(chia_full_node_service, get_block_record_command, data);
+export type WsGetBlockRecordMessage = GetMessageType<chia_full_node_service, get_block_record_command, TGetBlockRecordResponse>;
+export async function get_block_record<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockRecordRequest) {
+  type R = ResType<T, TGetBlockRecordResponse, WsGetBlockRecordMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_record_command, data);
 }
 
 
@@ -131,8 +145,10 @@ export type TGetBlockRecordsRequest = {
 export type TGetBlockRecordsResponse = {
   block_records: BlockRecord[];
 };
-export async function get_block_records(agent: TRPCAgent, data: TGetBlockRecordsRequest) {
-  return agent.sendMessage<TGetBlockRecordsResponse>(chia_full_node_service, get_block_records_command, data);
+export type WsGetBlockRecordsMessage = GetMessageType<chia_full_node_service, get_block_records_command, TGetBlockRecordsResponse>;
+export async function get_block_records<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockRecordsRequest) {
+  type R = ResType<T, TGetBlockRecordsResponse, WsGetBlockRecordsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_records_command, data);
 }
 
 
@@ -145,8 +161,10 @@ export type TGetBlockSpendsRequest = {
 export type TGetBlockSpendsResponse = {
   block_spends: CoinSpend[];
 };
-export async function get_block_spends(agent: TRPCAgent, data: TGetBlockSpendsRequest) {
-  return agent.sendMessage<TGetBlockSpendsResponse>(chia_full_node_service, get_block_spends_command, data);
+export type WsGetBlockSpendsMessage = GetMessageType<chia_full_node_service, get_block_spends_command, TGetBlockSpendsResponse>;
+export async function get_block_spends<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockSpendsRequest) {
+  type R = ResType<T, TGetBlockSpendsResponse, WsGetBlockSpendsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_spends_command, data);
 }
 
 
@@ -158,8 +176,10 @@ export type TGetUnfinishedBlockHeadersRequest = {
 export type TGetUnfinishedBlockHeadersResponse = {
   headers: UnfinishedHeaderBlock[];
 };
-export async function get_unfinished_block_headers(agent: TRPCAgent) {
-  return agent.sendMessage<TGetUnfinishedBlockHeadersResponse>(chia_full_node_service, get_unfinished_block_headers_command);
+export type WsGetUnfinishedBlockHeadersMessage = GetMessageType<chia_full_node_service, get_unfinished_block_headers_command, TGetUnfinishedBlockHeadersResponse>;
+export async function get_unfinished_block_headers<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetUnfinishedBlockHeadersResponse, WsGetUnfinishedBlockHeadersMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_unfinished_block_headers_command);
 }
 
 
@@ -173,8 +193,10 @@ export type TGetNetworkSpaceRequest = {
 export type TGetNetworkSpaceResponse = {
   space: uint128;
 };
-export async function get_network_space(agent: TRPCAgent, data: TGetNetworkSpaceRequest) {
-  return agent.sendMessage<TGetNetworkSpaceResponse>(chia_full_node_service, get_network_space_command, data);
+export type WsGetNetworkSpaceMessage = GetMessageType<chia_full_node_service, get_network_space_command, TGetNetworkSpaceResponse>;
+export async function get_network_space<T extends TRPCAgent | TDaemon>(agent: T, data: TGetNetworkSpaceRequest) {
+  type R = ResType<T, TGetNetworkSpaceResponse, WsGetNetworkSpaceMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_network_space_command, data);
 }
 
 
@@ -188,8 +210,10 @@ export type TGetAdditionsAndRemovalsResponse = {
   additions: CoinRecordBackwardCompatible[];
   removals: CoinRecordBackwardCompatible[];
 };
-export async function get_additions_and_removals(agent: TRPCAgent, data: TGetAdditionsAndRemovalsRequest) {
-  return agent.sendMessage<TGetAdditionsAndRemovalsResponse>(chia_full_node_service, get_additions_and_removals_command, data);
+export type WsGetAdditionsAndRemovalsMessage = GetMessageType<chia_full_node_service, get_additions_and_removals_command, TGetAdditionsAndRemovalsResponse>;
+export async function get_additions_and_removals<T extends TRPCAgent | TDaemon>(agent: T, data: TGetAdditionsAndRemovalsRequest) {
+  type R = ResType<T, TGetAdditionsAndRemovalsResponse, WsGetAdditionsAndRemovalsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_additions_and_removals_command, data);
 }
 
 
@@ -201,8 +225,10 @@ export type TGetInitialFreezePeriodRequestOfFullNode = {
 export type TGetInitialFreezePeriodResponseOfFullNode = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
-export async function get_initial_freeze_period_of_full_node(agent: TRPCAgent) {
-  return agent.sendMessage<TGetInitialFreezePeriodResponseOfFullNode>(chia_full_node_service, get_initial_freeze_period_command_of_full_node);
+export type WsGetInitialFreezePeriodMessageOfFullNode = GetMessageType<chia_full_node_service, get_initial_freeze_period_command_of_full_node, TGetInitialFreezePeriodResponseOfFullNode>;
+export async function get_initial_freeze_period_of_full_node<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetInitialFreezePeriodResponseOfFullNode, WsGetInitialFreezePeriodMessageOfFullNode>;
+  return agent.sendMessage<R>(chia_full_node_service, get_initial_freeze_period_command_of_full_node);
 }
 
 
@@ -215,8 +241,10 @@ export type TGetNetworkInfoResponseOfFullNode = {
   network_name: str;
   network_prefix: str;
 };
-export async function get_network_info_of_full_node(agent: TRPCAgent) {
-  return agent.sendMessage<TGetNetworkInfoResponseOfFullNode>(chia_full_node_service, get_network_info_command_of_full_node);
+export type WsGetNetworkInfoMessageOfFullNode = GetMessageType<chia_full_node_service, get_network_info_command_of_full_node, TGetNetworkInfoResponseOfFullNode>;
+export async function get_network_info_of_full_node<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetNetworkInfoResponseOfFullNode, WsGetNetworkInfoMessageOfFullNode>;
+  return agent.sendMessage<R>(chia_full_node_service, get_network_info_command_of_full_node);
 }
 
 
@@ -237,8 +265,10 @@ export type TGetRecentSignagePointOrEOSCommandResponse = {
   time_received: float;
   reverted: bool;
 };
-export async function get_recent_signage_point_or_eos(agent: TRPCAgent, data: TGetRecentSignagePointOrEOSCommandRequest) {
-  return agent.sendMessage<TGetRecentSignagePointOrEOSCommandResponse>(chia_full_node_service, get_recent_signage_point_or_eos_command, data);
+export type WsGetRecentSignagePointOrEOSCommandMessage = GetMessageType<chia_full_node_service, get_recent_signage_point_or_eos_command, TGetRecentSignagePointOrEOSCommandResponse>;
+export async function get_recent_signage_point_or_eos<T extends TRPCAgent | TDaemon>(agent: T, data: TGetRecentSignagePointOrEOSCommandRequest) {
+  type R = ResType<T, TGetRecentSignagePointOrEOSCommandResponse, WsGetRecentSignagePointOrEOSCommandMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_recent_signage_point_or_eos_command, data);
 }
 
 
@@ -254,8 +284,10 @@ export type TGetCoinRecordsByPuzzleHashRequest = {
 export type TGetCoinRecordsByPuzzleHashResponse = {
   coin_records: CoinRecordBackwardCompatible[];
 };
-export async function get_coin_records_by_puzzle_hash(agent: TRPCAgent, data: TGetCoinRecordsByPuzzleHashRequest) {
-  return agent.sendMessage<TGetCoinRecordsByPuzzleHashResponse>(chia_full_node_service, get_coin_records_by_puzzle_hash_command, data);
+export type WsGetCoinRecordsByPuzzleHashMessage = GetMessageType<chia_full_node_service, get_coin_records_by_puzzle_hash_command, TGetCoinRecordsByPuzzleHashResponse>;
+export async function get_coin_records_by_puzzle_hash<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordsByPuzzleHashRequest) {
+  type R = ResType<T, TGetCoinRecordsByPuzzleHashResponse, WsGetCoinRecordsByPuzzleHashMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_coin_records_by_puzzle_hash_command, data);
 }
 
 
@@ -271,8 +303,10 @@ export type TGetCoinRecordsByPuzzleHashesRequest = {
 export type TGetCoinRecordsByPuzzleHashesResponse = {
   coin_records: CoinRecordBackwardCompatible[];
 };
-export async function get_coin_records_by_puzzle_hashes(agent: TRPCAgent, data: TGetCoinRecordsByPuzzleHashesRequest) {
-  return agent.sendMessage<TGetCoinRecordsByPuzzleHashesResponse>(chia_full_node_service, get_coin_records_by_puzzle_hashes_command, data);
+export type WsGetCoinRecordsByPuzzleHashesMessage = GetMessageType<chia_full_node_service, get_coin_records_by_puzzle_hashes_command, TGetCoinRecordsByPuzzleHashesResponse>;
+export async function get_coin_records_by_puzzle_hashes<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordsByPuzzleHashesRequest) {
+  type R = ResType<T, TGetCoinRecordsByPuzzleHashesResponse, WsGetCoinRecordsByPuzzleHashesMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_coin_records_by_puzzle_hashes_command, data);
 }
 
 
@@ -285,8 +319,10 @@ export type TGetCoinRecordByNameRequest = {
 export type TGetCoinRecordByNameResponse = {
   coin_record: CoinRecordBackwardCompatible;
 };
-export async function get_coin_record_by_name(agent: TRPCAgent, data: TGetCoinRecordByNameRequest) {
-  return agent.sendMessage<TGetCoinRecordByNameResponse>(chia_full_node_service, get_coin_record_by_name_command, data);
+export type WsGetCoinRecordByNameMessage = GetMessageType<chia_full_node_service, get_coin_record_by_name_command, TGetCoinRecordByNameResponse>;
+export async function get_coin_record_by_name<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordByNameRequest) {
+  type R = ResType<T, TGetCoinRecordByNameResponse, WsGetCoinRecordByNameMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_coin_record_by_name_command, data);
 }
 
 
@@ -302,8 +338,10 @@ export type TGetCoinRecordsByNamesRequest = {
 export type TGetCoinRecordsByNamesResponse = {
   coin_records: CoinRecordBackwardCompatible[];
 };
-export async function get_coin_records_by_names(agent: TRPCAgent, data: TGetCoinRecordsByNamesRequest) {
-  return agent.sendMessage<TGetCoinRecordsByNamesResponse>(chia_full_node_service, get_coin_records_by_names_command, data);
+export type WsGetCoinRecordsByNamesMessage = GetMessageType<chia_full_node_service, get_coin_records_by_names_command, TGetCoinRecordsByNamesResponse>;
+export async function get_coin_records_by_names<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordsByNamesRequest) {
+  type R = ResType<T, TGetCoinRecordsByNamesResponse, WsGetCoinRecordsByNamesMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_coin_records_by_names_command, data);
 }
 
 
@@ -320,8 +358,10 @@ export type TGetCoinRecordsByParentIdsRequest = {
 export type TGetCoinRecordsByParentIdsResponse = {
   coin_records: CoinRecordBackwardCompatible[];
 };
-export async function get_coin_records_by_parent_ids(agent: TRPCAgent, data: TGetCoinRecordsByParentIdsRequest) {
-  return agent.sendMessage<TGetCoinRecordsByParentIdsResponse>(chia_full_node_service, get_coin_records_by_parent_ids_command, data);
+export type WsGetCoinRecordsByParentIdsMessage = GetMessageType<chia_full_node_service, get_coin_records_by_parent_ids_command, TGetCoinRecordsByParentIdsResponse>;
+export async function get_coin_records_by_parent_ids<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordsByParentIdsRequest) {
+  type R = ResType<T, TGetCoinRecordsByParentIdsResponse, WsGetCoinRecordsByParentIdsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_coin_records_by_parent_ids_command, data);
 }
 
 
@@ -339,8 +379,10 @@ export type TGetCoinRecordsByHintRequest = {
 export type TGetCoinRecordsByHintResponse = {
   coin_records: CoinRecordBackwardCompatible[];
 };
-export async function get_coin_records_by_hint(agent: TRPCAgent, data: TGetCoinRecordsByHintRequest) {
-  return agent.sendMessage<TGetCoinRecordsByHintResponse>(chia_full_node_service, get_coin_records_by_hint_command, data);
+export type WsGetCoinRecordsByHintMessage = GetMessageType<chia_full_node_service, get_coin_records_by_hint_command, TGetCoinRecordsByHintResponse>;
+export async function get_coin_records_by_hint<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordsByHintRequest) {
+  type R = ResType<T, TGetCoinRecordsByHintResponse, WsGetCoinRecordsByHintMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_coin_records_by_hint_command, data);
 }
 
 
@@ -354,8 +396,10 @@ export type TPushTxRequest = {
 export type TPushTxResponse = {
   status: str; // Enum.name
 };
-export async function push_tx(agent: TRPCAgent, data: TPushTxRequest) {
-  return agent.sendMessage<TPushTxResponse>(chia_full_node_service, push_tx_command, data);
+export type WsPushTxMessage = GetMessageType<chia_full_node_service, push_tx_command, TPushTxResponse>;
+export async function push_tx<T extends TRPCAgent | TDaemon>(agent: T, data: TPushTxRequest) {
+  type R = ResType<T, TPushTxResponse, WsPushTxMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, push_tx_command, data);
 }
 
 
@@ -369,8 +413,10 @@ export type TGetPuzzleAndSolutionRequest = {
 export type TGetPuzzleAndSolutionResponse = {
   coin_solution: CoinSpend;
 };
-export async function get_puzzle_and_solution(agent: TRPCAgent, data: TGetPuzzleAndSolutionRequest) {
-  return agent.sendMessage<TGetPuzzleAndSolutionResponse>(chia_full_node_service, get_puzzle_and_solution_command, data);
+export type WsGetPuzzleAndSolutionMessage = GetMessageType<chia_full_node_service, get_puzzle_and_solution_command, TGetPuzzleAndSolutionResponse>;
+export async function get_puzzle_and_solution<T extends TRPCAgent | TDaemon>(agent: T, data: TGetPuzzleAndSolutionRequest) {
+  type R = ResType<T, TGetPuzzleAndSolutionResponse, WsGetPuzzleAndSolutionMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_puzzle_and_solution_command, data);
 }
 
 
@@ -382,8 +428,10 @@ export type TGetAllMempoolTxIdsRequest = {
 export type TGetAllMempoolTxIdsResponse = {
   tx_ids: bytes32[];
 };
-export async function get_all_mempool_tx_ids(agent: TRPCAgent) {
-  return agent.sendMessage<TGetAllMempoolTxIdsResponse>(chia_full_node_service, get_all_mempool_tx_ids_command);
+export type WsGetAllMempoolTxIdsMessage = GetMessageType<chia_full_node_service, get_all_mempool_tx_ids_command, TGetAllMempoolTxIdsResponse>;
+export async function get_all_mempool_tx_ids<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetAllMempoolTxIdsResponse, WsGetAllMempoolTxIdsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_all_mempool_tx_ids_command);
 }
 
 
@@ -395,8 +443,10 @@ export type TGetAllMempoolItemsRequest = {
 export type TGetAllMempoolItemsResponse = {
   mempool_items: Record<string, MempoolItem>;
 };
-export async function get_all_mempool_items(agent: TRPCAgent) {
-  return agent.sendMessage<TGetAllMempoolItemsResponse>(chia_full_node_service, get_all_mempool_items_command);
+export type WsGetAllMempoolItemsMessage = GetMessageType<chia_full_node_service, get_all_mempool_items_command, TGetAllMempoolItemsResponse>;
+export async function get_all_mempool_items<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetAllMempoolItemsResponse, WsGetAllMempoolItemsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_all_mempool_items_command);
 }
 
 
@@ -405,12 +455,15 @@ export const get_mempool_item_by_tx_id_command = "get_mempool_item_by_tx_id";
 export type get_mempool_item_by_tx_id_command = typeof get_mempool_item_by_tx_id_command;
 export type TGetMempoolItemByTxIdRequest = {
   tx_id: str;
+  include_pending?: bool;
 };
 export type TGetMempoolItemByTxIdResponse = {
   mempool_item: MempoolItem;
 };
-export async function get_mempool_item_by_tx_id(agent: TRPCAgent, data: TGetMempoolItemByTxIdRequest) {
-  return agent.sendMessage<TGetMempoolItemByTxIdResponse>(chia_full_node_service, get_mempool_item_by_tx_id_command, data);
+export type WsGetMempoolItemByTxIdMessage = GetMessageType<chia_full_node_service, get_mempool_item_by_tx_id_command, TGetMempoolItemByTxIdResponse>;
+export async function get_mempool_item_by_tx_id<T extends TRPCAgent | TDaemon>(agent: T, data: TGetMempoolItemByTxIdRequest) {
+  type R = ResType<T, TGetMempoolItemByTxIdResponse, WsGetMempoolItemByTxIdMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_mempool_item_by_tx_id_command, data);
 }
 
 
@@ -433,6 +486,66 @@ export type TGetFeeEstimateResponse = {
   last_peak_timestamp: uint64;
   node_time_utc: int;
 };
-export async function get_fee_estimate(agent: TRPCAgent, data: TGetFeeEstimateRequest) {
-  return agent.sendMessage<TGetFeeEstimateResponse>(chia_full_node_service, get_fee_estimate_command, data);
+export type WsGetFeeEstimateMessage = GetMessageType<chia_full_node_service, get_fee_estimate_command, TGetFeeEstimateResponse>;
+export async function get_fee_estimate<T extends TRPCAgent | TDaemon>(agent: T, data: TGetFeeEstimateRequest) {
+  type R = ResType<T, TGetFeeEstimateResponse, WsGetFeeEstimateMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_fee_estimate_command, data);
 }
+
+export type RpcFullNodeMessage =
+  TGetAdditionsAndRemovalsResponse
+  | TGetAllMempoolItemsResponse
+  | TGetAllMempoolTxIdsResponse
+  | TGetBlockResponse
+  | TGetBlockRecordByHeightResponse
+  | TGetBlockRecordResponse
+  | TGetBlockRecordsResponse
+  | TGetBlockSpendsResponse
+  | TGetBlockchainStateResponse
+  | TGetBlocksResponse
+  | TGetBlockCountMetricsResponse
+  | TGetRecentSignagePointOrEOSCommandResponse
+  | TGetCoinRecordByNameResponse
+  | TGetCoinRecordsByNamesResponse
+  | TGetCoinRecordsByPuzzleHashResponse
+  | TGetCoinRecordsByPuzzleHashesResponse
+  | TGetCoinRecordsByParentIdsResponse
+  | TGetCoinRecordsByHintResponse
+  | TGetInitialFreezePeriodResponseOfFullNode
+  | TGetMempoolItemByTxIdResponse
+  | TGetNetworkInfoResponseOfFullNode
+  | TGetNetworkSpaceResponse
+  | TGetUnfinishedBlockHeadersResponse
+  | TPushTxResponse
+  | TGetPuzzleAndSolutionResponse
+  | TGetFeeEstimateResponse
+;
+
+export type RpcFullNodeMessageOnWs =
+  WsGetAdditionsAndRemovalsMessage
+  | WsGetAllMempoolItemsMessage
+  | WsGetAllMempoolTxIdsMessage
+  | WsGetBlockMessage
+  | WsGetBlockRecordByHeightMessage
+  | WsGetBlockRecordMessage
+  | WsGetBlockRecordsMessage
+  | WsGetBlockSpendsMessage
+  | WsGetBlockchainStateMessage
+  | WsGetBlocksMessage
+  | WsGetBlockCountMetricsMessage
+  | WsGetRecentSignagePointOrEOSCommandMessage
+  | WsGetCoinRecordByNameMessage
+  | WsGetCoinRecordsByNamesMessage
+  | WsGetCoinRecordsByPuzzleHashMessage
+  | WsGetCoinRecordsByPuzzleHashesMessage
+  | WsGetCoinRecordsByParentIdsMessage
+  | WsGetCoinRecordsByHintMessage
+  | WsGetInitialFreezePeriodMessageOfFullNode
+  | WsGetMempoolItemByTxIdMessage
+  | WsGetNetworkInfoMessageOfFullNode
+  | WsGetNetworkSpaceMessage
+  | WsGetUnfinishedBlockHeadersMessage
+  | WsPushTxMessage
+  | WsGetPuzzleAndSolutionMessage
+  | WsGetFeeEstimateMessage
+;

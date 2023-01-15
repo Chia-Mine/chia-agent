@@ -11,6 +11,5 @@ export type MempoolItem = {
   cost: uint64;
   spend_bundle_name: bytes32;
   additions: Coin[];
-  removals: Coin[];
   height_added_to_mempool: uint32;
 };

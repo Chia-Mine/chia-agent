@@ -1,5 +1,118 @@
 # Changelog
 
+## [10.0.0]
+### Breaking change
+In `chia/types/mempool_items.py`, `removals` of `MempoolItem` is now flagged as `@property`.
+As a result of this, `removals` of `MempoolItem` is removed from 2 RPC API responses listed below.
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_all_mempool_items`](./src/api/rpc/full_node/README.md#getallmempoolitemsagent)
+  - [`get_mempool_item_by_tx_id`](./src/api/rpc/full_node/README.md#getmempoolitembytxidagent-params)
+### Minor breaking change
+- Response params of`keyring_status` daemon WebSocket API below are deprecated
+  - `needs_migration`
+  - `can_remove_legacy_keys`
+### Removed
+- [Daemon WebSocket API](./src/api/ws/daemon)  
+  (Code will remain awhile on chia-agent for backward compatibility. Only document is removed for now.)
+  - Removed `migrate_keyring`
+  - Removed `notify_keyring_migration_completed`
+### Added
+- [New DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`get_sync_status`](./src/api/rpc/data_layer/README.md#getsyncstatusagent-params)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_spendable_coins`](./src/api/rpc/wallet/README.md#getspendablecoinsagent-params)
+  - [`get_coin_records_by_names`](./src/api/rpc/wallet/README.md#getcoinrecordsbynamesagent-params)
+  - [`verify_signature`](./src/api/rpc/wallet/README.md#verifysignatureagent-params)
+  - [`did_message_spend`](./src/api/rpc/wallet/README.md#didmessagespendagent-params)
+  - [`did_get_info`](./src/api/rpc/wallet/README.md#didgetinfoagent-params)
+  - [`did_find_lost_did`](./src/api/rpc/wallet/README.md#didfindlostdidagent-params)
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nftsetdidbulkagent-params)
+### Changed
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`keyring_status`](./src/api/ws/daemon/README.md#keyringstatusdaemon)
+    - Removed `needs_migration` from response
+    - Removed `can_remove_legacy_keys` from response
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_mempool_item_by_tx_id`](./src/api/rpc/full_node/README.md#getmempoolitembytxidagent-params)
+    - Added `include_pending` to request parameter
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`send_transaction`](./src/api/rpc/wallet/README.md#sendtransactionagent-params)
+    - Added `max_coin_amount` to request parameter
+    - Added `exclude_coin_amounts` to request parameter
+    - Added `exclude_coin_ids` to request parameter
+  - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#sendtransactionmultiagent-params)
+    - Added `max_coin_amount` to request parameter
+    - Added `exclude_coin_amounts` to request parameter
+    - Added parameters for cat spends.
+  - [`select_coins`](./src/api/rpc/wallet/README.md#selectcoinsagent-params)
+    - Added `max_coin_amount` to request parameter
+    - Added `exclude_coin_amounts` to request parameter
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#catspendagent-params)
+    - Added `additions` to request parameter
+    - Added `max_coin_amount` to request parameter
+    - Added `exclude_coin_amounts` to request parameter
+    - Added `exclude_coin_ids` to request parameter
+  - [`sign_message_by_id`](./src/api/rpc/wallet/README.md#signmessagebyidagent-params)
+    - Added `latest_coin_id` to request parameter
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#createofferforidsagent-params)
+    - Added `max_coin_amount` to request parameter
+  - [`take_offer`](./src/api/rpc/wallet/README.md#takeofferagent-params)
+    - Added `max_coin_amount` to request parameter
+  - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nftmintnftagent-params)
+    - Added `nft_id` to return parameter
+  - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nftmintbulkagent-params)
+    - Added `nft_id_list` to return parameter
+  - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#createsignedtransactionagent-params)
+    - Added `max_coin_amount` to return parameter
+    - Added `exclude_coin_amounts` to return parameter
+- [Wallet WebSocket API](./src/api/ws/wallet)
+  - [`state_changed`](./src/api/ws/wallet/README.md#onstatechangedofwallet)
+    - Added `new_on_chain_notification` state.
+- `TBladeBitParams` has been renamed to `TBladeBitRamParams`
+  - `plot_type: "ramplot"` has been added
+- `TBladeBit2Params` has been renamed to `TBladeBitDiskParams`
+  - `plot_type: "diskplot"` has been added
+  - `plotter` type has been converted to `"bladebit"` from `"bladebit2"`
+- Eased type requirement of `daemon.sendMessage()` and `agent.sendMessage()`  
+  You can request **RPC** API on Daemon WebSocket channel like this:
+```typescript
+const {getDaemon} = require("chia-agent");
+const {get_harvesters_summary} = require("chia-agent/api/rpc/farmer");
+const daemon = getDaemon();
+await daemon.connect();
+res = await get_harvesters_summary(daemon);
+// or specify service name and API command
+res = await daemon.sendMessage("chia_farmer", "get_harvesters_summary");
+/*
+{
+  ack: true,
+  command: 'get_harvesters_summary',
+  data: { harvesters: [ [Object] ], success: true },
+  destination: 'chia_agent',
+  origin: 'chia_farmer',
+  request_id: '4e31c04df234538901d9270932d04301b5b3a1a895d762144400852b8167973f'
+}
+ */
+```
+  Please note that when you use RPC API, you can directly request to the RPC endpoint of the service(full_node/farmer/...).
+  However, when you request RPC API on Daemon WebSocket channel, you get a response from the service
+  which the daemon is connecting to.
+  In other word, you can choose the exact ip:port of a service if you use RPC API,
+  while it is the daemon which chooses the services it connects to if you use Daemon WebSocket channel.
+### Fixed
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_blockchain_state`](./src/api/rpc/full_node/README.md#getblockchainstateagent)
+    - Made `sync_tip_height` as `uint32`(previously `Optional<uint32>`) because `None` value would never be set
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#sendtransactionmultiagent-params)
+    - Added missing `min_coin_amount` to request parameter
+    - Added missing `exclude_coins` to request parameter
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#createofferforidsagent-params)
+    - Added missing `solver` to request parameter
+  - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#createsignedtransactionagent-params)
+    - Added missing `wallet_id` to return parameter in README
+    - Added missing `exclude_coins` to return parameter in README
+
 ## [9.2.0]
 ### Minor breaking change
 - `add_private_key` daemon WebSocket API now deprecated `passphrase` request param  
@@ -39,7 +152,7 @@
   - [`nft_calculate_royalties`](./src/api/rpc/wallet/README.md#nft_calculate_royaltiesagent-params)
   - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
 ### Changed
-- [Daemon WebSocket API](./src/api/rpc/wallet)
+- [Daemon WebSocket API](./src/api/ws/daemon)
   - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
     - Removed `passphrase` request parameter
     - Added `label` request parameter
@@ -706,6 +819,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[10.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.2.0...v10.0.0
 [9.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.1.0...v9.2.0
 [9.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.1...v9.1.0
 [9.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.0...v9.0.1

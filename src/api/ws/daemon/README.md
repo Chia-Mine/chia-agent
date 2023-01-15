@@ -117,6 +117,7 @@ const response = await start_plotting(daemon, params);
 ```typescript
 {
   plotter: "bladebit";
+  plot_type: "ramplot";
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
@@ -125,7 +126,8 @@ const response = await start_plotting(daemon, params);
 ### bladebit2_params:
 ```typescript
 {
-  plotter: "bladebit2";
+  plotter: "bladebit";
+  plot_type: "diskplot";
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
@@ -610,8 +612,6 @@ const response = await keyring_status(daemon);
   passphrase_support_enabled: bool;
   can_save_passphrase: bool;
   user_passphrase_is_set: bool;
-  needs_migration: bool;
-  can_remove_legacy_keys: bool;
   can_set_passphrase_hint: bool;
   passphrase_hint: str;
   passphrase_requirements: {} | {
@@ -673,34 +673,6 @@ const response = await validate_keyring_passphrase(daemon, params);
 
 ---
 
-## `migrate_keyring(daemon, params)`
-### Usage
-```js
-const {getDaemon} = require("chia-agent");
-const {migrate_keyring} = require("chia-agent/api/ws");
-const daemon = getDaemon(); // This is the websocket connection handler
-await daemon.connect(); // connect to local daemon using config file.
-const response = await migrate_keyring(daemon, params);
-```
-### params:
-```typescript
-{
-  passphrase?: str;
-  passphrase_hint?: str;
-  save_passphrase?: bool;
-  cleanup_legacy_keyring?: bool;
-}
-```
-### response:
-```typescript
-{
-  success: bool;
-  error: string|None;
-}
-```
-
----
-
 ## `set_keyring_passphrase(daemon, params)`
 ### Usage
 ```js
@@ -742,31 +714,6 @@ const response = await remove_keyring_passphrase(daemon, params);
 ```typescript
 {
   current_passphrase: str;
-}
-```
-### response:
-```typescript
-{
-  success: bool;
-  error: string;
-}
-```
-
----
-
-## `notify_keyring_migration_completed(daemon, params)`
-### Usage
-```js
-const {getDaemon} = require("chia-agent");
-const {notify_keyring_migration_completed} = require("chia-agent/api/ws");
-const daemon = getDaemon(); // This is the websocket connection handler
-await daemon.connect(); // connect to local daemon using config file.
-const response = await notify_keyring_migration_completed(daemon, params);
-```
-### params:
-```typescript
-{
-  key: str;
 }
 ```
 ### response:

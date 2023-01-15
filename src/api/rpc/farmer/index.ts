@@ -5,6 +5,8 @@ import {TRPCAgent} from "../../../rpc/index";
 import {PoolState} from "../../chia/farmer/farmer";
 import {Receiver} from "../../chia/plot-sync/receiver";
 import {Plot} from "../../chia/protocols/harvester_protocol";
+import {GetMessageType, ResType} from "../../types";
+import {TDaemon} from "../../../daemon/index";
 
 export const chia_farmer_service = "chia_farmer";
 export type chia_farmer_service = typeof chia_farmer_service;
@@ -25,8 +27,10 @@ export type TGetSignagePointResponse = {
   };
   proofs: [string, ProofOfSpace];
 };
-export async function get_signage_point(agent: TRPCAgent, params: TGetSignagePointRequest) {
-  return agent.sendMessage<TGetSignagePointResponse>(chia_farmer_service, get_signage_point_command, params);
+export type WsGetSignagePointMessage = GetMessageType<chia_farmer_service, get_signage_point_command, TGetSignagePointResponse>;
+export async function get_signage_point<T extends TRPCAgent|TDaemon>(agent: T, params: TGetSignagePointRequest) {
+  type R = ResType<T, TGetSignagePointResponse, WsGetSignagePointMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_signage_point_command, params);
 }
 
 
@@ -37,8 +41,10 @@ export type TGetSignagePointsRequest = {
 export type TGetSignagePointsResponse = {
   signage_points: TGetSignagePointResponse[];
 };
-export async function get_signage_points(agent: TRPCAgent){
-  return agent.sendMessage<TGetSignagePointsResponse>(chia_farmer_service, get_signage_points_command);
+export type WsGetSignagePointsMessage = GetMessageType<chia_farmer_service, get_signage_points_command, TGetSignagePointsResponse>;
+export async function get_signage_points<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetSignagePointsResponse, WsGetSignagePointsMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_signage_points_command);
 }
 
 
@@ -58,8 +64,10 @@ export type TGetRewardTargetResponse = {
   farmer_target: str;
   pool_target: str;
 };
-export async function get_reward_targets(agent: TRPCAgent, params: TGetRewardTargetRequest){
-  return agent.sendMessage<TGetRewardTargetResponse>(chia_farmer_service, get_reward_targets_command, params);
+export type WsGetRewardTargetsMessage = GetMessageType<chia_farmer_service, get_reward_targets_command, TGetRewardTargetResponse>;
+export async function get_reward_targets<T extends TRPCAgent | TDaemon>(agent: T, params: TGetRewardTargetRequest){
+  type R = ResType<T, TGetRewardTargetResponse, WsGetRewardTargetsMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_reward_targets_command, params);
 }
 
 
@@ -72,8 +80,10 @@ export type TSetRewardTargetRequest = {
 };
 export type TSetRewardTargetResponse = {
 };
-export async function set_reward_targets(agent: TRPCAgent, params: TSetRewardTargetRequest){
-  return agent.sendMessage<TSetRewardTargetResponse>(chia_farmer_service, set_reward_targets_command, params);
+export type WsSetRewardTargetsMessage = GetMessageType<chia_farmer_service, set_reward_targets_command, TSetRewardTargetResponse>;
+export async function set_reward_targets<T extends TRPCAgent | TDaemon>(agent: T, params: TSetRewardTargetRequest){
+  type R = ResType<T, TSetRewardTargetResponse, WsSetRewardTargetsMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, set_reward_targets_command, params);
 }
 
 
@@ -85,8 +95,10 @@ export type TGetPoolStateRequest = {
 export type TGetPoolStateResponse = {
   pool_state: PoolState[];
 };
-export async function get_pool_state(agent: TRPCAgent){
-  return agent.sendMessage<TSetRewardTargetResponse>(chia_farmer_service, get_pool_state_command);
+export type WsGetPoolStateMessage = GetMessageType<chia_farmer_service, get_pool_state_command, TGetPoolStateResponse>;
+export async function get_pool_state<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetPoolStateResponse, WsGetPoolStateMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_pool_state_command);
 }
 
 
@@ -99,8 +111,10 @@ export type TSetPayoutInstructionsRequest = {
 };
 export type TSetPayoutInstructionsResponse = {
 };
-export async function set_pool_payout_instructions(agent: TRPCAgent, params: TSetPayoutInstructionsRequest){
-  return agent.sendMessage<TSetPayoutInstructionsResponse>(chia_farmer_service, set_payout_instructions_command, params);
+export type WsSetPayoutInstructionsMessage = GetMessageType<chia_farmer_service, set_payout_instructions_command, TSetPayoutInstructionsResponse>;
+export async function set_pool_payout_instructions<T extends TRPCAgent | TDaemon>(agent: T, params: TSetPayoutInstructionsRequest){
+  type R = ResType<T, TSetPayoutInstructionsResponse, WsSetPayoutInstructionsMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, set_payout_instructions_command, params);
 }
 
 
@@ -111,8 +125,10 @@ export type TGetHarvestersRequest = {
 export type TGetHarvestersResponse = {
   harvesters: Receiver[];
 };
-export async function get_harvesters(agent: TRPCAgent){
-  return agent.sendMessage<TGetHarvestersResponse>(chia_farmer_service, get_harvesters_command);
+export type WsGetHarvestersMessage = GetMessageType<chia_farmer_service, get_harvesters_command, TGetHarvestersResponse>;
+export async function get_harvesters<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetHarvestersResponse, WsGetHarvestersMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_harvesters_command);
 }
 
 
@@ -122,8 +138,10 @@ export type get_harvesters_summary_command = typeof get_harvesters_summary_comma
 export type TGetHarvestersSummaryResponse = {
   harvesters: Receiver<true>[];
 };
-export async function get_harvesters_summary(agent: TRPCAgent){
-  return agent.sendMessage<TGetHarvestersSummaryResponse>(chia_farmer_service, get_harvesters_summary_command);
+export type WsGetHarvestersSummaryMessage = GetMessageType<chia_farmer_service, get_harvesters_summary_command, TGetHarvestersSummaryResponse>;
+export async function get_harvesters_summary<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetHarvestersSummaryResponse, WsGetHarvestersSummaryMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_harvesters_summary_command);
 }
 
 
@@ -145,8 +163,10 @@ export type TGetHarvesterPlotsValidResponse = {
   total_count: int;
   plots: Plot[];
 };
-export async function get_harvester_plots_valid(agent: TRPCAgent, param: TGetHarvesterPlotsValidRequest){
-  return agent.sendMessage<TGetHarvesterPlotsValidResponse>(chia_farmer_service, get_harvester_plots_valid_command, param);
+export type WsGetHarvesterPlotsValidMessage = GetMessageType<chia_farmer_service, get_harvester_plots_valid_command, TGetHarvesterPlotsValidResponse>;
+export async function get_harvester_plots_valid<T extends TRPCAgent | TDaemon>(agent: T, param: TGetHarvesterPlotsValidRequest){
+  type R = ResType<T, TGetHarvesterPlotsValidResponse, WsGetHarvesterPlotsValidMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_harvester_plots_valid_command, param);
 }
 
 
@@ -167,8 +187,10 @@ export type TGetHarvesterPlotsInvalidResponse = {
   total_count: int;
   plots: str[];
 };
-export async function get_harvester_plots_invalid(agent: TRPCAgent, param: TGetHarvesterPlotsInvalidRequest){
-  return agent.sendMessage<TGetHarvesterPlotsInvalidResponse>(chia_farmer_service, get_harvester_plots_invalid_command, param);
+export type WsGetHarvesterPlotsInvalidMessage = GetMessageType<chia_farmer_service, get_harvester_plots_invalid_command, TGetHarvesterPlotsInvalidResponse>;
+export async function get_harvester_plots_invalid<T extends TRPCAgent | TDaemon>(agent: T, param: TGetHarvesterPlotsInvalidRequest){
+  type R = ResType<T, TGetHarvesterPlotsInvalidResponse, WsGetHarvesterPlotsInvalidMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_harvester_plots_invalid_command, param);
 }
 
 
@@ -189,8 +211,10 @@ export type TGetHarvesterPlotsKeysMissingResponse = {
   total_count: int;
   plots: str[];
 };
-export async function get_harvester_plots_keys_missing(agent: TRPCAgent, param: TGetHarvesterPlotsKeysMissingRequest){
-  return agent.sendMessage<TGetHarvesterPlotsKeysMissingResponse>(chia_farmer_service, get_harvester_plots_keys_missing_command, param);
+export type WsGetHarvesterPlotsKeysMissingMessage = GetMessageType<chia_farmer_service, get_harvester_plots_keys_missing_command, TGetHarvesterPlotsKeysMissingResponse>;
+export async function get_harvester_plots_keys_missing<T extends TRPCAgent | TDaemon>(agent: T, param: TGetHarvesterPlotsKeysMissingRequest){
+  type R = ResType<T, TGetHarvesterPlotsKeysMissingResponse, WsGetHarvesterPlotsKeysMissingMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_harvester_plots_keys_missing_command, param);
 }
 
 
@@ -211,8 +235,10 @@ export type TGetHarvesterPlotsDuplicatesResponse = {
   total_count: int;
   plots: str[];
 };
-export async function get_harvester_plots_duplicates(agent: TRPCAgent, param: TGetHarvesterPlotsDuplicatesRequest){
-  return agent.sendMessage<TGetHarvesterPlotsDuplicatesResponse>(chia_farmer_service, get_harvester_plots_duplicates_command, param);
+export type WsGetHarvesterPlotsDuplicatesMessage = GetMessageType<chia_farmer_service, get_harvester_plots_duplicates_command, TGetHarvesterPlotsDuplicatesResponse>;
+export async function get_harvester_plots_duplicates<T extends TRPCAgent | TDaemon>(agent: T, param: TGetHarvesterPlotsDuplicatesRequest){
+  type R = ResType<T, TGetHarvesterPlotsDuplicatesResponse, WsGetHarvesterPlotsDuplicatesMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_harvester_plots_duplicates_command, param);
 }
 
 
@@ -225,6 +251,40 @@ export type TGetPoolLinkRequest = {
 export type TGetPoolLinkResponse = {
   login_link: str;
 };
-export async function get_pool_login_link(agent: TRPCAgent, params: TGetPoolLinkRequest){
-  return agent.sendMessage<TGetPoolLinkResponse>(chia_farmer_service, get_pool_login_link_command, params);
+export type WsGetPoolLinkMessage = GetMessageType<chia_farmer_service, get_pool_login_link_command, TGetPoolLinkResponse>;
+export async function get_pool_login_link<T extends TRPCAgent | TDaemon>(agent: T, params: TGetPoolLinkRequest){
+  type R = ResType<T, TGetPoolLinkResponse, WsGetPoolLinkMessage>;
+  return agent.sendMessage<R>(chia_farmer_service, get_pool_login_link_command, params);
 }
+
+export type RpcFarmerMessage =
+  TGetRewardTargetResponse
+  | TGetSignagePointResponse
+  | TGetSignagePointsResponse
+  | TSetRewardTargetResponse
+  | TGetHarvestersResponse
+  | TGetHarvestersSummaryResponse
+  | TGetHarvesterPlotsValidResponse
+  | TGetHarvesterPlotsInvalidResponse
+  | TGetHarvesterPlotsKeysMissingResponse
+  | TGetHarvesterPlotsDuplicatesResponse
+  | TSetPayoutInstructionsResponse
+  | TGetPoolStateResponse
+  | TGetPoolLinkResponse
+;
+
+export type RpcFarmerMessageOnWs =
+  WsGetRewardTargetsMessage
+  | WsGetSignagePointMessage
+  | WsGetSignagePointsMessage
+  | WsSetRewardTargetsMessage
+  | WsGetHarvestersMessage
+  | WsGetHarvestersSummaryMessage
+  | WsGetHarvesterPlotsValidMessage
+  | WsGetHarvesterPlotsInvalidMessage
+  | WsGetHarvesterPlotsKeysMissingMessage
+  | WsGetHarvesterPlotsDuplicatesMessage
+  | WsSetPayoutInstructionsMessage
+  | WsGetPoolStateMessage
+  | WsGetPoolLinkMessage
+  ;

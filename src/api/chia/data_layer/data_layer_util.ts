@@ -1,4 +1,5 @@
-import {str} from "../types/_python_types_";
+import {int, str} from "../types/_python_types_";
+import {bytes32} from "../types/blockchain_format/sized_bytes";
 
 export type KeyValueMarshalled = {
   key: str;
@@ -33,4 +34,11 @@ export type OfferMarshalled = {
   offer: str;
   taker: OfferStoreMarshalled[];
   maker: StoreProofsMarshalled[];
+};
+
+export type SyncStatus = {
+  root_hash: bytes32; // converted to string via `.hex()`
+  generation: int;
+  target_root_hash: bytes32; // converted to string via `.hex()`
+  target_generation: int;
 };

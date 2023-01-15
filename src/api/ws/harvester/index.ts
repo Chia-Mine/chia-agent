@@ -1,7 +1,6 @@
 import {Plot} from "../../chia/harvester/harvester";
 import {TDaemon} from "../../../daemon/index";
 import {GetMessageType, TConnectionGeneral, wallet_ui_service, metrics_service} from "../../types";
-import {WsMessage} from "../index";
 import {float, int, str} from "../../chia/types/_python_types_";
 
 export const chia_harvester_service = "chia_harvester";
@@ -12,9 +11,10 @@ export type get_connections_command = typeof get_connections_command;
 export type TGetConnectionsBroadCast = {
   connections: TConnectionGeneral[];
 };
-export async function on_get_connections(daemon: TDaemon, callback: (e: GetMessageType<chia_harvester_service, get_connections_command, TGetConnectionsBroadCast>) => unknown){
+export type WsGetConnectionsHarvesterMessage = GetMessageType<chia_harvester_service, get_connections_command, TGetConnectionsBroadCast>;
+export async function on_get_connections(daemon: TDaemon, callback: (e: WsGetConnectionsHarvesterMessage) => unknown){
   await daemon.subscribe(wallet_ui_service);
-  const messageListener = (e: WsMessage) => {
+  const messageListener = (e: WsHarvesterMessage) => {
     if(e.origin === chia_harvester_service && e.command === get_connections_command){
       callback(e);
     }
@@ -29,9 +29,10 @@ export type TGetPlotsBroadCast = {
   failed_to_open_filenames: string[];
   not_found_filenames: string[];
 };
-export async function on_get_plots(daemon: TDaemon, callback: (e: GetMessageType<chia_harvester_service, get_plots_command, TGetPlotsBroadCast>) => unknown){
+export type WsGetPlotsMessage = GetMessageType<chia_harvester_service, get_plots_command, TGetPlotsBroadCast>;
+export async function on_get_plots(daemon: TDaemon, callback: (e: WsGetPlotsMessage) => unknown){
   await daemon.subscribe(wallet_ui_service);
-  const messageListener = (e: WsMessage) => {
+  const messageListener = (e: WsHarvesterMessage) => {
     if(e.origin === chia_harvester_service && e.command === get_plots_command){
       callback(e);
     }
@@ -48,9 +49,10 @@ export type TFarmingInfoBroadCast = {
   eligible_plots: int;
   time: float;
 };
+export type WsFarmingInfoMessage = GetMessageType<chia_harvester_service, farming_info_command, TFarmingInfoBroadCast>;
 export async function on_farming_info(daemon: TDaemon, callback: (e: GetMessageType<chia_harvester_service, farming_info_command, TFarmingInfoBroadCast>) => unknown){
   await daemon.subscribe(metrics_service);
-  const messageListener = (e: WsMessage) => {
+  const messageListener = (e: WsHarvesterMessage) => {
     if(e.origin === chia_harvester_service && e.command === farming_info_command){
       callback(e);
     }
@@ -58,12 +60,16 @@ export async function on_farming_info(daemon: TDaemon, callback: (e: GetMessageT
   return daemon.addMessageListener(chia_harvester_service, messageListener);
 }
 
+export type WsHarvesterMessage = WsGetConnectionsHarvesterMessage
+  | WsGetPlotsMessage
+  | WsFarmingInfoMessage
+;
 // Whole commands for the service
 export type chia_harvester_commands = get_plots_command | farming_info_command | get_connections_command;
 export type TChiaHarvesterBroadcast = TGetPlotsBroadCast  | TFarmingInfoBroadCast | TGetConnectionsBroadCast;
-export async function on_message_from_harvester(daemon: TDaemon, callback: (e: GetMessageType<chia_harvester_service, chia_harvester_commands, TChiaHarvesterBroadcast>) => unknown){
+export async function on_message_from_harvester(daemon: TDaemon, callback: (e: WsHarvesterMessage) => unknown){
   await daemon.subscribe(wallet_ui_service);
-  const messageListener = (e: WsMessage) => {
+  const messageListener = (e: WsHarvesterMessage) => {
     if(e.origin === chia_harvester_service){
       callback(e);
     }

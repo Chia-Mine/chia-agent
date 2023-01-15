@@ -1,6 +1,8 @@
 import {int, str, uint64} from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {TRPCAgent} from "../../../rpc/index";
+import {TDaemon} from "../../../daemon/index";
+import {GetMessageType, ResType} from "../../types";
 
 export const chia_crawler_service = "chia_crawler";
 export type chia_crawler_service = typeof chia_crawler_service;
@@ -16,8 +18,10 @@ export type TGetPeerCountsResponse = {
     versions: Record<str, int>;
   };
 };
-export async function get_peer_counts(agent: TRPCAgent) {
-  return agent.sendMessage<TGetPeerCountsResponse>(chia_crawler_service, get_peer_counts_command);
+export type WsGetPeerCountsMessage = GetMessageType<chia_crawler_service, get_peer_counts_command, TGetPeerCountsResponse>;
+export async function get_peer_counts<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetPeerCountsResponse, WsGetPeerCountsMessage>;
+  return agent.sendMessage<R>(chia_crawler_service, get_peer_counts_command);
 }
 
 
@@ -32,6 +36,18 @@ export type TGetIpsAfterTimestampResponse = {
   ips: str[];
   total: int;
 };
-export async function get_ips_after_timestamp(agent: TRPCAgent, params: TGetIpsAfterTimestampRequest){
-  return agent.sendMessage<TGetIpsAfterTimestampResponse>(chia_crawler_service, get_ips_after_timestamp_command, params);
+export type WsGetIpsAfterTimestampMessage = GetMessageType<chia_crawler_service, get_ips_after_timestamp_command, TGetIpsAfterTimestampResponse>;
+export async function get_ips_after_timestamp<T extends TRPCAgent | TDaemon>(agent: T, params: TGetIpsAfterTimestampRequest){
+  type R = ResType<T, TGetIpsAfterTimestampResponse, WsGetIpsAfterTimestampMessage>;
+  return agent.sendMessage<R>(chia_crawler_service, get_ips_after_timestamp_command, params);
 }
+
+export type RpcCrawlerMessage =
+  TGetIpsAfterTimestampResponse
+  | TGetPeerCountsResponse
+;
+
+export type RpcCrawlerMessageOnWs =
+  WsGetIpsAfterTimestampMessage
+  | WsGetPeerCountsMessage
+;

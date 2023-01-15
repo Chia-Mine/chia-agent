@@ -4,7 +4,6 @@ import type {checkServerIdentity} from "tls";
 import {existsSync, readFileSync} from "fs";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
-import {RpcMessage} from "../api/rpc/index";
 
 type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"data_layer"|"daemon"|"pool";
 
@@ -186,7 +185,7 @@ export class RPCAgent {
     return {clientCert, clientKey, caCert};
   }
   
-  public async sendMessage<M extends RpcMessage = RpcMessage>(
+  public async sendMessage<M extends unknown>(
     destination: string,
     command: string,
     data?: Record<string, unknown>,

@@ -4,9 +4,8 @@ import {randomBytes} from "crypto";
 import {getLogger} from "../logger";
 import {open} from "./connection";
 import {getConfig} from "../config/index";
-import {daemon_service, TRegisterServiceResponse, WsMessage} from "../api/ws";
-import {register_service_command} from "../api/ws/daemon";
-import {GetMessageType} from "../api/types";
+import {WsMessage} from "../api/ws";
+import {WsRegisterServiceMessage} from "../api/ws/daemon";
 
 export type EventType = "open" | "message" | "error" | "close";
 export type WsEvent = Event | MessageEvent | ErrorEvent | CloseEvent;
@@ -61,7 +60,7 @@ process.addListener("SIGINT", onProcessExit);
 class Daemon {
   protected _socket: WS|null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: {[request_id: string]: (value: (WsMessage | PromiseLike<WsMessage>)) => void} = {};
+  protected _responseQueue: {[request_id: string]: (value: unknown) => void} = {};
   protected _openEventListeners: Array<(e: Event) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
@@ -132,7 +131,7 @@ class Daemon {
     }));
   }
   
-  public async sendMessage<M extends WsMessage = WsMessage>(destination: string, command: string, data?: Record<string, unknown>): Promise<M> {
+  public async sendMessage<M=unknown>(destination: string, command: string, data?: Record<string, unknown>): Promise<M> {
     return new Promise((resolve, reject) => {
       if(!this.connected || !this._socket){
         getLogger().error("Tried to send message without active connection");
@@ -143,7 +142,7 @@ class Daemon {
       let timer: ReturnType<typeof setTimeout>|null = null;
       const message = this.createMessageTemplate(command, destination, data || {});
       const reqId = message.request_id;
-      this._responseQueue[reqId] = resolve as (v: WsMessage|PromiseLike<WsMessage>) => unknown;
+      this._responseQueue[reqId] = resolve as (v: unknown) => void;
       
       getLogger().debug(`Sending message. dest=${destination} command=${command} reqId=${reqId}`);
       this._socket.send(JSON.stringify(message));
@@ -161,7 +160,7 @@ class Daemon {
     };
   }
   
-  public async subscribe(service: string): Promise<GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>> {
+  public async subscribe<T extends WsRegisterServiceMessage>(service: string): Promise<T> {
     if(!this.connected || !this._socket){
       getLogger().error(`Tried to subscribe '${service}' without active connection`);
       throw new Error("Not connected");
@@ -175,7 +174,7 @@ class Daemon {
         origin: "daemon",
         destination: chia_agent_service,
         request_id: "",
-      };
+      } as T;
     }
     
     let error: unknown;
@@ -191,7 +190,7 @@ class Daemon {
     
     this._subscriptions.push(service);
     
-    return result as GetMessageType<daemon_service, register_service_command, TRegisterServiceResponse>;
+    return result as T;
   }
   
   public addEventListener<T extends EventType>(type: T, listener: EventListenerOf<T>){
