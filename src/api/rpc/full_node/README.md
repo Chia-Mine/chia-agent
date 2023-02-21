@@ -714,3 +714,204 @@ For content of `CLVMCost`,
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/clvm_cost.ts
 For content of `Mojos`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mojos.ts
+
+---
+
+## `get_all_blocks(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_all_blocks} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_all_blocks(agent);
+```
+### response:
+```typescript
+{
+  blocks: FullBlock[];
+  success: bool;
+}
+```
+For content of `FullBlock`,
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/full_block.ts
+
+---
+
+## `farm_block(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {farm_block} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await farm_block(agent, params);
+```
+### params:
+```typescript
+{
+  address: str;
+  guarantee_tx_block?: bool;
+  blocks?: bool;
+}
+```
+### response:
+```typescript
+{
+  new_peak_height: uint64;
+  success: bool;
+}
+```
+
+---
+
+## `set_auto_farming(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {set_auto_farming} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await set_auto_farming(agent, params);
+```
+### params:
+```typescript
+{
+ auto_farm: bool;
+}
+```
+### response:
+```typescript
+{
+  auto_farm_enabled: bool;
+  success: bool;
+}
+```
+
+---
+
+## `get_auto_farming(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_auto_farming} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_auto_farming(agent);
+```
+### response:
+```typescript
+{
+  new_peak_height: uint64;
+  success: bool;
+}
+```
+
+---
+
+## `get_farming_ph(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_farming_ph} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_farming_ph(agent);
+```
+### response:
+```typescript
+{
+  puzzle_hash: str;
+  success: bool;
+}
+```
+
+---
+
+## `get_all_coins(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_all_coins} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_all_coins(agent, params);
+```
+### params:
+```typescript
+{
+  include_spent_coins?: bool;
+};
+```
+### response:
+```typescript
+{
+  coin_records: CoinRecord[];
+  success: bool;
+}
+```
+For content of `CoinRecord`,
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_record.ts
+
+---
+
+## `get_all_puzzle_hashes(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_all_puzzle_hashes} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_all_puzzle_hashes(agent);
+```
+### response:
+```typescript
+{
+  puzzle_hashes: Record<string, Array<[uint128, int]>>;
+  success: bool;
+}
+```
+
+---
+
+## `revert_blocks(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {revert_blocks} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await revert_blocks(agent, params);
+```
+### params:
+```typescript
+{
+  num_of_blocks?: int;
+  delete_all_blocks?: bool;
+};
+```
+### response:
+```typescript
+{
+  new_peak_height: int;
+  success: bool;
+}
+```
+
+---
+
+## `reorg_blocks(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {reorg_blocks} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await reorg_blocks(agent, params);
+```
+### params:
+```typescript
+{
+  num_of_blocks_to_rev?: int;
+  num_of_new_blocks?: bool;
+  revert_all_blocks?: bool;
+  random_seed?: str;
+};
+```
+### response:
+```typescript
+{
+  new_peak_height: int;
+  success: bool;
+}
