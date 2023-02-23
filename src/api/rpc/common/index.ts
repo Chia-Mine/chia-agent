@@ -1,4 +1,4 @@
-import {str, True, uint16} from "../../chia/types/_python_types_";
+import {False, str, True, uint16} from "../../chia/types/_python_types_";
 import {TRPCAgent} from "../../../rpc/index";
 import {GetMessageType, ResType, TConnectionGeneral} from "../../types";
 import {TConnectionFullNode} from "../../ws/full_node/index";
@@ -28,7 +28,12 @@ export type TOpenConnectionRequest = {
   host: str;
   port: uint16;
 };
-export type TOpenConnectionResponse = {};
+export type TOpenConnectionResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+};
 export type WsOpenConnectionMessage = GetMessageType<chia_common_service, open_connection_command, TOpenConnectionResponse>;
 export async function open_connection<T extends TRPCAgent|TDaemon>(agent: T, params: TOpenConnectionRequest) {
   type R = ResType<T, TOpenConnectionResponse, WsOpenConnectionMessage>;

@@ -49,23 +49,28 @@ const response = await get_blockchain_state(agent);
       synced: bool;
       sync_tip_height: uint32;
       sync_progress_height: uint32;
-    },
+    };
     difficulty: uint64;
     sub_slot_iters: uint64;
     space: uint128;
     mempool_size: int;
-    mempool_cost: int;
+    mempool_cost: CLVMCost;
+    mempool_fees: Mojos;
     mempool_min_fees: {
-      cost_5000000: float,
-    },
-    mempool_max_total_cost: int,
-      block_max_cost: int,
-      node_id: str,
+      cost_5000000: float;
+    };
+    mempool_max_total_cost: int;
+      block_max_cost: int;
+      node_id: str;
   };
 }
 ```
 For content of `BlockRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/block_record.ts
+For content of `CLVMCost`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/clvm_cost.ts
+For content of `Mojos`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mojos.ts
 
 ---
 
@@ -677,6 +682,9 @@ const response = await get_fee_estimate(agent, params);
 {
   spend_bundle?: SpendBundle;
   cost?: uint64;
+  spend_type ? : "send_xch_transaction" | "cat_spend" | "take_offer" | "cancel_offer" | "nft_set_nft_did"
+    | "nft_transfer_nft" | "create_new_pool_wallet" | "pw_absorb_rewards" | "create_new_did_wallet";
+  spend_count ? : uint64;
   target_times: int[];
 }
 ```
@@ -687,14 +695,22 @@ const response = await get_fee_estimate(agent, params);
   target_times: int[];
   current_fee_rate: uint64;
   mempool_size: CLVMCost
+  mempool_fees: Mojos;
+  num_spends: int;
   mempool_max_size: CLVMCost;
   full_node_synced: bool;
   peak_height: uint32;
   last_peak_timestamp: uint64;
   node_time_utc: int;
+  last_block_cost: int;
+  fees_last_block: uint64;
+  fee_rate_last_block: float;
+  last_tx_block_height: int;
 }
 ```
 For content of `SpendBundle`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
 For content of `CLVMCost`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/clvm_cost.ts
+For content of `Mojos`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mojos.ts

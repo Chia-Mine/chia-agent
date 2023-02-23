@@ -13,6 +13,7 @@ import {CoinSpend} from "../../chia/types/coin_spend";
 import {CLVMCost} from "../../chia/types/clvm_cost";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
+import {Mojos} from "../../chia/types/mojos";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -35,7 +36,8 @@ export type TGetBlockchainStateResponse = {
     sub_slot_iters: uint64;
     space: uint128;
     mempool_size: int;
-    mempool_cost: int;
+    mempool_cost: CLVMCost;
+    mempool_fees: Mojos;
     mempool_min_fees: {
       cost_5000000: float,
     },
@@ -473,6 +475,9 @@ export type get_fee_estimate_command = typeof get_fee_estimate_command;
 export type TGetFeeEstimateRequest = {
   spend_bundle?: SpendBundle;
   cost?: uint64;
+  spend_type?: "send_xch_transaction" | "cat_spend" | "take_offer" | "cancel_offer" | "nft_set_nft_did"
+    | "nft_transfer_nft" | "create_new_pool_wallet" | "pw_absorb_rewards" | "create_new_did_wallet";
+  spend_count?: uint64;
   target_times: int[];
 };
 export type TGetFeeEstimateResponse = {
@@ -480,11 +485,17 @@ export type TGetFeeEstimateResponse = {
   target_times: int[];
   current_fee_rate: uint64;
   mempool_size: CLVMCost
+  mempool_fees: Mojos;
+  num_spends: int;
   mempool_max_size: CLVMCost;
   full_node_synced: bool;
   peak_height: uint32;
   last_peak_timestamp: uint64;
   node_time_utc: int;
+  last_block_cost: int;
+  fees_last_block: uint64;
+  fee_rate_last_block: float;
+  last_tx_block_height: int;
 };
 export type WsGetFeeEstimateMessage = GetMessageType<chia_full_node_service, get_fee_estimate_command, TGetFeeEstimateResponse>;
 export async function get_fee_estimate<T extends TRPCAgent | TDaemon>(agent: T, data: TGetFeeEstimateRequest) {
