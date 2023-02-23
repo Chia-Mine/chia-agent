@@ -78,7 +78,12 @@ const response = await open_connection(agent, params);
 ```
 ### response:
 ```typescript
-{}
+{
+  success: False;
+  error: str;
+} | {
+  success: True;
+}
 ```
 
 ---

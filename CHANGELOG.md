@@ -1,5 +1,67 @@
 # Changelog
 
+## [10.1.0]
+### Indirect Change
+In `chia/types/mempool_items.py`, `assert_height` was added to `MempoolItem`.  
+As a result of this change, the responses from following RPC APIs are affected.  
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_all_mempool_items`](./src/api/rpc/full_node/README.md#getallmempoolitemsagent)
+  - [`get_mempool_item_by_tx_id`](./src/api/rpc/full_node/README.md#getmempoolitembytxidagent-params)
+### Added
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_timestamp_for_height`](./src/api/rpc/wallet/README.md#gettimestampforheightagent)
+  - [`nft_transfer_bulk`](./src/api/rpc/wallet/README.md#nfttransferbulkagent-params)
+### Changed
+- [Common RPC API](./src/api/rpc/common)
+  - [`open_connection`](./src/api/rpc/common/README.md#openconnectionagent-params)
+    - Added `success` to response
+    - Added `error` to response when `success` is `False`
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_blockchain_state`](./src/api/rpc/full_node/README.md#getblockchainstateagent)
+    - Added `mempool_fees` to response
+  - [`get_fee_estimate`](./src/api/rpc/full_node/README.md#getfeeestimateagent-params)
+    - Added `spend_type` to request parameter
+    - Added `spend_count` to request parameter
+    - Added `mempool_fees` to response
+    - Added `num_spends` to response
+    - Added `last_block_cost` to response
+    - Added `fees_last_block` to response
+    - Added `fee_rate_last_block` to response
+    - Added `last_tx_block_height` to response
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_notifications`](./src/api/rpc/wallet/README.md#getnotificationsagent-params)
+    - Added `height` to response
+  - [`verify_signature`](./src/api/rpc/wallet/README.md#verifysignatureagent-params)
+    - Added `signing_mode` to request parameter
+  - [`sign_message_by_address`](./src/api/rpc/wallet/README.md#signmessagebyaddressagent-params)
+    - Added `signing_mode` to response
+  - [`sign_message_by_id`](./src/api/rpc/wallet/README.md#signmessagebyidagent-params)
+    - Added `None` type to `latest_coin_id` in response
+    - Added `signing_mode` to response
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#catspendagent-params)
+    - Added `coins` to response
+  - [`get_offer_summary`](./src/api/rpc/wallet/README.md#getoffersummaryagent-params)
+    - Added `id` to response
+  - [`check_offer_validity`](./src/api/rpc/wallet/README.md#checkoffervalidityagent-params)
+    - Added `id` to response
+  - [`did_message_spend`](./src/api/rpc/wallet/README.md#didmessagespendagent-params)
+    - Removed error response
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nftsetdidbulkagent-params)
+    - Added `tx_num to response
+  - [`nft_get_wallet_did`](./src/api/rpc/wallet/README.md#nftgetwalletdidagent-params)
+    - Removed error response
+  - [`nft_set_nft_status`](./src/api/rpc/wallet/README.md#nftsetnftstatusagent-params)
+    - Removed error response
+### Fixed
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_blockchain_state`](./src/api/rpc/full_node/README.md#getblockchainstateagent)
+    - Changed the type of `mempool_size` in response from `int` to `CLVMCost`(actually `uint64`)
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nftsetdidbulkagent-params)
+    - Fixed missing export and entry in [README](./src/api/README.md)
+  - [`verify_signature`](./src/api/rpc/wallet/README.md#verifysignatureagent-params)
+    - Added missing `message` to request parameter
+
 ## [10.0.0]
 ### Breaking change
 In `chia/types/mempool_items.py`, `removals` of `MempoolItem` is now flagged as `@property`.
@@ -819,6 +881,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+
+[10.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.0.0...v10.1.0
 [10.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.2.0...v10.0.0
 [9.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.1.0...v9.2.0
 [9.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.0.1...v9.1.0

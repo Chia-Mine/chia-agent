@@ -4,7 +4,7 @@ import {
   bool,
   bytes,
   False,
-  int,
+  int, None,
   Optional,
   str,
   True,
@@ -28,6 +28,7 @@ import {TPushTxResponseOfWallet} from "../index";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
 import {CoinRecord} from "../../chia/types/coin_record";
+import {SigningMode} from "../../chia/types/signing_mode";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -278,6 +279,17 @@ export async function farm_block<T extends TRPCAgent | TDaemon>(agent: T, data: 
   return agent.sendMessage<R>(chia_wallet_service, farm_block_command, data);
 }
 
+
+export const get_timestamp_for_height_command = "get_timestamp_for_height";
+export type get_timestamp_for_height_command = typeof get_timestamp_for_height_command;
+export type TGetTimestampForHeightResponse = {
+  timestamp: uint64;
+};
+export type WsGetTimestampForHeightMessage = GetMessageType<chia_wallet_service, get_timestamp_for_height_command, TGetTimestampForHeightResponse>;
+export async function get_timestamp_for_height<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetTimestampForHeightResponse, WsGetTimestampForHeightMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, get_timestamp_for_height_command);
+}
 
 
 export const get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";
@@ -823,6 +835,7 @@ export type TGetNotificationsResponse = {
     id: str;
     message: str;
     amount: uint64;
+    height: uint32;
   }>;
 };
 export type WsGetNotificationsMessage = GetMessageType<chia_wallet_service, get_notifications_command, TGetNotificationsResponse>;
@@ -871,6 +884,8 @@ export async function send_notification<T extends TRPCAgent | TDaemon>(agent: T,
 export const verify_signature_command = "verify_signature";
 export type verify_signature_command = typeof verify_signature_command;
 export type TVerifySignatureRequest = {
+  message: str;
+  signing_mode?: SigningMode;
   pubkey: str;
   signature: str;
   address?: str;
@@ -898,6 +913,7 @@ export type TSignMessageByAddressResponse = {
   success: True;
   pubkey: str;
   signature: str;
+  signing_mode: SigningMode;
 };
 export type WsSignMessageByAddressMessage = GetMessageType<chia_wallet_service, sign_message_by_address_command, TSignMessageByAddressResponse>;
 export async function sign_message_by_address<T extends TRPCAgent | TDaemon>(agent: T, data: TSignMessageByAddressRequest){
@@ -921,7 +937,8 @@ export type TSignMessageByIdResponse = {
   success: True;
   pubkey: str;
   signature: str;
-  latest_coin_id: str;
+  latest_coin_id: str|None;
+  signing_mode: SigningMode;
 };
 export type WsSignMessageByIdMessage = GetMessageType<chia_wallet_service, sign_message_by_id_command, TSignMessageByIdResponse>;
 export async function sign_message_by_id<T extends TRPCAgent | TDaemon>(agent: T, data: TSignMessageByIdRequest){
@@ -1029,6 +1046,7 @@ export type TCatSpendRequest = {
   amount: uint64;
   inner_address: str;
   memos?: str[];
+  coins?: Coin[];
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
   exclude_coin_amounts?: uint64[];
@@ -1102,6 +1120,7 @@ export type TGetOfferSummaryResponse = {
     fees: int;
     infos: TDriverDict;
   };
+  id: bytes32;
 };
 export type WsGetOfferSummaryMessage = GetMessageType<chia_wallet_service, get_offer_summary_command, TGetOfferSummaryResponse>;
 export async function get_offer_summary<T extends TRPCAgent | TDaemon>(agent: T, data: TGetOfferSummaryRequest){
@@ -1119,6 +1138,7 @@ export type TCheckOfferValidityRequest = {
 };
 export type TCheckOfferValidityResponse = {
   valid: bool;
+  id: bytes32;
 };
 export type WsCheckOfferValidityMessage = GetMessageType<chia_wallet_service, check_offer_validity_command, TCheckOfferValidityResponse>;
 export async function check_offer_validity<T extends TRPCAgent | TDaemon>(agent: T, data: TCheckOfferValidityRequest){
@@ -1544,9 +1564,6 @@ export type TDidMessageSpendRequest = {
   puzzle_announcements: str[];
 };
 export type TDidMessageSpendResponse = {
-  success: False;
-  error: str;
-} |{
   success: True;
   spend_bundle: SpendBundle;
 };
@@ -1719,11 +1736,36 @@ export type TNftSetDidBulkResponse = {
   success: True;
   wallet_id: uint32[];
   spend_bundle: SpendBundle;
+  tx_num: int;
 };
 export type WsNftSetDidBulkMessage = GetMessageType<chia_wallet_service, nft_set_did_bulk_command, TNftSetDidBulkResponse>;
 export async function nft_set_did_bulk<T extends TRPCAgent | TDaemon>(agent: T, data: TNftSetDidBulkRequest) {
   type R = ResType<T, TNftSetDidBulkResponse, WsNftSetDidBulkMessage>;
   return agent.sendMessage<R>(chia_wallet_service, nft_set_did_bulk_command, data);
+}
+
+
+export const nft_transfer_bulk_command = "nft_transfer_bulk";
+export type nft_transfer_bulk_command = typeof nft_transfer_bulk_command;
+export type TNftTransferBulkRequest = {
+  nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
+  target_address: str;
+  fee?: uint64;
+};
+export type TNftTransferBulkResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  wallet_id: uint32[];
+  spend_bundle: SpendBundle;
+  tx_num: int;
+};
+export type WsNftTransferBulkMessage = GetMessageType<chia_wallet_service, nft_transfer_bulk_command, TNftTransferBulkResponse>;
+
+export async function nft_transfer_bulk<T extends TRPCAgent | TDaemon>(agent: T, data: TNftTransferBulkRequest) {
+  type R = ResType<T, TNftTransferBulkResponse, WsNftTransferBulkMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, nft_transfer_bulk_command, data);
 }
 
 
@@ -1756,9 +1798,6 @@ export type TNftGetWalletDidRequest = {
 export type TNftGetWalletDidResponse = {
   did_id: Optional<str>;
   success: True;
-} | {
-  success: False;
-  error: str;
 };
 export type WsNftGetWalletDidMessage = GetMessageType<chia_wallet_service, nft_get_wallet_did_command, TNftGetWalletDidResponse>;
 export async function nft_get_wallet_did<T extends TRPCAgent | TDaemon>(agent: T, data: TNftGetWalletDidRequest){
@@ -1797,9 +1836,6 @@ export type TNftSetNftStatusRequest = {
 };
 export type TNftSetNftStatusResponse = {
   success: True;
-} | {
-  success: False;
-  error: str;
 };
 export type WsNftSetNftStatusMessage = GetMessageType<chia_wallet_service, nft_set_nft_status_command, TNftSetNftStatusResponse>;
 export async function nft_set_nft_status<T extends TRPCAgent | TDaemon>(agent: T, data: TNftSetNftStatusRequest){
@@ -2344,6 +2380,8 @@ export type RpcWalletMessage =
   | TNftCalculateRoyaltiesResponse
   | TNftMintBulkResponse
   | TNftSetDidBulkResponse
+  | TNftTransferBulkRequest
+  | TNftTransferBulkResponse
   | TDeleteAllKeysResponse
   | TDeleteKeyResponse
   | TCheckDeleteKeyResponse
@@ -2376,6 +2414,7 @@ export type RpcWalletMessage =
   | TNftGetInfoResponse
   | TNftAddUriResponse
   | TFarmBlockResponse
+  | TGetTimestampForHeightResponse
   | TGenerateMnemonicResponse
   | TGetAllOffersResponse
   | TGetCatListResponse
@@ -2452,6 +2491,7 @@ export type RpcWalletMessageOnWs =
   | WsNftCalculateRoyaltiesMessage
   | WsNftMintBulkMessage
   | WsNftSetDidBulkMessage
+  | WsNftTransferBulkMessage
   | WsDeleteAllKeysMessage
   | WsDeleteKeyMessage
   | WsCheckDeleteKeyMessage
@@ -2484,6 +2524,7 @@ export type RpcWalletMessageOnWs =
   | WsNftGetInfoMessage
   | WsNftAddUriMessage
   | WsFarmBlockMessage
+  | WsGetTimestampForHeightMessage
   | WsGenerateMnemonicMessage
   | WsGetAllOffersMessage
   | WsGetCatListMessage

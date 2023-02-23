@@ -331,6 +331,27 @@ const response = await farm_block(agent, params);
 
 ---
 
+## `get_timestamp_for_height(agent)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_timestamp_for_height} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_timestamp_for_height(agent);
+```
+
+### response:
+
+```typescript
+{
+  timestamp: uint64;
+}
+```
+
+---
+
 ## `get_initial_freeze_period_of_wallet(agent)`
 ### Usage
 ```js
@@ -1004,6 +1025,7 @@ const response = await get_notifications(agent, params);
     id: str;
     message: str;
     amount: uint64;
+    height: uint32;
   }>;
 }
 ```
@@ -1074,6 +1096,8 @@ const response = await verify_signature(agent, params);
 
 ```typescript
 {
+  message: str;
+  signing_mode?: SigningMode;
   pubkey: str;
   signature: str;
   address?: str;
@@ -1092,6 +1116,8 @@ const response = await verify_signature(agent, params);
   error: str;
 }
 ```
+For content of `SigningMode,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/signing_mode.ts
 
 ---
 
@@ -1116,8 +1142,11 @@ const response = await sign_message_by_address(agent, params);
   success: True;
   pubkey: str;
   signature: str;
+  signing_mode: SigningMode;
 }
 ```
+For content of `SigningMode,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/signing_mode.ts
 
 ---
 
@@ -1139,15 +1168,20 @@ const response = await sign_message_by_id(agent, params);
 ### response:
 ```typescript
 {
-    success: False;
-    error: str;
-} | {
-    success: True;
-    pubkey: str;
-    signature: str;
-    latest_coin_id: str;
+  success: False;
+  error: str;
+}
+|
+{
+  success: True;
+  pubkey: str;
+  signature: str;
+  latest_coin_id: str | None;
+  signing_mode: SigningMode;
 }
 ```
+For content of `SigningMode,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/signing_mode.ts
 
 ---
 
@@ -1234,18 +1268,14 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_b
 ---
 
 ## `nft_set_did_bulk(agent, params)`
-
 ### Usage
-
 ```js
 const {RPCAgent} = require("chia-agent");
 const {nft_set_did_bulk} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
 const response = await nft_set_did_bulk(agent, params);
 ```
-
 ### params:
-
 ```typescript
 {
   nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
@@ -1253,9 +1283,7 @@ const response = await nft_set_did_bulk(agent, params);
   fee?: uint64;
 }
 ```
-
 ### response:
-
 ```typescript
 {
   success: False;
@@ -1266,6 +1294,42 @@ const response = await nft_set_did_bulk(agent, params);
   success: True;
   wallet_id: uint32[];
   spend_bundle: SpendBundle;
+  tx_num: int;
+}
+```
+For content of `SpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+
+---
+
+## `nft_transfer_bulk(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {nft_transfer_bulk} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await nft_transfer_bulk(agent, params);
+```
+### params:
+```typescript
+{
+  nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
+  target_address: str;
+  fee ? : uint64;
+}
+```
+### response:
+```typescript
+{
+  success: False;
+  error: str;
+}
+|
+{
+  success: True;
+  wallet_id: uint32[];
+  spend_bundle: SpendBundle;
+  tx_num: int;
 }
 ```
 For content of `SpendBundle`,  
@@ -1405,6 +1469,7 @@ const response = await cat_spend(agent, params);
   amount: uint64;
   inner_address: str;
   memos?: str[];
+  coins ? : Coin[];
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
   exclude_coin_amounts?: uint64[];
@@ -1504,6 +1569,7 @@ const response = await get_offer_summary(agent, params);
     fees: int;
     drivers_dict: TDriverDict;
   };
+  id: bytes32;
 }
 ```
 For content of `TDriverDict`,  
@@ -1529,6 +1595,7 @@ const response = await check_offer_validity(agent, params);
 ```typescript
 {
   valid: bool;
+  id: bytes32;
 }
 ```
 
@@ -2066,11 +2133,6 @@ const response = await did_message_spend(agent, params);
 
 ```typescript
 {
-  success: False;
-  error: str;
-}
-|
-{
   success: True;
   spend_bundle: SpendBundle;
 }
@@ -2337,9 +2399,6 @@ const response = await nft_get_wallet_did(agent, params);
 {
   did_id: Optional<str>;
   success: True;
-} | {
-  success: False;
-  error: str;
 }
 ```
 
@@ -2387,9 +2446,6 @@ const response = await nft_set_nft_status(agent, params);
 ```typescript
 {
   success: True;
-} | {
-  success: False;
-  error: str;
 }
 ```
 
