@@ -280,6 +280,7 @@ export async function farm_block<T extends TRPCAgent | TDaemon>(agent: T, data: 
 }
 
 
+
 export const get_timestamp_for_height_command = "get_timestamp_for_height";
 export type get_timestamp_for_height_command = typeof get_timestamp_for_height_command;
 export type TGetTimestampForHeightResponse = {
@@ -290,6 +291,7 @@ export async function get_timestamp_for_height<T extends TRPCAgent | TDaemon>(ag
   type R = ResType<T, TGetTimestampForHeightResponse, WsGetTimestampForHeightMessage>;
   return agent.sendMessage<R>(chia_wallet_service, get_timestamp_for_height_command);
 }
+
 
 
 export const get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";

@@ -2,7 +2,7 @@ import {FullBlock} from "../../chia/types/full_block";
 import {BlockRecord} from "../../chia/consensus/block_record";
 import {bool, float, int, Optional, str, uint128, uint32, uint64} from "../../chia/types/_python_types_";
 import {UnfinishedHeaderBlock} from "../../chia/types/unfinished_header_block";
-import {CoinRecordBackwardCompatible} from "../../chia/types/coin_record";
+import {CoinRecord, CoinRecordBackwardCompatible} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {MempoolItem} from "../../chia/types/mempool_item";
@@ -503,6 +503,154 @@ export async function get_fee_estimate<T extends TRPCAgent | TDaemon>(agent: T, 
   return agent.sendMessage<R>(chia_full_node_service, get_fee_estimate_command, data);
 }
 
+
+
+// simulator RPCs
+export const get_all_blocks_command = "get_all_blocks";
+export type get_all_blocks_command = typeof get_all_blocks_command;
+export type TGetAllBlocksResponse = {
+  blocks: FullBlock[];
+  success: bool;
+};
+export type WsGetAllBlocksMessage = GetMessageType<chia_full_node_service, get_all_blocks_command, TGetAllBlocksResponse>;
+export async function get_all_blocks<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetAllBlocksResponse, WsGetAllBlocksMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_all_blocks_command);
+}
+
+
+
+export const farm_block_command = "farm_block";
+export type farm_block_command = typeof farm_block_command;
+export type TFarmBlockRequest = {
+  address: str;
+  guarantee_tx_block?: bool;
+  blocks?: int;
+};
+export type TFarmBlockResponse = {
+  new_peak_height: int;
+  success: bool;
+};
+export type WsFarmBlockMessage = GetMessageType<chia_full_node_service, farm_block_command, TFarmBlockResponse>;
+export async function farm_block<T extends TRPCAgent | TDaemon>(agent: T, data: TFarmBlockRequest){
+  type R = ResType<T, TFarmBlockResponse, WsFarmBlockMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, farm_block_command, data);
+}
+
+
+
+export const set_auto_farming_command = "set_auto_farming";
+export type set_auto_farming_command = typeof set_auto_farming_command;
+export type TSetAutoFarmingRequest = {
+  auto_farm: bool;
+};
+export type TSetAutoFarmingResponse = {
+  auto_farm_enabled: bool;
+  success: bool;
+};
+export type WsSetAutoFarmingMessage = GetMessageType<chia_full_node_service, set_auto_farming_command, TSetAutoFarmingResponse>;
+export async function set_auto_farming<T extends TRPCAgent | TDaemon>(agent: T, data: TSetAutoFarmingRequest){
+  type R = ResType<T, TSetAutoFarmingResponse, WsSetAutoFarmingMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, set_auto_farming_command, data);
+}
+
+
+
+export const get_auto_farming_command = "get_auto_farming";
+export type get_auto_farming_command = typeof get_auto_farming_command;
+export type TGetAutoFarmingResponse = {
+  new_peak_height: uint64;
+  success: bool;
+};
+export type WsGetAutoFarmingMessage = GetMessageType<chia_full_node_service, get_auto_farming_command, TGetAutoFarmingResponse>;
+export async function get_auto_farming<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetAutoFarmingResponse, WsGetAutoFarmingMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_auto_farming_command);
+}
+
+
+
+export const get_farming_ph_command = "get_farming_ph";
+export type get_farming_ph_command = typeof get_farming_ph_command;
+export type TGetFarmingPhResponse = {
+  puzzle_hash: str;
+  success: bool;
+};
+export type WsGetFarmingPhMessage = GetMessageType<chia_full_node_service, get_farming_ph_command, TGetFarmingPhResponse>;
+export async function get_farming_ph<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetFarmingPhResponse, WsGetFarmingPhMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_farming_ph_command);
+}
+
+
+
+export const get_all_coins_command = "get_all_coins";
+export type get_all_coins_command = typeof get_all_coins_command;
+export type TGetAllCoinsRequest = {
+  include_spent_coins?: bool;
+};
+export type TGetAllCoinsResponse = {
+  coin_records: CoinRecord[];
+  success: bool;
+};
+export type WsGetAllCoinsMessage = GetMessageType<chia_full_node_service, get_all_coins_command, TGetAllCoinsResponse>;
+export async function get_all_coins<T extends TRPCAgent | TDaemon>(agent: T, data: TGetAllCoinsRequest){
+  type R = ResType<T, TGetAllCoinsResponse, WsGetAllCoinsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_all_coins_command, data);
+}
+
+
+
+export const get_all_puzzle_hashes_command = "get_all_puzzle_hashes";
+export type get_all_puzzle_hashes_command = typeof get_all_puzzle_hashes_command;
+export type TGetAllPuzzleHashesResponse = {
+  puzzle_hashes: Record<bytes32, Array<[uint128, int]>>;
+  success: bool;
+};
+export type WsGetAllPuzzleHashesMessage = GetMessageType<chia_full_node_service, get_all_puzzle_hashes_command, TGetAllPuzzleHashesResponse>;
+export async function get_all_puzzle_hashes<T extends TRPCAgent | TDaemon>(agent: T){
+  type R = ResType<T, TGetAllPuzzleHashesResponse, WsGetAllPuzzleHashesMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_all_puzzle_hashes_command);
+}
+
+
+
+export const revert_blocks_command = "revert_blocks";
+export type revert_blocks_command = typeof revert_blocks_command;
+export type TRevertBlocksRequest = {
+  num_of_blocks?: int;
+  delete_all_blocks?: bool;
+};
+export type TRevertBlocksResponse = {
+  new_peak_height: int;
+  success: bool;
+};
+export type WsRevertBlocksMessage = GetMessageType<chia_full_node_service, revert_blocks_command, TRevertBlocksResponse>;
+export async function revert_blocks<T extends TRPCAgent | TDaemon>(agent: T, data: TRevertBlocksRequest){
+  type R = ResType<T, TRevertBlocksResponse, WsRevertBlocksMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, revert_blocks_command, data);
+}
+
+
+
+export const reorg_blocks_command = "reorg_blocks";
+export type reorg_blocks_command = typeof reorg_blocks_command;
+export type TReorgBlocksRequest = {
+  num_of_blocks_to_rev?: int;
+  num_of_new_blocks?: int;
+  revert_all_blocks?: bool;
+  random_seed?: str;
+};
+export type TReorgBlocksResponse = {
+  new_peak_height: int;
+  success: bool;
+};
+export type WsReorgBlocksMessage = GetMessageType<chia_full_node_service, reorg_blocks_command, TReorgBlocksResponse>;
+export async function reorg_blocks<T extends TRPCAgent | TDaemon>(agent: T, data: TReorgBlocksRequest){
+  type R = ResType<T, TReorgBlocksResponse, WsReorgBlocksMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, reorg_blocks_command, data);
+}
+
 export type RpcFullNodeMessage =
   TGetAdditionsAndRemovalsResponse
   | TGetAllMempoolItemsResponse
@@ -530,6 +678,15 @@ export type RpcFullNodeMessage =
   | TPushTxResponse
   | TGetPuzzleAndSolutionResponse
   | TGetFeeEstimateResponse
+  | TGetAllBlocksResponse
+  | TFarmBlockResponse
+  | TSetAutoFarmingResponse
+  | TGetAutoFarmingResponse
+  | TGetFarmingPhResponse
+  | TGetAllCoinsResponse
+  | TGetAllPuzzleHashesResponse
+  | TRevertBlocksResponse
+  | TReorgBlocksResponse
 ;
 
 export type RpcFullNodeMessageOnWs =
@@ -559,4 +716,13 @@ export type RpcFullNodeMessageOnWs =
   | WsPushTxMessage
   | WsGetPuzzleAndSolutionMessage
   | WsGetFeeEstimateMessage
+  | WsGetAllBlocksMessage
+  | WsFarmBlockMessage
+  | WsSetAutoFarmingMessage
+  | WsGetAutoFarmingMessage
+  | WsGetFarmingPhMessage
+  | WsGetAllCoinsMessage
+  | WsGetAllPuzzleHashesMessage
+  | WsRevertBlocksMessage
+  | WsReorgBlocksMessage
 ;
