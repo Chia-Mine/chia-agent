@@ -2345,6 +2345,37 @@ For content of `SpendBundle`,
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
 
 ---
+---
+
+## `nft_count_nfts(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {nft_count_nfts} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await nft_count_nfts(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+}
+```
+### response:
+```typescript
+{
+  success: False;
+  error: str;
+}
+|
+{
+  wallet_id: uint32;
+  success: True;
+  count: int;
+}
+```
+
+---
 
 ## `nft_get_nfts(agent, params)`
 ### Usage

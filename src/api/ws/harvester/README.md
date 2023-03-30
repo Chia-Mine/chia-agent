@@ -149,17 +149,17 @@ unsubscribe(); // Stop subscribing messages
 
 ---
 
-### `add_connection`
+### `on_add_connection`
 Capture broadcast message of command `add_connection` from `chia_harvester` service.
 
 #### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
-const {add_connection} = require("chia-agent/api/ws");
+const {on_add_connection} = require("chia-agent/api/ws");
 
 const daemon = getDaemon();
 await daemon.connect();
-const unsubscribe = await add_connection(daemon, (event) => {
+const unsubscribe = await on_add_connection(daemon, (event) => {
   // Format of `event` object is described below.
   ...
 });
@@ -184,17 +184,17 @@ None
 
 ---
 
-### `close_connection`
-Capture broadcast message of command `add_connection` from `chia_harvester` service.
+### `on_close_connection`
+Capture broadcast message of command `close_connection` from `chia_harvester` service.
 
 #### Usage
 ```typescript
 const {getDaemon} = require("chia-agent");
-const {close_connection} = require("chia-agent/api/ws");
+const {on_close_connection} = require("chia-agent/api/ws");
 
 const daemon = getDaemon();
 await daemon.connect();
-const unsubscribe = await close_connection(daemon, (event) => {
+const unsubscribe = await on_close_connection(daemon, (event) => {
   // Format of `event` object is described below.
   ...
 });
