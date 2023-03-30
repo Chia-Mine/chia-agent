@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `chia 1.7.0`.  
+Supports all RPC/Websocket API available at `chia 1.7.1`.  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
@@ -22,10 +22,10 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`a8bcb8516e695e69e271b78241c0b4b9f41093c4`](https://github.com/Chia-Network/chia-blockchain/tree/a8bcb8516e695e69e271b78241c0b4b9f41093c4) of [chia-blockchain 1.7.0](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/a8bcb8516e695e69e271b78241c0b4b9f41093c4...main)
-- [`f238c55ec5a5ad1ea2f4d3b7615f918dff492cd0`](https://github.com/Chia-Network/pool-reference/tree/f238c55ec5a5ad1ea2f4d3b7615f918dff492cd0) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
-  - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/f238c55ec5a5ad1ea2f4d3b7615f918dff492cd0...main)
+- [`ba2570f50fed64be92a49f1342fd0cc3ff014831`](https://github.com/Chia-Network/chia-blockchain/tree/ba2570f50fed64be92a49f1342fd0cc3ff014831) of [chia-blockchain 1.7.1](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/ba2570f50fed64be92a49f1342fd0cc3ff014831...main)
+- [`6c1c7ecd2ed7307760d1673dc2b1057f22e08fd5`](https://github.com/Chia-Network/pool-reference/tree/6c1c7ecd2ed7307760d1673dc2b1057f22e08fd5) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
+  - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/6c1c7ecd2ed7307760d1673dc2b1057f22e08fd5...main)
 
 ## API
 There are 2 kinds of APIs in chia.  
