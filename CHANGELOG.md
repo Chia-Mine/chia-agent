@@ -1,5 +1,104 @@
 # Changelog
 
+## [11.0.0]
+### Breaking change
+JSONified `MempoolItem` replaced original `MempoolItem` in `chia/types/mempool_items.py`
+for 2 RPC API responses listed below.  
+As a result of this change, `removals` was added and `height_added_to_mempool`/`assert_height` were removed
+from those RPC API responses.
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_all_mempool_items`](./src/api/rpc/full_node/README.md#get_all_mempool_itemsagent)
+  - [`get_mempool_item_by_tx_id`](./src/api/rpc/full_node/README.md#get_mempool_item_by_tx_idagent-params)
+### Changed
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_blockchain_state`](./src/api/rpc/full_node/README.md#get_blockchain_stateagent)
+    - The type of `mempool_fees` was changed to `int` from `Mojos`(`uint64`)
+  - [`get_fee_estimate`](./src/api/rpc/full_node/README.md#get_fee_estimateagent-params)
+    - The type of `mempool_fees` was changed to `int` from `Mojos`(`uint64`)
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`sign_message_by_address`](./src/api/rpc/wallet/README.md#sign_message_by_addressagent-params)
+    - Added `is_hex` to request parameter
+  - [`sign_message_by_id`](./src/api/rpc/wallet/README.md#sign_message_by_idagent-params)
+    - Added `is_hex` to request parameter
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`did_update_recovery_ids`](./src/api/rpc/wallet/README.md#did_update_recovery_idsagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`did_get_info`](./src/api/rpc/wallet/README.md#did_get_infoagent-params)
+    - Added `solution` to response
+  - [`did_update_metadata`](./src/api/rpc/wallet/README.md#did_update_metadataagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`did_transfer_did`](./src/api/rpc/wallet/README.md#did_transfer_didagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nft_set_did_bulkagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`nft_transfer_bulk`](./src/api/rpc/wallet/README.md#nft_transfer_bulkagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`nft_transfer_nft`](./src/api/rpc/wallet/README.md#nft_transfer_nftagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+    - Added `reuse_puzhash` to request parameter
+  - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
+    - Added `reuse_puzhash` to request parameter
+- [Wallet WebSocket API](./src/api/ws/wallet)
+  - [`on_state_changed_of_wallet`](./src/api/ws/wallet/README.md#on_state_changed_of_wallet)
+    - Added `wallet_removed` to state list
+    - Added `error` and `status` property to `tx_update` state changed event
+
+In `chia/wallet/nft_wallet/nft_info.py`, `nft_id` was added to `NftInfo`.  
+As a result of this change, the responses from following RPC APIs are affected.
+- [Wallet RPC API](./src/api/rpc/full_node)
+  - [`nft_get_nfts`](./src/api/rpc/wallet/README.md#nft_get_nftsagent-params)
+  - [`nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+### Added
+- [New FullNode(Simulator) RPC API](./src/api/rpc/full_node)  
+  Big thanks to [Dishwasha](https://github.com/Dishwasha) for a PR for new Simulator API!
+  - [`get_all_blocks`](./src/api/rpc/full_node/README.md#get_all_blocksagent-params)
+  - [`farm_block`](./src/api/rpc/full_node/README.md#farm_blockagent-params)
+  - [`set_auto_farming`](./src/api/rpc/full_node/README.md#set_auto_farmingagent-params)
+  - [`get_auto_farming`](./src/api/rpc/full_node/README.md#get_auto_farmingagent-params)
+  - [`get_farming_ph`](./src/api/rpc/full_node/README.md#get_farming_phagent-params)
+  - [`get_all_coins`](./src/api/rpc/full_node/README.md#get_all_coinsagent-params)
+  - [`get_all_puzzle_hashes`](./src/api/rpc/full_node/README.md#get_all_puzzle_hashesagent-params)
+  - [`revert_blocks`](./src/api/rpc/full_node/README.md#revert_blocksagent-params)
+  - [`reorg_blocks`](./src/api/rpc/full_node/README.md#reorg_blocksagent-params)
+- [New Farmer WebSocket API](./src/api/ws/farmer)
+  - [`on_add_connection`](./src/api/ws/farmer/README.md#on_add_connection)
+  - [`on_close_connection`](./src/api/ws/farmer/README.md#on_close_connection)
+- [New Harvester WebSocket API](./src/api/ws/harvester)
+  - [`on_add_connection`](./src/api/ws/harvester/README.md#on_add_connection)
+  - [`on_close_connection`](./src/api/ws/harvester/README.md#on_close_connection)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`set_wallet_resync_on_startup`](./src/api/rpc/wallet/README.md#set_wallet_resync_on_startupagent-params)
+  - [`get_transaction_memo`](./src/api/rpc/wallet/README.md#get_transaction_memoagent-params)
+  - [`nft_count_nfts`](./src/api/rpc/wallet/README.md#nft_count_nftsagent-params)
+- [New Wallet WebSocket API](./src/api/ws/wallet)
+  - [`on_add_connection`](./src/api/ws/wallet/README.md#on_add_connection)
+  - [`on_close_connection`](./src/api/ws/wallet/README.md#on_close_connection)
+### Fixed
+- [Farmer WebSocket API](./src/api/ws/farmer)
+  - [`on_submitted_partial`](./src/api/ws/farmer/README.md#on_submitted_partial)
+    - Fixed an issue where `on_submitted_partial` was not working 
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`verify_signature`](./src/api/rpc/wallet/README.md#verify_signatureagent-params)
+    - Fixed an issue where `verify_signature` was not exposed via `require("chia-agent/api/rpc")`
+- [Wallet WebSocket API](./src/api/ws/wallet)
+  - [`on_sync_changed`](./src/api/ws/wallet/README.md#on_sync_changed)
+    - Fixed an issue where `on_sync_changed` was defined as `on_sync_changed_of_wallet`
+  - [`on_coin_added`](./src/api/ws/wallet/README.md#on_coin_added)
+    - Fixed a typo. (WsCoindAddedMessage -> WsCoinAddedMessage)
+    - Fixed an issue where `on_coin_added` was defined as `on_coin_added_of_wallet`
+
 ## [10.1.0]
 ### Indirect Change
 In `chia/types/mempool_items.py`, `assert_height` was added to `MempoolItem`.  
@@ -881,7 +980,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-
+[11.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.1.0...v11.0.0
 [10.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.0.0...v10.1.0
 [10.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.2.0...v10.0.0
 [9.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.1.0...v9.2.0

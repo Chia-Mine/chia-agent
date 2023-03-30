@@ -3,7 +3,7 @@ import {DeclareProofOfSpace, NewSignagePoint} from "../../chia/protocols/farmer_
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {bool, float, str, uint32, uint64} from "../../chia/types/_python_types_";
 import {TDaemon} from "../../../daemon/index";
-import {GetMessageType, TConnectionGeneral, wallet_ui_service} from "../../types";
+import {GetMessageType, TConnectionGeneral, wallet_ui_service, metrics_service} from "../../types";
 import {Receiver} from "../../chia/plot-sync/receiver";
 
 export const chia_farmer_service = "chia_farmer";
@@ -123,9 +123,37 @@ export type TSubmittedPartialBroadCast = {
 };
 export type WsSubmittedPartialMessage = GetMessageType<chia_farmer_service, submitted_partial_command, TSubmittedPartialBroadCast>;
 export async function on_submitted_partial(daemon: TDaemon, callback: (e: WsSubmittedPartialMessage) => unknown){
-  await daemon.subscribe(wallet_ui_service);
+  await daemon.subscribe(metrics_service);
   const messageListener = (e: WsFarmerMessage) => {
     if(e.origin === chia_farmer_service && e.command === submitted_partial_command){
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
+
+export const add_connection_command = "add_connection";
+export type add_connection_command = typeof add_connection_command;
+export type TAddConnectionBroadCast = {};
+export type WsAddConnectionMessage = GetMessageType<chia_farmer_service, add_connection_command, TAddConnectionBroadCast>;
+export async function on_add_connection(daemon: TDaemon, callback: (e: WsAddConnectionMessage) => unknown) {
+  await daemon.subscribe(metrics_service);
+  const messageListener = (e: WsFarmerMessage) => {
+    if (e.origin === chia_farmer_service && e.command === add_connection_command) {
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
+
+export const close_connection_command = "close_connection";
+export type close_connection_command = typeof close_connection_command;
+export type TCloseConnectionBroadCast = {};
+export type WsCloseConnectionMessage = GetMessageType<chia_farmer_service, close_connection_command, TCloseConnectionBroadCast>;
+export async function on_close_connection(daemon: TDaemon, callback: (e: WsCloseConnectionMessage) => unknown) {
+  await daemon.subscribe(metrics_service);
+  const messageListener = (e: WsFarmerMessage) => {
+    if (e.origin === chia_farmer_service && e.command === close_connection_command) {
       callback(e);
     }
   };
@@ -141,6 +169,8 @@ export type WsFarmerMessage =
   | WsHarvesterRemovedMessage
   | WsProofMessage
   | WsSubmittedPartialMessage
+  | WsAddConnectionMessage
+  | WsCloseConnectionMessage
   ;
 
 // Whole commands for the service
@@ -151,6 +181,8 @@ export type chia_farmer_commands = get_connections_command
   | harvester_removed_command
   | proof_command
   | submitted_partial_command
+  | add_connection_command
+  | close_connection_command
 ;
 export type TChiaFarmerBroadcast = TGetConnectionsBroadCast
   | TNewFarmingInfoBroadCast
@@ -159,9 +191,14 @@ export type TChiaFarmerBroadcast = TGetConnectionsBroadCast
   | THarvesterRemovedBroadCast
   | TProofBroadCast
   | TSubmittedPartialBroadCast
+  | TAddConnectionBroadCast
+  | TCloseConnectionBroadCast
 ;
 export async function on_message_from_farmer(daemon: TDaemon, callback: (e: WsFarmerMessage) => unknown){
-  await daemon.subscribe(wallet_ui_service);
+  await Promise.all([
+    daemon.subscribe(wallet_ui_service),
+    daemon.subscribe(metrics_service),
+  ]);
   const messageListener = (e: WsFarmerMessage) => {
     if(e.origin === chia_farmer_service){
       callback(e);

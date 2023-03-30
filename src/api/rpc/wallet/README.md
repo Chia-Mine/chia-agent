@@ -232,6 +232,29 @@ No params nor response
 
 ---
 
+## `set_wallet_resync_on_startup(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {set_wallet_resync_on_startup} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await set_wallet_resync_on_startup(agent, params);
+```
+### params:
+```typescript
+{
+  enable?: bool;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+}
+```
+
+---
+
 ## `get_sync_status(agent)`
 ### Usage
 ```js
@@ -669,6 +692,7 @@ const response = await send_transaction(agent, params);
   max_coin_amount?: uint64;
   exclude_coin_amounts?: uint64[];
   exclude_coin_ids?: str[];
+  reuse_puzhash? : bool;
 }
 ```
 ### response:
@@ -1082,18 +1106,14 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transa
 ---
 
 ## `verify_signature(agent, params)`
-
 ### Usage
-
 ```js
 const {RPCAgent} = require("chia-agent");
 const {verify_signature} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
 const response = await verify_signature(agent, params);
 ```
-
 ### params:
-
 ```typescript
 {
   message: str;
@@ -1103,9 +1123,7 @@ const response = await verify_signature(agent, params);
   address?: str;
 }
 ```
-
 ### response:
-
 ```typescript
 {
   isValid: True;
@@ -1118,6 +1136,31 @@ const response = await verify_signature(agent, params);
 ```
 For content of `SigningMode,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/signing_mode.ts
+
+---
+
+## `get_transaction_memo(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_transaction_memo} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_transaction_memo(agent, params);
+```
+### params:
+```typescript
+{
+  transaction_id: str;
+}
+```
+### response:
+```typescript
+{
+  [transaction_id: string]: {
+    [coin_id: string]: string[];
+  };
+}
+```
 
 ---
 
@@ -1134,6 +1177,7 @@ const response = await sign_message_by_address(agent, params);
 {
   address: str;
   message: str;
+  is_hex?: bool;
 }
 ```
 ### response:
@@ -1163,6 +1207,7 @@ const response = await sign_message_by_id(agent, params);
 {
   id: str;
   message: str;
+  is_hex? : bool;
 }
 ```
 ### response:
@@ -1249,6 +1294,7 @@ const response = await nft_mint_bulk(agent, params);
   did_lineage_parent?: str;
   mint_from_did?: bool;
   fee?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -1281,6 +1327,7 @@ const response = await nft_set_did_bulk(agent, params);
   nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
   did_id?: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -1315,7 +1362,8 @@ const response = await nft_transfer_bulk(agent, params);
 {
   nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
   target_address: str;
-  fee ? : uint64;
+  fee?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -1474,6 +1522,7 @@ const response = await cat_spend(agent, params);
   max_coin_amount?: uint64;
   exclude_coin_amounts?: uint64[];
   exclude_coin_ids?: str[];
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -1530,6 +1579,7 @@ const response = await create_offer_for_ids(agent, params);
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
   solver?: Record<str, any>;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -1617,6 +1667,7 @@ const response = await take_offer(agent, params);
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
   solver?: Record<str, any>;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -1826,6 +1877,7 @@ const response = await did_update_recovery_ids(agent, params);
   wallet_id: uint32;
   new_list: str[];
   num_verifications_required?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -1849,6 +1901,7 @@ const response = await did_update_metadata(agent, params);
   wallet_id: uint32;
   metadata?: Record<str, str>;
   fee?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -2178,6 +2231,7 @@ const response = await did_get_info(agent, params);
   metadata: Record<str, str>;
   launcher_id: str;
   full_puzzle: str; // hex bytes of serialized CLVM program
+  solution: any;
   hints: str[];
 }
 ```
@@ -2234,6 +2288,7 @@ const response = await did_transfer_did(agent, params);
   inner_address: str;
   fee?: uint64;
   with_recovery_info?: bool;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -2274,6 +2329,7 @@ const response = await nft_mint_nft(agent, params);
   fee?: uint64;
   did_id?: str;
   royalty_percentage?: uint16;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -2335,6 +2391,7 @@ const response = await nft_set_nft_did(agent, params);
   did_id?: str;
   nft_coin_id: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -2466,6 +2523,7 @@ const response = await nft_transfer_nft(agent, params);
   target_address: str;
   nft_coin_id: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:
@@ -2531,6 +2589,7 @@ const response = await nft_add_uri(agent, params);
   key: str;
   nft_coin_id: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 }
 ```
 ### response:

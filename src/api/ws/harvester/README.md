@@ -125,7 +125,6 @@ const unsubscribe = await on_farming_info(daemon, (event) => {
 ...
 unsubscribe(); // Stop subscribing messages
 ```
-
 #### event:
 ```typescript
 {
@@ -146,4 +145,74 @@ unsubscribe(); // Stop subscribing messages
   eligible_plots: int;
   time: float;
 }
+```
+
+---
+
+### `add_connection`
+Capture broadcast message of command `add_connection` from `chia_harvester` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {add_connection} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await add_connection(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+#### event:
+```typescript
+{
+  origin: "chia_harvester";
+  command: "add_connection";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "metrics";
+}
+```
+#### data:
+```typescript
+None
+```
+
+---
+
+### `close_connection`
+Capture broadcast message of command `add_connection` from `chia_harvester` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {close_connection} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await close_connection(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+#### event:
+```typescript
+{
+  origin: "chia_harvester";
+  command: "close_connection";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "metrics";
+}
+```
+#### data:
+```typescript
+None
 ```

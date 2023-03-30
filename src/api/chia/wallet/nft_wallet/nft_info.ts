@@ -2,6 +2,7 @@ import {bool, bytes, Optional, str, uint16, uint32, uint64} from "../../types/_p
 import {bytes32} from "../../types/blockchain_format/sized_bytes";
 
 export type NFTInfo = {
+  nft_id: str;
   launcher_id: bytes32;
   nft_coin_id: bytes32;
   owner_did: Optional<bytes32>;

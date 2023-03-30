@@ -203,6 +203,19 @@ export async function delete_all_keys<T extends TRPCAgent | TDaemon>(agent: T){
 }
 
 
+export const set_wallet_resync_on_startup_command = "set_wallet_resync_on_startup";
+export type set_wallet_resync_on_startup_command = typeof set_wallet_resync_on_startup_command;
+export type TSetWalletResyncOnStartupRequest = {
+  enable?: bool;
+};
+export type TSetWalletResyncOnStartupResponse = {
+  success: True;
+};
+export type WsSetWalletResyncOnStartupMessage = GetMessageType<chia_wallet_service, set_wallet_resync_on_startup_command, TSetWalletResyncOnStartupResponse>;
+export async function set_wallet_resync_on_startup<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TSetWalletResyncOnStartupResponse, WsSetWalletResyncOnStartupMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, set_wallet_resync_on_startup_command);
+}
 
 
 // # Wallet node
@@ -584,6 +597,7 @@ export type TSendTransactionRequest = {
   max_coin_amount?: uint64;
   exclude_coin_amounts?: uint64[];
   exclude_coin_ids?: str[];
+  reuse_puzhash?: bool;
 };
 export type TSendTransactionResponse = {
   transaction: TransactionRecordConvenience;
@@ -905,11 +919,29 @@ export async function verify_signature<T extends TRPCAgent | TDaemon>(agent: T, 
 }
 
 
+export const get_transaction_memo_command = "get_transaction_memo";
+export type get_transaction_memo_command = typeof get_transaction_memo_command;
+export type TGetTransactionMemoRequest = {
+  transaction_id: str;
+};
+export type TGetTransactionMemoResponse = {
+  [transaction_id: string]: {
+    [coin_id: string]: string[];
+  };
+};
+export type WsGetTransactionMemoMessage = GetMessageType<chia_wallet_service, get_transaction_memo_command, TGetTransactionMemoResponse>;
+export async function get_transaction_memo<T extends TRPCAgent | TDaemon>(agent: T, data: TGetTransactionMemoRequest) {
+  type R = ResType<T, TGetTransactionMemoResponse, WsGetTransactionMemoMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, get_transaction_memo_command, data);
+}
+
+
 export const sign_message_by_address_command = "sign_message_by_address";
 export type sign_message_by_address_command = typeof sign_message_by_address_command;
 export type TSignMessageByAddressRequest = {
   address: str;
   message: str;
+  is_hex?: bool;
 };
 export type TSignMessageByAddressResponse = {
   success: True;
@@ -931,6 +963,7 @@ export type sign_message_by_id_command = typeof sign_message_by_id_command;
 export type TSignMessageByIdRequest = {
   id: str;
   message: str;
+  is_hex?: bool;
 };
 export type TSignMessageByIdResponse = {
   success: False;
@@ -1053,6 +1086,7 @@ export type TCatSpendRequest = {
   max_coin_amount?: uint64;
   exclude_coin_amounts?: uint64[];
   exclude_coin_ids?: str[];
+  reuse_puzhash?: bool;
 };
 export type TCatSpendResponse = {
   transaction: TransactionRecordConvenience;
@@ -1095,6 +1129,7 @@ export type TCreateOfferForIdsRequest = {
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
   solver?: Record<str, any>;
+  reuse_puzhash?: bool;
 };
 export type TCreateOfferForIdsResponse = {
   offer: str;
@@ -1159,6 +1194,7 @@ export type TTakeOfferRequest = {
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
   solver?: Record<str, any>;
+  reuse_puzhash?: bool;
 };
 export type TTakeOfferResponse = {
   trade_record: TradeRecordConvenience;
@@ -1318,6 +1354,7 @@ export type TDidUpdateRecoveryIdsRequest = {
   wallet_id: uint32;
   new_list: str[];
   num_verifications_required?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TDidUpdateRecoveryIdsResponse = {
   success: bool;
@@ -1337,6 +1374,7 @@ export type TDidUpdateMetadataRequest = {
   wallet_id: uint32;
   metadata?: Record<str, str>;
   fee?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TDidUpdateMetadataResponse = {
   success: True;
@@ -1595,6 +1633,7 @@ export type TDidGetInfoResponse = {
   metadata: Record<str, str>;
   launcher_id: str;
   full_puzzle: str; // hex bytes of serialized CLVM program
+  solution: any;
   hints: str[];
 };
 export type WsDidGetInfoMessage = GetMessageType<chia_wallet_service, did_get_info_command, TDidGetInfoResponse>;
@@ -1630,6 +1669,7 @@ export type TDidTransferDidRequest = {
   inner_address: str;
   fee?: uint64;
   with_recovery_info?: bool;
+  reuse_puzhash?: bool;
 };
 export type TDidTransferDidResponse = {
   success: True;
@@ -1663,6 +1703,7 @@ export type TNftMintNftRequest = {
   fee?: uint64;
   did_id?: str;
   royalty_percentage?: uint16;
+  reuse_puzhash?: bool;
 };
 export type TNftMintNftResponse = {
   wallet_id: uint32;
@@ -1677,6 +1718,25 @@ export async function nft_mint_nft<T extends TRPCAgent | TDaemon>(agent: T, data
 }
 
 
+
+export const nft_count_nfts_command = "nft_count_nfts";
+export type nft_count_nfts_command = typeof nft_count_nfts_command;
+export type TNftCountNftsRequest = {
+  wallet_id: uint32;
+};
+export type TNftCountNftsResponse = {
+  success: False;
+  error: str;
+} | {
+  wallet_id: uint32;
+  success: True;
+  count: int;
+};
+export type WsNftCountNftsMessage = GetMessageType<chia_wallet_service, nft_count_nfts_command, TNftCountNftsResponse>;
+export async function nft_count_nfts<T extends TRPCAgent | TDaemon>(agent: T, data: TNftCountNftsRequest) {
+  type R = ResType<T, TNftCountNftsResponse, WsNftCountNftsMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, nft_count_nfts_command, data);
+}
 
 
 export const nft_get_nfts_command = "nft_get_nfts";
@@ -1708,6 +1768,7 @@ export type TNftSetNftDidRequest = {
   did_id?: str;
   nft_coin_id: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TNftSetNftDidResponse = {
   wallet_id: uint32;
@@ -1730,6 +1791,7 @@ export type TNftSetDidBulkRequest = {
   nft_coin_list: Array<{nft_coin_id: str; wallet_id: uint32;}>;
   did_id?: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TNftSetDidBulkResponse = {
   success: False;
@@ -1753,6 +1815,7 @@ export type TNftTransferBulkRequest = {
   nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
   target_address: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TNftTransferBulkResponse = {
   success: False;
@@ -1855,6 +1918,7 @@ export type TNftTransferNftRequest = {
   target_address: str;
   nft_coin_id: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TNftTransferNftResponse = {
   success: True;
@@ -1904,6 +1968,7 @@ export type TNftAddUriRequest = {
   key: str;
   nft_coin_id: str;
   fee?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TNftAddUriResponse = {
   success: True;
@@ -1973,6 +2038,7 @@ export type TNftMintBulkRequest = {
   did_lineage_parent?: str;
   mint_from_did?: bool;
   fee?: uint64;
+  reuse_puzhash?: bool;
 };
 export type TNftMintBulkResponse = {
   success: False;
@@ -2379,12 +2445,13 @@ export type RpcWalletMessage =
   | TSignMessageByAddressResponse
   | TSignMessageByIdResponse
   | TVerifySignatureResponse
+  | TGetTransactionMemoResponse
   | TNftCalculateRoyaltiesResponse
   | TNftMintBulkResponse
   | TNftSetDidBulkResponse
-  | TNftTransferBulkRequest
   | TNftTransferBulkResponse
   | TDeleteAllKeysResponse
+  | TSetWalletResyncOnStartupResponse
   | TDeleteKeyResponse
   | TCheckDeleteKeyResponse
   | TDidSetWalletNameResponse
@@ -2406,6 +2473,7 @@ export type RpcWalletMessage =
   | TDidUpdateRecoveryIdsResponse
   | TDidUpdateMetadataResponse
   | TNftMintNftResponse
+  | TNftCountNftsResponse
   | TNftGetNftsResponse
   | TNftSetNftDidResponse
   | TNftGetByDidResponse
@@ -2490,11 +2558,13 @@ export type RpcWalletMessageOnWs =
   | WsSignMessageByAddressMessage
   | WsSignMessageByIdMessage
   | WsVerifySignatureMessage
+  | WsGetTransactionMemoMessage
   | WsNftCalculateRoyaltiesMessage
   | WsNftMintBulkMessage
   | WsNftSetDidBulkMessage
   | WsNftTransferBulkMessage
   | WsDeleteAllKeysMessage
+  | WsSetWalletResyncOnStartupMessage
   | WsDeleteKeyMessage
   | WsCheckDeleteKeyMessage
   | WsDidSetWalletNameMessage
@@ -2516,6 +2586,7 @@ export type RpcWalletMessageOnWs =
   | WsDidUpdateRecoveryIdsMessage
   | WsDidUpdateMetadataMessage
   | WsNftMintNftMessage
+  | WsNftCountNftsMessage
   | WsNftGetNftsMessage
   | WsNftSetNftDidMessage
   | WsNftGetByDidMessage
