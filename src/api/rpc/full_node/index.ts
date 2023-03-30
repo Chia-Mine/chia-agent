@@ -5,7 +5,7 @@ import {UnfinishedHeaderBlock} from "../../chia/types/unfinished_header_block";
 import {CoinRecord, CoinRecordBackwardCompatible} from "../../chia/types/coin_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {MempoolItem} from "../../chia/types/mempool_item";
+import {MempoolItemInJsonDict} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
@@ -37,7 +37,7 @@ export type TGetBlockchainStateResponse = {
     space: uint128;
     mempool_size: int;
     mempool_cost: CLVMCost;
-    mempool_fees: Mojos;
+    mempool_fees: int;
     mempool_min_fees: {
       cost_5000000: float,
     },
@@ -443,7 +443,7 @@ export type get_all_mempool_items_command = typeof get_all_mempool_items_command
 export type TGetAllMempoolItemsRequest = {
 };
 export type TGetAllMempoolItemsResponse = {
-  mempool_items: Record<string, MempoolItem>;
+  mempool_items: Record<string, MempoolItemInJsonDict>;
 };
 export type WsGetAllMempoolItemsMessage = GetMessageType<chia_full_node_service, get_all_mempool_items_command, TGetAllMempoolItemsResponse>;
 export async function get_all_mempool_items<T extends TRPCAgent | TDaemon>(agent: T) {
@@ -460,7 +460,7 @@ export type TGetMempoolItemByTxIdRequest = {
   include_pending?: bool;
 };
 export type TGetMempoolItemByTxIdResponse = {
-  mempool_item: MempoolItem;
+  mempool_item: MempoolItemInJsonDict;
 };
 export type WsGetMempoolItemByTxIdMessage = GetMessageType<chia_full_node_service, get_mempool_item_by_tx_id_command, TGetMempoolItemByTxIdResponse>;
 export async function get_mempool_item_by_tx_id<T extends TRPCAgent | TDaemon>(agent: T, data: TGetMempoolItemByTxIdRequest) {
@@ -485,7 +485,7 @@ export type TGetFeeEstimateResponse = {
   target_times: int[];
   current_fee_rate: uint64;
   mempool_size: CLVMCost
-  mempool_fees: Mojos;
+  mempool_fees: int;
   num_spends: int;
   mempool_max_size: CLVMCost;
   full_node_synced: bool;
@@ -604,7 +604,7 @@ export async function get_all_coins<T extends TRPCAgent | TDaemon>(agent: T, dat
 export const get_all_puzzle_hashes_command = "get_all_puzzle_hashes";
 export type get_all_puzzle_hashes_command = typeof get_all_puzzle_hashes_command;
 export type TGetAllPuzzleHashesResponse = {
-  puzzle_hashes: Record<bytes32, Array<[uint128, int]>>;
+  puzzle_hashes: Record<bytes32, [uint128, int]>;
   success: bool;
 };
 export type WsGetAllPuzzleHashesMessage = GetMessageType<chia_full_node_service, get_all_puzzle_hashes_command, TGetAllPuzzleHashesResponse>;

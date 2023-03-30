@@ -55,7 +55,7 @@ const response = await get_blockchain_state(agent);
     space: uint128;
     mempool_size: int;
     mempool_cost: CLVMCost;
-    mempool_fees: Mojos;
+    mempool_fees: int;
     mempool_min_fees: {
       cost_5000000: float;
     };
@@ -69,8 +69,6 @@ For content of `BlockRecord`,
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/block_record.ts
 For content of `CLVMCost`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/clvm_cost.ts
-For content of `Mojos`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mojos.ts
 
 ---
 
@@ -635,10 +633,10 @@ const response = await get_all_mempool_items(agent);
 ### response
 ```typescript
 {
-  mempool_items: Record<string, MempoolItem>;
+  mempool_items: Record<string, MempoolItemInJsonDict>;
 }
 ```
-For content of `MempoolItem`,  
+For content of `MempoolItemInJsonDict`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mempool_item.ts
 
 ---
@@ -661,10 +659,10 @@ const response = await get_mempool_item_by_tx_id(agent, params);
 ### response
 ```typescript
 {
-  mempool_item: MempoolItem;
+  mempool_item: MempoolItemInJsonDict;
 }
 ```
-For content of `MempoolItem`,  
+For content of `MempoolItemInJsonDict`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/mempool_item.ts
 
 ---
@@ -694,7 +692,7 @@ const response = await get_fee_estimate(agent, params);
   estimates: uint64[];
   target_times: int[];
   current_fee_rate: uint64;
-  mempool_size: CLVMCost
+  mempool_size: int
   mempool_fees: Mojos;
   num_spends: int;
   mempool_max_size: CLVMCost;
@@ -860,7 +858,7 @@ const response = await get_all_puzzle_hashes(agent);
 ### response:
 ```typescript
 {
-  puzzle_hashes: Record<string, Array<[uint128, int]>>;
+  puzzle_hashes: Record<string, [uint128, int]>;
   success: bool;
 }
 ```

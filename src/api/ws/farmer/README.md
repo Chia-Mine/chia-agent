@@ -290,7 +290,7 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/far
 ---
 
 ### `on_submitted_partial`
-Capture broadcast message of command `on_proof` from `chia_farmer` service.
+Capture broadcast message of command `on_submitted_partial` from `chia_farmer` service.
 
 #### Usage
 ```typescript
@@ -315,7 +315,7 @@ unsubscribe(); // Stop subscribing messages
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: "wallet_ui";
+  destination: "metrics";
 }
 ```
 #### data:
@@ -327,4 +327,78 @@ unsubscribe(); // Stop subscribing messages
   points_acknowledged_since_start: uint64;
   points_acknowledged_24h: Array<[float, uint64]>; // [(time.time(), new_difficulty)]
 }
+```
+
+---
+
+### `on_add_connection`
+Capture broadcast message of command `on_add_connection` from `chia_farmer` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_add_connection} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_add_connection(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "on_add_connection";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "metrics";
+}
+```
+
+#### data:
+```typescript
+{}
+```
+
+---
+
+### `on_close_connection`
+Capture broadcast message of command `on_close_connection` from `chia_farmer` service.
+
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_close_connection} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_close_connection(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "on_close_connection";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "metrics";
+}
+```
+
+#### data:
+```typescript
+{}
 ```

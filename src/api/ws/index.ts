@@ -9,6 +9,8 @@ export {
   THarvesterRemovedBroadCast,
   TProofBroadCast,
   TSubmittedPartialBroadCast,
+  TAddConnectionBroadCast,
+  TCloseConnectionBroadCast,
   on_message_from_farmer,
   on_get_connections as on_get_connections_farmer,
   on_new_farming_info,
@@ -17,6 +19,8 @@ export {
   on_harvester_removed,
   on_proof,
   on_submitted_partial,
+  on_add_connection,
+  on_close_connection,
 } from "./farmer/index";
 
 import type {WsFullNodeMessage} from "./full_node/index";
@@ -41,24 +45,30 @@ export {
   TChiaHarvesterBroadcast,
   TGetPlotsBroadCast,
   TFarmingInfoBroadCast,
+  TAddConnectionBroadCast as TAddConnectionHarvesterBroadCast,
+  TCloseConnectionBroadCast as TCloseConnectionHarvesterBroadCast,
   on_message_from_harvester,
   on_get_connections as on_get_connections_harvester,
   on_get_plots,
   on_farming_info,
+  on_add_connection as on_add_connection_harvester,
+  on_close_connection as on_close_connection_harvester,
 } from "./harvester/index";
 
 import type {WsWalletMessage} from "./wallet/index";
 export {
   chia_wallet_service,
   TGetConnectionsBroadCast as TGetConnectionsWalletBroadCast,
-  TSyncChangedBroadCastOfWallet,
+  TSyncChangedBroadCast,
   TStateChangedBroadCastOfWallet,
-  TCoinAddedBroadCastOfWallet,
+  TCoinAddedBroadCast,
   TChiaWalletBroadcast,
   on_get_connections as on_get_connections_wallet,
-  on_sync_changed_of_wallet,
+  on_sync_changed,
   on_state_changed_of_wallet,
-  on_coin_added_of_wallet,
+  on_coin_added,
+  on_add_connection as on_add_connection_wallet,
+  on_close_connection as on_close_connection_wallet,
   on_message_from_wallet,
 } from "./wallet/index";
 

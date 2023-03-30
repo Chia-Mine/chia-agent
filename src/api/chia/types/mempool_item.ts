@@ -8,9 +8,17 @@ export type MempoolItem = {
   spend_bundle: SpendBundle;
   fee: uint64;
   npc_result: NPCResult;
+  spend_bundle_name: bytes32;
+  height_added_to_mempool: uint32;
+  assert_height: Optional<uint32>;
+};
+
+export type MempoolItemInJsonDict = {
+  spend_bundle: SpendBundle;
+  fee: uint64;
+  npc_result: NPCResult;
   cost: uint64;
   spend_bundle_name: bytes32;
   additions: Coin[];
-  height_added_to_mempool: uint32;
-  assert_height: Optional<uint32>;
+  removals: Coin[];
 };
