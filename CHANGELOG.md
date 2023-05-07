@@ -1,5 +1,24 @@
 # Changelog
 
+## [11.1.0]
+### Changed
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_wallet_balance`](./src/api/rpc/wallet/README.md#get_wallet_balanceagent-params)
+    - Part of response properties are replaced by `Balance` type.  
+    (* No new properties were added and no properties were removed to the response. Just part of props were managed separately)
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+    - Added `extra_delta`, `tail_reveal` and `tail_solution` to request parameter.
+  - In `chia/wallet/nft_wallet/nft_info.py`, `nft_coin_confirmation_height` was added to `NFTInfo`.  
+    As a result of this change, the responses from following RPC API is affected.
+    - ['nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+- Updated `yaml` to `2.2.2`
+### Added
+- [New DataLayer RPC API](./src/api/ws/wallet)
+  - [`check_plugins`](./src/api/rpc/data_layer/README.md#check_pluginsagent)
+### Fixed
+- Added missing `get_sync_status` to `README.md` for RPC APIs
+- Added missing property `launcher_id` to `dl_history` in DataLayer RPC API
+
 ## [11.0.0]
 ### Breaking change
 JSONified `MempoolItem` replaced original `MempoolItem` in `chia/types/mempool_items.py`
@@ -980,6 +999,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+
+[11.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.0.0...v11.1.0
 [11.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.1.0...v11.0.0
 [10.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.0.0...v10.1.0
 [10.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v9.2.0...v10.0.0

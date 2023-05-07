@@ -5,6 +5,7 @@ export type NFTInfo = {
   nft_id: str;
   launcher_id: bytes32;
   nft_coin_id: bytes32;
+  nft_coin_confirmation_height: uint32;
   owner_did: Optional<bytes32>;
   royalty_percentage: Optional<uint16>;
   royalty_puzzle_hash: Optional<bytes32>;

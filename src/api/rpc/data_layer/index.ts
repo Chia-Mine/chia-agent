@@ -2,7 +2,12 @@ import {TRPCAgent} from "../../../rpc/index";
 import {bool, None, Optional, str, uint64} from "../../chia/types/_python_types_";
 import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {OfferMarshalled, OfferStoreMarshalled, SyncStatus} from "../../chia/data_layer/data_layer_util";
+import {
+  OfferMarshalled,
+  OfferStoreMarshalled,
+  PluginStatusMarshalled,
+  SyncStatus
+} from "../../chia/data_layer/data_layer_util";
 import {TCancelOfferResponseDL, TTakeOfferResponseDL} from "../index";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
@@ -470,6 +475,16 @@ export async function get_sync_status<T extends TRPCAgent | TDaemon>(agent: T, p
   return agent.sendMessage<R>(chia_data_layer_service, get_sync_status_command, params);
 }
 
+
+export const check_plugins_command = "check_plugins";
+export type check_plugins_command = typeof check_plugins_command;
+export type TCheckPluginsResponse = PluginStatusMarshalled;
+export type WsCheckPluginsMessage = GetMessageType<chia_data_layer_service, check_plugins_command, TCheckPluginsResponse>;
+export async function check_plugins<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TCheckPluginsResponse, WsCheckPluginsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, check_plugins_command);
+}
+
 export type RpcDataLayerMessage =
   TCreateDataStoreResponse
   | TGetOwnedStoresResponse
@@ -498,6 +513,7 @@ export type RpcDataLayerMessage =
   | TVerifyOfferResponse
   | TCancelOfferResponseDL
   | TGetSyncStatusResponse
+  | TCheckPluginsResponse
 ;
 
 export type RpcDataLayerMessageOnWs =
@@ -528,4 +544,5 @@ export type RpcDataLayerMessageOnWs =
   | WsVerifyOfferMessage
   | WsCancelOfferMessageDL
   | WsGetSyncStatusMessage
+  | WsCheckPluginsMessage
 ;

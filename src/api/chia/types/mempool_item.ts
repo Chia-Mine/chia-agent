@@ -11,6 +11,8 @@ export type MempoolItem = {
   spend_bundle_name: bytes32;
   height_added_to_mempool: uint32;
   assert_height: Optional<uint32>;
+  assert_before_height: Optional<uint32>;
+  assert_before_seconds: Optional<uint64>;
 };
 
 export type MempoolItemInJsonDict = {

@@ -568,6 +568,8 @@ export {
   TGetSyncStatusRequest as TGetSyncStatusRequestDL,
   TGetSyncStatusResponse as TGetSyncStatusResponseDL,
   get_sync_status as get_sync_status_dl,
+  TCheckPluginsResponse,
+  check_plugins,
 } from "./data_layer/index"
 
 import type {RpcCrawlerMessage} from "./crawler/index";
