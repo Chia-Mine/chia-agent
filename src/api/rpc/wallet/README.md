@@ -572,21 +572,16 @@ const response = await get_wallet_balance(agent, params);
 ### response:
 ```typescript
 {
-  wallet_balance: {
+  wallet_balance: Balance & {
     wallet_id: uint32;
-    confirmed_wallet_balance: uint128; // MEMO: cat_wallet, did_wallet and pool_wallet declare `uint64`. rl_wallet and standard_wallet declare uint128.
-    unconfirmed_wallet_balance: uint128;
-    spendable_balance: uint128;
-    pending_change: uint64;
-    max_send_amount: uint64;
-    unspent_coin_count: int;
-    pending_coin_removal_count: int;
     wallet_type: int;
     fingerprint?: int;
     asset_id?: str;
   }
 }
 ```
+For content of `Balance`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_node.ts
 
 ---
 
@@ -1523,6 +1518,9 @@ const response = await cat_spend(agent, params);
   exclude_coin_amounts?: uint64[];
   exclude_coin_ids?: str[];
   reuse_puzhash?: bool;
+  extra_delta? : int;
+  tail_reveal? : str;
+  tail_solution? : str;
 }
 ```
 ### response:
@@ -2949,6 +2947,7 @@ const response = await dl_history(agent, params);
 ### params:
 ```typescript
 {
+  launcher_id: str;
   min_generation?: uint32;
   max_generation?: uint32;
   num_results?: uint32;

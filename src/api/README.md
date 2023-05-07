@@ -221,6 +221,8 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`take_offer`](./rpc/data_layer/README.md#take_offeragent-params)
 - [`verify_offer`](./rpc/data_layer/README.md#verify_offeragent-params)
 - [`cancel_offer`](./rpc/data_layer/README.md#cancel_offeragent-params)
+- [`get_sync_status`](./rpc/data_layer/README.md#get_sync_statusagent-params)
+- [`check_plugins`](./rpc/data_layer/README.md#check_pluginsagent)
 
 #### [Crawler RPC API](./rpc/crawler/README.md#usage)
 - [`get_peer_counts`](./rpc/crawler/README.md#get_peer_countsagent)

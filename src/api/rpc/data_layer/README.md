@@ -696,21 +696,34 @@ const {get_sync_status} = require("chia-agent/api/rpc/data_layer");
 const agent = new RPCAgent({service: "data_layer"});
 const response = await get_sync_status(agent, params);
 ```
-
 ### params:
-
 ```typescript
 {
   id: str;
 }
 ```
-
 ### response:
-
 ```typescript
 {
   sync_status: SyncStatus;
 }
 ```
 For content of `SyncStatus`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer.util.ts
+
+---
+
+## `check_plugins(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {check_plugins} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await check_plugins(agent, params);
+```
+### response:
+```typescript
+PluginStatusMarshalled
+```
+For content of `PluginStatusMarshalled`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer.util.ts

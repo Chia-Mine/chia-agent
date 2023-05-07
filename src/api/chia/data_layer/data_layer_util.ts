@@ -42,3 +42,10 @@ export type SyncStatus = {
   target_root_hash: bytes32; // converted to string via `.hex()`
   target_generation: int;
 };
+
+export type PluginStatusMarshalled = {
+  plugin_status: {
+    uploaders: Record<str, Record<str, any>>;
+    downloaders: Record<str, Record<str, any>>;
+  }
+};

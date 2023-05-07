@@ -8,7 +8,6 @@ import {
   Optional,
   str,
   True,
-  uint128,
   uint16,
   uint32,
   uint64,
@@ -29,6 +28,7 @@ import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
 import {CoinRecord} from "../../chia/types/coin_record";
 import {SigningMode} from "../../chia/types/signing_mode";
+import {Balance} from "../../chia/wallet/wallet_node";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -503,15 +503,8 @@ export type TGetWalletBalanceRequest = {
   wallet_id: int;
 };
 export type TGetWalletBalanceResponse = {
-  wallet_balance: {
+  wallet_balance: Balance & {
     wallet_id: uint32;
-    confirmed_wallet_balance: uint128; // MEMO: cat_wallet, did_wallet and pool_wallet declare `uint64`. rl_wallet and standard_wallet declare uint128.
-    unconfirmed_wallet_balance: uint128;
-    spendable_balance: uint128;
-    pending_change: uint64;
-    max_send_amount: uint64;
-    unspent_coin_count: int;
-    pending_coin_removal_count: int;
     wallet_type: int;
     fingerprint?: int;
     asset_id?: str;
@@ -1087,6 +1080,9 @@ export type TCatSpendRequest = {
   exclude_coin_amounts?: uint64[];
   exclude_coin_ids?: str[];
   reuse_puzhash?: bool;
+  extra_delta?: int;
+  tail_reveal?: str;
+  tail_solution?: str;
 };
 export type TCatSpendResponse = {
   transaction: TransactionRecordConvenience;
@@ -2334,6 +2330,7 @@ export async function dl_update_multiple<T extends TRPCAgent | TDaemon>(agent: T
 export const dl_history_command = "dl_history";
 export type dl_history_command = typeof dl_history_command;
 export type TDlHistoryRequest = {
+  launcher_id: str;
   min_generation?: uint32;
   max_generation?: uint32;
   num_results?: uint32;
