@@ -11,6 +11,7 @@
   - In `chia/wallet/nft_wallet/nft_info.py`, `nft_coin_confirmation_height` was added to `NFTInfo`.  
     As a result of this change, the responses from following RPC API is affected.
     - ['nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+- Updated `yaml` to `2.2.2`
 ### Added
 - [New DataLayer RPC API](./src/api/ws/wallet)
   - [`check_plugins`](./src/api/rpc/data_layer/README.md#check_pluginsagent)
