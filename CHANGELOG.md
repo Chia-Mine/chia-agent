@@ -1,5 +1,9 @@
 # Changelog
 
+## [11.1.1]
+Just updated documents.
+You don't need to update `chia-agent` from `11.1.0` for `chia-blockchain@1.8.1` because there are no API changes.
+
 ## [11.1.0]
 ### Changed
 - [Wallet RPC API](./src/api/rpc/wallet)
@@ -999,7 +1003,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-
+[11.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.0...v11.1.1
 [11.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.0.0...v11.1.0
 [11.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.1.0...v11.0.0
 [10.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.0.0...v10.1.0
