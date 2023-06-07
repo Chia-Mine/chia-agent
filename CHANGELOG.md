@@ -1,5 +1,13 @@
 # Changelog
 
+## [12.0.0]
+### Breaking change
+Now the types of `int64`, `uint64`, `uint128`, `uint512` are `number | BigInt` (Originally it was `number`).  
+When the numeric value is larger than `Number.MAX_SAFE_INTEGER`, the value is parsed as a `BigInt`.  
+You need to check a numeric member of API responses whether it is a `number` or `BigInt`
+if the type of it is either `int64`, `uint64`, `uint128` or `uint512`.  
+You may also use `BigInt` for API request inputs wherever the type is one of the above.
+
 ## [11.1.1]
 Just updated documents.
 You don't need to update `chia-agent` from `11.1.0` for `chia-blockchain@1.8.1` because there are no API changes.
@@ -1003,6 +1011,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[12.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.1...v12.0.0
 [11.1.1]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.0...v11.1.1
 [11.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.0.0...v11.1.0
 [11.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v10.1.0...v11.0.0

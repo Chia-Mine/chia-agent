@@ -2,8 +2,14 @@ import {Agent as HttpsAgent, request as httpsRequest, RequestOptions} from "http
 import {Agent as HttpAgent, OutgoingHttpHeaders, request as httpRequest} from "http";
 import type {checkServerIdentity} from "tls";
 import {existsSync, readFileSync} from "fs";
+import * as JSONbigBuilder from "json-bigint";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
+
+const JSONbig = JSONbigBuilder({
+  useNativeBigInt: true,
+  alwaysParseAsBig: false,
+});
 
 type TDestination = "farmer"|"harvester"|"full_node"|"wallet"|"data_layer"|"daemon"|"pool";
 
@@ -198,7 +204,7 @@ export class RPCAgent {
   
   public async request<R>(method: string, path: string, data?: any){
     return new Promise((resolve: (v: R) => void, reject) => {
-      const body = data ? JSON.stringify(data) : "{}";
+      const body = data ? JSONbig.stringify(data) : "{}";
       const pathname = `/${path.replace(/^\/+/, "")}`;
       const METHOD = method.toUpperCase();
       const options: RequestOptions & {checkServerIdentity?: typeof checkServerIdentity;} = {
@@ -272,7 +278,7 @@ export class RPCAgent {
         res.on("end", () => {
           try{
             if(chunks.length > 0){
-              const data = JSON.parse(Buffer.concat(chunks).toString());
+              const data = JSONbig.parse(Buffer.concat(chunks).toString());
               return resolve(data);
             }
           
