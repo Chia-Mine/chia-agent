@@ -243,7 +243,7 @@ const response = await get_block_spends(agent, params);
 }
 ```
 For content of `CoinSpend`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/cons_spends.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_spend.ts
 
 ---
 
@@ -601,7 +601,7 @@ const response = await get_puzzle_and_solution(agent, params);
 }
 ```
 For content of `CoinSpend`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/cons_spends.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_spend.ts
 
 ---
 

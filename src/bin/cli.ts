@@ -34,7 +34,7 @@ if(command === "farm"){
         if(e.command === "new_farming_info"){
           const {farming_info} = e.data;
           const {challenge_hash, passed_filter, proofs, total_plots, timestamp} = farming_info;
-          const date = new Date(timestamp*1000);
+          const date = new Date(Number(timestamp)*1000);
           console.log(`${challenge_hash.substr(0, 32)}... ${passed_filter}/${total_plots} ${proofs} ${date.toLocaleTimeString()}`);
     
           sumPassedFilter += passed_filter;
