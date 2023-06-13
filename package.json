@@ -1,6 +1,6 @@
 {
   "name": "chia-agent",
-  "version": "12.0.0",
+  "version": "12.0.1",
   "author": "ChiaMineJP <admin@chiamine.jp>",
   "description": "chia rpc/websocket client library",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "node": ">=12.13.0"
   },
   "dependencies": {
-    "@chiamine/json-bigint": "^1.0.2-beta.4",
+    "@chiamine/json-bigint": "^1.0.3",
     "ws": "^8.5.0",
     "yaml": "^2.2.2"
   },
