@@ -1,5 +1,11 @@
 # Changelog
 
+## [12.0.1]
+### Changed
+- Replace the npm module `json-bigint` to `@chiamine/json-bigint`.
+### Fixed
+- Fixed the type of `int64`, `uint64`, `uint128`, `uint512` to `number | bigint`.
+
 ## [12.0.0]
 ### Breaking change
 Now the types of `int64`, `uint64`, `uint128`, `uint512` are `number | BigInt` (Originally it was `number`).  
@@ -1011,6 +1017,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[12.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.0...v12.0.1
 [12.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.1...v12.0.0
 [11.1.1]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.0...v11.1.1
 [11.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.0.0...v11.1.0
