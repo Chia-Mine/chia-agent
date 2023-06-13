@@ -11,10 +11,10 @@ export type int16 = number;
 export type uint16 = number;
 export type int32 = number;
 export type uint32 = number;
-export type int64 = number | BigInt;
-export type uint64 = number | BigInt;
-export type uint128 = number | BigInt;
-export type int512 = number | BigInt;
+export type int64 = number | bigint;
+export type uint64 = number | bigint;
+export type uint128 = number | bigint;
+export type int512 = number | bigint;
 
 export type float = number;
 

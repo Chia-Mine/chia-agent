@@ -2,7 +2,7 @@ import {Agent as HttpsAgent, request as httpsRequest, RequestOptions} from "http
 import {Agent as HttpAgent, OutgoingHttpHeaders, request as httpRequest} from "http";
 import type {checkServerIdentity} from "tls";
 import {existsSync, readFileSync} from "fs";
-import * as JSONbigBuilder from "json-bigint";
+import * as JSONbigBuilder from "@chiamine/json-bigint";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
 
