@@ -1068,7 +1068,7 @@ const response = await get_spendable_coins(agent, params);
 }
 ```
 For content of `CoinRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_records.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_records.ts  
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
 
@@ -1313,7 +1313,7 @@ const response = await sign_message_by_address(agent, params);
   signing_mode: SigningMode;
 }
 ```
-For content of `SigningMode,  
+For content of `SigningMode`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/signing_mode.ts
 
 ---
@@ -1349,7 +1349,7 @@ const response = await sign_message_by_id(agent, params);
   signing_mode: SigningMode;
 }
 ```
-For content of `SigningMode,  
+For content of `SigningMode`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/signing_mode.ts
 
 ---
@@ -1718,8 +1718,9 @@ const response = await create_offer_for_ids(agent, params);
 ```
 For content of `TradeRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/trade_record.ts  
-For content of `TDriverDict`,   
+For content of `TDriverDict`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzle_drivers.ts
+
 ---
 
 ## `get_offer_summary(agent, params)`
@@ -2930,8 +2931,7 @@ const response = await dl_track_new(agent, params);
 ```
 ### response:
 ```typescript
-{
-}
+{}
 ```
 
 ---
@@ -2952,8 +2952,7 @@ const response = await dl_stop_tracking(agent, params);
 ```
 ### response:
 ```typescript
-{
-}
+{}
 ```
 
 ---
@@ -3320,8 +3319,7 @@ const response = await vc_add_proofs(agent, params);
 ```
 ### response:
 ```typescript
-{
-}
+{}
 ```
 
 ---
@@ -3371,3 +3369,5 @@ const response = await vc_revoke(agent, params);
   transactions: TransactionRecordConvenience[];
 }
 ```
+For content of `TransactionRecordConvenience`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
