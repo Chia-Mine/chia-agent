@@ -1,3 +1,5 @@
+import {uint32, uint8} from "../../types/_python_types_";
+
 export const WalletType = {
 // # Wallet Types
   STANDARD_WALLET: 0,
@@ -13,4 +15,15 @@ export const WalletType = {
   NFT: 10,
   DATA_LAYER: 11,
   DATA_LAYER_OFFER: 12,
+  VC: 13,
+} as const;
+
+export const CoinType = {
+  NORMAL: 0,
+  CLAWBACK: 1,
+} as const;
+
+export type StreamableWalletIdentifier = {
+  id: uint32;
+  type: uint8;
 };

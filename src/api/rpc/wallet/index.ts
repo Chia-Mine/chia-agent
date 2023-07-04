@@ -14,7 +14,11 @@ import {
   uint8
 } from "../../chia/types/_python_types_";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {TransactionRecord, TransactionRecordConvenience} from "../../chia/wallet/transaction_record";
+import {
+  TransactionRecord,
+  TransactionRecordConvenience,
+  TransactionRecordConvenienceWithMetadata
+} from "../../chia/wallet/transaction_record";
 import {SpendBundle} from "../../chia/types/spend_bundle";
 import {TRPCAgent} from "../../../rpc";
 import {PoolWalletInfo} from "../../chia/pools/pool_wallet_info";
@@ -29,6 +33,11 @@ import {TDaemon} from "../../../daemon/index";
 import {CoinRecord} from "../../chia/types/coin_record";
 import {SigningMode} from "../../chia/types/signing_mode";
 import {Balance} from "../../chia/wallet/wallet_node";
+import {AutoClaimSettings} from "../../chia/wallet/puzzles/clawback/metadata";
+import {GetCoinRecords} from "../../chia/wallet/wallet_coin_store";
+import {WalletCoinRecordWithMetadata} from "../../chia/wallet/wallet_coin_record";
+import {VCRecord} from "../../chia/wallet/vc_wallet/vc_store";
+import {TransactionTypeFilter} from "../../chia/wallet/util/quality_filter";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -307,6 +316,27 @@ export async function get_timestamp_for_height<T extends TRPCAgent | TDaemon>(ag
 
 
 
+export const set_auto_claim_command = "set_auto_claim";
+export type set_auto_claim_command = typeof set_auto_claim_command;
+export type TSetAutoClaimRequest = AutoClaimSettings;
+export type TSetAutoClaimResponse = AutoClaimSettings;
+export type WsSetAutoClaimMessage = GetMessageType<chia_wallet_service, set_auto_claim_command, TSetAutoClaimResponse>;
+export async function set_auto_claim<T extends TRPCAgent | TDaemon>(agent: T, data: TSetAutoClaimRequest) {
+  type R = ResType<T, TSetAutoClaimResponse, WsSetAutoClaimMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, set_auto_claim_command, data);
+}
+
+
+export const get_auto_claim_command = "get_auto_claim";
+export type get_auto_claim_command = typeof get_auto_claim_command;
+export type TGetAutoClaimResponse = AutoClaimSettings;
+export type WsGetAutoClaimMessage = GetMessageType<chia_wallet_service, get_auto_claim_command, TGetAutoClaimResponse>;
+export async function get_auto_claim<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetAutoClaimResponse, WsGetAutoClaimMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, get_auto_claim_command);
+}
+
+
 export const get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";
 export type get_initial_freeze_period_command_of_wallet = typeof get_initial_freeze_period_command_of_wallet;
 export type TGetInitialFreezePeriodRequestOfWallet = {
@@ -497,18 +527,19 @@ export async function create_new_wallet<T extends TRPCAgent | TDaemon>(agent: T,
 
 
 // # Wallet
+export type WalletBalance = Balance & {
+  wallet_id: uint32;
+  wallet_type: int;
+  fingerprint?: int;
+  asset_id?: str;
+};
 export const get_wallet_balance_command = "get_wallet_balance";
 export type get_wallet_balance_command = typeof get_wallet_balance_command;
 export type TGetWalletBalanceRequest = {
   wallet_id: int;
 };
 export type TGetWalletBalanceResponse = {
-  wallet_balance: Balance & {
-    wallet_id: uint32;
-    wallet_type: int;
-    fingerprint?: int;
-    asset_id?: str;
-  };
+  wallet_balance: WalletBalance;
 };
 export type WsGetWalletBalanceMessage = GetMessageType<chia_wallet_service, get_wallet_balance_command, TGetWalletBalanceResponse>;
 export async function get_wallet_balance<T extends TRPCAgent | TDaemon>(agent: T, data: TGetWalletBalanceRequest){
@@ -516,6 +547,20 @@ export async function get_wallet_balance<T extends TRPCAgent | TDaemon>(agent: T
   return agent.sendMessage<R>(chia_wallet_service, get_wallet_balance_command, data);
 }
 
+
+export const get_wallet_balances_command = "get_wallet_balances";
+export type get_wallet_balances_command = typeof get_wallet_balances_command;
+export type TGetWalletBalancesRequest = {
+  wallet_ids: int[];
+};
+export type TGetWalletBalancesResponse = {
+  wallet_balances: Record<uint32, WalletBalance>;
+};
+export type WsGetWalletBalancesMessage = GetMessageType<chia_wallet_service, get_wallet_balances_command, TGetWalletBalancesResponse>;
+export async function get_wallet_balances<T extends TRPCAgent | TDaemon>(agent: T, data: TGetWalletBalancesRequest) {
+  type R = ResType<T, TGetWalletBalancesResponse, WsGetWalletBalancesMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, get_wallet_balances_command, data);
+}
 
 
 export const get_transaction_command = "get_transaction";
@@ -545,9 +590,11 @@ export type TGetTransactionsRequest = {
   sort_key?: str;
   reverse?: bool;
   to_address?: str;
+  type_filter?: TransactionTypeFilter;
+  confirmed?: bool;
 };
 export type TGetTransactionsResponse = {
-  transactions: TransactionRecordConvenience[];
+  transactions: TransactionRecordConvenienceWithMetadata[];
   wallet_id: int;
 };
 export type WsGetTransactionsMessage = GetMessageType<chia_wallet_service, get_transactions_command, TGetTransactionsResponse>;
@@ -590,6 +637,7 @@ export type TSendTransactionRequest = {
   max_coin_amount?: uint64;
   exclude_coin_amounts?: uint64[];
   exclude_coin_ids?: str[];
+  puzzle_decorator?: Array<{decorator: str; clawback_timelock?: uint64}>;
   reuse_puzhash?: bool;
 };
 export type TSendTransactionResponse = {
@@ -642,11 +690,44 @@ export async function send_transaction_multi<T extends TRPCAgent | TDaemon>(agen
 
 
 
+export const spend_clawback_coins_command = "spend_clawback_coins";
+export type spend_clawback_coins_command = typeof spend_clawback_coins_command;
+export type TSpendClawbackCoinsRequest = {
+  coin_ids: str[];
+  fee?: uint64;
+  batch_size: int;
+};
+export type TSpendClawbackCoinsResponse = {
+  success: True;
+  transaction_ids: str[];
+};
+export type WsSpendClawbackCoinsMessage = GetMessageType<chia_wallet_service, spend_clawback_coins_command, TSpendClawbackCoinsResponse>;
+export async function spend_clawback_coins<T extends TRPCAgent | TDaemon>(agent: T, data: TSpendClawbackCoinsRequest) {
+  type R = ResType<T, TSpendClawbackCoinsResponse, WsSpendClawbackCoinsMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, spend_clawback_coins_command, data);
+}
+
+
+export const get_coin_records_command = "get_coin_records";
+export type get_coin_records_command = typeof get_coin_records_command;
+export type TGetCoinRecordsRequest = GetCoinRecords;
+export type TGetCoinRecordsResponse = {
+  coin_records: WalletCoinRecordWithMetadata[];
+  total_count: uint32 | None;
+};
+export type WsGetCoinRecordsMessage = GetMessageType<chia_wallet_service, get_coin_records_command, TGetCoinRecordsResponse>;
+export async function get_coin_records<T extends TRPCAgent | TDaemon>(agent: T, data: TGetCoinRecordsRequest) {
+  type R = ResType<T, TGetCoinRecordsResponse, WsGetCoinRecordsMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, get_coin_records_command, data);
+}
+
 
 export const get_transaction_count_command = "get_transaction_count";
 export type get_transaction_count_command = typeof get_transaction_count_command;
 export type TGetTransactionCountRequest = {
   wallet_id: int;
+  type_filter?: TransactionTypeFilter;
+  confirmed?: bool;
 };
 export type TGetTransactionCountResponse = {
   count: int;
@@ -1621,6 +1702,7 @@ export type TDidGetInfoResponse = {
   error: str;
 } | {
   success: True;
+  did_id: str;
   latest_coin: str;
   p2_address: str;
   public_key: str;
@@ -2415,6 +2497,129 @@ export async function dl_delete_mirror<T extends TRPCAgent | TDaemon>(agent: T, 
   return agent.sendMessage<R>(chia_wallet_service, dl_delete_mirror_command, data);
 }
 
+
+export type VCMint = {
+  did_id: str;
+  target_address: Optional<str>;
+  fee: uint64;
+};
+export const vc_mint_command = "vc_mint";
+export type vc_mint_command = typeof vc_mint_command;
+export type TVcMintRequest = VCMint;
+export type TVcMintResponse = {
+  vc_record: VCRecord;
+  transactions: TransactionRecordConvenience[];
+};
+export type WsVcMintMessage = GetMessageType<chia_wallet_service, vc_mint_command, TVcMintResponse>;
+export async function vc_mint<T extends TRPCAgent | TDaemon>(agent: T, data: TVcMintRequest) {
+  type R = ResType<T, TVcMintResponse, WsVcMintMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, vc_mint_command, data);
+}
+
+
+export type VCGet = {
+  vc_id: bytes32;
+};
+export const vc_get_command = "vc_get";
+export type vc_get_command = typeof vc_get_command;
+export type TVcGetRequest = VCGet;
+export type TVcGetResponse = {
+  vc_record: VCRecord | None;
+};
+export type WsVcGetMessage = GetMessageType<chia_wallet_service, vc_get_command, TVcGetResponse>;
+export async function vc_get<T extends TRPCAgent | TDaemon>(agent: T, data: TVcGetRequest) {
+  type R = ResType<T, TVcGetResponse, WsVcGetMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, vc_get_command, data);
+}
+
+
+export type VcGetList = {
+  start: uint32;
+  end: uint32;
+};
+export const vc_get_list_command = "vc_get_list";
+export type vc_get_list_command = typeof vc_get_list_command;
+export type TVcGetListRequest = VcGetList;
+export type TVcGetListResponse = {
+  vc_records: Array<VCRecord & {coin_id: str;}>;
+  proofs: Record<str, Record<str, str> | None>;
+};
+export type WsVcGetListMessage = GetMessageType<chia_wallet_service, vc_get_list_command, TVcGetListResponse>;
+export async function vc_get_list<T extends TRPCAgent | TDaemon>(agent: T, data: TVcGetListRequest) {
+  type R = ResType<T, TVcGetListResponse, WsVcGetListMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, vc_get_list_command, data);
+}
+
+
+export type VcSpend = {
+  vc_id: bytes32;
+  new_puzhash: Optional<bytes32>;
+  new_proof_hash: Optional<bytes32>;
+  provider_inner_puzhash: Optional<bytes32>;
+  fee: uint64;
+  reuse_puzhash: Optional<bool>;
+};
+export const vc_spend_command = "vc_spend";
+export type vc_spend_command = typeof vc_spend_command;
+export type TVcSpendRequest = VcSpend;
+export type TVcSpendResponse = {
+  transactions: TransactionRecordConvenience[];
+};
+export type WsVcSpendMessage = GetMessageType<chia_wallet_service, vc_spend_command, TVcSpendResponse>;
+export async function vc_spend<T extends TRPCAgent | TDaemon>(agent: T, data: TVcSpendRequest) {
+  type R = ResType<T, TVcSpendResponse, WsVcSpendMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, vc_spend_command, data);
+}
+
+
+export const vc_add_proofs_command = "vc_add_proofs";
+export type vc_add_proofs_command = typeof vc_add_proofs_command;
+export type TVcAddProofsRequest = {
+  proofs: {
+    key_value_pairs: Record<str, str>;
+  };
+};
+export type TVcAddProofsResponse = {};
+export type WsVcAddProofsMessage = GetMessageType<chia_wallet_service, vc_add_proofs_command, TVcAddProofsResponse>;
+export async function vc_add_proofs<T extends TRPCAgent | TDaemon>(agent: T, data: TVcAddProofsRequest) {
+  type R = ResType<T, TVcAddProofsResponse, WsVcAddProofsMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, vc_add_proofs_command, data);
+}
+
+
+export type VCGetProofsForRoot = {
+  root: bytes32;
+};
+export const vc_get_proofs_for_root_command = "vc_get_proofs_for_root";
+export type vc_get_proofs_for_root_command = typeof vc_get_proofs_for_root_command;
+export type TVcGetProofsForRootRequest = VCGetProofsForRoot;
+export type TVcGetProofsForRootResponse = {
+  proofs: Record<str, str>;
+};
+export type WsVcGetProofsForRootMessage = GetMessageType<chia_wallet_service, vc_get_proofs_for_root_command, TVcGetProofsForRootResponse>;
+export async function vc_get_proofs_for_root<T extends TRPCAgent | TDaemon>(agent: T, data: TVcGetProofsForRootRequest) {
+  type R = ResType<T, TVcGetProofsForRootResponse, WsVcGetProofsForRootMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, vc_get_proofs_for_root_command, data);
+}
+
+
+export type VcRevoke = {
+  vc_parent_id: bytes32;
+  fee: uint64;
+  reuse_puzhash: Optional<bool>;
+};
+export const vc_revoke_command = "vc_revoke";
+export type vc_revoke_command = typeof vc_revoke_command;
+export type TVcRevokeRequest = VcRevoke;
+export type TVcRevokeResponse = {
+  transactions: TransactionRecordConvenience[];
+};
+export type WsVcRevokeMessage = GetMessageType<chia_wallet_service, vc_revoke_command, TVcRevokeResponse>;
+export async function vc_revoke<T extends TRPCAgent | TDaemon>(agent: T, data: TVcRevokeRequest) {
+  type R = ResType<T, TVcRevokeResponse, WsVcRevokeMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, vc_revoke_command, data);
+}
+
 export type RpcWalletMessage =
   TAddKeyResponse
   | TAddRateLimitedFundsResponse
@@ -2482,6 +2687,8 @@ export type RpcWalletMessage =
   | TNftAddUriResponse
   | TFarmBlockResponse
   | TGetTimestampForHeightResponse
+  | TSetAutoClaimResponse
+  | TGetAutoClaimResponse
   | TGenerateMnemonicResponse
   | TGetAllOffersResponse
   | TGetCatListResponse
@@ -2501,6 +2708,7 @@ export type RpcWalletMessage =
   | TGetTransactionCountResponse
   | TGetTransactionsResponse
   | TGetWalletBalanceResponse
+  | TGetWalletBalancesResponse
   | TGetWalletsResponse
   | TLoginResponse
   | TPushTxResponseOfWallet
@@ -2513,6 +2721,8 @@ export type RpcWalletMessage =
   | TSendClawbackTransactionResponse
   | TSendTransactionResponse
   | TSendTransactionMultiResponse
+  | TSpendClawbackCoinsResponse
+  | TGetCoinRecordsResponse
   | TTakeOfferResponse
   | TCreateNewDlResponse
   | TDlTrackNewResponse
@@ -2526,6 +2736,13 @@ export type RpcWalletMessage =
   | TDlGetMirrorsResponse
   | TDlNewMirrorResponse
   | TDlDeleteMirrorResponse
+  | TVcMintResponse
+  | TVcGetResponse
+  | TVcGetListResponse
+  | TVcSpendResponse
+  | TVcAddProofsResponse
+  | TVcGetProofsForRootResponse
+  | TVcRevokeResponse
 ;
 
 export type RpcWalletMessageOnWs =
@@ -2595,6 +2812,8 @@ export type RpcWalletMessageOnWs =
   | WsNftAddUriMessage
   | WsFarmBlockMessage
   | WsGetTimestampForHeightMessage
+  | WsSetAutoClaimMessage
+  | WsGetAutoClaimMessage
   | WsGenerateMnemonicMessage
   | WsGetAllOffersMessage
   | WsGetCatListMessage
@@ -2614,6 +2833,7 @@ export type RpcWalletMessageOnWs =
   | WsGetTransactionCountMessage
   | WsGetTransactionsMessage
   | WsGetWalletBalanceMessage
+  | WsGetWalletBalancesMessage
   | WsGetWalletsMessage
   | WsLoginMessage
   | WsPushTxMessageOfWallet
@@ -2626,6 +2846,8 @@ export type RpcWalletMessageOnWs =
   | WsSendClawbackTransactionMessage
   | WsSendTransactionMessage
   | WsSendTransactionMultiMessage
+  | WsSpendClawbackCoinsMessage
+  | WsGetCoinRecordsMessage
   | WsTakeOfferMessage
   | WsCreateNewDlMessage
   | WsDlTrackNewMessage
@@ -2639,4 +2861,11 @@ export type RpcWalletMessageOnWs =
   | WsDlGetMirrorsMessage
   | WsDlNewMirrorMessage
   | WsDlDeleteMirrorMessage
+  | WsVcMintMessage
+  | WsVcGetMessage
+  | WsVcGetListMessage
+  | WsVcSpendMessage
+  | WsVcAddProofsMessage
+  | WsVcGetProofsForRootMessage
+  | WsVcRevokeMessage
 ;

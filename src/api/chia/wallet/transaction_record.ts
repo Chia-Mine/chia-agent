@@ -2,6 +2,7 @@ import {bool, bytes, Optional, str, uint32, uint64, uint8} from "../types/_pytho
 import {SpendBundle} from "../types/spend_bundle";
 import {Coin} from "../types/blockchain_format/coin";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
+import {ClawbackMetadata} from "./puzzles/clawback/metadata";
 
 export type TransactionRecord = {
   confirmed_at_height: uint32;
@@ -29,3 +30,10 @@ export type TransactionRecordConvenience = {
   to_address: str;
   memos: Record<str, str>;
 } & TransactionRecord;
+
+export type TransactionRecordConvenienceWithMetadata = {
+  metadata: ClawbackMetadata & {
+    coin_id: str;
+    spent: bool;
+  };
+} & TransactionRecordConvenience;
