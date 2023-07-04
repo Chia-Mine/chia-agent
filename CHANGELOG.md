@@ -1,5 +1,34 @@
 # Changelog
 
+## [12.1.0]
+### Changed
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_transactions`](./src/api/rpc/wallet/README.md#get_transactionsagent-params)
+    - Added `type_filter` to request parameter
+    - Added `confirmed` to request parameter
+    - Added `metadata` for each `transactions` in a response
+  - [`get_transaction_count`](./src/api/rpc/wallet/README.md#get_transaction_countagent-params)
+    - Added `type_filter` to request parameter
+    - Added `confirmed` to request parameter
+  - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+    - Added `puzzle_decorator` to request parameter
+  - [`did_get_info`](./src/api/rpc/wallet/README.md#did_get_infoagent-params)
+    - Added `did_id` to response
+### Added
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`set_auto_claim`](./src/api/rpc/wallet/README.md#set_auto_claimagent-params)
+  - [`get_auto_claim`](./src/api/rpc/wallet/README.md#get_auto_claimagent-params)
+  - [`get_wallet_balances`](./src/api/rpc/wallet/README.md#get_wallet_balancesagent-params)
+  - [`spend_clawback_coins`](./src/api/rpc/wallet/README.md#spend_clawback_coinsagent-params)
+  - [`get_coin_records`](./src/api/rpc/wallet/README.md#get_coin_recordsagent-params)
+  - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
+  - [`vc_get`](./src/api/rpc/wallet/README.md#vc_getagent-params)
+  - [`vc_get_list`](./src/api/rpc/wallet/README.md#vc_get_listagent-params)
+  - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
+  - [`vc_add_proofs`](./src/api/rpc/wallet/README.md#vc_add_proofsagent-params)
+  - [`vc_get_proofs_for_root`](./src/api/rpc/wallet/README.md#vc_get_proofs_for_rootagent-params)
+  - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
+
 ## [12.0.1]
 ### Changed
 - Replace the npm module `json-bigint` to `@chiamine/json-bigint`.
@@ -1017,6 +1046,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[12.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.1...v12.1.0
 [12.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.0...v12.0.1
 [12.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.1...v12.0.0
 [11.1.1]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.0...v11.1.1
