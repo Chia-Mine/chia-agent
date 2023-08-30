@@ -22,6 +22,9 @@
     - Added `cudaplot` plot type for bladebit plotter
   - [`get_plotters`](./src/api/ws/daemon/README.md#get_plottersdaemon)
     - Added `cuda_support` property to bladebit install info
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - Renamed the type `WsTakeOfferMessageDL` to `WsTakeOfferMessage`
+  - Renamed the type `WsCancelOfferMessageDL` to `WsCancelOfferMessage`
 - [Farmer RPC API](./src/api/rpc/farmer)
   - [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
     - Added new properties
@@ -1124,7 +1127,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[12.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v12.2.0
+[12.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v13.0.0
 [12.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.1...v12.1.0
 [12.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.0...v12.0.1
 [12.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.1...v12.0.0

@@ -5,7 +5,8 @@ import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {
   OfferMarshalled,
   OfferStoreMarshalled,
-  PluginStatusMarshalled, RootMarshalled,
+  PluginStatusMarshalled,
+  RootMarshalled,
   SyncStatus
 } from "../../chia/data_layer/data_layer_util";
 import {GetMessageType, ResType} from "../../types";
