@@ -1,4 +1,4 @@
-import {str} from "../../chia/types/_python_types_";
+import {bool, int, str, True, uint32} from "../../chia/types/_python_types_";
 import {TRPCAgent} from "../../../rpc";
 import {Plot} from "../../chia/harvester/harvester";
 import {GetMessageType, ResType} from "../../types";
@@ -101,6 +101,47 @@ export async function remove_plot_directory<T extends TRPCAgent | TDaemon>(agent
   return agent.sendMessage<R>(chia_harvester_service, remove_plot_directory_command, data);
 }
 
+
+export const get_harvester_config_command = "get_harvester_config";
+export type get_harvester_config_command = typeof get_harvester_config_command;
+export type TGetHarvesterConfigResponse = {
+  success: True;
+  use_gpu_harvesting: bool;
+  gpu_index: int;
+  enforce_gpu_index: bool;
+  disable_cpu_affinity: bool;
+  parallel_decompressor_count: int;
+  decompressor_thread_count: int;
+  recursive_plot_scan: bool;
+  refresh_parameter_interval_seconds: int;
+};
+export type WsGetHarvesterConfigMessage = GetMessageType<chia_harvester_service, get_harvester_config_command, TGetHarvesterConfigResponse>;
+export async function get_harvester_config<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetHarvesterConfigResponse, WsGetHarvesterConfigMessage>;
+  return agent.sendMessage<R>(chia_harvester_service, get_harvester_config_command);
+}
+
+
+export const update_harvester_config_command = "update_harvester_config";
+export type update_harvester_config_command = typeof update_harvester_config_command;
+export type TUpdateHarvesterConfigRequest = {
+  use_gpu_harvesting?: bool;
+  gpu_index?: int;
+  enforce_gpu_index?: bool;
+  disable_cpu_affinity?: bool;
+  parallel_decompressor_count?: int;
+  decompressor_thread_count?: int;
+  recursive_plot_scan?: bool;
+  refresh_parameter_interval_seconds?: uint32;
+};
+export type TUpdateHarvesterConfigResponse = {
+};
+export type WsUpdateHarvesterConfigMessage = GetMessageType<chia_harvester_service, update_harvester_config_command, TUpdateHarvesterConfigResponse>;
+export async function update_harvester_config<T extends TRPCAgent | TDaemon>(agent: T, data: TUpdateHarvesterConfigRequest) {
+  type R = ResType<T, TUpdateHarvesterConfigResponse, WsUpdateHarvesterConfigMessage>;
+  return agent.sendMessage<R>(chia_harvester_service, update_harvester_config_command, data);
+}
+
 export type RpcHarvesterMessage =
   TAddPlotDirectoryResponse
   | TDeletePlotResponse
@@ -108,6 +149,8 @@ export type RpcHarvesterMessage =
   | TGetPlotsResponse
   | TRefreshPlotsResponse
   | TRemovePlotDirectoryResponse
+  | TGetHarvesterConfigResponse
+  | TUpdateHarvesterConfigResponse
 ;
 
 export type RpcHarvesterMessageOnWs =
@@ -117,4 +160,6 @@ export type RpcHarvesterMessageOnWs =
   | WsGetPlotsMessage
   | WsRefreshPlotsMessage
   | WsRemovePlotDirectoryMessage
+  | WsGetHarvesterConfigMessage
+  | WsUpdateHarvesterConfigMessage
 ;

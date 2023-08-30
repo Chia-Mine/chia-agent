@@ -1,4 +1,4 @@
-import {int, str} from "../types/_python_types_";
+import {int, Optional, str} from "../types/_python_types_";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 
 export type KeyValueMarshalled = {
@@ -48,4 +48,11 @@ export type PluginStatusMarshalled = {
     uploaders: Record<str, Record<str, any>>;
     downloaders: Record<str, Record<str, any>>;
   }
+};
+
+export type RootMarshalled = {
+  tree_id: str;
+  node_hash: Optional<str>;
+  generation: int;
+  status: int;
 };

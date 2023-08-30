@@ -10,4 +10,5 @@ export type Plot = {
   plot_public_key: G1Element;
   file_size: int;
   time_modified: int;
+  compression_level: int;
 };

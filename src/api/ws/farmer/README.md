@@ -105,6 +105,8 @@ unsubscribe(); // Stop subscribing messages
     proofs: uint32;
     total_plots: uint32;
     timestamp: uint64;
+    node_id: bytes32;
+    lookup_time: uint64;
   }
 }
 ```
@@ -145,11 +147,11 @@ unsubscribe(); // Stop subscribing messages
 {
   proofs: ProofOfSpace[];
   signage_point: NewSignagePoint;
+  missing_signage_points: Optional<[uint64, uint32]>;
 }
 ```
 For content of `ProofOfSpace`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/proof_of_space.ts
-
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/proof_of_space.ts  
 For content of `NewSignagePoint`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/farmer_protocol.ts
 
@@ -315,7 +317,7 @@ unsubscribe(); // Stop subscribing messages
   ack: boolean;
   data: /*See below*/;
   request_id: string;
-  destination: "metrics";
+  destination: "wallet_ui" | "metrics";
 }
 ```
 #### data:
@@ -326,6 +328,42 @@ unsubscribe(); // Stop subscribing messages
   current_difficulty: uint64;
   points_acknowledged_since_start: uint64;
   points_acknowledged_24h: Array<[float, uint64]>; // [(time.time(), new_difficulty)]
+}
+```
+
+---
+
+### `on_failed_partial`
+Capture broadcast message of command `on_failed_partial` from `chia_farmer` service.
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_failed_partial} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_failed_partial(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+#### event:
+```typescript
+{
+  origin: "chia_farmer";
+  command: "failed_partial";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "wallet_ui";
+}
+```
+#### data:
+```typescript
+{
+  p2_singleton_puzzle_hash: str;
 }
 ```
 

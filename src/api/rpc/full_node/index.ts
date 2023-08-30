@@ -35,6 +35,7 @@ export type TGetBlockchainStateResponse = {
     difficulty: uint64;
     sub_slot_iters: uint64;
     space: uint128;
+    average_block_time: Optional<uint32>;
     mempool_size: int;
     mempool_cost: CLVMCost;
     mempool_fees: int;

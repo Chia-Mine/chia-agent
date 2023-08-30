@@ -635,8 +635,8 @@ export type TSendTransactionRequest = {
   memos?: str[];
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
-  exclude_coin_amounts?: uint64[];
-  exclude_coin_ids?: str[];
+  excluded_coin_amounts?: uint64[];
+  excluded_coin_ids?: str[];
   puzzle_decorator?: Array<{decorator: str; clawback_timelock?: uint64}>;
   reuse_puzhash?: bool;
 };
@@ -752,6 +752,8 @@ export type TGetFarmedAmountResponse = {
   farmer_reward_amount: int;
   fee_amount: int;
   last_height_farmed: int;
+  last_time_farmed: uint32;
+  blocks_won: uint32;
 };
 export type WsGetFarmedAmountMessage = GetMessageType<chia_wallet_service, get_farmed_amount_command, TGetFarmedAmountResponse>;
 export async function get_farmed_amount<T extends TRPCAgent | TDaemon>(agent: T){
@@ -785,9 +787,9 @@ export type TCreateSignedTransactionRequest = {
   fee?: uint64;
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
-  exclude_coin_amounts?: uint64[];
+  excluded_coin_amounts?: uint64[];
   coins?: Coin[];
-  exclude_coins?: Coin[];
+  excluded_coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
 };
@@ -1158,8 +1160,8 @@ export type TCatSpendRequest = {
   coins?: Coin[];
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
-  exclude_coin_amounts?: uint64[];
-  exclude_coin_ids?: str[];
+  excluded_coin_amounts?: uint64[];
+  excluded_coin_ids?: str[];
   reuse_puzhash?: bool;
   extra_delta?: int;
   tail_reveal?: str;
@@ -1725,6 +1727,9 @@ export const did_find_lost_did_command = "did_find_lost_did";
 export type did_find_lost_did_command = typeof did_find_lost_did_command;
 export type TDidFindLostDidRequest = {
   coin_id: str;
+  recovery_list_hash?: str;
+  num_verification?: int;
+  metadata?: Record<str, any>;
 };
 export type TDidFindLostDidResponse = {
   success: False;

@@ -9,6 +9,7 @@ export {
   THarvesterRemovedBroadCast,
   TProofBroadCast,
   TSubmittedPartialBroadCast,
+  TFailedPartialBroadCast,
   TAddConnectionBroadCast,
   TCloseConnectionBroadCast,
   on_message_from_farmer,
@@ -19,6 +20,7 @@ export {
   on_harvester_removed,
   on_proof,
   on_submitted_partial,
+  on_failed_partial,
   on_add_connection,
   on_close_connection,
 } from "./farmer/index";
@@ -199,6 +201,14 @@ export {
   TValidateKeyringPassphraseRequest,
   TValidateKeyringPassphraseResponse,
   TPlotQueue,
+  get_routes,
+  TGetRoutesResponse,
+  get_wallet_addresses,
+  TGetWalletAddressesRequest,
+  TGetWalletAddressesResponse,
+  get_keys_for_plotting,
+  TGetKeysForPlottingRequest,
+  TGetKeysForPlottingResponse,
 } from "./daemon/index";
 
 export type WsMessage =

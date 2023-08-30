@@ -727,3 +727,29 @@ PluginStatusMarshalled
 ```
 For content of `PluginStatusMarshalled`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer.util.ts
+
+---
+
+## `clear_pending_roots(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {clear_pending_roots} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await clear_pending_roots(agent, params);
+```
+### params:
+```typescript
+{
+  store_id: str;
+}
+```
+### response:
+```typescript
+{
+  success: bool;
+  root: Optional<RootMarshalled>;
+}
+```
+For content of `RootMarshalled`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer.util.ts

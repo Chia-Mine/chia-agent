@@ -1,4 +1,4 @@
-import {float, int, str, uint64, uint8} from "../types/_python_types_";
+import {float, int, str, uint32, uint64, uint8} from "../types/_python_types_";
 import {PoolWalletConfig} from "../pools/pool_config";
 import {ErrorResponse} from "../protocols/pool_protocol";
 
@@ -29,14 +29,22 @@ async with aiohttp.ClientSession() as session:
  */
 export type PoolState = {
   points_found_since_start: int;
-  points_found_24h: Array<[float, uint64]>;
+  points_found_24h: Array<[uint32, uint64]>;
   points_acknowledged_since_start: int;
-  points_acknowledged_24h: Array<[float, uint64]>;
+  points_acknowledged_24h: Array<[uint32, uint64]>;
+  valid_partials_since_start: int;
+  valid_partials_24h: Array<[uint32, uint64]>;
+  invalid_partials_since_start: int;
+  invalid_partials_24h: Array<[uint32, uint64]>;
+  stale_partials_since_start: int;
+  stale_partials_24h: Array<[uint32, uint64]>;
+  missing_partials_since_start: int;
+  missing_partials_24h: Array<[uint32, uint64]>;
   next_farmer_update: float;
   next_pool_info_update: float;
   current_points: uint64;
   current_difficulty: uint64;
-  pool_errors_24h: ErrorResponse[];
+  pool_errors_24h: Array<[uint32, ErrorResponse]>;
   authentication_token_timeout: uint8;
   pool_config: PoolWalletConfig;
   p2_singleton_puzzle_hash: str; // This property is added at `get_pool_state()` in chia/rpc/farmer_rpc_api.py

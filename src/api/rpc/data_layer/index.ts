@@ -5,10 +5,9 @@ import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {
   OfferMarshalled,
   OfferStoreMarshalled,
-  PluginStatusMarshalled,
+  PluginStatusMarshalled, RootMarshalled,
   SyncStatus
 } from "../../chia/data_layer/data_layer_util";
-import {TCancelOfferResponseDL, TTakeOfferResponseDL} from "../index";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
 
@@ -418,9 +417,9 @@ export type TTakeOfferResponse = {
   success: bool;
   trade_id: str;
 };
-export type WsTakeOfferMessageDL = GetMessageType<chia_data_layer_service, take_offer_command, TTakeOfferResponse>;
+export type WsTakeOfferMessage = GetMessageType<chia_data_layer_service, take_offer_command, TTakeOfferResponse>;
 export async function take_offer<T extends TRPCAgent|TDaemon>(agent: T, params: TTakeOfferRequest) {
-  type R = ResType<T, TTakeOfferResponseDL, WsTakeOfferMessageDL>;
+  type R = ResType<T, TTakeOfferResponse, WsTakeOfferMessage>;
   return agent.sendMessage<R>(chia_data_layer_service, take_offer_command, params);
 }
 
@@ -454,9 +453,9 @@ export type TCancelOfferRequest = {
 export type TCancelOfferResponse = {
   success: bool;
 };
-export type WsCancelOfferMessageDL = GetMessageType<chia_data_layer_service, cancel_offer_command, TCancelOfferResponse>;
+export type WsCancelOfferMessage = GetMessageType<chia_data_layer_service, cancel_offer_command, TCancelOfferResponse>;
 export async function cancel_offer<T extends TRPCAgent|TDaemon>(agent: T, params: TCancelOfferRequest) {
-  type R = ResType<T, TCancelOfferResponseDL, WsCancelOfferMessageDL>;
+  type R = ResType<T, TCancelOfferResponse, WsCancelOfferMessage>;
   return agent.sendMessage<R>(chia_data_layer_service, cancel_offer_command, params);
 }
 
@@ -485,6 +484,22 @@ export async function check_plugins<T extends TRPCAgent | TDaemon>(agent: T) {
   return agent.sendMessage<R>(chia_data_layer_service, check_plugins_command);
 }
 
+
+export const clear_pending_roots_command = "clear_pending_roots";
+export type clear_pending_roots_command = typeof clear_pending_roots_command;
+export type TClearPendingRootsRequest = {
+  store_id: str;
+};
+export type TClearPendingRootsResponse = {
+  success: bool;
+  root: Optional<RootMarshalled>;
+};
+export type WsClearPendingRootsMessage = GetMessageType<chia_data_layer_service, clear_pending_roots_command, TClearPendingRootsResponse>;
+export async function clear_pending_roots<T extends TRPCAgent | TDaemon>(agent: T, params: TClearPendingRootsRequest) {
+  type R = ResType<T, TClearPendingRootsResponse, WsClearPendingRootsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, clear_pending_roots_command, params);
+}
+
 export type RpcDataLayerMessage =
   TCreateDataStoreResponse
   | TGetOwnedStoresResponse
@@ -509,11 +524,12 @@ export type RpcDataLayerMessage =
   | TGetRootHistoryResponse
   | TAddMissingFilesResponse
   | TMakeOfferResponse
-  | TTakeOfferResponseDL
+  | TTakeOfferResponse
   | TVerifyOfferResponse
-  | TCancelOfferResponseDL
+  | TCancelOfferResponse
   | TGetSyncStatusResponse
   | TCheckPluginsResponse
+  | TClearPendingRootsResponse
 ;
 
 export type RpcDataLayerMessageOnWs =
@@ -540,9 +556,10 @@ export type RpcDataLayerMessageOnWs =
   | WsGetRootHistoryMessage
   | WsAddMissingFilesMessage
   | WsMakeOfferMessage
-  | WsTakeOfferMessageDL
+  | WsTakeOfferMessage
   | WsVerifyOfferMessage
-  | WsCancelOfferMessageDL
+  | WsCancelOfferMessage
   | WsGetSyncStatusMessage
   | WsCheckPluginsMessage
+  | WsClearPendingRootsMessage
 ;

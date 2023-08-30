@@ -1,5 +1,83 @@
 # Changelog
 
+## [13.0.0]
+### Breaking change
+- The format of [`PoolState`](./src/api/chia/farmer/farmer.ts)) has been changed.
+  - `points_found_24h` and `points_acknowledged_24h` are now `Array<[uint32, uint64]>` (they were `Array<[float, uint64]>`)
+  - `pool_errors_24h` is now `Array<[uint32, ErrorResponse]>` (it was `ErrorResponse[]`)
+- The following request properties of `send_transaction` and `cat_spend` Wallet RPC API were renamed
+  - `exclude_coin_amounts` -> `excluded_coin_amounts`
+  - `exclude_coins` -> `excluded_coins`
+  - The previous property names(`exclude_coin_amounts`, `exclude_coins`) are preserved for backward compatibility
+- The following request properties of `create_signed_transaction` Wallet RPC API were renamed
+  - `exclude_coin_amounts` -> `excluded_coin_amounts`
+  - `exclude_coins` -> `excluded_coins`
+  - The previous property name (`exclude_coins`) is preserved for backward compatibility
+  - Unlike `send_transaction` and `cat_spend`, `exclude_coin_amounts` is removed by accident and not backward compatible.
+### Changed
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params)
+    - The `t2` option for chiapos plotter is now optional
+    - Added `compress` option for bladebit plotter
+    - Added `cudaplot` plot type for bladebit plotter
+  - [`get_plotters`](./src/api/ws/daemon/README.md#get_plottersdaemon)
+    - Added `cuda_support` property to bladebit install info
+- [Farmer RPC API](./src/api/rpc/farmer)
+  - [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
+    - Added new properties
+      - `valid_partials_since_start`
+      - `valid_partials_24h`
+      - `invalid_partials_since_start`
+      - `invalid_partials_24h`
+      - `stale_partials_since_start`
+      - `stale_partials_24h`
+      - `missing_partials_since_start`
+      - `missing_partials_24h`
+  - [`get_harvesters`](./src/api/rpc/farmer/README.md#get_harvestersagent)
+    - Added `total_effective_plot_size` and `harvesting_mode` to `harvesters` in response 
+  - [`get_harvesters_summary`](./src/api/rpc/farmer/README.md#get_harvesters_summaryagent)
+    - Added `total_effective_plot_size` and `harvesting_mode` to `harvesters` in response
+- [Farmer WebSocket API](./src/api/ws/farmer)
+  - [`on_new_farming_info`](./src/api/ws/farmer/README.md#on_new_farming_info)
+    - Added `node_id` and `lookup_time` to `farming_info` Broadcast data
+  - [`on_new_signage_point`](./src/api/ws/farmer/README.md#on_new_signage_point)
+    - Added `missing_signage_points` to Broadcast data
+  - [`on_submitted_partial`](./src/api/ws/farmer/README.md#on_submitted_partial)
+    - Added `"wallet_ui""` to `destination` in Broadcast data
+  - [`on_harvester_update`](./src/api/ws/farmer/README.md#on_harvester_update)
+    - Added `total_effective_plot_size` and `harvesting_mode` to broadcast data
+- [Harvester RPC API](./src/api/rpc/harvester)
+  - [`get_plots`](./src/api/rpc/harvester/README.md#get_plotsagent)
+    - Added `compression_level` to response
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_blockchain_state`](./src/api/rpc/full_node/README.md#get_blockchain_stateagent)
+    - Added `average_block_time` to response
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_farmed_amount`](./src/api/rpc/full_node/README.md#get_farmed_amountagent)
+    - Added `last_time_farmed` to response
+    - Added `blocks_won` to response
+### Added
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`get_routes`](./src/api/ws/daemon/README.md#get_routesdaemon)
+  - [`get_wallet_addresses`](./src/api/ws/daemon/README.md#get_wallet_addressesdaemon)
+  - [`get_keys_for_plotting`](./src/api/ws/daemon/README.md#get_keys_for_plottingdaemon)
+- [Farmer WebSocket API](./src/api/ws/farmer)
+  - [`on_failed_partial`](./src/api/ws/farmer/README.md#on_failed_partial)
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`clear_pending_roots`](./src/api/rpc/data_layer/README.md#clear_pending_rootsagent-params)
+- [Harvester RPC API](./src/api/rpc/harvester)
+  - [`get_harvester_config`](./src/api/rpc/harvester/README.md#get_harvester_configagent)
+  - [`update_harvester_config`](./src/api/rpc/harvester/README.md#update_harvester_configagent)
+### Fixed
+  - Fixed documentation for plotter params.
+    - `bladebit_params` => `bladebit_ramplot_params`
+    - `bladebit2_params` => `bladebit_diskplot_params`
+  - Fixed an issue where ts files related to the data layer RPC API had a circular dependency.
+  - Fixed an issue where the following request parameters for the `did_find_lost_did` Wallet RPC API were missing.
+    - `recovery_list_hash`
+    - `num_verification`
+    - `metadata`
+
 ## [12.1.0]
 ### Changed
 - [Wallet RPC API](./src/api/rpc/wallet)
@@ -1046,6 +1124,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[12.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v12.2.0
 [12.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.1...v12.1.0
 [12.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.0...v12.0.1
 [12.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.1...v12.0.0

@@ -82,6 +82,8 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`add_plot_directory`](./rpc/harvester/README.md#add_plot_directoryagent-params)
 - [`get_plot_directories`](./rpc/harvester/README.md#get_plot_directoriesagent)
 - [`remove_plot_directory`](./rpc/harvester/README.md#remove_plot_directoryagent-params)
+- [`get_harvester_config`](./rpc/harvester/README.md#get_harvester_configagent)
+- [`update_harvester_config`](./rpc/harvester/README.md#update_harvester_configagent)
 
 #### [Wallet RPC API](./rpc/wallet/README.md#usage)
 - [`log_in`](./rpc/wallet/README.md#log_inagent-params)
@@ -235,6 +237,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`cancel_offer`](./rpc/data_layer/README.md#cancel_offeragent-params)
 - [`get_sync_status`](./rpc/data_layer/README.md#get_sync_statusagent-params)
 - [`check_plugins`](./rpc/data_layer/README.md#check_pluginsagent)
+- [`clear_pending_roots`](./rpc/data_layer/README.md#clear_pending_rootsagent-params)
 
 #### [Crawler RPC API](./rpc/crawler/README.md#usage)
 - [`get_peer_counts`](./rpc/crawler/README.md#get_peer_countsagent)
@@ -291,6 +294,9 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`get_status`](./ws/daemon/README.md#get_statusdaemon)
 - [`get_version`](./ws/daemon/README.md#get_versiondaemon)
 - [`get_plotters`](./ws/daemon/README.md#get_plottersdaemon)
+- [`get_routes`](./ws/daemon/README.md#get_routesdaemon)
+- [`get_wallet_addresses`](./ws/daemon/README.md#get_wallet_addressesdaemon)
+- [`get_keys_for_plotting`](./ws/daemon/README.md#get_keys_for_plottingdaemon)
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  
@@ -311,6 +317,7 @@ you need to wait messages in the channel are arrived to your message listener.
 - [`harvester_removed`](./ws/farmer/README.md#on_harvester_removed)
 - [`on_proof`](./ws/farmer/README.md#on_proof)
 - [`on_submitted_partial`](./ws/farmer/README.md#on_submitted_partial)
+- [`on_failed_partial`](./ws/farmer/README.md#on_failed_partial)
 - [`on_add_connection`](./ws/farmer/README.md#on_add_connection)
 - [`on_close_connection`](./ws/farmer/README.md#on_close_connection)
 

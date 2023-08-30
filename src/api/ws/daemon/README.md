@@ -99,13 +99,13 @@ const response = await start_plotting(daemon, params);
   f?: str; // farmer public key.
   p?: str; // pool public key.
   c?: str; // pool contract address.
-} & (chiapos_params | bladebit_params | bladebit2_params | madmax_params)
+} & (chiapos_params | bladebit_ramplot_params | bladebit_diskplot_params | bladebit_cudaplot_params | madmax_params)
 ```
 ### chiapos_params:
 ```typescript
 {
   plotter: "chiapos";
-  t2: str; // tmp dir 2
+  t2?: str; // tmp dir 2
   b: int; // memory buffer size in MiB
   u: int; // number of buckets
   a?: int; // wallet private key fingerprint
@@ -113,7 +113,7 @@ const response = await start_plotting(daemon, params);
   overrideK: bool; // Set true only if you want to use k < 32
 }
 ```
-### bladebit_params:
+### bladebit_ramplot_params:
 ```typescript
 {
   plotter: "bladebit";
@@ -121,9 +121,10 @@ const response = await start_plotting(daemon, params);
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
+  compress?: int;
 }
 ```
-### bladebit2_params:
+### bladebit_diskplot_params:
 ```typescript
 {
   plotter: "bladebit";
@@ -131,6 +132,7 @@ const response = await start_plotting(daemon, params);
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
+  compress?: int;
   t1: str; // Temp directory
   t2?: str; // Temp2 directory
   u?: int; // Buckets
@@ -143,6 +145,21 @@ const response = await start_plotting(daemon, params);
   alternate?: bool; // Default: False
   no_t1_direct?: bool; // Default: False
   no_t2_direct?: bool; // Default: False
+}
+```
+### bladebit_cudaplot_params:
+```typescript
+{
+  plotter: "bladebit";
+  plot_type: "cudaplot";
+  w?: bool; // Warm start. Default: False
+  m?: bool; // Disable NUMA. Default: False
+  no_cpu_affinity?: bool; // Default: False
+  compress?: int;
+  device?: int;
+  no_direct_downloads?: bool;
+  t?: str; // Temp directory
+  t2?: str; // Temp2 directory
 }
 ```
 ### madmax_params:
@@ -844,6 +861,83 @@ const response = await get_plotters(daemon);
 For content of `chiapos_install_info`, `bladebit_install_info`, `madmax_install_info`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/plotters/
 
+---
+
+## `get_routes(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_routes} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_routes(daemon);
+```
+### response:
+```typescript
+{
+  success: bool;
+  routes: str[];
+}
+```
+
+---
+
+## `get_wallet_addresses(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_wallet_addresses} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_wallet_addresses(daemon, params);
+```
+### params:
+```typescript
+{
+  fingerprints?: uint32[];
+  index?: int;
+  count?: int;
+  non_observer_derivation?: bool;
+}
+```
+### response:
+```typescript
+{
+  success: False;
+  error: str;
+} | {
+  success: True;
+  wallet_addresses: Record<str, Array<{ address: str; hd_path: str }>>;
+}
+```
+
+---
+
+## `get_keys_for_plotting(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_keys_for_plotting} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_keys_for_plotting(daemon, params);
+```
+### params:
+```typescript
+{
+  fingerprints?: uint32[];
+}
+```
+### response:
+```typescript
+{
+  success: False;
+  error: str;
+} | {
+  success: True;
+  keys: Record<str, { farmer_public_key: str; pool_public_key: str }>;
+}
+```
 
 ---
 
