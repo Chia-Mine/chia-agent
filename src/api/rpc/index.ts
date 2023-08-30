@@ -168,6 +168,11 @@ export {
   TRemovePlotDirectoryRequest,
   TRemovePlotDirectoryResponse,
   remove_plot_directory,
+  TGetHarvesterConfigResponse,
+  get_harvester_config,
+  TUpdateHarvesterConfigRequest,
+  TUpdateHarvesterConfigResponse,
+  update_harvester_config,
 } from "./harvester/index";
 
 import type {RpcWalletMessage} from "./wallet/index";
@@ -605,6 +610,9 @@ export {
   get_sync_status as get_sync_status_dl,
   TCheckPluginsResponse,
   check_plugins,
+  TClearPendingRootsRequest,
+  TClearPendingRootsResponse,
+  clear_pending_roots,
 } from "./data_layer/index"
 
 import type {RpcCrawlerMessage} from "./crawler/index";

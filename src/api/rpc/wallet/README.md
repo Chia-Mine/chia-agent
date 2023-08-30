@@ -757,8 +757,8 @@ const response = await send_transaction(agent, params);
   memos?: str[];
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
-  exclude_coin_amounts?: uint64[];
-  exclude_coin_ids?: str[];
+  excluded_coin_amounts?: uint64[];
+  excluded_coin_ids?: str[];
   puzzle_decorator?: Array<{ decorator: str; clawback_timelock?: uint64 }>;
   reuse_puzhash? : bool;
 }
@@ -931,6 +931,8 @@ const response = await get_farmed_amount(agent);
   farmer_reward_amount: int;
   fee_amount: int;
   last_height_farmed: int;
+  last_time_farmed: uint32;
+  blocks_won: uint32;
 }
 ```
 
@@ -952,9 +954,9 @@ const response = await create_signed_transaction(agent, params);
   fee?: uint64;
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
-  exclude_coin_amounts?: uint64[];
+  excluded_coin_amounts?: uint64[];
   coins?: Coin[];
-  exclude_coins?: Coin[];
+  excluded_coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
 }
@@ -1644,8 +1646,8 @@ const response = await cat_spend(agent, params);
   coins ? : Coin[];
   min_coin_amount?: uint64;
   max_coin_amount?: uint64;
-  exclude_coin_amounts?: uint64[];
-  exclude_coin_ids?: str[];
+  excluded_coin_amounts?: uint64[];
+  excluded_coin_ids?: str[];
   reuse_puzhash?: bool;
   extra_delta? : int;
   tail_reveal? : str;
@@ -2364,26 +2366,23 @@ const response = await did_get_info(agent, params);
 ---
 
 ## `did_find_lost_did(agent, params)`
-
 ### Usage
-
 ```js
 const {RPCAgent} = require("chia-agent");
 const {did_find_lost_did} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
 const response = await did_find_lost_did(agent, params);
 ```
-
 ### params:
-
 ```typescript
 {
   coin_id: str;
+  recovery_list_hash?: str;
+  num_verification?: int;
+  metadata?: Record<str, any>;
 }
 ```
-
 ### response:
-
 ```typescript
 {
   success: False;

@@ -8,4 +8,5 @@ export type bladebit_install_info = {
   installed: bool,
   can_install?: bool;
   bladebit_memory_warning?: str;
+  cuda_support: bool;
 };

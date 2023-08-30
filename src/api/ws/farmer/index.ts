@@ -1,7 +1,7 @@
 import {ProofOfSpace} from "../../chia/types/blockchain_format/proof_of_space";
 import {DeclareProofOfSpace, NewSignagePoint} from "../../chia/protocols/farmer_protocol";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {bool, float, str, uint32, uint64} from "../../chia/types/_python_types_";
+import {bool, float, Optional, str, uint32, uint64} from "../../chia/types/_python_types_";
 import {TDaemon} from "../../../daemon/index";
 import {GetMessageType, TConnectionGeneral, wallet_ui_service, metrics_service} from "../../types";
 import {Receiver} from "../../chia/plot-sync/receiver";
@@ -35,6 +35,8 @@ export type TNewFarmingInfoBroadCast = {
     proofs: uint32;
     total_plots: uint32;
     timestamp: uint64;
+    node_id: bytes32;
+    lookup_time: uint64;
   }
 };
 export type WsNewFarmingInfoMessage = GetMessageType<chia_farmer_service, new_farming_info_command, TNewFarmingInfoBroadCast>;
@@ -53,6 +55,7 @@ export type new_signage_point_command = typeof new_signage_point_command;
 export type TNewSignagePointBroadCast = {
   proofs: ProofOfSpace[];
   signage_point: NewSignagePoint;
+  missing_signage_points: Optional<[uint64, uint32]>;
 };
 export type WsNewSignagePointMessage = GetMessageType<chia_farmer_service, new_signage_point_command, TNewSignagePointBroadCast>;
 export async function on_new_signage_point(daemon: TDaemon, callback: (e: WsNewSignagePointMessage) => unknown){
@@ -132,6 +135,22 @@ export async function on_submitted_partial(daemon: TDaemon, callback: (e: WsSubm
   return daemon.addMessageListener(chia_farmer_service, messageListener);
 }
 
+export const failed_partial_command = "failed_partial";
+export type failed_partial_command = typeof failed_partial_command;
+export type TFailedPartialBroadCast = {
+  p2_singleton_puzzle_hash: str;
+};
+export type WsFailedPartialMessage = GetMessageType<chia_farmer_service, failed_partial_command, TFailedPartialBroadCast>;
+export async function on_failed_partial(daemon: TDaemon, callback: (e: WsFailedPartialMessage) => unknown) {
+  await daemon.subscribe(metrics_service);
+  const messageListener = (e: WsFarmerMessage) => {
+    if (e.origin === chia_farmer_service && e.command === failed_partial_command) {
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_farmer_service, messageListener);
+}
+
 export const add_connection_command = "add_connection";
 export type add_connection_command = typeof add_connection_command;
 export type TAddConnectionBroadCast = {};
@@ -169,6 +188,7 @@ export type WsFarmerMessage =
   | WsHarvesterRemovedMessage
   | WsProofMessage
   | WsSubmittedPartialMessage
+  | WsFailedPartialMessage
   | WsAddConnectionMessage
   | WsCloseConnectionMessage
   ;

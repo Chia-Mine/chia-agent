@@ -38,6 +38,7 @@ export type FarmingInfo = {
   passed: uint32;
   proofs: uint32;
   total_plots: uint32;
+  lookup_time: uint64;
 }
 
 export type SignedValues = {

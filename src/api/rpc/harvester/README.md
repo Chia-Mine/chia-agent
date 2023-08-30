@@ -143,3 +143,55 @@ const response = await remove_plot_directory(agent, params);
 ```typescript
 {}
 ```
+
+---
+## `get_harvester_config(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_harvester_config} = require("chia-agent/api/rpc/harvester");
+const agent = new RPCAgent({service: "harvester"});
+const response = await get_harvester_config(agent);
+```
+### response
+```typescript
+{
+  success: True;
+  use_gpu_harvesting: bool;
+  gpu_index: int;
+  enforce_gpu_index: bool;
+  disable_cpu_affinity: bool;
+  parallel_decompressor_count: int;
+  decompressor_thread_count: int;
+  recursive_plot_scan: bool;
+  refresh_parameter_interval_seconds: int;
+}
+```
+
+---
+
+## `update_harvester_config(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {update_harvester_config} = require("chia-agent/api/rpc/harvester");
+const agent = new RPCAgent({service: "harvester"});
+const response = await update_harvester_config(agent, params);
+```
+### params
+```typescript
+{
+  use_gpu_harvesting?: bool;
+  gpu_index?: int;
+  enforce_gpu_index?: bool;
+  disable_cpu_affinity?: bool;
+  parallel_decompressor_count?: int;
+  decompressor_thread_count?: int;
+  recursive_plot_scan?: bool;
+  refresh_parameter_interval_seconds?: uint32;
+}
+```
+### response
+```typescript
+{}
+```

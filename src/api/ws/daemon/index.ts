@@ -64,7 +64,7 @@ export type TCommonPlottingParams = {
 };
 export type TChiaPosParams = {
   plotter: "chiapos";
-  t2: str; // tmp dir 2
+  t2?: str; // tmp dir 2
   b: int; // memory buffer size in MiB
   u: int; // number of buckets
   a?: int; // wallet private key fingerprint
@@ -77,6 +77,7 @@ export type TBladeBitRamParams = {
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
+  compress?: int;
 };
 export type TBladeBitDiskParams = {
   plotter: "bladebit";
@@ -84,6 +85,7 @@ export type TBladeBitDiskParams = {
   w?: bool; // Warm start. Default: False
   m?: bool; // Disable NUMA. Default: False
   no_cpu_affinity?: bool; // Default: False
+  compress?: int;
   t1: str; // Temp directory
   t2?: str; // Temp2 directory
   u?: int; // Buckets
@@ -97,6 +99,18 @@ export type TBladeBitDiskParams = {
   no_t1_direct?: bool; // Default: False
   no_t2_direct?: bool; // Default: False
 };
+export type TBladeBitCudaParams = {
+  plotter: "bladebit";
+  plot_type: "cudaplot";
+  w?: bool; // Warm start. Default: False
+  m?: bool; // Disable NUMA. Default: False
+  no_cpu_affinity?: bool; // Default: False
+  compress?: int;
+  device?: int;
+  no_direct_downloads?: bool;
+  t?: str; // Temp directory
+  t2?: str; // Temp2 directory
+};
 export type TMadMaxParams = {
   plotter: "madmax";
   t2: str; // tmp dir 2
@@ -106,7 +120,8 @@ export type TMadMaxParams = {
   K?: int; // Thread multiplier for phase 2. Default: 1
   G?: bool; // Alternate tmpdir/tmp2dir. Default: False
 };
-export type TStartPlottingRequest = TCommonPlottingParams & (TChiaPosParams | TBladeBitRamParams | TBladeBitDiskParams | TMadMaxParams);
+export type TStartPlottingRequest = TCommonPlottingParams &
+  (TChiaPosParams | TBladeBitRamParams | TBladeBitDiskParams | TBladeBitCudaParams | TMadMaxParams);
 export type TStartPlottingResponse = {
   success: bool;
   ids: str[];
@@ -622,6 +637,60 @@ export async function get_plotters(daemon: TDaemon) {
 }
 
 
+
+export const get_routes_command = "get_routes";
+export type get_routes_command = typeof get_routes_command;
+export type TGetRoutesResponse = {
+  success: True;
+  routes: str[];
+};
+export type WsGetRoutesMessage = GetMessageType<daemon_service, get_routes_command, TGetRoutesResponse>;
+export async function get_routes(daemon: TDaemon) {
+  return daemon.sendMessage<WsGetRoutesMessage>(daemon_service, get_routes_command);
+}
+
+
+export const get_wallet_addresses_command = "get_wallet_addresses";
+export type get_wallet_addresses_command = typeof get_wallet_addresses_command;
+export type TGetWalletAddressesRequest = {
+  fingerprints?: uint32[];
+  index?: int;
+  count?: int;
+  non_observer_derivation?: bool;
+};
+export type TGetWalletAddressesResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  wallet_addresses: Record<str, Array<{address: str; hd_path: str}>>;
+};
+export type WsGetWalletAddressesMessage = GetMessageType<daemon_service, get_wallet_addresses_command, TGetWalletAddressesResponse>;
+
+export async function get_wallet_addresses(daemon: TDaemon, data: TGetWalletAddressesRequest) {
+  return daemon.sendMessage<WsGetWalletAddressesMessage>(daemon_service, get_wallet_addresses_command, data);
+}
+
+
+export const get_keys_for_plotting_command = "get_keys_for_plotting";
+export type get_keys_for_plotting_command = typeof get_keys_for_plotting_command;
+export type TGetKeysForPlottingRequest = {
+  fingerprints?: uint32[];
+};
+export type TGetKeysForPlottingResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  keys: Record<str, { farmer_public_key: str; pool_public_key: str }>;
+};
+export type WsGetKeysForPlottingMessage = GetMessageType<daemon_service, get_keys_for_plotting_command, TGetKeysForPlottingResponse>;
+
+export async function get_keys_for_plotting(daemon: TDaemon, data: TGetKeysForPlottingRequest) {
+  return daemon.sendMessage<WsGetKeysForPlottingMessage>(daemon_service, get_keys_for_plotting_command, data);
+}
+
+
 //// From here subscribe/listen style APIs ////
 
 export const keyring_status_changed_command = "keyring_status_changed";
@@ -672,5 +741,8 @@ export type WsDaemonMessage =
   | WsSetKeyringPassphraseMessage
   | WsRemoveKeyringPassphraseMessage
   | WsNotifyKeyringMigrationCompletedMessage
+  | WsGetRoutesMessage
+  | WsGetWalletAddressesMessage
+  | WsGetKeysForPlottingMessage
   | WsKeyringStatusChangedMessage
 ;
