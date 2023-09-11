@@ -157,7 +157,6 @@ const response = await start_plotting(daemon, params);
   no_cpu_affinity?: bool; // Default: False
   compress?: int;
   device?: int;
-  no_direct_downloads?: bool;
   t?: str; // Temp directory
   t2?: str; // Temp2 directory
 }
