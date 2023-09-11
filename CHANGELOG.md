@@ -1,5 +1,11 @@
 # Changelog
 
+## [13.0.1]
+### Changed
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params)
+    - `no_direct_downloads` has been removed from `TBladeBitCudaParams`
+
 ## [13.0.0]
 ### Breaking change
 - The format of [`PoolState`](./src/api/chia/farmer/farmer.ts)) has been changed.
@@ -1127,7 +1133,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[12.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v13.0.0
+[13.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.0...v13.0.1
+[13.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v13.0.0
 [12.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.1...v12.1.0
 [12.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.0...v12.0.1
 [12.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v11.1.1...v12.0.0
