@@ -1,5 +1,10 @@
 # Changelog
 
+## [13.2.0]
+### Added
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_block_spends_with_conditions`](./src/api/rpc/full_node/README.md#get_block_spends_with_conditions)
+
 ## [13.1.1]
 ### Fixed
 - Typo in SpendBundle: `cons_spends` renamed to `coin_spends`
@@ -1242,6 +1247,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[13.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.1.0...v13.2.0
 [13.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.1...v13.1.0
 [13.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.0...v13.0.1
 [13.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v13.0.0
