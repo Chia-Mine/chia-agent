@@ -1,9 +1,7 @@
-import {Coin} from "./blockchain_format/coin";
-import {SerializedProgram} from "./blockchain_format/serialized_program";
+import {CoinSpend} from "./coin_spend";
+import {ConditionWithArgs} from "./condition_with_args";
 
 export type CoinSpendWithConditions = {
-  coin: Coin;
-  puzzle_reveal: SerializedProgram;
-  solution: SerializedProgram;
-  conditions: SerializedProgram;
+  coin_spend: CoinSpend;
+  conditions: ConditionWithArgs[];
 };
