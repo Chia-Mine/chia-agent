@@ -1,5 +1,10 @@
 # Changelog
 
+## [13.0.2]
+### Added
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_block_spends_with_conditions`](./src/api/rpc/full_node/README.md#get_block_spends_with_conditions)
+
 ## [13.0.1]
 ### Changed
 - [Daemon WebSocket API](./src/api/ws/daemon)
