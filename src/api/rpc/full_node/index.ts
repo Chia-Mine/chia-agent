@@ -10,6 +10,7 @@ import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
 import {CoinSpend} from "../../chia/types/coin_spend";
+import {CoinSpendWithConditions} from "../../chia/types/coin_spend_with_conditions";
 import {CLVMCost} from "../../chia/types/clvm_cost";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
@@ -168,6 +169,22 @@ export type WsGetBlockSpendsMessage = GetMessageType<chia_full_node_service, get
 export async function get_block_spends<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockSpendsRequest) {
   type R = ResType<T, TGetBlockSpendsResponse, WsGetBlockSpendsMessage>;
   return agent.sendMessage<R>(chia_full_node_service, get_block_spends_command, data);
+}
+
+
+
+export const get_block_spends_with_conditions_command = "get_block_spends_with_conditions";
+export type get_block_spends_with_conditions_command = typeof get_block_spends_with_conditions_command;
+export type TGetBlockSpendsWithConditionsRequest = {
+  header_hash: str;
+};
+export type TGetBlockSpendsWithConditionsResponse = {
+  block_spends_with_conditions: CoinSpendWithConditions[];
+};
+export type WsGetBlockSpendsWithConditionsMessage = GetMessageType<chia_full_node_service, get_block_spends_with_conditions_command, TGetBlockSpendsWithConditionsResponse>;
+export async function get_block_spends_with_conditions<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockSpendsWithConditionsRequest) {
+  type R = ResType<T, TGetBlockSpendsWithConditionsResponse, WsGetBlockSpendsWithConditionsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_spends_with_conditions_command, data);
 }
 
 
