@@ -103,6 +103,7 @@
   - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
     - Fixed wrong response param name: `driver_dict` -> `infos`
   - Fixed an issue where the type of `status` property in `TradeRecordConvenience` was `uint32` (`str` is correct).
+
 ## [13.0.1]
 ### Changed
 - [Daemon WebSocket API](./src/api/ws/daemon)
