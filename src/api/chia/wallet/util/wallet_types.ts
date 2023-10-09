@@ -16,11 +16,14 @@ export const WalletType = {
   DATA_LAYER: 11,
   DATA_LAYER_OFFER: 12,
   VC: 13,
+  CRCAT: 57,
 } as const;
 
 export const CoinType = {
   NORMAL: 0,
   CLAWBACK: 1,
+  CRCAT_PENDING: 2,
+  CRCAT: 3,
 } as const;
 
 export type StreamableWalletIdentifier = {

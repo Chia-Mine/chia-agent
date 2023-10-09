@@ -1,5 +1,5 @@
 import {TRPCAgent} from "../../../rpc/index";
-import {bool, None, Optional, str, uint64} from "../../chia/types/_python_types_";
+import {bool, int, None, Optional, str, uint64} from "../../chia/types/_python_types_";
 import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {
@@ -15,13 +15,28 @@ import {TDaemon} from "../../../daemon/index";
 export const chia_data_layer_service = "chia_data_layer";
 export type chia_data_layer_service = typeof chia_data_layer_service;
 
+export const wallet_log_in_command = "wallet_log_in";
+export type wallet_log_in_command = typeof wallet_log_in_command;
+export type TWalletLogInRequest = {
+  fingerprint: int;
+};
+export type TWalletLogInResponse = {
+};
+export type WsWalletLogInMessage = GetMessageType<chia_data_layer_service, wallet_log_in_command, TWalletLogInResponse>;
+export async function wallet_log_in<T extends TRPCAgent | TDaemon>(agent: T, params: TWalletLogInRequest) {
+  type R = ResType<T, TWalletLogInResponse, WsWalletLogInMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, wallet_log_in_command, params);
+}
+
+
 export const create_data_store_command = "create_data_store";
 export type create_data_store_command = typeof create_data_store_command;
 export type TCreateDataStoreRequest = {
   fee?: uint64;
+  verbose?: bool;
 };
 export type TCreateDataStoreResponse = {
-  txs: TransactionRecord[];
+  txs?: TransactionRecord[];
   id: str;
 };
 export type WsCreateDataStoreMessage = GetMessageType<chia_data_layer_service, create_data_store_command, TCreateDataStoreResponse>;
@@ -244,6 +259,7 @@ export const unsubscribe_command = "unsubscribe";
 export type unsubscribe_command = typeof unsubscribe_command;
 export type TUnsubscribeRequest = {
   id: str;
+  retain?: bool;
 };
 export type TUnsubscribeResponse = {
 };
@@ -502,7 +518,8 @@ export async function clear_pending_roots<T extends TRPCAgent | TDaemon>(agent: 
 }
 
 export type RpcDataLayerMessage =
-  TCreateDataStoreResponse
+  TWalletLogInResponse
+  | TCreateDataStoreResponse
   | TGetOwnedStoresResponse
   | TBatchUpdateResponse
   | TGetValueResponse
@@ -534,7 +551,8 @@ export type RpcDataLayerMessage =
 ;
 
 export type RpcDataLayerMessageOnWs =
-  WsCreateDataStoreMessage
+  WsWalletLogInMessage
+  | WsCreateDataStoreMessage
   | WsGetOwnedStoresMessage
   | WsBatchUpdateMessage
   | WsGetValueMessage

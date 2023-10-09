@@ -38,6 +38,8 @@ import {GetCoinRecords} from "../../chia/wallet/wallet_coin_store";
 import {WalletCoinRecordWithMetadata} from "../../chia/wallet/wallet_coin_record";
 import {VCRecord} from "../../chia/wallet/vc_wallet/vc_store";
 import {TransactionTypeFilter} from "../../chia/wallet/util/quality_filter";
+import {TxEndpoint} from "../../chia/wallet/util/tx_config";
+import {ConditionValidTimes} from "../../chia/wallet/conditions";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -390,7 +392,9 @@ export async function get_wallets<T extends TRPCAgent | TDaemon>(agent: T, data:
 export type TCreate_New_CAT_WalletRequest = {
   fee?: uint64;
   wallet_type: "cat_wallet"
+  name?: str;
   mode: "new";
+  test?: bool;
   amount: uint64;
 } | {
   fee?: uint64;
@@ -508,11 +512,11 @@ export type TCreateWalletErrorResponse = {
 
 export const create_new_wallet_command = "create_new_wallet";
 export type create_new_wallet_command = typeof create_new_wallet_command;
-export type TCreateNewWalletRequest = TCreate_New_CAT_WalletRequest
+export type TCreateNewWalletRequest = (TCreate_New_CAT_WalletRequest
   | TCreate_New_RL_WalletRequest
   | TCreate_New_DID_WalletRequest
   | TCreate_New_NFT_WalletRequest
-  | TCreate_New_Pool_WalletRequest;
+  | TCreate_New_Pool_WalletRequest) & TxEndpoint;
 export type TCreateNewWalletResponse = TCreate_New_CAT_WalletResponse
   | TCreate_New_RL_WalletResponse
   | TCreate_New_DID_WalletResponse
@@ -633,13 +637,8 @@ export type TSendTransactionRequest = {
   fee: int;
   address: str;
   memos?: str[];
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
-  excluded_coin_ids?: str[];
   puzzle_decorator?: Array<{decorator: str; clawback_timelock?: uint64}>;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TSendTransactionResponse = {
   transaction: TransactionRecordConvenience;
   transaction_id: TransactionRecord["name"];
@@ -696,7 +695,8 @@ export type TSpendClawbackCoinsRequest = {
   coin_ids: str[];
   fee?: uint64;
   batch_size: int;
-};
+  force?: bool;
+} & TxEndpoint;
 export type TSpendClawbackCoinsResponse = {
   success: True;
   transaction_ids: str[];
@@ -785,14 +785,10 @@ export type TCreateSignedTransactionRequest = {
   wallet_id?: uint32;
   additions: TAdditions[];
   fee?: uint64;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
   coins?: Coin[];
-  excluded_coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
-};
+} & TxEndpoint;
 export type TCreateSignedTransactionResponse = {
   signed_txs: TransactionRecordConvenience[];
   signed_tx: TransactionRecordConvenience;
@@ -827,11 +823,7 @@ export type select_coins_command = typeof select_coins_command;
 export type TSelectCoinsRequest = {
   amount: uint64;
   wallet_id: uint32;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
-  excluded_coins?: Coin[];
-};
+} & TxEndpoint;
 export type TSelectCoinsResponse = {
   coins: Coin[];
 };
@@ -962,7 +954,7 @@ export type TSendNotificationRequest = {
   message: str;
   amount: uint64;
   fee?: uint64;
-};
+} & TxEndpoint;
 export type TSendNotificationResponse = {
   tx: TransactionRecordConvenience;
 };
@@ -1158,15 +1150,10 @@ export type TCatSpendRequest = {
   inner_address: str;
   memos?: str[];
   coins?: Coin[];
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
-  excluded_coin_ids?: str[];
-  reuse_puzhash?: bool;
   extra_delta?: int;
   tail_reveal?: str;
   tail_solution?: str;
-};
+} & TxEndpoint;
 export type TCatSpendResponse = {
   transaction: TransactionRecordConvenience;
   transaction_id: TransactionRecord["name"];
@@ -1205,11 +1192,8 @@ export type TCreateOfferForIdsRequest = {
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
   solver?: Record<str, any>;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TCreateOfferForIdsResponse = {
   offer: str;
   trade_record: TradeRecordConvenience;
@@ -1235,6 +1219,10 @@ export type TGetOfferSummaryResponse = {
     requested: Record<str, int>;
     fees: int;
     infos: TDriverDict;
+    valid_times: Omit<
+      ConditionValidTimes,
+      "max_secs_after_created" | "min_secs_since_created" | "max_blocks_after_created" | "min_blocks_since_created"
+    >;
   };
   id: bytes32;
 };
@@ -1270,11 +1258,8 @@ export type take_offer_command = typeof take_offer_command;
 export type TTakeOfferRequest = {
   offer: str;
   fee?: uint64;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
   solver?: Record<str, any>;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TTakeOfferResponse = {
   trade_record: TradeRecordConvenience;
 };
@@ -1353,7 +1338,7 @@ export type TCancelOfferRequest = {
   secure: bool;
   trade_id: str;
   fee?: uint64;
-};
+} & TxEndpoint;
 export type TCancelOfferResponse = {};
 export type WsCancelOfferMessage = GetMessageType<chia_wallet_service, cancel_offer_command, TCancelOfferResponse>;
 export async function cancel_offer<T extends TRPCAgent | TDaemon>(agent: T, data: TCancelOfferRequest){
@@ -1372,7 +1357,7 @@ export type TCancelOffersRequest = {
   batch_size?: int;
   cancel_all?: bool;
   asset_id?: str;
-};
+} & TxEndpoint;
 export type TCancelOffersResponse = {
   success: True;
 };
@@ -1433,8 +1418,7 @@ export type TDidUpdateRecoveryIdsRequest = {
   wallet_id: uint32;
   new_list: str[];
   num_verifications_required?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TDidUpdateRecoveryIdsResponse = {
   success: bool;
 };
@@ -1453,8 +1437,7 @@ export type TDidUpdateMetadataRequest = {
   wallet_id: uint32;
   metadata?: Record<str, str>;
   fee?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TDidUpdateMetadataResponse = {
   success: True;
   wallet_id: uint32;
@@ -1597,7 +1580,7 @@ export type TDidCreateAttestRequest = {
   wallet_id: uint32;
   coin_name: str;
   puzhash: str;
-};
+} & TxEndpoint;
 export type TDidCreateAttestResponse = {
   success: True;
   message_spend_bundle: str;
@@ -1681,7 +1664,7 @@ export type TDidMessageSpendRequest = {
   wallet_id: uint32;
   coin_announcements: str[];
   puzzle_announcements: str[];
-};
+} & TxEndpoint;
 export type TDidMessageSpendResponse = {
   success: True;
   spend_bundle: SpendBundle;
@@ -1752,8 +1735,7 @@ export type TDidTransferDidRequest = {
   inner_address: str;
   fee?: uint64;
   with_recovery_info?: bool;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TDidTransferDidResponse = {
   success: True;
   transaction: TransactionRecordConvenience;
@@ -1786,8 +1768,7 @@ export type TNftMintNftRequest = {
   fee?: uint64;
   did_id?: str;
   royalty_percentage?: uint16;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TNftMintNftResponse = {
   wallet_id: uint32;
   success: True;
@@ -1851,8 +1832,7 @@ export type TNftSetNftDidRequest = {
   did_id?: str;
   nft_coin_id: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TNftSetNftDidResponse = {
   wallet_id: uint32;
   success: True;
@@ -1874,8 +1854,7 @@ export type TNftSetDidBulkRequest = {
   nft_coin_list: Array<{nft_coin_id: str; wallet_id: uint32;}>;
   did_id?: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TNftSetDidBulkResponse = {
   success: False;
   error: str;
@@ -1898,8 +1877,7 @@ export type TNftTransferBulkRequest = {
   nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
   target_address: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TNftTransferBulkResponse = {
   success: False;
   error: str;
@@ -2001,8 +1979,7 @@ export type TNftTransferNftRequest = {
   target_address: str;
   nft_coin_id: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TNftTransferNftResponse = {
   success: True;
   wallet_id: uint32;
@@ -2051,8 +2028,7 @@ export type TNftAddUriRequest = {
   key: str;
   nft_coin_id: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TNftAddUriResponse = {
   success: True;
   wallet_id: uint32;
@@ -2121,8 +2097,7 @@ export type TNftMintBulkRequest = {
   did_lineage_parent?: str;
   mint_from_did?: bool;
   fee?: uint64;
-  reuse_puzhash?: bool;
-};
+} & TxEndpoint;
 export type TNftMintBulkResponse = {
   success: False;
   error: str;
@@ -2210,7 +2185,7 @@ export type TPwJoinPoolRequest = {
   target_puzzlehash?: string;
   pool_url?: str;
   relative_lock_height: uint32;
-};
+} & TxEndpoint;
 export type TPwJoinPoolResponse = {
   total_fee: uint64;
   transaction: TransactionRecord;
@@ -2233,7 +2208,7 @@ export type pw_self_pool_command = typeof pw_self_pool_command;
 export type TPwSelfPoolRequest = {
   wallet_id: uint32;
   fee?: uint64;
-};
+} & TxEndpoint;
 export type TPwSelfPoolResponse = {
   total_fee: uint64;
   transaction: TransactionRecord;
@@ -2254,7 +2229,7 @@ export type TPwAbsorbRewardsRequest = {
   wallet_id: uint32;
   fee?: uint64;
   max_spends_in_tx?: int;
-};
+} & TxEndpoint;
 export type TPwAbsorbRewardsResponse = {
   state: PoolWalletInfo;
   transaction: TransactionRecord;
@@ -2292,7 +2267,7 @@ export type create_new_dl_command = typeof create_new_dl_command;
 export type TCreateNewDlRequest = {
   root: str;
   fee?: uint64;
-};
+} & TxEndpoint;
 export type TCreateNewDlResponse = {
   success: False;
   error: str;
@@ -2384,7 +2359,7 @@ export type TDlUpdateRootRequest = {
   launcher_id: str;
   new_root: str;
   fee?: uint64;
-};
+} & TxEndpoint;
 export type TDlUpdateRootResponse = {
   tx_record: TransactionRecordConvenience;
 };
@@ -2401,7 +2376,7 @@ export const dl_update_multiple_command = "dl_update_multiple";
 export type dl_update_multiple_command = typeof dl_update_multiple_command;
 export type TDlUpdateMultipleRequest = {
   updates: Record<str, str>; // {[launcher_id]: root}
-};
+} & TxEndpoint;
 export type TDlUpdateMultipleResponse = {
   tx_records: TransactionRecordConvenience[];
 };
@@ -2474,7 +2449,7 @@ export type TDlNewMirrorRequest = {
   amount: uint64;
   urls: str[];
   fee?: uint64;
-};
+} & TxEndpoint;
 export type TDlNewMirrorResponse = {
   transactions: TransactionRecordConvenience[];
 };
@@ -2492,7 +2467,7 @@ export type dl_delete_mirror_command = typeof dl_delete_mirror_command;
 export type TDlDeleteMirrorRequest = {
   coin_id: str;
   fee?: uint64;
-};
+} & TxEndpoint;
 export type TDlDeleteMirrorResponse = {
   transactions: TransactionRecordConvenience[];
 };
@@ -2510,7 +2485,7 @@ export type VCMint = {
 };
 export const vc_mint_command = "vc_mint";
 export type vc_mint_command = typeof vc_mint_command;
-export type TVcMintRequest = VCMint;
+export type TVcMintRequest = VCMint & TxEndpoint;
 export type TVcMintResponse = {
   vc_record: VCRecord;
   transactions: TransactionRecordConvenience[];
@@ -2562,11 +2537,10 @@ export type VcSpend = {
   new_proof_hash: Optional<bytes32>;
   provider_inner_puzhash: Optional<bytes32>;
   fee: uint64;
-  reuse_puzhash: Optional<bool>;
 };
 export const vc_spend_command = "vc_spend";
 export type vc_spend_command = typeof vc_spend_command;
-export type TVcSpendRequest = VcSpend;
+export type TVcSpendRequest = VcSpend & TxEndpoint;
 export type TVcSpendResponse = {
   transactions: TransactionRecordConvenience[];
 };
@@ -2611,11 +2585,10 @@ export async function vc_get_proofs_for_root<T extends TRPCAgent | TDaemon>(agen
 export type VcRevoke = {
   vc_parent_id: bytes32;
   fee: uint64;
-  reuse_puzhash: Optional<bool>;
 };
 export const vc_revoke_command = "vc_revoke";
 export type vc_revoke_command = typeof vc_revoke_command;
-export type TVcRevokeRequest = VcRevoke;
+export type TVcRevokeRequest = VcRevoke & TxEndpoint;
 export type TVcRevokeResponse = {
   transactions: TransactionRecordConvenience[];
 };
@@ -2623,6 +2596,25 @@ export type WsVcRevokeMessage = GetMessageType<chia_wallet_service, vc_revoke_co
 export async function vc_revoke<T extends TRPCAgent | TDaemon>(agent: T, data: TVcRevokeRequest) {
   type R = ResType<T, TVcRevokeResponse, WsVcRevokeMessage>;
   return agent.sendMessage<R>(chia_wallet_service, vc_revoke_command, data);
+}
+
+
+export type CrcatApprovePending = {
+  wallet_id: uint32;
+  min_amount_to_claim: uint64;
+  fee: uint64;
+};
+export const crcat_approve_pending_command = "crcat_approve_pending";
+export type crcat_approve_pending_command = typeof crcat_approve_pending_command;
+export type TCrcatApprovePendingRequest = CrcatApprovePending & TxEndpoint;
+export type TCrcatApprovePendingResponse = {
+  transactions: TransactionRecordConvenience[];
+};
+export type WsCrcatApprovePendingMessage = GetMessageType<chia_wallet_service, crcat_approve_pending_command, TCrcatApprovePendingResponse>;
+
+export async function crcat_approve_pending<T extends TRPCAgent | TDaemon>(agent: T, data: TCrcatApprovePendingRequest) {
+  type R = ResType<T, TCrcatApprovePendingResponse, WsCrcatApprovePendingMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, crcat_approve_pending_command, data);
 }
 
 export type RpcWalletMessage =
@@ -2748,6 +2740,7 @@ export type RpcWalletMessage =
   | TVcAddProofsResponse
   | TVcGetProofsForRootResponse
   | TVcRevokeResponse
+  | TCrcatApprovePendingResponse
 ;
 
 export type RpcWalletMessageOnWs =
@@ -2873,4 +2866,5 @@ export type RpcWalletMessageOnWs =
   | WsVcAddProofsMessage
   | WsVcGetProofsForRootMessage
   | WsVcRevokeMessage
+  | WsCrcatApprovePendingMessage
 ;

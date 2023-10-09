@@ -471,6 +471,21 @@ export async function get_mempool_item_by_tx_id<T extends TRPCAgent | TDaemon>(a
 
 
 
+export const get_mempool_items_by_coin_name_command = "get_mempool_items_by_coin_name";
+export type get_mempool_items_by_coin_name_command = typeof get_mempool_items_by_coin_name_command;
+export type TGetMempoolItemsByCoinNameRequest = {
+  coin_name: str;
+};
+export type TGetMempoolItemsByCoinNameResponse = {
+  mempool_items: MempoolItemInJsonDict[];
+};
+export type WsGetMempoolItemsByCoinNameMessage = GetMessageType<chia_full_node_service, get_mempool_items_by_coin_name_command, TGetMempoolItemsByCoinNameResponse>;
+export async function get_mempool_items_by_coin_name<T extends TRPCAgent | TDaemon>(agent: T, data: TGetMempoolItemsByCoinNameRequest) {
+  type R = ResType<T, TGetMempoolItemsByCoinNameResponse, WsGetMempoolItemsByCoinNameMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_mempool_items_by_coin_name_command, data);
+}
+
+
 export const get_fee_estimate_command = "get_fee_estimate";
 export type get_fee_estimate_command = typeof get_fee_estimate_command;
 export type TGetFeeEstimateRequest = {
@@ -673,6 +688,7 @@ export type RpcFullNodeMessage =
   | TGetCoinRecordsByHintResponse
   | TGetInitialFreezePeriodResponseOfFullNode
   | TGetMempoolItemByTxIdResponse
+  | TGetMempoolItemsByCoinNameResponse
   | TGetNetworkInfoResponseOfFullNode
   | TGetNetworkSpaceResponse
   | TGetUnfinishedBlockHeadersResponse
@@ -711,6 +727,7 @@ export type RpcFullNodeMessageOnWs =
   | WsGetCoinRecordsByHintMessage
   | WsGetInitialFreezePeriodMessageOfFullNode
   | WsGetMempoolItemByTxIdMessage
+  | WsGetMempoolItemsByCoinNameMessage
   | WsGetNetworkInfoMessageOfFullNode
   | WsGetNetworkSpaceMessage
   | WsGetUnfinishedBlockHeadersMessage

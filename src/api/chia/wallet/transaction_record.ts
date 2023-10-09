@@ -3,8 +3,9 @@ import {SpendBundle} from "../types/spend_bundle";
 import {Coin} from "../types/blockchain_format/coin";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 import {ClawbackMetadata} from "./puzzles/clawback/metadata";
+import {ConditionValidTimes} from "./conditions";
 
-export type TransactionRecord = {
+export type TransactionRecordOld = {
   confirmed_at_height: uint32;
   created_at_time: uint64;
   to_puzzle_hash: bytes32;
@@ -24,6 +25,10 @@ export type TransactionRecord = {
   type: uint32  // # TransactionType
   name: bytes32;
   memos: Array<[bytes32, bytes[]]>;
+};
+
+export type TransactionRecord = TransactionRecordOld & {
+  valid_times: ConditionValidTimes;
 };
 
 export type TransactionRecordConvenience = {

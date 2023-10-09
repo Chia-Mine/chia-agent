@@ -54,6 +54,9 @@ export {
   TGetAllMempoolTxIdsRequest,
   TGetAllMempoolTxIdsResponse,
   get_all_mempool_tx_ids,
+  TGetMempoolItemsByCoinNameRequest,
+  TGetMempoolItemsByCoinNameResponse,
+  get_mempool_items_by_coin_name,
   TGetBlockRecordByHeightRequest,
   TGetBlockRecordByHeightResponse,
   get_block_record_by_height,
@@ -524,11 +527,17 @@ export {
   TVcRevokeRequest,
   TVcRevokeResponse,
   vc_revoke,
+  TCrcatApprovePendingRequest,
+  TCrcatApprovePendingResponse,
+  crcat_approve_pending,
 } from "./wallet/index";
 
 import type {RpcDataLayerMessage} from "./data_layer/index"
 export {
   chia_data_layer_service,
+  TWalletLogInRequest,
+  TWalletLogInResponse,
+  wallet_log_in,
   TCreateDataStoreRequest,
   TCreateDataStoreResponse,
   create_data_store,
