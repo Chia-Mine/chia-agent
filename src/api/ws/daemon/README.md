@@ -586,8 +586,8 @@ const response = await get_public_keys(daemon, params);
 ### params:
 ```typescript
 {
-  kc_user? : str;
-  kc_service? : str;
+  kc_user?: str;
+  kc_service?: str;
 }
 ```
 ### response:
@@ -620,8 +620,8 @@ const response = await set_label(daemon, params);
 {
   fingerprint: uint32;
   label: str;
-  kc_user? : str;
-  kc_service? : str;
+  kc_user?: str;
+  kc_service?: str;
 }
 ```
 ### response:
@@ -650,8 +650,8 @@ const response = await delete_label(daemon, params);
 ```typescript
 {
   fingerprint: uint32;
-  kc_user? : str;
-  kc_service? : str;
+  kc_user?: str;
+  kc_service?: str;
 }
 ```
 ### response:
