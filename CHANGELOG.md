@@ -22,7 +22,7 @@
   - [`unsubscribe`](./src/api/rpc/data_layer/README.md#unsubscribeagent-params)
     - Added `retain` to request parameter
 - [Wallet RPC API](./src/api/rpc/wallet)
-  - A collection of common optional request parameters(`TxEndpoint`) is added to several wallet RPC API requests.
+  - A collection of common optional request parameters([`TxEndpoint`](./src/api/chia/wallet/util/tx_config.ts)) is added to several wallet RPC API requests.
     - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
     - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
     - [`spend_clawback_coins`](./src/api/rpc/wallet/README.md#spend_clawback_coinsagent-params)
@@ -63,13 +63,14 @@
     - Added `force` request parameter
   - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
     - Added `valid_times` to response
-  - Added `valid_times` to `TradeRecord` type. As a result of this addition, the following Wallet RPC APIs are affected.
+  - `TradeRecord` now has `valid_times`.  
+    As a result of this addition, the following Wallet RPC APIs are affected.
     - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
     - [`get_all_offers`](./src/api/rpc/wallet/README.md#get_all_offersagent-params)
     - [`get_offer`](./src/api/rpc/wallet/README.md#get_offeragent-params)
     - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
-  - `TransactionRecordConvenience` now has `valid_times`. As a result of this addition, the following Wallet RPC APIs
-    are affected
+  - `TransactionRecordConvenience` now has `valid_times`.  
+    As a result of this addition, the following Wallet RPC APIs are affected
     - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
     - [`crcat_approve_pending`](./src/api/rpc/wallet/README.md#crcat_approve_pendingagent-params)
     - [`create_new_dl`](./src/api/rpc/wallet/README.md#create_new_dlagent-params)
@@ -87,12 +88,12 @@
     - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
     - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
     - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
-  - `CRCAT` are added to [`WalletType`](./src/api/chia/wallet/util/wallet_types.ts) and `CRCAT_PENDING`, `CRCAT` are added to [`CoinType`](./src/api/chia/wallet/util/wallet_types.ts)
+  - `CRCAT` are added to [`WalletType`](./src/api/chia/wallet/util/wallet_types.ts) and `CRCAT_PENDING`, `CRCAT` are added to [`CoinType`](./src/api/chia/wallet/util/wallet_types.ts).  
     As a result of this addition, the following Wallet RPC API is affected.
     - [`get_coin_records`](./src/api/rpc/wallet/README.md#get_coin_recordsagent-params)
 ### Fixed
 - [Daemon WebSocket API](./src/api/ws/daemon)
-  - Fixed an issue where `kc_user` and `kc_service` were missing from the request parameters of the following daemon Ws API.
+  - Fixed an issue where `kc_user` and `kc_service` were missing from the request parameter of the following daemon Ws APIs.
     - [`get_key`](./src/api/ws/daemon/README.md#get_keydaemon-params)
     - [`get_keys`](./src/api/ws/daemon/README.md#get_keysdaemon-params)
     - [`set_label`](./src/api/ws/daemon/README.md#set_labeldaemon-params)
