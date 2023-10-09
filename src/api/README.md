@@ -64,6 +64,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_all_mempool_tx_ids`](./rpc/full_node/README.md#get_all_mempool_tx_idsagent)
 - [`get_all_mempool_items`](./rpc/full_node/README.md#get_all_mempool_itemsagent)
 - [`get_mempool_item_by_tx_id`](./rpc/full_node/README.md#get_mempool_item_by_tx_idagent-params)
+- [`get_mempool_items_by_coin_name`](./rpc/full_node/README.md#get_mempool_items_by_coin_nameagent-params)
 - [`get_fee_estimate`](./rpc/full_node/README.md#get_fee_estimateagent-params)
 - [`get_all_blocks`](./rpc/full_node/README.md#get_all_blocksagent-params)
 - [`farm_block`](./rpc/full_node/README.md#farm_blockagent-params)
@@ -199,6 +200,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`vc_add_proofs`](./rpc/wallet/README.md#vc_add_proofsagent-params)
 - [`vc_get_proofs_for_root`](./rpc/wallet/README.md#vc_get_proofs_for_rootagent-params)
 - [`vc_revoke`](./rpc/wallet/README.md#vc_revokeagent-params)
+- [`crcat_approve_pending`](./rpc/wallet/README.md#crcat_approve_pendingagent-params)
 
 #### [Pool API](./rpc/pool/README.md#usage)
 - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
@@ -209,6 +211,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`login`](./rpc/pool/README.md#loginagent-params)
 
 #### [Data Layer API](./rpc/data_layer/README.md#usage)
+- [`wallet_log_in`](./rpc/data_layer/README.md#wallet_log_inagent-params)
 - [`create_data_store`](./rpc/data_layer/README.md#create_data_storeagent-params)
 - [`get_owned_stores`](./rpc/data_layer/README.md#get_owned_storesagent)
 - [`batch_update`](./rpc/data_layer/README.md#batch_updateagent-params)
@@ -272,6 +275,7 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`get_key_for_fingerprint`](./ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
 - [`get_key`](./ws/daemon/README.md#get_keydaemon-params)
 - [`get_keys`](./ws/daemon/README.md#get_keysdaemon-params)
+- [`get_public_key`](./ws/daemon/README.md#get_public_keydaemon-params)
 - [`set_label`](./ws/daemon/README.md#set_labeldaemon-params)
 - [`delete_label`](./ws/daemon/README.md#delete_labeldaemon-params)
 - [`ping`](./ws/daemon/README.md#pingdaemon)

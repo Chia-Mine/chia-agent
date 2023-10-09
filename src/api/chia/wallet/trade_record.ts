@@ -4,8 +4,9 @@ import {bool, bytes, int, Optional, str, uint32, uint64, uint8} from "../types/_
 import {Coin} from "../types/blockchain_format/coin";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 import {TDriverDict} from "./puzzle_drivers";
+import {ConditionValidTimes} from "./conditions";
 
-export type TradeRecord = {
+export type TradeRecordOld = {
   confirmed_at_index: uint32;
   accepted_at_time: Optional<uint64>;
   created_at_time: uint64;
@@ -19,7 +20,12 @@ export type TradeRecord = {
   sent_to: Array<[str, uint8, Optional<str>]>;
 };
 
+export type TradeRecord = TradeRecordOld & {
+  valid_times: ConditionValidTimes;
+};
+
 export type TradeRecordConvenience = {
+  status: str;
   summary: {
     offered: Record<str, int>; // {[asset_id]: amount}
     requested: Record<str, int>; // {[asset_id]: amount}

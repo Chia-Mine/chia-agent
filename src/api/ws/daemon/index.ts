@@ -109,6 +109,8 @@ export type TBladeBitCudaParams = {
   device?: int;
   t?: str; // Temp directory
   t2?: str; // Temp2 directory
+  disk_128?: bool;
+  disk_16?: bool;
 };
 export type TMadMaxParams = {
   plotter: "madmax";
@@ -331,6 +333,8 @@ export type get_key_command = typeof get_key_command;
 export type TGetKeyRequest = {
   fingerprint: uint32;
   include_secrets?: bool;
+  kc_user?: str;
+  kc_service?: str;
 };
 export type TGetKeyResponse = {
   success: True;
@@ -351,6 +355,8 @@ export const get_keys_command = "get_keys";
 export type get_keys_command = typeof get_keys_command;
 export type TGetKeysRequest = {
   include_secrets?: bool;
+  kc_user?: str;
+  kc_service?: str;
 };
 export type TGetKeysResponse = {
   success: True;
@@ -366,12 +372,54 @@ export async function get_keys(daemon: TDaemon, data: TGetKeysRequest) {
 }
 
 
+export const get_public_key_command = "get_public_key";
+export type get_public_key_command = typeof get_public_key_command;
+export type TGetPublicKeyRequest = {
+  fingerprint: uint32;
+  kc_user?: str;
+  kc_service?: str;
+};
+export type TGetPublicKeyResponse = {
+  success: True;
+  key: Omit<KeyData, "secrets">;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: { message: str } | { fingerprint: int };
+};
+export type WsGetPublicKeyMessage = GetMessageType<daemon_service, get_public_key_command, TGetPublicKeyResponse>;
+export async function get_public_key(daemon: TDaemon, data: TGetPublicKeyRequest) {
+  return daemon.sendMessage<WsGetPublicKeyMessage>(daemon_service, get_public_key_command, data);
+}
+
+
+export const get_public_keys_command = "get_public_keys";
+export type get_public_keys_command = typeof get_public_keys_command;
+export type TGetPublicKeysRequest = {
+  kc_user?: str;
+  kc_service?: str;
+};
+export type TGetPublicKeysResponse = {
+  success: True;
+  keys: Array<Omit<KeyData, "secrets">>;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: { message: str } | { fingerprint: int };
+};
+export type WsGetPublicKeysMessage = GetMessageType<daemon_service, get_public_keys_command, TGetPublicKeysResponse>;
+export async function get_public_keys(daemon: TDaemon, data: TGetPublicKeysRequest) {
+  return daemon.sendMessage<WsGetPublicKeysMessage>(daemon_service, get_public_keys_command, data);
+}
+
 
 export const set_label_command = "set_label";
 export type set_label_command = typeof set_label_command;
 export type TSetLabelRequest = {
   fingerprint: uint32;
   label: str;
+  kc_user?: str;
+  kc_service?: str;
 };
 export type TSetLabelResponse = {
   success: True;
@@ -391,6 +439,8 @@ export const delete_label_command = "delete_label";
 export type delete_label_command = typeof delete_label_command;
 export type TDeleteLabelRequest = {
   fingerprint: uint32;
+  kc_user?: str;
+  kc_service?: str;
 };
 export type TDeleteLabelResponse = {
   success: True;
@@ -730,6 +780,8 @@ export type WsDaemonMessage =
   | WsGetKeyForFingerprintMessage
   | WsGetKeyMessage
   | WsGetKeysMessage
+  | WsGetPublicKeyMessage
+  | WsGetPublicKeysMessage
   | WsSetLabelMessage
   | WsDeleteLabelMessage
   | WsIsKeyringLockedMessage

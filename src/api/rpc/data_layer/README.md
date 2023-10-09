@@ -32,6 +32,27 @@ const agent = new RPCAgent({
 
 ---
 
+## `wallet_log_in(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {wallet_log_in} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await wallet_log_in(agent, params);
+```
+### params:
+```typescript
+{
+  fingerprint: int;
+}
+```
+### response:
+```typescript
+{}
+```
+
+---
+
 ## `create_data_store(agent, params)`
 ### Usage
 ```js
@@ -44,12 +65,13 @@ const response = await create_data_store(agent, params);
 ```typescript
 {
   fee?: uint64;
+  verbose?: bool;
 }
 ```
 ### response:
 ```typescript
 {
-  txs: TransactionRecord[];
+  txs?: TransactionRecord[];
   id: str;
 }
 ```
@@ -372,6 +394,7 @@ const response = await unsubscribe(agent, params);
 ```typescript
 {
   id: str;
+  retain? : bool;
 }
 ```
 ### response:
