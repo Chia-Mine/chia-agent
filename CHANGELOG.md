@@ -1,9 +1,114 @@
 # Changelog
 
-## [13.0.2]
+## [13.2.0]
 ### Added
 - [FullNode RPC API](./src/api/rpc/full_node)
   - [`get_block_spends_with_conditions`](./src/api/rpc/full_node/README.md#get_block_spends_with_conditions)
+
+## [13.1.0]
+### Added
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`get_public_key`](./src/api/ws/daemon/README.md#get_public_keydaemon-params)
+  - [`get_public_keys`](./src/api/ws/daemon/README.md#get_public_keysdaemon-params)
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`wallet_log_in`](./src/api/rpc/data_layer/README.md#wallet_loginagent-params)
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_mempool_items_by_coin_name`](./src/api/rpc/full_node/README.md#get_mempool_items_by_coin_nameagent-params)
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`crcat_approve_pending`](./src/api/rpc/wallet/README.md#crcat_approve_pendingagent-params)
+### Changed
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`start_plotting`](./src/api/ws/daemon/README.md#start_plottingdaemon-params)
+    - Added `disk_128`, `disk_16` to cudaplot request parameter.
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`create_data_store`](./src/api/rpc/data_layer/README.md#create_data_storeagent-params)
+    - Added `verbose` to request parameter
+    - Now `txs` is set only when `verbose` is `true`.
+  - [`unsubscribe`](./src/api/rpc/data_layer/README.md#unsubscribeagent-params)
+    - Added `retain` to request parameter
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - A collection of common optional request parameters([`TxEndpoint`](./src/api/chia/wallet/util/tx_config.ts)) is added to several wallet RPC API requests.
+    - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+    - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+    - [`spend_clawback_coins`](./src/api/rpc/wallet/README.md#spend_clawback_coinsagent-params)
+    - [`select_coins`](./src/api/rpc/wallet/README.md#select_coinsagent-params)
+    - [`send_notification`](./src/api/rpc/wallet/README.md#send_notificationagent-params)
+    - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+    - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+    - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+    - [`cancel_offer`](./src/api/rpc/wallet/README.md#cancel_offeragent-params)
+    - [`cancel_offers`](./src/api/rpc/wallet/README.md#cancel_offersagent-params)
+    - [`did_update_recovery_ids`](./src/api/rpc/wallet/README.md#did_update_recovery_idsagent-params)
+    - [`did_message_spend`](./src/api/rpc/wallet/README.md#did_message_spendagent-params)
+    - [`did_update_metadata`](./src/api/rpc/wallet/README.md#did_update_metadataagent-params)
+    - [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
+    - [`did_transfer_did`](./src/api/rpc/wallet/README.md#did_transfer_didagent-params)
+    - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+    - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+    - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nft_set_did_bulkagent-params)
+    - [`nft_transfer_bulk`](./src/api/rpc/wallet/README.md#nft_transfer_bulkagent-params)
+    - [`nft_transfer_nft`](./src/api/rpc/wallet/README.md#nft_transfer_nftagent-params)
+    - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+    - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
+    - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+    - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
+    - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
+    - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
+    - [`create_new_dl`](./src/api/rpc/wallet/README.md#create_new_dlagent-params)
+    - [`dl_update_root`](./src/api/rpc/wallet/README.md#dl_update_rootagent-params)
+    - [`dl_update_multiple`](./src/api/rpc/wallet/README.md#dl_update_multipleagent-params)
+    - [`dl_new_mirror`](./src/api/rpc/wallet/README.md#dl_new_mirroragent-params)
+    - [`dl_delete_mirror`](./src/api/rpc/wallet/README.md#dl_delete_mirroragent-params)
+    - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
+    - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
+    - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
+  - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+    - Added `test` request parameter for CAT wallet
+  - [`spend_clawback_coins`](./src/api/rpc/wallet/README.md#spend_clawback_coinsagent-params)
+    - Added `force` request parameter
+  - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
+    - Added `valid_times` to response
+  - `TradeRecord` now has `valid_times`.  
+    As a result of this addition, the following Wallet RPC APIs are affected.
+    - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+    - [`get_all_offers`](./src/api/rpc/wallet/README.md#get_all_offersagent-params)
+    - [`get_offer`](./src/api/rpc/wallet/README.md#get_offeragent-params)
+    - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+  - `TransactionRecordConvenience` now has `valid_times`.  
+    As a result of this addition, the following Wallet RPC APIs are affected
+    - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+    - [`crcat_approve_pending`](./src/api/rpc/wallet/README.md#crcat_approve_pendingagent-params)
+    - [`create_new_dl`](./src/api/rpc/wallet/README.md#create_new_dlagent-params)
+    - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+    - [`did_transfer_did`](./src/api/rpc/wallet/README.md#did_transfer_didagent-params)
+    - [`dl_delete_mirror`](./src/api/rpc/wallet/README.md#dl_delete_mirroragent-params)
+    - [`dl_new_mirror`](./src/api/rpc/wallet/README.md#dl_new_mirroragent-params)
+    - [`dl_update_multiple`](./src/api/rpc/wallet/README.md#dl_update_multipleagent-params)
+    - [`dl_update_root`](./src/api/rpc/wallet/README.md#dl_update_rootagent-params)
+    - [`get_transaction`](./src/api/rpc/wallet/README.md#get_transactionagent-params)
+    - [`get_transactions`](./src/api/rpc/wallet/README.md#get_transactionsagent-params)
+    - [`send_notification`](./src/api/rpc/wallet/README.md#send_notificationagent-params)
+    - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
+    - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+    - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
+    - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
+    - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
+  - `CRCAT` are added to [`WalletType`](./src/api/chia/wallet/util/wallet_types.ts) and `CRCAT_PENDING`, `CRCAT` are added to [`CoinType`](./src/api/chia/wallet/util/wallet_types.ts).  
+    As a result of this addition, the following Wallet RPC API is affected.
+    - [`get_coin_records`](./src/api/rpc/wallet/README.md#get_coin_recordsagent-params)
+### Fixed
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - Fixed an issue where `kc_user` and `kc_service` were missing from the request parameter of the following daemon Ws APIs.
+    - [`get_key`](./src/api/ws/daemon/README.md#get_keydaemon-params)
+    - [`get_keys`](./src/api/ws/daemon/README.md#get_keysdaemon-params)
+    - [`set_label`](./src/api/ws/daemon/README.md#set_labeldaemon-params)
+    - [`delete_label`](./src/api/ws/daemon/README.md#delete_labeldaemon-params)
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+    - Added missing `name` request parameter for CAT wallet
+  - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
+    - Fixed wrong response param name: `driver_dict` -> `infos`
+  - Fixed an issue where the type of `status` property in `TradeRecordConvenience` was `uint32` (`str` is correct).
 
 ## [13.0.1]
 ### Changed
@@ -1138,6 +1243,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[13.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.1.0...v13.2.0
+[13.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.1...v13.1.0
 [13.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.0...v13.0.1
 [13.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v13.0.0
 [12.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.0.1...v12.1.0

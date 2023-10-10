@@ -485,11 +485,14 @@ const response = await create_new_wallet(agent, params);
 ```
 ### params:
 One of `TCreate_New_CAT_WalletRequest`, `TCreate_New_DID_WalletRequest`, `TCreate_New_NFT_WalletRequest`, `TCreate_New_Pool_WalletRequest`
+plus parameters from `TxEndpoint`
 ```typescript
 type TCreate_New_CAT_WalletRequest = {
   fee?: uint64;
   wallet_type: "cat_wallet"
+  name?: str;
   mode: "new";
+  test?: bool;
   amount: uint64;
 } | {
   fee?: uint64;
@@ -589,7 +592,9 @@ type TCreateWalletErrorResponse = {
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
 For content of `TransactionRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -755,13 +760,8 @@ const response = await send_transaction(agent, params);
   fee: int;
   address: str;
   memos?: str[];
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
-  excluded_coin_ids?: str[];
   puzzle_decorator?: Array<{ decorator: str; clawback_timelock?: uint64 }>;
-  reuse_puzhash? : bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -770,6 +770,8 @@ const response = await send_transaction(agent, params);
   transaction_id: TransactionRecord["name"];
 }
 ```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
@@ -849,7 +851,8 @@ const response = await spend_clawback_coins(agent, params);
   coin_ids: str[];
   fee?: uint64;
   batch_size: int;
-}
+  force? : bool;
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -858,6 +861,8 @@ const response = await spend_clawback_coins(agent, params);
   transaction_ids: str[];
 }
 ```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -952,14 +957,10 @@ const response = await create_signed_transaction(agent, params);
   wallet_id?: uint32;
   additions: TAdditions[];
   fee?: uint64;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
   coins?: Coin[];
-  excluded_coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -969,19 +970,17 @@ const response = await create_signed_transaction(agent, params);
 }
 ```
 For content of `TAdditions`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts
-
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts  
 For content of `Coin`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
-
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
 For content of `TCoinAnnouncement`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts
-
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts  
 For content of `TPuzzleAnnouncement`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts
-
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts  
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1019,11 +1018,7 @@ const response = await select_coins(agent, params);
 {
   amount: uint64;
   wallet_id: uint32;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
-  excluded_coins?: Coin[];
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1032,7 +1027,9 @@ const response = await select_coins(agent, params);
 }
 ```
 For content of `Coin`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1077,18 +1074,14 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockch
 ---
 
 ## `get_coin_records_by_names(agent, params)`
-
 ### Usage
-
 ```js
 const {RPCAgent} = require("chia-agent");
 const {get_coin_records_by_names} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
 const response = await get_coin_records_by_names(agent, params);
 ```
-
 ### params:
-
 ```typescript
 {
   names: str[];
@@ -1097,9 +1090,7 @@ const response = await get_coin_records_by_names(agent, params);
   include_spent_coins?: bool;
 }
 ```
-
 ### response:
-
 ```typescript
 {
   coin_records: CoinRecord[];
@@ -1218,7 +1209,7 @@ const response = await send_notification(agent, params);
   message: str;
   amount: uint64;
   fee?: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1227,7 +1218,9 @@ const response = await send_notification(agent, params);
 }
 ```
 For content of `TransactionRecord` and `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1420,8 +1413,7 @@ const response = await nft_mint_bulk(agent, params);
   did_lineage_parent?: str;
   mint_from_did?: bool;
   fee?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1435,7 +1427,9 @@ const response = await nft_mint_bulk(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1453,8 +1447,7 @@ const response = await nft_set_did_bulk(agent, params);
   nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
   did_id?: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1471,7 +1464,9 @@ const response = await nft_set_did_bulk(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1489,8 +1484,7 @@ const response = await nft_transfer_bulk(agent, params);
   nft_coin_list: Array<{ nft_coin_id: str; wallet_id: uint32; }>;
   target_address: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1507,7 +1501,9 @@ const response = await nft_transfer_bulk(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1644,15 +1640,10 @@ const response = await cat_spend(agent, params);
   inner_address: str;
   memos?: str[];
   coins ? : Coin[];
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
-  excluded_coin_amounts?: uint64[];
-  excluded_coin_ids?: str[];
-  reuse_puzhash?: bool;
   extra_delta? : int;
   tail_reveal? : str;
   tail_solution? : str;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1662,7 +1653,9 @@ const response = await cat_spend(agent, params);
 }
 ```
 For content of `TransactionRecord` and `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1705,11 +1698,8 @@ const response = await create_offer_for_ids(agent, params);
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
   solver?: Record<str, any>;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1721,7 +1711,9 @@ const response = await create_offer_for_ids(agent, params);
 For content of `TradeRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/trade_record.ts  
 For content of `TDriverDict`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzle_drivers.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzle_drivers.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1747,13 +1739,19 @@ const response = await get_offer_summary(agent, params);
     offered: Record<str, int>;
     requested: Record<str, int>;
     fees: int;
-    drivers_dict: TDriverDict;
+    infos: TDriverDict;
+    valid_times: Omit<
+      ConditionValidTimes,
+      "max_secs_after_created" | "min_secs_since_created" | "max_blocks_after_created" | "min_blocks_since_created"
+    >;
   };
   id: bytes32;
 }
 ```
 For content of `TDriverDict`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzle_drivers.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzle_drivers.ts  
+For content of `ConditionValidTimes`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/conditions.ts
 
 ---
 
@@ -1794,11 +1792,8 @@ const response = await take_offer(agent, params);
 {
   offer: str;
   fee?: uint64;
-  min_coin_amount?: uint64;
-  max_coin_amount?: uint64;
   solver?: Record<str, any>;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1807,7 +1802,9 @@ const response = await take_offer(agent, params);
 }
 ```
 For content of `TradeRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/trade_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/trade_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1904,12 +1901,14 @@ const response = await cancel_offer(agent, params);
   secure: bool;
   trade_id: str;
   fee?: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
 {}
 ```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -1929,7 +1928,7 @@ const response = await cancel_offers(agent, params);
   batch_size?: int;
   cancel_all?: bool;
   asset_id?: str;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -1937,6 +1936,8 @@ const response = await cancel_offers(agent, params);
   success: True;
 }
 ```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2007,13 +2008,14 @@ const response = await did_update_recovery_ids(agent, params);
   wallet_id: uint32;
   new_list: str[];
   num_verifications_required?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
 {}
 ```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2031,8 +2033,7 @@ const response = await did_update_metadata(agent, params);
   wallet_id: uint32;
   metadata?: Record<str, str>;
   fee?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2046,7 +2047,9 @@ const response = await did_update_metadata(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2194,7 +2197,7 @@ const response = await did_create_attest(agent, params);
   wallet_id: uint32;
   coin_name: str;
   puzhash: str;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2207,6 +2210,8 @@ const response = await did_create_attest(agent, params);
   success: False;
 }
 ```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2292,34 +2297,30 @@ const response = await did_create_backup_file(agent, params);
 ---
 
 ## `did_message_spend(agent, params)`
-
 ### Usage
-
 ```js
 const {RPCAgent} = require("chia-agent");
 const {did_message_spend} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
 const response = await did_message_spend(agent, params);
 ```
-
 ### params:
-
 ```typescript
 {
   wallet_id: uint32;
   coin_announcements: str[];
   puzzle_announcements: str[];
-}
+} & TxEndpoint
 ```
-
 ### response:
-
 ```typescript
 {
   success: True;
   spend_bundle: SpendBundle;
 }
 ```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2412,8 +2413,7 @@ const response = await did_transfer_did(agent, params);
   inner_address: str;
   fee?: uint64;
   with_recovery_info?: bool;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2424,7 +2424,9 @@ const response = await did_transfer_did(agent, params);
 }
 ```
 For content of `TransactionRecord` and `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2453,8 +2455,7 @@ const response = await nft_mint_nft(agent, params);
   fee?: uint64;
   did_id?: str;
   royalty_percentage?: uint16;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2466,9 +2467,10 @@ const response = await nft_mint_nft(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
----
 ---
 
 ## `nft_count_nfts(agent, params)`
@@ -2546,8 +2548,7 @@ const response = await nft_set_nft_did(agent, params);
   did_id?: str;
   nft_coin_id: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2561,7 +2562,9 @@ const response = await nft_set_nft_did(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2678,8 +2681,7 @@ const response = await nft_transfer_nft(agent, params);
   target_address: str;
   nft_coin_id: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2693,7 +2695,9 @@ const response = await nft_transfer_nft(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2744,8 +2748,7 @@ const response = await nft_add_uri(agent, params);
   key: str;
   nft_coin_id: str;
   fee?: uint64;
-  reuse_puzhash?: bool;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2756,7 +2759,9 @@ const response = await nft_add_uri(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2776,7 +2781,7 @@ const response = await pw_join_pool(agent, params);
   target_puzzlehash: string;
   pool_url: Optional<str>;
   relative_lock_height: uint32;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2790,7 +2795,9 @@ const response = await pw_join_pool(agent, params);
 }
 ```
 For content of `TransactionRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2807,7 +2814,7 @@ const response = await pw_self_pool(agent, params);
 {
   wallet_id: uint32;
   fee?: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2818,7 +2825,9 @@ const response = await pw_self_pool(agent, params);
 };
 ```
 For content of `TransactionRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2836,7 +2845,7 @@ const response = await pw_absorb_rewards(agent, params);
   wallet_id: uint32;
   fee?: uint64;
   max_spends_in_tx?: int;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2847,10 +2856,11 @@ const response = await pw_absorb_rewards(agent, params);
 };
 ```
 For content of `PoolWalletInfo`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts
-
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/pools/pool_wallet_info.ts  
 For content of `TransactionRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -2896,7 +2906,7 @@ const response = await create_new_dl(agent, params);
 {
   root: str;
   fee?: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -2910,7 +2920,9 @@ const response = await create_new_dl(agent, params);
 }
 ```
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -3022,7 +3034,7 @@ const response = await dl_update_root(agent, params);
   launcher_id: str;
   new_root: str;
   fee?: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -3031,7 +3043,9 @@ const response = await dl_update_root(agent, params);
 }
 ```
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -3047,7 +3061,7 @@ const response = await dl_update_multiple(agent, params);
 ```typescript
 {
   updates: Record<str, str>; // {[launcher_id]: root}
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -3056,7 +3070,9 @@ const response = await dl_update_multiple(agent, params);
 }
 ```
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -3149,7 +3165,7 @@ const response = await dl_new_mirror(agent, params);
   amount: uint64;
   urls: str[];
   fee?: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -3158,7 +3174,9 @@ const response = await dl_new_mirror(agent, params);
 }
 ```
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -3175,7 +3193,7 @@ const response = await dl_delete_mirror(agent, params);
 {
   coin_id: str;
   fee?: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -3184,7 +3202,9 @@ const response = await dl_delete_mirror(agent, params);
 }
 ```
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -3202,7 +3222,7 @@ const response = await vc_mint(agent, params);
   did_id: str;
   target_address: Optional<str>;
   fee: uint64;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -3214,7 +3234,9 @@ const response = await vc_mint(agent, params);
 For content of `VCRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/vc_wallet/vc_store.ts  
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -3286,8 +3308,7 @@ const response = await vc_spend(agent, params);
   new_proof_hash: Optional<bytes32>;
   provider_inner_puzhash: Optional<bytes32>;
   fee: uint64;
-  reuse_puzhash: Optional<bool>;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -3296,7 +3317,9 @@ const response = await vc_spend(agent, params);
 }
 ```
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
 
@@ -3359,8 +3382,7 @@ const response = await vc_revoke(agent, params);
 {
   vc_parent_id: bytes32;
   fee: uint64;
-  reuse_puzhash: Optional<bool>;
-}
+} & TxEndpoint
 ```
 ### response:
 ```typescript
@@ -3369,4 +3391,35 @@ const response = await vc_revoke(agent, params);
 }
 ```
 For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
+
+---
+
+## `crcat_approve_pending(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {crcat_approve_pending} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await crcat_approve_pending(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  min_amount_to_claim: uint64;
+  fee: uint64;
+} & TxEndpoint
+```
+### response:
+```typescript
+{
+  transactions: TransactionRecordConvenience[];
+}
+```
+For content of `TransactionRecordConvenience`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts

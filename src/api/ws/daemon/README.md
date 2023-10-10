@@ -159,6 +159,8 @@ const response = await start_plotting(daemon, params);
   device?: int;
   t?: str; // Temp directory
   t2?: str; // Temp2 directory
+  disk_128? : bool;
+  disk_16? : bool;
 }
 ```
 ### madmax_params:
@@ -486,6 +488,8 @@ const response = await get_key(daemon, params);
 {
   fingerprint: uint32;
   include_secrets?: bool;
+  kc_user? : str;
+  kc_service? : str;
 }
 ```
 ### response:
@@ -517,6 +521,8 @@ const response = await get_keys(daemon, params);
 ```typescript
 {
   include_secrets?: bool;
+  kc_user? : str;
+  kc_service? : str;
 }
 ```
 ### response:
@@ -524,6 +530,71 @@ const response = await get_keys(daemon, params);
 {
   success: True;
   keys: KeyData[];
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+}
+```
+For content of `KeyData`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/util/keychain.ts
+
+---
+
+## `get_public_key(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_public_key} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_public_key(daemon, params);
+```
+### params:
+```typescript
+{
+  fingerprint: uint32;
+  kc_user?: str;
+  kc_service?: str;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  key: Omit<KeyData, "secrets">;
+} | {
+  success: False;
+  error: "keyring is locked" | "key not found" | "malformed request";
+  error_details?: {message: str} | {fingerprint: int};
+}
+```
+For content of `KeyData`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/util/keychain.ts
+
+---
+
+## `get_public_keys(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_public_keys} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_public_keys(daemon, params);
+```
+### params:
+```typescript
+{
+  kc_user?: str;
+  kc_service?: str;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  keys: Array<Omit<KeyData, "secrets">>;
 } | {
   success: False;
   error: "keyring is locked" | "key not found" | "malformed request";
@@ -549,6 +620,8 @@ const response = await set_label(daemon, params);
 {
   fingerprint: uint32;
   label: str;
+  kc_user?: str;
+  kc_service?: str;
 }
 ```
 ### response:
@@ -577,6 +650,8 @@ const response = await delete_label(daemon, params);
 ```typescript
 {
   fingerprint: uint32;
+  kc_user?: str;
+  kc_service?: str;
 }
 ```
 ### response:
