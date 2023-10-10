@@ -248,6 +248,31 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_sp
 
 ---
 
+## `get_block_spends_with_conditions(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_block_spends_with_conditions} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_block_spends_with_conditions(agent, params);
+```
+### params
+```typescript
+{
+  header_hash: str;
+}
+```
+### response
+```typescript
+{
+  block_spends_with_conditions: CoinSpendWithConditions[];
+}
+```
+For content of `CoinSpendWithConditions`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_spend_with_conditions.ts
+
+---
+
 ## `get_unfinished_block_headers(agent)`
 ### Usage
 ```js

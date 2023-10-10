@@ -47,6 +47,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_block_record`](./rpc/full_node/README.md#get_block_recordagent-params)
 - [`get_block_records`](./rpc/full_node/README.md#get_block_recordsagent-params)
 - [`get_block_spends`](./rpc/full_node/README.md#get_block_spendsagent-params)
+- [`get_block_spends_with_conditions`](./rpc/full_node/README.md#get_block_spends_with_conditionsagent-params)
 - [`get_unfinished_block_headers`](./rpc/full_node/README.md#get_unfinished_block_headersagent)
 - [`get_network_space`](./rpc/full_node/README.md#get_network_spaceagent-params)
 - [`get_additions_and_removals`](./rpc/full_node/README.md#get_additions_and_removalsagent-params)
