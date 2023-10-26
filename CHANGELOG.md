@@ -1,5 +1,9 @@
 # Changelog
 
+## [13.1.1]
+### Fixed
+- Typo in SpendBundle: `cons_spends` renamed to `coin_spends`
+
 ## [13.1.0]
 ### Added
 - [Daemon WebSocket API](./src/api/ws/daemon)
