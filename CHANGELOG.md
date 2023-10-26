@@ -4,8 +4,6 @@
 ### Added
 - [FullNode RPC API](./src/api/rpc/full_node)
   - [`get_block_spends_with_conditions`](./src/api/rpc/full_node/README.md#get_block_spends_with_conditionsagent-params)
-
-## [13.1.1]
 ### Fixed
 - Typo in SpendBundle: `cons_spends` renamed to `coin_spends`
 
