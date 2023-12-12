@@ -21,8 +21,8 @@ export const plotterDir = path.resolve(chiaRoot, "plotter");
 
 export type TConfig = Record<string, string|number|Array<string|number>|null>;
 
-let lastConfigPath: string|undefined = undefined;
-let config: TConfig|undefined;
+let _lastConfigPath: string|undefined;
+let _config: TConfig|undefined;
 
 /**
  * Get parsed config object
@@ -39,14 +39,14 @@ let config: TConfig|undefined;
  */
 export function getConfig(configFilePath?: string): TConfig {
   // Memoize config data once.
-  if(lastConfigPath === configFilePath && config){
-    return config;
+  if(_lastConfigPath === configFilePath && _config){
+    return _config;
   }
-  lastConfigPath = configFilePath;
+  _lastConfigPath = configFilePath;
   
   const file = readFileSync(configFilePath || configPath, "utf8");
   const parsedYamlObj = parse(file);
-  return config = buildConfigObj(parsedYamlObj);
+  return _config = buildConfigObj(parsedYamlObj);
 }
 
 
@@ -74,8 +74,8 @@ export function buildConfigObj(
       });
     }
     else{
-      const path = currentPath.length > 0 ? `/${currentPath.join("/")}/${propName}` : `/${propName}`;
-      product[path] = value;
+      const p = currentPath.length > 0 ? `/${currentPath.join("/")}/${propName}` : `/${propName}`;
+      product[p] = value;
     }
   }
   

@@ -35,9 +35,9 @@ export function getConnectionInfoFromConfig(destination: TDestination, config: T
     port = +(config["/data_layer/rpc_port"] as string);
   }
   else if(destination === "pool"){
-    const pool_url = config["/pool/pool_list/0/pool_url"] as string;
+    const poolUrl = config["/pool/pool_list/0/pool_url"] as string;
     const regex = /^(https?:\/\/)?([^/:]+):?(\d*)/;
-    const match = regex.exec(pool_url);
+    const match = regex.exec(poolUrl);
     if(match){
       hostname = match[2];
       port = match[3] ? +match[3] : 80;
@@ -260,9 +260,10 @@ export class RPCAgent {
         if(!res.statusCode || res.statusCode < 200 || res.statusCode >= 300){
           getLogger().error(`Status not ok: ${res.statusCode}`);
           if(res.statusCode === 404){
-            getLogger().error(`Maybe the RPCAgent is connecting to different service against target rpc command.`);
-            getLogger().error(`For example, this happens when invoking 'new_farming_info' rpc command to 'full_node' service, which 'farm' service is correct`);
-            getLogger().error(`Check invoking command is correct and connecting service/host is right for the command`);
+            getLogger().error("Maybe the RPCAgent is connecting to different service against target rpc command.");
+            getLogger().error("For example, this happens when invoking 'new_farming_info' rpc command" +
+              " to 'full_node' service, which 'farm' service is correct");
+            getLogger().error("Check invoking command is correct and connecting service/host is right for the command");
           }
           return reject(new Error(`Status not ok: ${res.statusCode}`));
         }
@@ -271,29 +272,29 @@ export class RPCAgent {
         res.on("data", chunk => {
           chunks.push(chunk);
           if(chunks.length === 0){
-            getLogger().debug(`The first response chunk data arrived`);
+            getLogger().debug("The first response chunk data arrived");
           }
         });
       
         res.on("end", () => {
           try{
             if(chunks.length > 0){
-              const data = JSONbig.parse(Buffer.concat(chunks).toString());
-              return resolve(data);
+              const d = JSONbig.parse(Buffer.concat(chunks).toString());
+              return resolve(d);
             }
           
             // RPC Server should return response like
             // {origin: string; destination: string; request_id: string; data: any; ...}
             // If no such response is returned, reject it.
-            getLogger().error(`RPC Server returned no data. This is not expected.`);
+            getLogger().error("RPC Server returned no data. This is not expected.");
             reject(new Error("Server responded without expected data"));
           }
           catch (e) {
-            getLogger().error(`Failed to parse response data`);
+            getLogger().error("Failed to parse response data");
             try{
               getLogger().error(Buffer.concat(chunks).toString());
             }
-            catch(_){}
+            catch(_){ /* Do nothing */ }
           
             reject(new Error("Server responded without expected data"));
           }
