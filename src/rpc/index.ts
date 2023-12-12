@@ -74,6 +74,8 @@ export type TRPCAgentProps = {
   port: number;
 } | {
   service: TDestination;
+  host?: string;
+  port?: number;
   configPath?: string;
   skip_hostname_verification?: boolean;
 };
@@ -134,12 +136,18 @@ export class RPCAgent {
       this._protocol = "https";
   
       const config = this._getConfig("configPath" in props ? props.configPath : undefined);
-      const {hostname, port} = getConnectionInfoFromConfig(props.service, config);
-      getLogger().debug(`Picked ${hostname}:${port} for ${props.service}`);
       
-      this._hostname = hostname;
-      this._port = port;
-  
+      if(props.host && typeof props.port === "number"){
+        this._hostname = props.host;
+        this._port = props.port;
+      }
+      else{
+        const {hostname, port} = getConnectionInfoFromConfig(props.service, config);
+        this._hostname = props.host ? props.host : hostname;
+        this._port = typeof props.port === "number" ? props.port : port;
+      }
+      getLogger().debug(`Picked ${this._hostname}:${this._port} for ${props.service}`);
+      
       const certs = this._loadCertFilesFromConfig(config);
       this._clientCert = certs.clientCert;
       this._clientKey = certs.clientKey;

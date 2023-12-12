@@ -4,6 +4,12 @@
 ### Added
 - [FullNode RPC API](./src/api/rpc/full_node)
   - [`get_block_spends_with_conditions`](./src/api/rpc/full_node/README.md#get_block_spends_with_conditionsagent-params)
+### Changed
+- [RPC Agent](./src/rpc)
+  - Allow to specify `host` / `port` on instantiating `RPCAgent` when `protocol` is not specified.  
+  ```typescript
+  const agent = new RPCAgent({host: 'example.com', port: 8444, service: 'full_node', configPath: '...'});
+  ```
 ### Fixed
 - Typo in SpendBundle: `cons_spends` renamed to `coin_spends`
 
