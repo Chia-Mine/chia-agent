@@ -1,6 +1,6 @@
 {
   "name": "chia-agent",
-  "version": "13.2.0-beta.1",
+  "version": "13.2.0-beta.2",
   "author": "ChiaMineJP <admin@chiamine.jp>",
   "description": "chia rpc/websocket client library",
   "license": "MIT",
