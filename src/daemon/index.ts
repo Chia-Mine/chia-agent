@@ -101,7 +101,7 @@ class Daemon {
       return true;
     }
     else if(this._connectedUrl){
-      getLogger().error(`Connection is still active. Please close living connection first`);
+      getLogger().error("Connection is still active. Please close living connection first");
       return false;
     }
     

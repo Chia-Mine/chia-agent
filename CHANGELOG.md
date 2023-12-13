@@ -12,6 +12,7 @@
   ```
 ### Fixed
 - Typo in SpendBundle: `cons_spends` renamed to `coin_spends`
+- Fixed an issue where sometimes error logs were not reported due to circular dependencies.
 
 ## [13.1.0]
 ### Added
