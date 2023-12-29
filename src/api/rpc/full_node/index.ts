@@ -691,6 +691,7 @@ export type RpcFullNodeMessage =
   | TGetBlockRecordResponse
   | TGetBlockRecordsResponse
   | TGetBlockSpendsResponse
+  | TGetBlockSpendsWithConditionsResponse
   | TGetBlockchainStateResponse
   | TGetBlocksResponse
   | TGetBlockCountMetricsResponse
@@ -730,6 +731,7 @@ export type RpcFullNodeMessageOnWs =
   | WsGetBlockRecordMessage
   | WsGetBlockRecordsMessage
   | WsGetBlockSpendsMessage
+  | WsGetBlockSpendsWithConditionsMessage
   | WsGetBlockchainStateMessage
   | WsGetBlocksMessage
   | WsGetBlockCountMetricsMessage

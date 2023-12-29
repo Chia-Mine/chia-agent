@@ -269,7 +269,7 @@ const response = await get_block_spends_with_conditions(agent, params);
 }
 ```
 For content of `CoinSpendWithConditions`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_spend_with_conditions.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_spend.ts
 
 ---
 
