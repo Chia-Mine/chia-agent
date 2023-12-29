@@ -7,7 +7,7 @@ import {
   int, None,
   Optional,
   str,
-  True,
+  True, uint128,
   uint16,
   uint32,
   uint64,
@@ -38,8 +38,10 @@ import {GetCoinRecords} from "../../chia/wallet/wallet_coin_store";
 import {WalletCoinRecordWithMetadata} from "../../chia/wallet/wallet_coin_record";
 import {VCRecord} from "../../chia/wallet/vc_wallet/vc_store";
 import {TransactionTypeFilter} from "../../chia/wallet/util/quality_filter";
-import {TxEndpoint} from "../../chia/wallet/util/tx_config";
+import {CoinSelectionConfigLoader, TxEndpoint} from "../../chia/wallet/util/tx_config";
 import {ConditionValidTimes} from "../../chia/wallet/conditions";
+import {DAOInfo, DAORules, ProposalInfo} from "../../chia/wallet/dao_wallet/dao_info";
+import {ParsedProposalSpend, ParsedProposalUpdate, ProposalState} from "../../chia/wallet/dao_wallet/dao_wallet";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -466,6 +468,27 @@ export type TCreate_New_DID_WalletResponse = {
   num_verifications_required: uint64;
 };
 
+export type TCreate_New_DAO_WalletRequest = {
+  wallet_type: "dao_wallet";
+  name?: str;
+  mode: "new" | "existing";
+  amount_of_cats?: uint64;
+  filter_amount: uint64;
+  fee: uint64;
+  fee_for_cat: uint64;
+  treasury_id: str;
+  
+};
+export type TCreate_New_DAO_WalletResponse = {
+  success: True;
+  type: uint8;
+  my_did: str;
+  wallet_id: uint32;
+  treasury_id: bytes32;
+  cat_wallet_id: uint32;
+  dao_cat_wallet_id: uint32;
+};
+
 export type TCreate_New_NFT_WalletRequest = {
   fee?: uint64;
   wallet_type: "nft_wallet";
@@ -515,11 +538,13 @@ export type create_new_wallet_command = typeof create_new_wallet_command;
 export type TCreateNewWalletRequest = (TCreate_New_CAT_WalletRequest
   | TCreate_New_RL_WalletRequest
   | TCreate_New_DID_WalletRequest
+  | TCreate_New_DAO_WalletRequest
   | TCreate_New_NFT_WalletRequest
   | TCreate_New_Pool_WalletRequest) & TxEndpoint;
 export type TCreateNewWalletResponse = TCreate_New_CAT_WalletResponse
   | TCreate_New_RL_WalletResponse
   | TCreate_New_DID_WalletResponse
+  | TCreate_New_DAO_WalletResponse
   | TCreate_New_NFT_WalletResponse
   | TCreate_New_Pool_WalletResponse
   | TCreateWalletErrorResponse;
@@ -823,7 +848,9 @@ export type select_coins_command = typeof select_coins_command;
 export type TSelectCoinsRequest = {
   amount: uint64;
   wallet_id: uint32;
-} & TxEndpoint;
+  exclude_coins?: Optional<Coin[]>;
+  excluded_coins?: Optional<Coin[]>;
+} & CoinSelectionConfigLoader;
 export type TSelectCoinsResponse = {
   coins: Coin[];
 };
@@ -1010,6 +1037,7 @@ export type TSignMessageByAddressRequest = {
   address: str;
   message: str;
   is_hex?: bool;
+  safe_mode?: bool;
 };
 export type TSignMessageByAddressResponse = {
   success: True;
@@ -1032,6 +1060,7 @@ export type TSignMessageByIdRequest = {
   id: str;
   message: str;
   is_hex?: bool;
+  safe_mode?: bool;
 };
 export type TSignMessageByIdResponse = {
   success: False;
@@ -1748,6 +1777,292 @@ export async function did_transfer_did<T extends TRPCAgent | TDaemon>(agent: T, 
 }
 
 
+
+// # DAO Wallet
+export const dao_adjust_filter_level_command = "dao_adjust_filter_level";
+export type dao_adjust_filter_level_command = typeof dao_adjust_filter_level_command;
+export type TDaoAdjustFilterLevelRequest = {
+  wallet_id: uint32;
+  filter_level: uint64;
+};
+export type TDaoAdjustFilterLevelResponse = {
+  success: True;
+  dao_info: DAOInfo;
+};
+export type WsDaoAdjustFilterLevelMessage = GetMessageType<chia_wallet_service, dao_adjust_filter_level_command, TDaoAdjustFilterLevelResponse>;
+export async function dao_adjust_filter_level<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoAdjustFilterLevelRequest) {
+  type R = ResType<T, TDaoAdjustFilterLevelResponse, WsDaoAdjustFilterLevelMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_adjust_filter_level_command, data);
+}
+
+
+export const dao_add_funds_to_treasury_command = "dao_add_funds_to_treasury";
+export type dao_add_funds_to_treasury_command = typeof dao_add_funds_to_treasury_command;
+export type TDaoAddFundsToTreasuryRequest = {
+  wallet_id: uint32;
+  funding_wallet_id: uint32;
+  amount: uint64;
+  fee?: uint64;
+} & TxEndpoint;
+export type TDaoAddFundsToTreasuryResponse = {
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+};
+export type WsDaoAddFundsToTreasuryMessage = GetMessageType<chia_wallet_service, dao_add_funds_to_treasury_command, TDaoAddFundsToTreasuryResponse>;
+export async function dao_add_funds_to_treasury<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoAddFundsToTreasuryRequest) {
+  type R = ResType<T, TDaoAddFundsToTreasuryResponse, WsDaoAddFundsToTreasuryMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_add_funds_to_treasury_command, data);
+}
+
+
+export const dao_get_treasury_balance_command = "dao_get_treasury_balance";
+export type dao_get_treasury_balance_command = typeof dao_get_treasury_balance_command;
+export type TDaoGetTreasuryBalanceRequest = {
+  wallet_id: uint32;
+};
+export type TDaoGetTreasuryBalanceResponse = {
+  success: True;
+  balance: Record<str, uint128>;
+};
+export type WsDaoGetTreasuryBalanceMessage = GetMessageType<chia_wallet_service, dao_get_treasury_balance_command, TDaoGetTreasuryBalanceResponse>;
+export async function dao_get_treasury_balance<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoGetTreasuryBalanceRequest) {
+  type R = ResType<T, TDaoGetTreasuryBalanceResponse, WsDaoGetTreasuryBalanceMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_get_treasury_balance_command, data);
+}
+
+
+export const dao_get_treasury_id_command = "dao_get_treasury_id";
+export type dao_get_treasury_id_command = typeof dao_get_treasury_id_command;
+export type TDaoGetTreasuryIdRequest = {
+  wallet_id: uint32;
+};
+export type TDaoGetTreasuryIdResponse = {
+  success: True;
+  treasury_id: bytes32;
+};
+export type WsDaoGetTreasuryIdMessage = GetMessageType<chia_wallet_service, dao_get_treasury_id_command, TDaoGetTreasuryIdResponse>;
+export async function dao_get_treasury_id<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoGetTreasuryIdRequest) {
+  type R = ResType<T, TDaoGetTreasuryIdResponse, WsDaoGetTreasuryIdMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_get_treasury_id_command, data);
+}
+
+
+export const dao_get_rules_command = "dao_get_rules";
+export type dao_get_rules_command = typeof dao_get_rules_command;
+export type TDaoGetRulesRequest = {
+  wallet_id: uint32;
+};
+export type TDaoGetRulesResponse = {
+  success: True;
+  rules: DAORules;
+};
+export type WsDaoGetRulesMessage = GetMessageType<chia_wallet_service, dao_get_rules_command, TDaoGetRulesResponse>;
+export async function dao_get_rules<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoGetRulesRequest) {
+  type R = ResType<T, TDaoGetRulesResponse, WsDaoGetRulesMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_get_rules_command, data);
+}
+
+
+export const dao_send_to_lockup_command = "dao_send_to_lockup";
+export type dao_send_to_lockup_command = typeof dao_send_to_lockup_command;
+export type TDaoSendToLockupRequest = {
+  wallet_id: uint32;
+  amount: uint64;
+  fee?: uint64;
+} & TxEndpoint;
+export type TDaoSendToLockupResponse = {
+  success: True;
+  tx_id: bytes32;
+  txs: TransactionRecord[];
+};
+export type WsDaoSendToLockupMessage = GetMessageType<chia_wallet_service, dao_send_to_lockup_command, TDaoSendToLockupResponse>;
+export async function dao_send_to_lockup<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoSendToLockupRequest) {
+  type R = ResType<T, TDaoSendToLockupResponse, WsDaoSendToLockupMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_send_to_lockup_command, data);
+}
+
+
+export const dao_get_proposals_command = "dao_get_proposals";
+export type dao_get_proposals_command = typeof dao_get_proposals_command;
+export type TDaoGetProposalsRequest = {
+  wallet_id: uint32;
+  include_closed?: bool;
+};
+export type TDaoGetProposalsResponse = {
+  success: True;
+  proposals: ProposalInfo[];
+  proposal_timelock: uint64;
+  soft_close_length: uint64;
+};
+export type WsDaoGetProposalsMessage = GetMessageType<chia_wallet_service, dao_get_proposals_command, TDaoGetProposalsResponse>;
+export async function dao_get_proposals<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoGetProposalsRequest) {
+  type R = ResType<T, TDaoGetProposalsResponse, WsDaoGetProposalsMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_get_proposals_command, data);
+}
+
+
+export const dao_get_proposal_state_command = "dao_get_proposal_state";
+export type dao_get_proposal_state_command = typeof dao_get_proposal_state_command;
+export type TDaoGetProposalStateRequest = {
+  wallet_id: uint32;
+  proposal_id: str;
+};
+export type TDaoGetProposalStateResponse = {
+  success: True;
+  state: ProposalState;
+};
+export type WsDaoGetProposalStateMessage = GetMessageType<chia_wallet_service, dao_get_proposal_state_command, TDaoGetProposalStateResponse>;
+export async function dao_get_proposal_state<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoGetProposalStateRequest) {
+  type R = ResType<T, TDaoGetProposalStateResponse, WsDaoGetProposalStateMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_get_proposal_state_command, data);
+}
+
+
+export const dao_exit_lockup_command = "dao_exit_lockup";
+export type dao_exit_lockup_command = typeof dao_exit_lockup_command;
+export type TDaoExitLockupRequest = {
+  wallet_id: uint32;
+  coins: Coin[] | undefined;
+  fee?: uint64;
+} & TxEndpoint;
+export type TDaoExitLockupResponse = {
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+};
+export type WsDaoExitLockupMessage = GetMessageType<chia_wallet_service, dao_exit_lockup_command, TDaoExitLockupResponse>;
+export async function dao_exit_lockup<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoExitLockupRequest) {
+  type R = ResType<T, TDaoExitLockupResponse, WsDaoExitLockupMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_exit_lockup_command, data);
+}
+
+
+export const dao_create_proposal_command = "dao_create_proposal";
+export type dao_create_proposal_command = typeof dao_create_proposal_command;
+export type TDaoCreateProposalRequest = ({
+  wallet_id: uint32;
+  proposal_type: "spend";
+  additions: Array<{
+    asset_id?: str;
+    puzzle_hash: str;
+    amount: uint64;
+  }>;
+  vote_amount?: uint64;
+  fee?: uint64;
+} | {
+  wallet_id: uint32;
+  proposal_type: "spend";
+  amount: uint64;
+  inner_address: str;
+  asset_id: str;
+  vote_amount?: uint64;
+  fee?: uint64;
+} | {
+  wallet_id: uint32;
+  proposal_type: "update";
+  new_dao_rules: Partial<DAORules>;
+  vote_amount?: uint64;
+  fee?: uint64;
+} | {
+  wallet_id: uint32;
+  proposal_type: "mint";
+  amount: uint64;
+  cat_target_address: str;
+  vote_amount?: uint64;
+  fee?: uint64;
+}) & TxEndpoint;
+export type TDaoCreateProposalResponse = {
+  success: False;
+  error: str;
+} | {
+  success: True;
+  proposal_id: bytes32;
+  tx_id: str;
+  tx: TransactionRecord;
+};
+export type WsDaoCreateProposalMessage = GetMessageType<chia_wallet_service, dao_create_proposal_command, TDaoCreateProposalResponse>;
+export async function dao_create_proposal<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoCreateProposalRequest) {
+  type R = ResType<T, TDaoCreateProposalResponse, WsDaoCreateProposalMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_create_proposal_command, data);
+}
+
+
+export const dao_vote_on_proposal_command = "dao_vote_on_proposal";
+export type dao_vote_on_proposal_command = typeof dao_vote_on_proposal_command;
+export type TDaoVoteOnProposalRequest = {
+  wallet_id: uint32;
+  vote_amount?: uint64;
+  fee?: uint64;
+  proposal_id: str;
+  is_yes_vote: bool;
+} & TxEndpoint;
+export type TDaoVoteOnProposalResponse = {
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+};
+export type WsDaoVoteOnProposalMessage = GetMessageType<chia_wallet_service, dao_vote_on_proposal_command, TDaoVoteOnProposalResponse>;
+export async function dao_vote_on_proposal<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoVoteOnProposalRequest) {
+  type R = ResType<T, TDaoVoteOnProposalResponse, WsDaoVoteOnProposalMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_vote_on_proposal_command, data);
+}
+
+
+export const dao_parse_proposal_command = "dao_parse_proposal";
+export type dao_parse_proposal_command = typeof dao_parse_proposal_command;
+export type TDaoParseProposalRequest = {
+  wallet_id: uint32;
+  proposal_id: str;
+};
+export type TDaoParseProposalResponse = {
+  success: True;
+  proposal_dictionary: ParsedProposalSpend | ParsedProposalUpdate;
+};
+export type WsDaoParseProposalMessage = GetMessageType<chia_wallet_service, dao_parse_proposal_command, TDaoParseProposalResponse>;
+export async function dao_parse_proposal<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoParseProposalRequest) {
+  type R = ResType<T, TDaoParseProposalResponse, WsDaoParseProposalMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_parse_proposal_command, data);
+}
+
+
+export const dao_close_proposal_command = "dao_close_proposal";
+export type dao_close_proposal_command = typeof dao_close_proposal_command;
+export type TDaoCloseProposalRequest = {
+  wallet_id: uint32;
+  fee?: uint64;
+  genesis_id?: str;
+  self_destruct?: bool;
+  proposal_id: str;
+} & TxEndpoint;
+export type TDaoCloseProposalResponse = {
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+};
+export type WsDaoCloseProposalMessage = GetMessageType<chia_wallet_service, dao_close_proposal_command, TDaoCloseProposalResponse>;
+export async function dao_close_proposal<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoCloseProposalRequest) {
+  type R = ResType<T, TDaoCloseProposalResponse, WsDaoCloseProposalMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_close_proposal_command, data);
+}
+
+
+export const dao_free_coins_from_finished_proposals_command = "dao_free_coins_from_finished_proposals";
+export type dao_free_coins_from_finished_proposals_command = typeof dao_free_coins_from_finished_proposals_command;
+export type TDaoFreeCoinsFromFinishedProposalsRequest = {
+  wallet_id: uint32;
+  fee?: uint64;
+} & TxEndpoint;
+export type TDaoFreeCoinsFromFinishedProposalsResponse = {
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+};
+export type WsDaoFreeCoinsFromFinishedProposalsMessage = GetMessageType<chia_wallet_service, dao_free_coins_from_finished_proposals_command, TDaoFreeCoinsFromFinishedProposalsResponse>;
+export async function dao_free_coins_from_finished_proposals<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoFreeCoinsFromFinishedProposalsRequest) {
+  type R = ResType<T, TDaoFreeCoinsFromFinishedProposalsResponse, WsDaoFreeCoinsFromFinishedProposalsMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dao_free_coins_from_finished_proposals_command, data);
+}
 
 
 // # NFT Wallet
@@ -2671,6 +2986,20 @@ export type RpcWalletMessage =
   | TDidSpendResponse
   | TDidUpdateRecoveryIdsResponse
   | TDidUpdateMetadataResponse
+  | TDaoAdjustFilterLevelResponse
+  | TDaoAddFundsToTreasuryResponse
+  | TDaoGetTreasuryBalanceResponse
+  | TDaoGetTreasuryIdResponse
+  | TDaoGetRulesResponse
+  | TDaoSendToLockupResponse
+  | TDaoGetProposalsResponse
+  | TDaoGetProposalStateResponse
+  | TDaoExitLockupResponse
+  | TDaoCreateProposalResponse
+  | TDaoVoteOnProposalResponse
+  | TDaoParseProposalResponse
+  | TDaoCloseProposalResponse
+  | TDaoFreeCoinsFromFinishedProposalsResponse
   | TNftMintNftResponse
   | TNftCountNftsResponse
   | TNftGetNftsResponse
@@ -2797,6 +3126,20 @@ export type RpcWalletMessageOnWs =
   | WsDidSpendMessage
   | WsDidUpdateRecoveryIdsMessage
   | WsDidUpdateMetadataMessage
+  | WsDaoAdjustFilterLevelMessage
+  | WsDaoAddFundsToTreasuryMessage
+  | WsDaoGetTreasuryBalanceMessage
+  | WsDaoGetTreasuryIdMessage
+  | WsDaoGetRulesMessage
+  | WsDaoSendToLockupMessage
+  | WsDaoGetProposalsMessage
+  | WsDaoGetProposalStateMessage
+  | WsDaoExitLockupMessage
+  | WsDaoCreateProposalMessage
+  | WsDaoVoteOnProposalMessage
+  | WsDaoParseProposalMessage
+  | WsDaoCloseProposalMessage
+  | WsDaoFreeCoinsFromFinishedProposalsMessage
   | WsNftMintNftMessage
   | WsNftCountNftsMessage
   | WsNftGetNftsMessage

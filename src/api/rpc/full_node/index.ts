@@ -9,12 +9,10 @@ import {MempoolItemInJsonDict} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
-import {CoinSpend} from "../../chia/types/coin_spend";
-import {CoinSpendWithConditions} from "../../chia/types/coin_spend_with_conditions";
+import {CoinSpend, CoinSpendWithConditions} from "../../chia/types/coin_spend";
 import {CLVMCost} from "../../chia/types/clvm_cost";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
-import {Mojos} from "../../chia/types/mojos";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -509,7 +507,7 @@ export type TGetFeeEstimateRequest = {
   spend_bundle?: SpendBundle;
   cost?: uint64;
   spend_type?: "send_xch_transaction" | "cat_spend" | "take_offer" | "cancel_offer" | "nft_set_nft_did"
-    | "nft_transfer_nft" | "create_new_pool_wallet" | "pw_absorb_rewards" | "create_new_did_wallet";
+  | "nft_transfer_nft" | "create_new_pool_wallet" | "pw_absorb_rewards" | "create_new_did_wallet";
   spend_count?: uint64;
   target_times: int[];
 };
