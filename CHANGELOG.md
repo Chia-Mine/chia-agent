@@ -43,7 +43,6 @@
     - Added `safe_mode` to request parameter
   - [`sign_message_by_id`](./src/api/rpc/wallet/README.md#sign_message_by_idagent-params)
     - Added `safe_mode` to request parameter
-
 ### Fixed
 - Typo in SpendBundle: `cons_spends` renamed to `coin_spends`
 - Fixed an issue where sometimes error logs were not reported due to circular dependencies.
