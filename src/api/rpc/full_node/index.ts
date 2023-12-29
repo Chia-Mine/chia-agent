@@ -9,11 +9,10 @@ import {MempoolItemInJsonDict} from "../../chia/types/mempool_item";
 import {TRPCAgent} from "../../../rpc";
 import {EndOfSubSlotBundle} from "../../chia/types/end_of_slot_bundle";
 import {SignagePoint} from "../../chia/full_node/signage_point";
-import {CoinSpend} from "../../chia/types/coin_spend";
+import {CoinSpend, CoinSpendWithConditions} from "../../chia/types/coin_spend";
 import {CLVMCost} from "../../chia/types/clvm_cost";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
-import {Mojos} from "../../chia/types/mojos";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -168,6 +167,22 @@ export type WsGetBlockSpendsMessage = GetMessageType<chia_full_node_service, get
 export async function get_block_spends<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockSpendsRequest) {
   type R = ResType<T, TGetBlockSpendsResponse, WsGetBlockSpendsMessage>;
   return agent.sendMessage<R>(chia_full_node_service, get_block_spends_command, data);
+}
+
+
+
+export const get_block_spends_with_conditions_command = "get_block_spends_with_conditions";
+export type get_block_spends_with_conditions_command = typeof get_block_spends_with_conditions_command;
+export type TGetBlockSpendsWithConditionsRequest = {
+  header_hash: str;
+};
+export type TGetBlockSpendsWithConditionsResponse = {
+  block_spends_with_conditions: CoinSpendWithConditions[];
+};
+export type WsGetBlockSpendsWithConditionsMessage = GetMessageType<chia_full_node_service, get_block_spends_with_conditions_command, TGetBlockSpendsWithConditionsResponse>;
+export async function get_block_spends_with_conditions<T extends TRPCAgent | TDaemon>(agent: T, data: TGetBlockSpendsWithConditionsRequest) {
+  type R = ResType<T, TGetBlockSpendsWithConditionsResponse, WsGetBlockSpendsWithConditionsMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_block_spends_with_conditions_command, data);
 }
 
 
@@ -492,7 +507,7 @@ export type TGetFeeEstimateRequest = {
   spend_bundle?: SpendBundle;
   cost?: uint64;
   spend_type?: "send_xch_transaction" | "cat_spend" | "take_offer" | "cancel_offer" | "nft_set_nft_did"
-    | "nft_transfer_nft" | "create_new_pool_wallet" | "pw_absorb_rewards" | "create_new_did_wallet";
+  | "nft_transfer_nft" | "create_new_pool_wallet" | "pw_absorb_rewards" | "create_new_did_wallet";
   spend_count?: uint64;
   target_times: int[];
 };
@@ -676,6 +691,7 @@ export type RpcFullNodeMessage =
   | TGetBlockRecordResponse
   | TGetBlockRecordsResponse
   | TGetBlockSpendsResponse
+  | TGetBlockSpendsWithConditionsResponse
   | TGetBlockchainStateResponse
   | TGetBlocksResponse
   | TGetBlockCountMetricsResponse
@@ -715,6 +731,7 @@ export type RpcFullNodeMessageOnWs =
   | WsGetBlockRecordMessage
   | WsGetBlockRecordsMessage
   | WsGetBlockSpendsMessage
+  | WsGetBlockSpendsWithConditionsMessage
   | WsGetBlockchainStateMessage
   | WsGetBlocksMessage
   | WsGetBlockCountMetricsMessage

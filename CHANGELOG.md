@@ -1,8 +1,51 @@
 # Changelog
 
-## [13.1.1]
+## [13.2.0]
+### Added
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_block_spends_with_conditions`](./src/api/rpc/full_node/README.md#get_block_spends_with_conditionsagent-params)
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`dao_adjust_filter_level`](./src/api/rpc/wallet/README.md#dao_adjust_filter_levelagent-params)
+  - [`dao_add_funds_to_treasury`](./src/api/rpc/wallet/README.md#dao_add_funds_to_treasuryagent-params)
+  - [`dao_get_treasury_balance`](./src/api/rpc/wallet/README.md#dao_get_treasury_balanceagent-params)
+  - [`dao_get_treasury_id`](./src/api/rpc/wallet/README.md#dao_get_treasury_idagent-params)
+  - [`dao_get_rules`](./src/api/rpc/wallet/README.md#dao_get_rulesagent-params)
+  - [`dao_send_to_lockup`](./src/api/rpc/wallet/README.md#dao_send_to_lockupagent-params)
+  - [`dao_get_proposals`](./src/api/rpc/wallet/README.md#dao_get_proposalsagent-params)
+  - [`dao_get_proposal_state`](./src/api/rpc/wallet/README.md#dao_get_proposal_stateagent-params)
+  - [`dao_exit_lockup`](./src/api/rpc/wallet/README.md#dao_exit_lockupagent-params)
+  - [`dao_create_proposal`](./src/api/rpc/wallet/README.md#dao_create_proposalagent-params)
+  - [`dao_vote_on_proposal`](./src/api/rpc/wallet/README.md#dao_vote_on_proposalagent-params)
+  - [`dao_parse_proposal`](./src/api/rpc/wallet/README.md#dao_parse_proposalagent-params)
+  - [`dao_close_proposal`](./src/api/rpc/wallet/README.md#dao_close_proposalagent-params)
+  - [`dao_free_coins_from_finished_proposals`](./src/api/rpc/wallet/README.md#dao_free_coins_from_finished_proposalsagent-params)
+- [SigningMode](./src/api/chia/types/full_block.ts)
+  - Added `CHIP_0002_HEX_INPUT` as `SigningMode`
+- [WalletType](./src/api/chia/wallet/util/wallet_types.ts)
+  - Added `DAO` and `DAO_CAT` to `WalletType`
+### Changed
+- [RPC Agent](./src/rpc)
+  - Allow to specify `host` / `port` on instantiating `RPCAgent` when `protocol` is not specified.  
+  ```typescript
+  const agent = new RPCAgent({host: 'example.com', port: 8444, service: 'full_node', configPath: '...'});
+  ```
+- [Farmer RPC API](./src/api/rpc/farmer)
+  - [`get_pool_state`](./src/api/rpc/farmer/README.md#get_pool_stateagent)
+    - Added new properties
+      - `insufficient_partials_since_start`
+      - `insufficient_partials_24h`
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`select_coins`](./src/api/rpc/wallet/README.md#select_coinsagent-params)
+    - The types of both `excluded_coins` and `exclude_coins` were changed to `Coin[]` from `str[]`.
+    - Please note that both of the above properties are just kept for compatibility so don't use them unless you have
+      strong reasons. Use `excluded_coin_ids: str[]` instead.
+  - [`sign_message_by_address`](./src/api/rpc/wallet/README.md#sign_message_by_addressagent-params)
+    - Added `safe_mode` to request parameter
+  - [`sign_message_by_id`](./src/api/rpc/wallet/README.md#sign_message_by_idagent-params)
+    - Added `safe_mode` to request parameter
 ### Fixed
 - Typo in SpendBundle: `cons_spends` renamed to `coin_spends`
+- Fixed an issue where sometimes error logs were not reported due to circular dependencies.
 
 ## [13.1.0]
 ### Added
@@ -1242,6 +1285,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[13.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.1.0...v13.2.0
 [13.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.1...v13.1.0
 [13.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.0...v13.0.1
 [13.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v12.1.0...v13.0.0

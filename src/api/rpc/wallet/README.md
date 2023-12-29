@@ -545,7 +545,7 @@ type TCreate_New_Pool_WalletRequest = {
 };
 ```
 ### response:
-One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`, `TCreateWalletErrorResponse`
+One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_DAO_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`, `TCreateWalletErrorResponse`
 ```typescript
 type TCreate_New_CAT_WalletResponse = {
   type: uint8;
@@ -569,6 +569,27 @@ type TCreate_New_DID_WalletResponse = {
   pubkey: str;
   backup_dids: bytes[];
   num_verifications_required: uint64;
+};
+
+type TCreate_New_DAO_WalletRequest = {
+  wallet_type: "dao_wallet";
+  name?: str;
+  mode: "new" | "existing";
+  amount_of_cats?: uint64;
+  filter_amount: uint64;
+  fee: uint64;
+  fee_for_cat: uint64;
+  treasury_id: str;
+
+};
+type TCreate_New_DAO_WalletResponse = {
+  success: True;
+  type: uint8;
+  my_did: str;
+  wallet_id: uint32;
+  treasury_id: bytes32;
+  cat_wallet_id: uint32;
+  dao_cat_wallet_id: uint32;
 };
 
 type TCreate_New_NFT_WalletResponse = {
@@ -1018,7 +1039,11 @@ const response = await select_coins(agent, params);
 {
   amount: uint64;
   wallet_id: uint32;
-} & TxEndpoint
+  amount: uint64;
+  wallet_id: uint32;
+  exclude_coins? : Optional<Coin[]>;
+  excluded_coins? : Optional<Coin[]>;
+} & CoinSelectionConfigLoader
 ```
 ### response:
 ```typescript
@@ -1028,7 +1053,7 @@ const response = await select_coins(agent, params);
 ```
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
-For content of `TxEndpoint`,  
+For content of `CoinSelectionConfigLoader`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
@@ -1297,6 +1322,7 @@ const response = await sign_message_by_address(agent, params);
   address: str;
   message: str;
   is_hex?: bool;
+  safe_mode?: bool;
 }
 ```
 ### response:
@@ -1327,6 +1353,7 @@ const response = await sign_message_by_id(agent, params);
   id: str;
   message: str;
   is_hex? : bool;
+  safe_mode?: bool;
 }
 ```
 ### response:
@@ -2427,6 +2454,472 @@ For content of `TransactionRecord` and `TransactionRecordConvenience`,
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
 For content of `TxEndpoint`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
+
+---
+
+## `dao_adjust_filter_level(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_adjust_filter_level} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_adjust_filter_level(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  filter_level: uint64;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  dao_info: DAOInfo;
+}
+```
+For content of `DAOInfo`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/dao_wallet/dao_info.ts
+
+---
+## `dao_add_funds_to_treasury(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_add_funds_to_treasury} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_add_funds_to_treasury(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  funding_wallet_id: uint32;
+  amount: uint64;
+  fee?: uint64;
+} & TxEndpoint
+```
+### response:
+```typescript
+{
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+}
+```
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
+
+---
+## `dao_get_treasury_balance(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_get_treasury_balance} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_get_treasury_balance(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  balance: Record<str, uint128>;
+}
+```
+
+---
+## `dao_get_treasury_id(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_get_treasury_id} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_get_treasury_id(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  treasury_id: bytes32;
+}
+```
+
+---
+## `dao_get_rules(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_get_rules} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_get_rules(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  rules: DAORules;
+}
+```
+
+---
+## `dao_send_to_lockup(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_send_to_lockup} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_send_to_lockup(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  amount: uint64;
+  fee?: uint64;
+} & TxEndpoint;
+```
+### response:
+```typescript
+{
+  success: True;
+  tx_id: bytes32;
+  txs: TransactionRecord[];
+}
+```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dao_get_proposals(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_get_proposals} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_get_proposals(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  include_closed?: bool;
+};
+```
+### response:
+```typescript
+{
+  success: True;
+  proposals: ProposalInfo[];
+  proposal_timelock: uint64;
+  soft_close_length: uint64;
+}
+```
+For content of `ProposalInfo`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/dao_wallet/dao_info.ts  
+
+---
+
+## `dao_get_proposal_state(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_get_proposal_state} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_get_proposal_state(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  proposal_id: str;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  state: ProposalState;
+}
+```
+For content of `ProposalState`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/dao_wallet/dao_wallet.ts
+
+---
+
+## `dao_exit_lockup(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_exit_lockup} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_exit_lockup(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  coins: Coin[] | undefined;
+  fee?: uint64;
+} & TxEndpoint
+```
+### response:
+```typescript
+{
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+}
+```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dao_create_proposal(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_create_proposal} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_create_proposal(agent, params);
+```
+### params:
+```typescript
+({
+  wallet_id: uint32;
+  proposal_type: "spend";
+  additions: Array<{
+    asset_id?: str;
+    puzzle_hash: str;
+    amount: uint64;
+  }>;
+  vote_amount?: uint64;
+  fee?: uint64;
+} | {
+  wallet_id: uint32;
+  proposal_type: "spend";
+  amount: uint64;
+  inner_address: str;
+  asset_id: str;
+  vote_amount?: uint64;
+  fee?: uint64;
+} | {
+  wallet_id: uint32;
+  proposal_type: "update";
+  new_dao_rules: Partial<DAORules>;
+  vote_amount?: uint64;
+  fee?: uint64;
+} | {
+  wallet_id: uint32;
+  proposal_type: "mint";
+  amount: uint64;
+  cat_target_address: str;
+  vote_amount?: uint64;
+  fee?: uint64;
+}) & TxEndpoint
+```
+### response:
+```typescript
+{
+  success: False;
+  error: str;
+} | {
+  success: True;
+  proposal_id: bytes32;
+  tx_id: str;
+  tx: TransactionRecord;
+}
+```
+For content of `DAORules`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/dao_wallet/dao_info.ts  
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dao_vote_on_proposal(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_vote_on_proposal} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_vote_on_proposal(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  vote_amount?: uint64;
+  fee?: uint64;
+  proposal_id: str;
+  is_yes_vote: bool;
+} & TxEndpoint
+```
+### response:
+```typescript
+{
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+}
+```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dao_parse_proposal(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_parse_proposal} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_parse_proposal(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  proposal_id: str;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  proposal_dictionary: ParsedProposalSpend | ParsedProposalUpdate;
+}
+```
+For content of `ParsedProposalSpend`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/dao_wallet/dao_wallet.ts  
+For content of `ParsedProposalUpdate`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/dao_wallet/dao_wallet.ts  
+
+---
+
+## `dao_close_proposal(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_close_proposal} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_close_proposal(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  fee?: uint64;
+  genesis_id?: str;
+  self_destruct?: bool;
+  proposal_id: str;
+} & TxEndpoint
+```
+### response:
+```typescript
+{
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+}
+```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dao_close_proposal(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_close_proposal} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_close_proposal(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  fee?: uint64;
+  genesis_id?: str;
+  self_destruct?: bool;
+  proposal_id: str;
+} & TxEndpoint
+```
+### response:
+```typescript
+{
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+}
+```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+
+---
+
+## `dao_free_coins_from_finished_proposals(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dao_free_coins_from_finished_proposals} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dao_free_coins_from_finished_proposals(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  fee?: uint64;
+} & TxEndpoint
+```
+### response:
+```typescript
+{
+  success: True;
+  tx_id: bytes32;
+  tx: TransactionRecord;
+}
+```
+For content of `TxEndpoint`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts  
+For content of `TransactionRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
 ---
 

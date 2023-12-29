@@ -36,6 +36,8 @@ export type PoolState = {
   valid_partials_24h: Array<[uint32, uint64]>;
   invalid_partials_since_start: int;
   invalid_partials_24h: Array<[uint32, uint64]>;
+  insufficient_partials_since_start: int;
+  insufficient_partials_24h: Array<[uint32, uint64]>;
   stale_partials_since_start: int;
   stale_partials_24h: Array<[uint32, uint64]>;
   missing_partials_since_start: int;

@@ -5,11 +5,11 @@ export type Writer = {
 };
 
 const logPriority: Record<TLogLevel, number> = {
-  "none": 9999,
-  "error": 4,
-  "warning": 3,
-  "info": 2,
-  "debug": 1,
+  none: 9999,
+  error: 4,
+  warning: 3,
+  info: 2,
+  debug: 1,
 };
 
 class ConsoleWriter implements Writer {
@@ -21,6 +21,44 @@ class ConsoleWriter implements Writer {
 let currentLogLevel: TLogLevel = "error";
 export function getLogLevel(){ return currentLogLevel; }
 export function setLogLevel(logLevel: TLogLevel){ return currentLogLevel = logLevel; }
+
+function stringify(obj: any, indent?: number){
+  if(typeof obj === "string"){
+    return obj;
+  }
+  else if(typeof obj === "number"){
+    return `${obj}`;
+  }
+  else if(typeof obj === "boolean"){
+    return `${obj}`;
+  }
+  else if(typeof obj === "bigint"){
+    return `${obj}`;
+  }
+  else if(typeof obj === "symbol"){
+    return obj.toString();
+  }
+  else if(typeof obj === "undefined"){
+    return "undefined";
+  }
+  else if(typeof obj === "function"){
+    return "[Function]";
+  }
+  
+  const seen = new WeakSet();
+  return JSON.stringify(obj, (k, v) => {
+    if(typeof v === "object" && v !== null){
+      if(seen.has(v)){
+        return undefined;
+      }
+      seen.add(v);
+    }
+    else if(typeof v === "bigint"){
+      return `${v}n`;
+    }
+    return v;
+  }, indent);
+}
 
 const loggers: Partial<Record<TDestination, Logger>> = {};
 
@@ -69,27 +107,27 @@ class Logger {
     return `${(new Date()).toLocaleString()} [${level.toUpperCase()}] ${body}`;
   }
   
-  public debug(msg: string){
+  public debug(msg: any){
     if(this.shouldWrite("debug")){
-      this._writer.write(this.formatMessage("debug", msg));
+      this._writer.write(this.formatMessage("debug", stringify(msg)));
     }
   }
   
-  public info(msg: string){
+  public info(msg: any){
     if(this.shouldWrite("info")){
-      this._writer.write(this.formatMessage("info", msg));
+      this._writer.write(this.formatMessage("info", stringify(msg)));
     }
   }
   
-  public warning(msg: string){
+  public warning(msg: any){
     if(this.shouldWrite("warning")){
-      this._writer.write(this.formatMessage("warning", msg));
+      this._writer.write(this.formatMessage("warning", stringify(msg)));
     }
   }
   
-  public error(msg: string){
+  public error(msg: any){
     if(this.shouldWrite("error")){
-      this._writer.write(this.formatMessage("error", msg));
+      this._writer.write(this.formatMessage("error", stringify(msg)));
     }
   }
 }
