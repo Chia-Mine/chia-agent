@@ -80,11 +80,6 @@ export type TRPCAgentProps = {
   skip_hostname_verification?: boolean;
 };
 
-export type ErrorResponse = {
-  error: string;
-  success: false;
-};
-
 const userAgent = "chia-agent/1.0.0";
 
 export class RPCAgent {
@@ -203,7 +198,7 @@ export class RPCAgent {
     destination: string,
     command: string,
     data?: Record<string, unknown>,
-  ): Promise<M | ErrorResponse> {
+  ): Promise<M> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     
@@ -252,7 +247,7 @@ export class RPCAgent {
           }
           p += "?";
           for(const key in data){
-            if(data.hasOwnProperty(key)){
+            if(Object.prototype.hasOwnProperty.call(data, key)){
               p += `${key}=${data[key]}`;
             }
           }
@@ -287,7 +282,21 @@ export class RPCAgent {
         res.on("end", () => {
           try{
             if(chunks.length > 0){
-              const d = JSONbig.parse(Buffer.concat(chunks).toString());
+              const entireChunks = Buffer.concat(chunks);
+              const serializedData = entireChunks.toString();
+              const d = JSONbig.parse(serializedData);
+              if(typeof d !== "object" || !d){
+                getLogger().error(`Response is expected to be an object but received: ${serializedData}`);
+                return reject(new Error(`Unexpected response format: ${serializedData}`));
+              }
+              else if(!Object.prototype.hasOwnProperty.call(d, "success")){
+                getLogger().error("Response has no 'success' property");
+                return reject(new Error(`Response has no 'success' property: ${serializedData}`));
+              }
+              if(!d.success){
+                getLogger().error(`API failure: ${d.error}`);
+                return reject(d);
+              }
               return resolve(d);
             }
           

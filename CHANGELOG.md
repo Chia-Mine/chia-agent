@@ -1,5 +1,9 @@
 # Changelog
 
+## [14.0.0]
+### Breaking change
+- When RPC API responds with `success: false`, its `Promise` now does `reject`. (Previously it does `resolve`)
+
 ## [13.2.0]
 ### Added
 - [FullNode RPC API](./src/api/rpc/full_node)
@@ -1285,6 +1289,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+
+[14.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.2.0...v14.0.0
 [13.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.1.0...v13.2.0
 [13.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.1...v13.1.0
 [13.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.0...v13.0.1
