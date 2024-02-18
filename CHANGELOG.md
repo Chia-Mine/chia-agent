@@ -21,6 +21,8 @@ const agent = new RPCAgent({
   maxSockets: 1, // Avoid to set `1` if your requests may be sent in parallel.
   timeout: 5000,
 });
+const res = await get_plots(agent);
+console.log(res.plots[0]);
 ```
 
 ## [13.2.0]
