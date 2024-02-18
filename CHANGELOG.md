@@ -3,6 +3,25 @@
 ## [14.0.0]
 ### Breaking change
 - When RPC API responds with `success: false`, its `Promise` now does `reject`. (Previously it does `resolve`)
+### Added
+- Added connectivity options for `RPCAgent`.
+  - `keepAlive` (default: `true`)
+  - `keepAliveMsecs` (default: `1000`)
+  - `maxSockets` (default: `Infinity`)
+  - `timeout` (default: `undefined`)
+```typescript
+// Usage
+const {RPCAgent, setLogLevel} = require("chia-agent");
+const {get_plots} = require("chia-agent/api/rpc");
+
+const agent = new RPCAgent({
+  service: "harvester",
+  keepAlive: true,
+  keepAliveMsecs: 3000,
+  maxSockets: 1, // Avoid to set `1` if your requests may be sent in parallel.
+  timeout: 5000,
+});
+```
 
 ## [13.2.0]
 ### Added

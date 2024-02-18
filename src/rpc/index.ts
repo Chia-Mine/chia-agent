@@ -62,22 +62,38 @@ export type TRPCAgentProps = {
   client_cert?: string|Buffer;
   client_key?: string|Buffer;
   skip_hostname_verification?: boolean;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 } | {
   protocol: "https";
   host: string;
   port: number;
   configPath: string;
   skip_hostname_verification?: boolean;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 } | {
   protocol: "http";
   host: string;
   port: number;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 } | {
   service: TDestination;
   host?: string;
   port?: number;
   configPath?: string;
   skip_hostname_verification?: boolean;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 };
 
 const userAgent = "chia-agent/1.0.0";
@@ -91,12 +107,23 @@ export class RPCAgent {
   protected _clientKey?: string|Buffer = "";
   protected _agent: HttpsAgent|HttpAgent;
   protected _skip_hostname_verification: boolean = false;
+  protected _keepAlive: boolean = true;
+  protected _keepAliveMsecs: number = 1000;
+  protected _maxSockets: number = Infinity;
+  protected _timeout?: number = undefined;
   
   public constructor(props: TRPCAgentProps) {
     if("protocol" in props){
       this._protocol = props.protocol;
       this._hostname = props.host;
       this._port = props.port;
+      this._keepAlive = props.keepAlive !== false;
+      this._keepAliveMsecs = typeof props.keepAliveMsecs === "number" && props.keepAliveMsecs > 0 ?
+        props.keepAliveMsecs : this._keepAliveMsecs;
+      this._maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
+        props.maxSockets : this._maxSockets;
+      this._timeout = typeof props.timeout === "number" && props.timeout > 0 ?
+        props.timeout : this._timeout;
   
       if(props.protocol === "https"){
         if("configPath" in props){
@@ -121,15 +148,29 @@ export class RPCAgent {
           cert: this._clientCert,
           key: this._clientKey,
           rejectUnauthorized: Boolean(this._caCert) && this._hostname !== "localhost",
+          keepAlive: this._keepAlive,
+          keepAliveMsecs: this._keepAliveMsecs,
+          maxSockets: this._maxSockets,
+          timeout: this._timeout,
         });
       }
       else{
-        this._agent = new HttpAgent();
+        this._agent = new HttpAgent({
+          keepAlive: this._keepAlive,
+          keepAliveMsecs: this._keepAliveMsecs,
+          maxSockets: this._maxSockets,
+          timeout: this._timeout,
+        });
       }
     }
     else{
       this._protocol = "https";
-  
+      this._keepAlive = props.keepAlive !== false;
+      this._keepAliveMsecs = typeof props.keepAliveMsecs === "number" ? props.keepAliveMsecs : this._keepAliveMsecs;
+      this._maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
+        props.maxSockets : this._maxSockets;
+      this._timeout = typeof props.timeout === "number" && props.timeout > 0 ? props.timeout : this._timeout;
+      
       const config = this._getConfig("configPath" in props ? props.configPath : undefined);
       
       if(props.host && typeof props.port === "number"){
@@ -156,6 +197,10 @@ export class RPCAgent {
         cert: this._clientCert,
         key: this._clientKey,
         rejectUnauthorized: Boolean(this._caCert) && this._hostname !== "localhost",
+        keepAlive: this._keepAlive,
+        keepAliveMsecs: this._keepAliveMsecs,
+        maxSockets: this._maxSockets,
+        timeout: this._timeout,
       });
     }
   }
