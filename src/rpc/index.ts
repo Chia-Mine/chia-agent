@@ -5,6 +5,7 @@ import {existsSync, readFileSync} from "fs";
 import * as JSONbigBuilder from "@chiamine/json-bigint";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
+import {APIAgent} from "../agent/index";
 
 const JSONbig = JSONbigBuilder({
   useNativeBigInt: true,
@@ -98,7 +99,7 @@ export type TRPCAgentProps = {
 
 const userAgent = "chia-agent/1.0.0";
 
-export class RPCAgent {
+export class RPCAgent implements APIAgent {
   protected _protocol: "http"|"https";
   protected _hostname: string;
   protected _port: number;
@@ -376,4 +377,4 @@ export class RPCAgent {
   }
 }
 
-export type TRPCAgent = InstanceType<typeof RPCAgent>;
+export type TRPCAgent = APIAgent;

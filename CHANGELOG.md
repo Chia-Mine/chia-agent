@@ -3,6 +3,18 @@
 ## [14.0.0]
 ### Breaking change
 - When RPC API responds with `success: false`, its `Promise` now does `reject`. (Previously it does `resolve`)
+### Changed
+- Loosened a type of `agent` to call RPC APIs. RPC APIs can be invoked with `agent` which just implements
+  `sendMessage` method depicted as below.
+```typescript
+export interface APIAgent {
+  sendMessage<M extends unknown>(
+          destination: string,
+          command: string,
+          data?: Record<string, unknown>,
+  ): Promise<M>;
+}
+```
 ### Added
 - Added connectivity options for `RPCAgent`.
   - `keepAlive` (default: `true`)
@@ -24,6 +36,8 @@ const agent = new RPCAgent({
 const res = await get_plots(agent);
 console.log(res.plots[0]);
 ```
+### Fixed
+- Fixed an issue where some of the RPC Pool APIs did not handle request parameters correctly.
 
 ## [13.2.0]
 ### Added

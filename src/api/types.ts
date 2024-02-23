@@ -13,7 +13,7 @@ export type GetMessageType<O extends string, C extends string, D> = {
   destination: string;
 };
 
-export type ResType<T extends TRPCAgent | TDaemon, A, D> = T extends TRPCAgent ? A : D;
+export type ResType<T extends TRPCAgent | TDaemon, A, D> = T extends TDaemon ? D : A;
 
 export const wallet_ui_service = "wallet_ui";
 export const metrics_service = "metrics";
