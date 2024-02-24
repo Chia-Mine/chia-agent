@@ -23,7 +23,7 @@ export interface APIAgent {
   - `timeout` (default: `undefined`)
 ```typescript
 // Usage
-const {RPCAgent, setLogLevel} = require("chia-agent");
+const {RPCAgent} = require("chia-agent");
 const {get_plots} = require("chia-agent/api/rpc");
 
 const agent = new RPCAgent({
@@ -34,8 +34,27 @@ const agent = new RPCAgent({
   timeout: 5000,
 });
 const res = await get_plots(agent);
-console.log(res.plots[0]);
 ```
+- Added `httpsAgent`, `httpAgent` option for `RPCAgent`.
+  You can now configure and inject your own `require('https').Agent` into `RPCAgent`.
+```typescript
+// Usage
+const {Agent: HttpsAgent} = require("https"); // or const {Agent: HttpAgent} = require('http');
+const {RPCAgent} = require("chia-agent");
+const {get_plots} = require("chia-agent/api/rpc");
+
+const httpsAgent = new HttpsAgent({
+  host: "localhost",
+  port: 8560,
+  ca: ...,
+  cert: ...,
+  key: ...,
+  rejectUnauthorized: false,
+});
+const agent = new RPCAgent({httpsAgent: httpsAgent}); // `new RPCAgent({httpAgent: httpAgent});` is also allowed.
+const res = await get_plots(agent);
+```
+
 ### Fixed
 - Fixed an issue where some of the RPC Pool APIs did not handle request parameters correctly.
 

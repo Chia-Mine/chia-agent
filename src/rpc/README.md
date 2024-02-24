@@ -146,3 +146,40 @@ const agent = new RPCAgent({
 });
 ```
 
+---
+
+**Case 5** Configure your own `HttpsAgent`.
+
+```typescript
+{
+  httpsAgent: require('https').Agent; // An instance of require('https').Agent
+  skip_hostname_verification?: boolean;
+}
+```
+example
+```js
+const httpsAgent = new require('https').Agent({...});
+const agent = new RPCAgent({
+  httpsAgent: httpsAgent,
+  skip_hostname_verification: true,
+});
+```
+
+---
+
+**Case 6** Configure your own `HttpAgent`.
+
+```typescript
+{
+  httpAgent: require('http').Agent; // An instance of require('http').Agent
+  skip_hostname_verification?: boolean;
+}
+```
+example
+```js
+const httpAgent = new require('http').Agent({...});
+const agent = new RPCAgent({
+  httpsAgent: httpAgent,
+  skip_hostname_verification: true,
+});
+```

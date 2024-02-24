@@ -55,6 +55,40 @@ export function getConnectionInfoFromConfig(destination: TDestination, config: T
   return {hostname, port};
 }
 
+export function getConf(configPath?: string) {
+  configPath = configPath || defaultConfigPath;
+  if (!existsSync(configPath)) {
+    getLogger().error(`chia config file does not exist at: ${configPath}`)
+    throw new Error("chia config file Not Found.");
+  }
+  
+  return getConfig(configPath);
+}
+
+export function loadCertFilesFromConfig(config: TConfig) {
+  const clientCertPath = resolveFromChiaRoot([config["/daemon_ssl/private_crt"]] as string[]);
+  const clientKeyPath = resolveFromChiaRoot([config["/daemon_ssl/private_key"]] as string[]);
+  const caCertPath = resolveFromChiaRoot([config["/private_ssl_ca/crt"]] as string[]);
+  
+  getLogger().debug(`Loading client cert file from ${clientCertPath}`);
+  getLogger().debug(`Loading client key file from ${clientKeyPath}`);
+  getLogger().debug(`Loading ca cert file from ${caCertPath}`);
+  
+  const getCertOrKey = (path: string) => {
+    if (!existsSync(path)) {
+      getLogger().error(`ssl crt/key does not exist at: ${path}`)
+      throw new Error(`crt/key Not Found at ${path}`);
+    }
+    return readFileSync(path);
+  };
+  
+  const clientCert = getCertOrKey(clientCertPath);
+  const clientKey = getCertOrKey(clientKeyPath);
+  const caCert = getCertOrKey(caCertPath);
+  
+  return {clientCert, clientKey, caCert};
+}
+
 export type TRPCAgentProps = {
   protocol: "https";
   host: string;
@@ -95,149 +129,124 @@ export type TRPCAgentProps = {
   keepAliveMsecs?: number;
   maxSockets?: number;
   timeout?: number;
+} | {
+  httpsAgent: HttpsAgent;
+  skip_hostname_verification?: boolean;
+} | {
+  httpAgent: HttpAgent;
+  skip_hostname_verification?: boolean;
 };
 
 const userAgent = "chia-agent/1.0.0";
 
 export class RPCAgent implements APIAgent {
   protected _protocol: "http"|"https";
-  protected _hostname: string;
-  protected _port: number;
-  protected _caCert?: string|Buffer = "";
-  protected _clientCert?: string|Buffer = "";
-  protected _clientKey?: string|Buffer = "";
   protected _agent: HttpsAgent|HttpAgent;
   protected _skip_hostname_verification: boolean = false;
-  protected _keepAlive: boolean = true;
-  protected _keepAliveMsecs: number = 1000;
-  protected _maxSockets: number = Infinity;
-  protected _timeout?: number = undefined;
   
   public constructor(props: TRPCAgentProps) {
-    if("protocol" in props){
+    if("httpsAgent" in props){
+      this._protocol = "https";
+      this._agent = props.httpsAgent;
+      this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
+    }
+    else if("httpAgent" in props){
+      this._protocol = "http";
+      this._agent = props.httpAgent;
+      this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
+    }
+    else if("protocol" in props){
       this._protocol = props.protocol;
-      this._hostname = props.host;
-      this._port = props.port;
-      this._keepAlive = props.keepAlive !== false;
-      this._keepAliveMsecs = typeof props.keepAliveMsecs === "number" && props.keepAliveMsecs > 0 ?
-        props.keepAliveMsecs : this._keepAliveMsecs;
-      this._maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
-        props.maxSockets : this._maxSockets;
-      this._timeout = typeof props.timeout === "number" && props.timeout > 0 ?
-        props.timeout : this._timeout;
+      const {host, port} = props;
+      let clientCert: string | Buffer | undefined;
+      let clientKey: string | Buffer | undefined;
+      let caCert: string | Buffer | undefined;
+      
+      const keepAlive = props.keepAlive !== false;
+      const keepAliveMsecs = typeof props.keepAliveMsecs === "number" && props.keepAliveMsecs > 0 ?
+        props.keepAliveMsecs : 1000;
+      const maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
+        props.maxSockets : Infinity;
+      const timeout = typeof props.timeout === "number" && props.timeout > 0 ?
+        props.timeout : undefined;
   
       if(props.protocol === "https"){
         if("configPath" in props){
-          const config = this._getConfig(props.configPath);
-          const certs = this._loadCertFilesFromConfig(config);
-          this._clientCert = certs.clientCert;
-          this._clientKey = certs.clientKey;
-          this._caCert = certs.caCert;
+          const config = getConf(props.configPath);
+          const certs = loadCertFilesFromConfig(config);
+          clientCert = certs.clientCert;
+          clientKey = certs.clientKey;
+          caCert = certs.caCert;
           this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
         }
         else{
-          this._caCert = props.ca_cert;
-          this._clientCert = props.client_cert;
-          this._clientKey = props.client_key;
+          ({client_cert: clientCert, client_key: clientKey, ca_cert: caCert} = props);
           this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
         }
     
         this._agent = new HttpsAgent({
-          host: this._hostname,
-          port: this._port,
-          ca: this._caCert,
-          cert: this._clientCert,
-          key: this._clientKey,
-          rejectUnauthorized: Boolean(this._caCert) && this._hostname !== "localhost",
-          keepAlive: this._keepAlive,
-          keepAliveMsecs: this._keepAliveMsecs,
-          maxSockets: this._maxSockets,
-          timeout: this._timeout,
+          host,
+          port,
+          ca: caCert,
+          cert: clientCert,
+          key: clientKey,
+          rejectUnauthorized: Boolean(caCert) && host !== "localhost",
+          keepAlive,
+          keepAliveMsecs,
+          maxSockets,
+          timeout,
         });
       }
       else{
         this._agent = new HttpAgent({
-          keepAlive: this._keepAlive,
-          keepAliveMsecs: this._keepAliveMsecs,
-          maxSockets: this._maxSockets,
-          timeout: this._timeout,
+          keepAlive,
+          keepAliveMsecs,
+          maxSockets,
+          timeout,
         });
       }
     }
     else{
       this._protocol = "https";
-      this._keepAlive = props.keepAlive !== false;
-      this._keepAliveMsecs = typeof props.keepAliveMsecs === "number" ? props.keepAliveMsecs : this._keepAliveMsecs;
-      this._maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
-        props.maxSockets : this._maxSockets;
-      this._timeout = typeof props.timeout === "number" && props.timeout > 0 ? props.timeout : this._timeout;
+      let host: string | undefined;
+      let port: number | undefined;
+      const keepAlive = props.keepAlive !== false;
+      const keepAliveMsecs = typeof props.keepAliveMsecs === "number" && props.keepAliveMsecs > 0 ?
+        props.keepAliveMsecs : 1000;
+      const maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
+        props.maxSockets : Infinity;
+      const timeout = typeof props.timeout === "number" && props.timeout > 0 ?
+        props.timeout : undefined;
       
-      const config = this._getConfig("configPath" in props ? props.configPath : undefined);
+      const config = getConf("configPath" in props ? props.configPath : undefined);
       
       if(props.host && typeof props.port === "number"){
-        this._hostname = props.host;
-        this._port = props.port;
+        ({host, port} = props);
       }
       else{
-        const {hostname, port} = getConnectionInfoFromConfig(props.service, config);
-        this._hostname = props.host ? props.host : hostname;
-        this._port = typeof props.port === "number" ? props.port : port;
+        const info = getConnectionInfoFromConfig(props.service, config);
+        host = props.host ? props.host : info.hostname;
+        port = typeof props.port === "number" ? props.port : info.port;
       }
-      getLogger().debug(`Picked ${this._hostname}:${this._port} for ${props.service}`);
+      getLogger().debug(`Picked ${host}:${port} for ${props.service}`);
       
-      const certs = this._loadCertFilesFromConfig(config);
-      this._clientCert = certs.clientCert;
-      this._clientKey = certs.clientKey;
-      this._caCert = certs.caCert;
+      const certs = loadCertFilesFromConfig(config);
+      const {clientCert, clientKey, caCert} = certs;
       this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
   
       this._agent = new HttpsAgent({
-        host: this._hostname,
-        port: this._port,
-        ca: this._caCert,
-        cert: this._clientCert,
-        key: this._clientKey,
-        rejectUnauthorized: Boolean(this._caCert) && this._hostname !== "localhost",
-        keepAlive: this._keepAlive,
-        keepAliveMsecs: this._keepAliveMsecs,
-        maxSockets: this._maxSockets,
-        timeout: this._timeout,
+        host: host,
+        port: port,
+        ca: caCert,
+        cert: clientCert,
+        key: clientKey,
+        rejectUnauthorized: Boolean(caCert) && host !== "localhost",
+        keepAlive,
+        keepAliveMsecs,
+        maxSockets,
+        timeout,
       });
     }
-  }
-  
-  protected _getConfig(configPath?: string){
-    configPath = configPath || defaultConfigPath;
-    if (!existsSync(configPath)) {
-      getLogger().error(`chia config file does not exist at: ${configPath}`)
-      throw new Error("chia config file Not Found.");
-    }
-  
-    return getConfig(configPath);
-  }
-  
-  protected _loadCertFilesFromConfig(config: TConfig){
-    const clientCertPath = resolveFromChiaRoot([config["/daemon_ssl/private_crt"]] as string[]);
-    const clientKeyPath = resolveFromChiaRoot([config["/daemon_ssl/private_key"]] as string[]);
-    const caCertPath = resolveFromChiaRoot([config["/private_ssl_ca/crt"]] as string[]);
-    
-    getLogger().debug(`Loading client cert file from ${clientCertPath}`);
-    getLogger().debug(`Loading client key file from ${clientKeyPath}`);
-    getLogger().debug(`Loading ca cert file from ${caCertPath}`);
-  
-    const getCertOrKey = (path: string) => {
-      if (!existsSync(path)) {
-        getLogger().error(`ssl crt/key does not exist at: ${path}`)
-        throw new Error(`crt/key Not Found at ${path}`);
-      }
-      return readFileSync(path);
-    };
-  
-    const clientCert = getCertOrKey(clientCertPath);
-    const clientKey = getCertOrKey(clientKeyPath);
-    const caCert = getCertOrKey(caCertPath);
-    
-    return {clientCert, clientKey, caCert};
   }
   
   public async sendMessage<M extends unknown>(
@@ -257,9 +266,6 @@ export class RPCAgent implements APIAgent {
       const pathname = `/${path.replace(/^\/+/, "")}`;
       const METHOD = method.toUpperCase();
       const options: RequestOptions & {checkServerIdentity?: typeof checkServerIdentity;} = {
-        protocol: this._protocol + ":", // nodejs's https module requires protocol to include ':'.
-        hostname: this._hostname,
-        port: `${this._port}`,
         path: pathname,
         method: METHOD,
         agent: this._agent,
