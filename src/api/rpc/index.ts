@@ -48,6 +48,8 @@ export {
   TGetAdditionsAndRemovalsRequest,
   TGetAdditionsAndRemovalsResponse,
   get_additions_and_removals,
+  TGetAggsigAdditionalDataResponse,
+  get_aggsig_additional_data,
   TGetAllMempoolItemsRequest,
   TGetAllMempoolItemsResponse,
   get_all_mempool_items,

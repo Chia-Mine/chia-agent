@@ -51,6 +51,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_unfinished_block_headers`](./rpc/full_node/README.md#get_unfinished_block_headersagent)
 - [`get_network_space`](./rpc/full_node/README.md#get_network_spaceagent-params)
 - [`get_additions_and_removals`](./rpc/full_node/README.md#get_additions_and_removalsagent-params)
+- [`get_aggsig_additional_data`](./rpc/full_node/README.md#get_aggsig_additional_dataagent)
 - [`get_initial_freeze_period_of_full_node`](./rpc/full_node/README.md#get_initial_freeze_period_of_full_nodeagent)
 - [`get_network_info_of_full_node`](./rpc/full_node/README.md#get_network_info_of_full_nodeagent)
 - [`get_recent_signage_point_or_eos`](./rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)

@@ -54,6 +54,8 @@ const httpsAgent = new HttpsAgent({
 const agent = new RPCAgent({httpsAgent: httpsAgent}); // `new RPCAgent({httpAgent: httpAgent});` is also allowed.
 const res = await get_plots(agent);
 ```
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - [`get_aggsig_additional_data`](./src/api/rpc/full_node/README.md#get_aggsig_additional_dataagent)
 
 ### Fixed
 - Fixed an issue where some of the RPC Pool APIs did not handle request parameters correctly.
