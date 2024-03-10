@@ -235,6 +235,17 @@ export async function get_additions_and_removals<T extends TRPCAgent | TDaemon>(
 }
 
 
+export const get_aggsig_additional_data_command = "get_aggsig_additional_data";
+export type get_aggsig_additional_data_command = typeof get_aggsig_additional_data_command;
+export type TGetAggsigAdditionalDataResponse = {
+  additional_data: str;
+};
+export type WsGetAggsigAdditionalDataMessage = GetMessageType<chia_full_node_service, get_aggsig_additional_data_command, TGetAggsigAdditionalDataResponse>;
+export async function get_aggsig_additional_data<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetAggsigAdditionalDataResponse, WsGetAggsigAdditionalDataMessage>;
+  return agent.sendMessage<R>(chia_full_node_service, get_aggsig_additional_data_command);
+}
+
 
 export const get_initial_freeze_period_command_of_full_node = "get_initial_freeze_period";
 export type get_initial_freeze_period_command_of_full_node = typeof get_initial_freeze_period_command_of_full_node;
@@ -684,6 +695,7 @@ export async function reorg_blocks<T extends TRPCAgent | TDaemon>(agent: T, data
 
 export type RpcFullNodeMessage =
   TGetAdditionsAndRemovalsResponse
+  | TGetAggsigAdditionalDataResponse
   | TGetAllMempoolItemsResponse
   | TGetAllMempoolTxIdsResponse
   | TGetBlockResponse
@@ -724,6 +736,7 @@ export type RpcFullNodeMessage =
 
 export type RpcFullNodeMessageOnWs =
   WsGetAdditionsAndRemovalsMessage
+  | WsGetAggsigAdditionalDataMessage
   | WsGetAllMempoolItemsMessage
   | WsGetAllMempoolTxIdsMessage
   | WsGetBlockMessage

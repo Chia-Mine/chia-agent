@@ -1,4 +1,4 @@
-import {int, Optional, str} from "../types/_python_types_";
+import {bool, int, Optional, str, uint8} from "../types/_python_types_";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 
 export type KeyValueMarshalled = {
@@ -55,4 +55,44 @@ export type RootMarshalled = {
   node_hash: Optional<str>;
   generation: int;
   status: int;
+};
+
+export type ProofLayer = {
+  other_hash_side: uint8;
+  other_hash: bytes32;
+  combined_hash: bytes32;
+};
+
+export type HashOnlyProof = {
+  key_clvm_hash: bytes32;
+  value_clvm_hash: bytes32;
+  node_hash: bytes32;
+  layers: ProofLayer[]
+};
+
+export type KeyValueHashes = {
+  key_clvm_hash: bytes32;
+  value_clvm_hash: bytes32;
+};
+
+export type ProofResultInclusions = {
+  store_id: bytes32
+  inclusions: KeyValueHashes[];
+};
+
+export type StoreProofsHashes = {
+  store_id: bytes32;
+  proofs: HashOnlyProof[];
+};
+
+export type DLProof = {
+  store_proofs: StoreProofsHashes;
+  coin_id: bytes32;
+  inner_puzzle_hash: bytes32;
+};
+
+export type VerifyProofResponse = {
+  verified_clvm_hashes: ProofResultInclusions;
+  current_root: bool
+  success: bool;
 };

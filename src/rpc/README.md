@@ -15,10 +15,28 @@ const response2 = await get_sync_status(agent);
 
 ```js
 const {RPCAgent} = require("chia-agent");
-const agent = new RPCAgent({...});
+const agent = new RPCAgent({
+  ...,
+  keepAlive: true,
+  keepAliveMsecs: 1000,
+  maxSockets: Infinity,
+  timeout: undefined,
+});
 ```
 
 Instantiate rpc agent with connection option.  
+
+**Common connectivity options**  
+|     name    | default |
+|---------| ------- |
+|keepAlive| `true`  |
+|keepAliveMsecs| `1000`  |
+|maxSockets| `Infinity`  |
+|timeout| `undefined`  |
+
+For details of above options, please check
+https://nodejs.org/docs/latest-v20.x/api/http.html#new-agentoptions
+
 There are several ways to specify connection info.
 
 ---
@@ -30,6 +48,11 @@ options = {
   service: "farmer"|"harvester"|"full_node"|"wallet"|"crawler";
   configPath?: string;
   skip_hostname_verification?: boolean;
+  // Below are common connectivity options
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 }
 ```
 example
@@ -49,6 +72,11 @@ options = {
   client_cert: string|Buffer;
   client_key: string|Buffer;
   skip_hostname_verification?: boolean;
+  // Below are common connectivity options
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 }
 ```
 example
@@ -75,6 +103,11 @@ const agent = new RPCAgent({
   port: number;
   configPath: string;
   skip_hostname_verification?: boolean;
+  // Below are common connectivity options
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 }
 ```
 example
@@ -97,6 +130,11 @@ const agent = new RPCAgent({
   protocol: "http";
   host: string;
   port: number;
+  // Below are common connectivity options
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 }
 ```
 example
@@ -108,3 +146,40 @@ const agent = new RPCAgent({
 });
 ```
 
+---
+
+**Case 5** Configure your own `HttpsAgent`.
+
+```typescript
+{
+  httpsAgent: require('https').Agent; // An instance of require('https').Agent
+  skip_hostname_verification?: boolean;
+}
+```
+example
+```js
+const httpsAgent = new require('https').Agent({...});
+const agent = new RPCAgent({
+  httpsAgent: httpsAgent,
+  skip_hostname_verification: true,
+});
+```
+
+---
+
+**Case 6** Configure your own `HttpAgent`.
+
+```typescript
+{
+  httpAgent: require('http').Agent; // An instance of require('http').Agent
+  skip_hostname_verification?: boolean;
+}
+```
+example
+```js
+const httpAgent = new require('http').Agent({...});
+const agent = new RPCAgent({
+  httpsAgent: httpAgent,
+  skip_hostname_verification: true,
+});
+```

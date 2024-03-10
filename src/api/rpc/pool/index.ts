@@ -1,5 +1,5 @@
 import {str, uint64} from "../../chia/types/_python_types_";
-import {TRPCAgent} from "../../../rpc";
+import type {RPCAgent} from "../../../rpc";
 import {
   ErrorResponse,
   GetFarmerResponse,
@@ -16,7 +16,7 @@ import {FarmerRecord} from "../../chia/pool/store";
 
 
 export type TPoolInfoResponse = GetPoolInfoResponse;
-export async function pool_info(agent: TRPCAgent){
+export async function pool_info(agent: RPCAgent){
   return agent.request<TPoolInfoResponse>("GET", "pool_info");
 }
 
@@ -28,31 +28,31 @@ export type TGetFarmerRequest = {
   signature: str;
 };
 export type TGetFarmerResponse = GetFarmerResponse;
-export async function get_farmer(agent: TRPCAgent, data: TGetFarmerRequest){
-  return agent.request<TGetFarmerResponse>("GET", "farmer");
+export async function get_farmer(agent: RPCAgent, data: TGetFarmerRequest){
+  return agent.request<TGetFarmerResponse>("GET", "farmer", data);
 }
 
 
 
 export type TPostFarmerRequest = PostFarmerRequest;
 export type TPostFarmerResponse = PostFarmerResponse | ErrorResponse;
-export async function post_farmer(agent: TRPCAgent, data: TPostFarmerRequest){
-  return agent.request<TPostFarmerResponse>("POST", "farmer");
+export async function post_farmer(agent: RPCAgent, data: TPostFarmerRequest){
+  return agent.request<TPostFarmerResponse>("POST", "farmer", data);
 }
 
 
 
 export type TPutFarmerRequest = PutFarmerRequest;
 export type TPutFarmerResponse = PutFarmerResponse | ErrorResponse;
-export async function put_farmer(agent: TRPCAgent, data: TPutFarmerRequest){
-  return agent.request<TPutFarmerResponse>("PUT", "farmer");
+export async function put_farmer(agent: RPCAgent, data: TPutFarmerRequest){
+  return agent.request<TPutFarmerResponse>("PUT", "farmer", data);
 }
 
 
 
 export type TPartialRequest = PostPartialRequest;
 export type TPartialResponse = PostPartialResponse | ErrorResponse;
-export async function partial(agent: TRPCAgent, data: TPartialRequest){
+export async function partial(agent: RPCAgent, data: TPartialRequest){
   return agent.request<TPartialResponse>("POST", "partial", data);
 }
 
@@ -67,6 +67,6 @@ export type TLoginResponse = {
   farmer_record: FarmerRecord;
   recent_partials: Array<[uint64, uint64]>; // Array of tuple [timestamp, difficulty]
 } | { };
-export async function login(agent: TRPCAgent, data: TLoginRequest){
+export async function login(agent: RPCAgent, data: TLoginRequest){
   return agent.request<TLoginResponse>("GET", "login", data);
 }

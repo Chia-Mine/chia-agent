@@ -776,3 +776,51 @@ const response = await clear_pending_roots(agent, params);
 ```
 For content of `RootMarshalled`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer.util.ts
+
+---
+
+## `get_proof(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_proof} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await get_proof(agent, params);
+```
+### params:
+```typescript
+{
+  store_id: bytes32;
+  keys: bytes[];
+}
+```
+### response:
+```typescript
+{
+  proof: DLProof;
+  success: bool;
+}
+```
+For content of `DLProof`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer.util.ts
+
+---
+
+## `verify_proof(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {verify_proof} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await verify_proof(agent, params);
+```
+### params:
+```typescript
+DLProof
+```
+### response:
+```typescript
+VerifyProofResponse
+```
+For content of `DLProof` and `VerifyProofResponse`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer.util.ts

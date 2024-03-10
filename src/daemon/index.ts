@@ -139,7 +139,6 @@ class Daemon {
         return;
       }
       
-      let timer: ReturnType<typeof setTimeout>|null = null;
       const message = this.createMessageTemplate(command, destination, data || {});
       const reqId = message.request_id;
       this._responseQueue[reqId] = resolve as (v: unknown) => void;
@@ -301,7 +300,7 @@ class Daemon {
     
     this._messageEventListeners.forEach(l => l(event));
     for(const o in this._messageListeners){
-      if(!this._messageListeners.hasOwnProperty(o)){
+      if(!Object.prototype.hasOwnProperty.call(this._messageListeners, o)){
         continue;
       }
       
@@ -326,7 +325,7 @@ class Daemon {
     this._closeEventListeners.forEach(l => l(event));
     this.clearAllEventListeners();
     
-    getLogger().info(`Closed ws connection`);
+    getLogger().info("Closed ws connection");
     
     if(this._onClosePromise){
       this._onClosePromise();

@@ -5,6 +5,7 @@ import {existsSync, readFileSync} from "fs";
 import * as JSONbigBuilder from "@chiamine/json-bigint";
 import {getLogger} from "../logger";
 import {configPath as defaultConfigPath, getConfig, resolveFromChiaRoot, TConfig} from "../config/index";
+import {APIAgent} from "../agent/index";
 
 const JSONbig = JSONbigBuilder({
   useNativeBigInt: true,
@@ -54,6 +55,40 @@ export function getConnectionInfoFromConfig(destination: TDestination, config: T
   return {hostname, port};
 }
 
+export function getConf(configPath?: string) {
+  configPath = configPath || defaultConfigPath;
+  if (!existsSync(configPath)) {
+    getLogger().error(`chia config file does not exist at: ${configPath}`)
+    throw new Error("chia config file Not Found.");
+  }
+  
+  return getConfig(configPath);
+}
+
+export function loadCertFilesFromConfig(config: TConfig) {
+  const clientCertPath = resolveFromChiaRoot([config["/daemon_ssl/private_crt"]] as string[]);
+  const clientKeyPath = resolveFromChiaRoot([config["/daemon_ssl/private_key"]] as string[]);
+  const caCertPath = resolveFromChiaRoot([config["/private_ssl_ca/crt"]] as string[]);
+  
+  getLogger().debug(`Loading client cert file from ${clientCertPath}`);
+  getLogger().debug(`Loading client key file from ${clientKeyPath}`);
+  getLogger().debug(`Loading ca cert file from ${caCertPath}`);
+  
+  const getCertOrKey = (path: string) => {
+    if (!existsSync(path)) {
+      getLogger().error(`ssl crt/key does not exist at: ${path}`)
+      throw new Error(`crt/key Not Found at ${path}`);
+    }
+    return readFileSync(path);
+  };
+  
+  const clientCert = getCertOrKey(clientCertPath);
+  const clientKey = getCertOrKey(clientKeyPath);
+  const caCert = getCertOrKey(caCertPath);
+  
+  return {clientCert, clientKey, caCert};
+}
+
 export type TRPCAgentProps = {
   protocol: "https";
   host: string;
@@ -62,148 +97,163 @@ export type TRPCAgentProps = {
   client_cert?: string|Buffer;
   client_key?: string|Buffer;
   skip_hostname_verification?: boolean;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 } | {
   protocol: "https";
   host: string;
   port: number;
   configPath: string;
   skip_hostname_verification?: boolean;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 } | {
   protocol: "http";
   host: string;
   port: number;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
 } | {
   service: TDestination;
   host?: string;
   port?: number;
   configPath?: string;
   skip_hostname_verification?: boolean;
-};
-
-export type ErrorResponse = {
-  error: string;
-  success: false;
+  keepAlive?: boolean;
+  keepAliveMsecs?: number;
+  maxSockets?: number;
+  timeout?: number;
+} | {
+  httpsAgent: HttpsAgent;
+  skip_hostname_verification?: boolean;
+} | {
+  httpAgent: HttpAgent;
+  skip_hostname_verification?: boolean;
 };
 
 const userAgent = "chia-agent/1.0.0";
 
-export class RPCAgent {
+export class RPCAgent implements APIAgent {
   protected _protocol: "http"|"https";
-  protected _hostname: string;
-  protected _port: number;
-  protected _caCert?: string|Buffer = "";
-  protected _clientCert?: string|Buffer = "";
-  protected _clientKey?: string|Buffer = "";
   protected _agent: HttpsAgent|HttpAgent;
   protected _skip_hostname_verification: boolean = false;
   
   public constructor(props: TRPCAgentProps) {
-    if("protocol" in props){
+    if("httpsAgent" in props){
+      this._protocol = "https";
+      this._agent = props.httpsAgent;
+      this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
+    }
+    else if("httpAgent" in props){
+      this._protocol = "http";
+      this._agent = props.httpAgent;
+      this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
+    }
+    else if("protocol" in props){
       this._protocol = props.protocol;
-      this._hostname = props.host;
-      this._port = props.port;
+      const {host, port} = props;
+      let clientCert: string | Buffer | undefined;
+      let clientKey: string | Buffer | undefined;
+      let caCert: string | Buffer | undefined;
+      
+      const keepAlive = props.keepAlive !== false;
+      const keepAliveMsecs = typeof props.keepAliveMsecs === "number" && props.keepAliveMsecs > 0 ?
+        props.keepAliveMsecs : 1000;
+      const maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
+        props.maxSockets : Infinity;
+      const timeout = typeof props.timeout === "number" && props.timeout > 0 ?
+        props.timeout : undefined;
   
       if(props.protocol === "https"){
         if("configPath" in props){
-          const config = this._getConfig(props.configPath);
-          const certs = this._loadCertFilesFromConfig(config);
-          this._clientCert = certs.clientCert;
-          this._clientKey = certs.clientKey;
-          this._caCert = certs.caCert;
+          const config = getConf(props.configPath);
+          const certs = loadCertFilesFromConfig(config);
+          clientCert = certs.clientCert;
+          clientKey = certs.clientKey;
+          caCert = certs.caCert;
           this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
         }
         else{
-          this._caCert = props.ca_cert;
-          this._clientCert = props.client_cert;
-          this._clientKey = props.client_key;
+          ({client_cert: clientCert, client_key: clientKey, ca_cert: caCert} = props);
           this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
         }
     
         this._agent = new HttpsAgent({
-          host: this._hostname,
-          port: this._port,
-          ca: this._caCert,
-          cert: this._clientCert,
-          key: this._clientKey,
-          rejectUnauthorized: Boolean(this._caCert) && this._hostname !== "localhost",
+          host,
+          port,
+          ca: caCert,
+          cert: clientCert,
+          key: clientKey,
+          rejectUnauthorized: Boolean(caCert) && host !== "localhost",
+          keepAlive,
+          keepAliveMsecs,
+          maxSockets,
+          timeout,
         });
       }
       else{
-        this._agent = new HttpAgent();
+        this._agent = new HttpAgent({
+          keepAlive,
+          keepAliveMsecs,
+          maxSockets,
+          timeout,
+        });
       }
     }
     else{
       this._protocol = "https";
-  
-      const config = this._getConfig("configPath" in props ? props.configPath : undefined);
+      let host: string | undefined;
+      let port: number | undefined;
+      const keepAlive = props.keepAlive !== false;
+      const keepAliveMsecs = typeof props.keepAliveMsecs === "number" && props.keepAliveMsecs > 0 ?
+        props.keepAliveMsecs : 1000;
+      const maxSockets = typeof props.maxSockets === "number" && props.maxSockets > 0 ?
+        props.maxSockets : Infinity;
+      const timeout = typeof props.timeout === "number" && props.timeout > 0 ?
+        props.timeout : undefined;
+      
+      const config = getConf("configPath" in props ? props.configPath : undefined);
       
       if(props.host && typeof props.port === "number"){
-        this._hostname = props.host;
-        this._port = props.port;
+        ({host, port} = props);
       }
       else{
-        const {hostname, port} = getConnectionInfoFromConfig(props.service, config);
-        this._hostname = props.host ? props.host : hostname;
-        this._port = typeof props.port === "number" ? props.port : port;
+        const info = getConnectionInfoFromConfig(props.service, config);
+        host = props.host ? props.host : info.hostname;
+        port = typeof props.port === "number" ? props.port : info.port;
       }
-      getLogger().debug(`Picked ${this._hostname}:${this._port} for ${props.service}`);
+      getLogger().debug(`Picked ${host}:${port} for ${props.service}`);
       
-      const certs = this._loadCertFilesFromConfig(config);
-      this._clientCert = certs.clientCert;
-      this._clientKey = certs.clientKey;
-      this._caCert = certs.caCert;
+      const certs = loadCertFilesFromConfig(config);
+      const {clientCert, clientKey, caCert} = certs;
       this._skip_hostname_verification = Boolean(props.skip_hostname_verification);
   
       this._agent = new HttpsAgent({
-        host: this._hostname,
-        port: this._port,
-        ca: this._caCert,
-        cert: this._clientCert,
-        key: this._clientKey,
-        rejectUnauthorized: Boolean(this._caCert) && this._hostname !== "localhost",
+        host: host,
+        port: port,
+        ca: caCert,
+        cert: clientCert,
+        key: clientKey,
+        rejectUnauthorized: Boolean(caCert) && host !== "localhost",
+        keepAlive,
+        keepAliveMsecs,
+        maxSockets,
+        timeout,
       });
     }
-  }
-  
-  protected _getConfig(configPath?: string){
-    configPath = configPath || defaultConfigPath;
-    if (!existsSync(configPath)) {
-      getLogger().error(`chia config file does not exist at: ${configPath}`)
-      throw new Error("chia config file Not Found.");
-    }
-  
-    return getConfig(configPath);
-  }
-  
-  protected _loadCertFilesFromConfig(config: TConfig){
-    const clientCertPath = resolveFromChiaRoot([config["/daemon_ssl/private_crt"]] as string[]);
-    const clientKeyPath = resolveFromChiaRoot([config["/daemon_ssl/private_key"]] as string[]);
-    const caCertPath = resolveFromChiaRoot([config["/private_ssl_ca/crt"]] as string[]);
-    
-    getLogger().debug(`Loading client cert file from ${clientCertPath}`);
-    getLogger().debug(`Loading client key file from ${clientKeyPath}`);
-    getLogger().debug(`Loading ca cert file from ${caCertPath}`);
-  
-    const getCertOrKey = (path: string) => {
-      if (!existsSync(path)) {
-        getLogger().error(`ssl crt/key does not exist at: ${path}`)
-        throw new Error(`crt/key Not Found at ${path}`);
-      }
-      return readFileSync(path);
-    };
-  
-    const clientCert = getCertOrKey(clientCertPath);
-    const clientKey = getCertOrKey(clientKeyPath);
-    const caCert = getCertOrKey(caCertPath);
-    
-    return {clientCert, clientKey, caCert};
   }
   
   public async sendMessage<M extends unknown>(
     destination: string,
     command: string,
     data?: Record<string, unknown>,
-  ): Promise<M | ErrorResponse> {
+  ): Promise<M> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(`Sending message. dest=${destination} command=${command}`);
     
@@ -216,9 +266,6 @@ export class RPCAgent {
       const pathname = `/${path.replace(/^\/+/, "")}`;
       const METHOD = method.toUpperCase();
       const options: RequestOptions & {checkServerIdentity?: typeof checkServerIdentity;} = {
-        protocol: this._protocol + ":", // nodejs's https module requires protocol to include ':'.
-        hostname: this._hostname,
-        port: `${this._port}`,
         path: pathname,
         method: METHOD,
         agent: this._agent,
@@ -252,7 +299,7 @@ export class RPCAgent {
           }
           p += "?";
           for(const key in data){
-            if(data.hasOwnProperty(key)){
+            if(Object.prototype.hasOwnProperty.call(data, key)){
               p += `${key}=${data[key]}`;
             }
           }
@@ -287,7 +334,21 @@ export class RPCAgent {
         res.on("end", () => {
           try{
             if(chunks.length > 0){
-              const d = JSONbig.parse(Buffer.concat(chunks).toString());
+              const entireChunks = Buffer.concat(chunks);
+              const serializedData = entireChunks.toString();
+              const d = JSONbig.parse(serializedData);
+              if(typeof d !== "object" || !d){
+                getLogger().error(`Response is expected to be an object but received: ${serializedData}`);
+                return reject(new Error(`Unexpected response format: ${serializedData}`));
+              }
+              else if(!Object.prototype.hasOwnProperty.call(d, "success")){
+                getLogger().error("Response has no 'success' property");
+                return reject(new Error(`Response has no 'success' property: ${serializedData}`));
+              }
+              if(!d.success){
+                getLogger().error(`API failure: ${d.error}`);
+                return reject(d);
+              }
               return resolve(d);
             }
           
@@ -322,4 +383,4 @@ export class RPCAgent {
   }
 }
 
-export type TRPCAgent = InstanceType<typeof RPCAgent>;
+export type TRPCAgent = APIAgent;

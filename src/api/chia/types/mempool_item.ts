@@ -8,6 +8,7 @@ import {CoinSpend} from "./coin_spend";
 export type BundleCoinSpend = {
   coin_spend: CoinSpend;
   eligible_for_dedup: bool;
+  eligible_for_fast_forward: bool;
   additions: Coin[];
   // cost on the specific solution in this item
   cost: Optional<uint64>;

@@ -342,6 +342,23 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_re
 
 ---
 
+## `get_aggsig_additional_data(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_aggsig_additional_data} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await get_aggsig_additional_data(agent);
+```
+### response
+```typescript
+{
+  additional_data: str;
+}
+```
+
+---
+
 ## `get_initial_freeze_period_of_full_node(agent)`
 ### Usage
 ```js

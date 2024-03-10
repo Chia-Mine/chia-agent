@@ -56,7 +56,7 @@ export function buildConfigObj(
   product: Record<string, any> = {},
 ){
   for(const propName in config){
-    if(!config.hasOwnProperty(propName)){
+    if(!Object.prototype.hasOwnProperty.call(config, propName)){
       continue;
     }
     
