@@ -1,4 +1,4 @@
-import {bool, bytes, int, None, uint64} from "../../types/_python_types_";
+import {bool, bytes, int, None} from "../../types/_python_types_";
 import {Program} from "../../types/blockchain_format/program";
 
 // Return type of get_proposal_state

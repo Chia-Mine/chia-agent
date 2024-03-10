@@ -209,6 +209,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`dl_get_mirrors`](./rpc/wallet/README.md#dl_get_mirrorsagent-params)
 - [`dl_new_mirror`](./rpc/wallet/README.md#dl_new_mirroragent-params)
 - [`dl_delete_mirror`](./rpc/wallet/README.md#dl_delete_mirroragent-params)
+- [`dl_verify_proof`](./rpc/wallet/README.md#dl_verify_proofagent-params)
 - [`vc_mint`](./rpc/wallet/README.md#vc_mintagent-params)
 - [`vc_get`](./rpc/wallet/README.md#vc_getagent-params)
 - [`vc_get_list`](./rpc/wallet/README.md#vc_get_listagent-params)
@@ -257,6 +258,8 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_sync_status`](./rpc/data_layer/README.md#get_sync_statusagent-params)
 - [`check_plugins`](./rpc/data_layer/README.md#check_pluginsagent)
 - [`clear_pending_roots`](./rpc/data_layer/README.md#clear_pending_rootsagent-params)
+- [`get_proof`](./rpc/data_layer/README.md#get_proofagent-params)
+- [`verify_proof`](./rpc/data_layer/README.md#verify_proofagent-params)
 
 #### [Crawler RPC API](./rpc/crawler/README.md#usage)
 - [`get_peer_counts`](./rpc/crawler/README.md#get_peer_countsagent)

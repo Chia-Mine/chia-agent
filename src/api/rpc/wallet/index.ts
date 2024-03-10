@@ -42,6 +42,8 @@ import {CoinSelectionConfigLoader, TxEndpoint} from "../../chia/wallet/util/tx_c
 import {ConditionValidTimes} from "../../chia/wallet/conditions";
 import {DAOInfo, DAORules, ProposalInfo} from "../../chia/wallet/dao_wallet/dao_info";
 import {ParsedProposalSpend, ParsedProposalUpdate, ProposalState} from "../../chia/wallet/dao_wallet/dao_wallet";
+import {DLProof, VerifyProofResponse} from "../../chia/data_layer/data_layer_util";
+import {GetNotifications, GetNotificationsResponse} from "../../chia/rpc/wallet_request_types";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -936,19 +938,8 @@ export async function extend_derivation_index<T extends TRPCAgent | TDaemon>(age
 
 export const get_notifications_command = "get_notifications";
 export type get_notifications_command = typeof get_notifications_command;
-export type TGetNotificationsRequest = {
-  ids?: str[];
-  start?: int;
-  end?: int;
-};
-export type TGetNotificationsResponse = {
-  notifications: Array<{
-    id: str;
-    message: str;
-    amount: uint64;
-    height: uint32;
-  }>;
-};
+export type TGetNotificationsRequest = GetNotifications;
+export type TGetNotificationsResponse = GetNotificationsResponse;
 export type WsGetNotificationsMessage = GetMessageType<chia_wallet_service, get_notifications_command, TGetNotificationsResponse>;
 export async function get_notifications<T extends TRPCAgent | TDaemon>(agent: T, data: TGetNotificationsRequest){
   type R = ResType<T, TGetNotificationsResponse, WsGetNotificationsMessage>;
@@ -1248,6 +1239,8 @@ export type TGetOfferSummaryResponse = {
     requested: Record<str, int>;
     fees: int;
     infos: TDriverDict;
+    additions: str[];
+    removals: str[];
     valid_times: Omit<
       ConditionValidTimes,
       "max_secs_after_created" | "min_secs_since_created" | "max_blocks_after_created" | "min_blocks_since_created"
@@ -2317,7 +2310,6 @@ export type nft_get_info_command = typeof nft_get_info_command;
 export type TNftGetInfoRequest = {
   coin_id: str;
   latest?: bool;
-  ignore_size_limit?: bool;
 };
 export type TNftGetInfoResponse = {
   success: True;
@@ -2793,6 +2785,17 @@ export async function dl_delete_mirror<T extends TRPCAgent | TDaemon>(agent: T, 
 }
 
 
+export const dl_verify_proof_command = "dl_verify_proof";
+export type dl_verify_proof_command = typeof dl_verify_proof_command;
+export type TDlVerifyProofRequest = DLProof;
+export type TDlVerifyProofResponse = VerifyProofResponse;
+export type WsDlVerifyProofMessage = GetMessageType<chia_wallet_service, dl_verify_proof_command, TDlVerifyProofResponse>;
+export async function dl_verify_proof<T extends TRPCAgent | TDaemon>(agent: T, data: TDlVerifyProofRequest) {
+  type R = ResType<T, TDlVerifyProofResponse, WsDlVerifyProofMessage>;
+  return agent.sendMessage<R>(chia_wallet_service, dl_verify_proof_command, data);
+}
+
+
 export type VCMint = {
   did_id: str;
   target_address: Optional<str>;
@@ -2873,7 +2876,7 @@ export type TVcAddProofsRequest = {
     key_value_pairs: Record<str, str>;
   };
 };
-export type TVcAddProofsResponse = {};
+export type TVcAddProofsResponse = Record<string, never>;
 export type WsVcAddProofsMessage = GetMessageType<chia_wallet_service, vc_add_proofs_command, TVcAddProofsResponse>;
 export async function vc_add_proofs<T extends TRPCAgent | TDaemon>(agent: T, data: TVcAddProofsRequest) {
   type R = ResType<T, TVcAddProofsResponse, WsVcAddProofsMessage>;
@@ -3062,6 +3065,7 @@ export type RpcWalletMessage =
   | TDlGetMirrorsResponse
   | TDlNewMirrorResponse
   | TDlDeleteMirrorResponse
+  | TDlVerifyProofResponse
   | TVcMintResponse
   | TVcGetResponse
   | TVcGetListResponse
@@ -3202,6 +3206,7 @@ export type RpcWalletMessageOnWs =
   | WsDlGetMirrorsMessage
   | WsDlNewMirrorMessage
   | WsDlDeleteMirrorMessage
+  | WsDlVerifyProofMessage
   | WsVcMintMessage
   | WsVcGetMessage
   | WsVcGetListMessage

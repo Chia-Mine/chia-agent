@@ -3,6 +3,11 @@
 ## [14.0.0]
 ### Breaking change
 - When RPC API responds with `success: false`, its `Promise` now does `reject`. (Previously it does `resolve`)
+- At chia-blockchain@2.2.1, in `chia/consensus/cost_calculator.py`,  
+  `NPCResult.cost` was removed.  
+  As a result, the RPC APIs below might be incompatible between `2.1.4` and `2.2.1`.
+  - `get_all_mempool_items` Of FullNode RPC API
+  - `get_mempool_item_by_tx_id` Of FullNode RPC API
 ### Changed
 - Loosened a type of `agent` to call RPC APIs. RPC APIs can be invoked with `agent` which just implements
   `sendMessage` method depicted as below.
@@ -15,6 +20,36 @@ export interface APIAgent {
   ): Promise<M>;
 }
 ```
+- `sp_source_data` was added to [`NewSignagePoint`](./src/api/chia/protocols/farmer_protocol.ts)  
+  As a result the following API responses were affected
+  - [`on_signage_point`](./src/api/ws/full_node/README.md#on_signage_point)
+  - [`on_new_signage_point`](./src/api/ws/farmer/README.md#on_new_signage_point)
+- `include_signature_source_data` was added to [`DeclareProofOfSpace`](./src/api/chia/protocols/farmer_protocol.ts)
+  As a result the following API responses were affected
+  - [`on_proof`](./src/api/ws/farmer/README.md#on_proof)
+- `foliage_block_data`, `foliage_transaction_block_data` and `rc_block_unfinished` were added to [`RequestSignedValues`](./src/api/chia/protocols/farmer_protocol.ts)
+- `eligible_for_fast_forward` was added to [`BundleCoinSpend`](./src/api/chia/types/mempool_item.ts)
+- `CHIP_0002_P2_DELEGATED_CONDITIONS` was added to [`SigningMode`](./src/api/chia/types/signing_mode.ts)  
+  As a result the following API responses were affected
+  - [`verify_signature`](./src/api/rpc/wallet/README.md#verify_signatureagent-params)
+  - [`sign_message_by_address`](./src/api/rpc/wallet/README.md#sign_message_by_addressagent-params)
+  - [`sign_message_by_id`](./src/api/rpc/wallet/README.md#sign_message_by_idagent-params)
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`get_notifications`](./src/api/rpc/wallet/README.md#get_notificationsagent-params)
+    - The types of request parameters were slightly changed
+      - `ids` are now `bytes32[]` (previously `str[]`)
+      - `start` are now `uint32` (previously `int[]`)
+      - `end` are now `uint32` (previously `int[]`)
+    - The types of response parameters were slightly changed
+      - `id` are now `bytes32` (previously `str`)
+      - `message` are now `bytes` (previously `str`)
+  - [`get_offer_summary`](./src/api/rpc/wallet/README.md#get_offer_summaryagent-params)
+    - The following properties were added to the response parameters
+      - `additions: str[]`
+      - `removals: str[]`
+  - [`nft_get_info`](./src/api/rpc/wallet/README.md#nft_get_infoagent-params)
+    - The following properties were removed from the response parameters
+      - `ignore_size_limit`
 ### Added
 - Added connectivity options for `RPCAgent`.
   - `keepAlive` (default: `true`)
@@ -54,11 +89,16 @@ const httpsAgent = new HttpsAgent({
 const agent = new RPCAgent({httpsAgent: httpsAgent}); // `new RPCAgent({httpAgent: httpAgent});` is also allowed.
 const res = await get_plots(agent);
 ```
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`get_proof`](./src/api/rpc/data_layer/README.md#get_proofagent-params)
+  - [`verify_proof`](./src/api/rpc/data_layer/README.md#verify_proofagent-params)
 - [FullNode RPC API](./src/api/rpc/full_node)
   - [`get_aggsig_additional_data`](./src/api/rpc/full_node/README.md#get_aggsig_additional_dataagent)
-
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`dl_verify_proof`](./src/api/rpc/wallet/README.md#dl_verify_proofagent-params)
 ### Fixed
 - Fixed an issue where some of the RPC Pool APIs did not handle request parameters correctly.
+- Added missing attribute `peak_height` to [`NewSignagePoint`](./src/api/chia/protocols/farmer_protocol.ts)
 
 ## [13.2.0]
 ### Added

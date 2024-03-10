@@ -1178,23 +1178,14 @@ const response = await get_notifications(agent, params);
 ```
 ### params:
 ```typescript
-{
-  ids?: str[];
-  start?: int;
-  end?: int;
-}
+GetNotifications
 ```
 ### response:
 ```typescript
-{
-  notifications: Array<{
-    id: str;
-    message: str;
-    amount: uint64;
-    height: uint32;
-  }>;
-}
+GetNotificationsResponse
 ```
+For content of `GetNotifications` and `GetNotificationsResponse`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts  
 
 ---
 
@@ -1767,6 +1758,8 @@ const response = await get_offer_summary(agent, params);
     requested: Record<str, int>;
     fees: int;
     infos: TDriverDict;
+    additions: str[];
+    removals: str[];
     valid_times: Omit<
       ConditionValidTimes,
       "max_secs_after_created" | "min_secs_since_created" | "max_blocks_after_created" | "min_blocks_since_created"
@@ -3207,7 +3200,6 @@ const response = await nft_get_info(agent, params);
 {
   coin_id: str;
   latest?: bool;
-  ignore_size_limit?: bool;
 }
 ```
 ### response:
@@ -3698,6 +3690,26 @@ For content of `TransactionRecordConvenience`,
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
 For content of `TxEndpoint`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
+
+---
+## `dl_verify_proof(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {dl_verify_proof} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await dl_verify_proof(agent, params);
+```
+### params:
+```typescript
+DLProof
+```
+### response:
+```typescript
+VerifyProofResponse
+```
+For content of `DLProof` and `VerifyProofResponse`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/data_layer/data_layer_util.ts  
 
 ---
 

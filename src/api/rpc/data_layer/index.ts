@@ -1,13 +1,14 @@
 import {TRPCAgent} from "../../../rpc/index";
-import {bool, int, None, Optional, str, uint64} from "../../chia/types/_python_types_";
+import {bool, bytes, int, None, Optional, str, uint64} from "../../chia/types/_python_types_";
 import {TransactionRecord} from "../../chia/wallet/transaction_record";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {
+  DLProof,
   OfferMarshalled,
   OfferStoreMarshalled,
   PluginStatusMarshalled,
   RootMarshalled,
-  SyncStatus
+  SyncStatus, VerifyProofResponse
 } from "../../chia/data_layer/data_layer_util";
 import {GetMessageType, ResType} from "../../types";
 import {TDaemon} from "../../../daemon/index";
@@ -517,6 +518,34 @@ export async function clear_pending_roots<T extends TRPCAgent | TDaemon>(agent: 
   return agent.sendMessage<R>(chia_data_layer_service, clear_pending_roots_command, params);
 }
 
+
+export const get_proof_command = "get_proof";
+export type get_proof_command = typeof get_proof_command;
+export type TGetProofRequest = {
+  store_id: bytes32;
+  keys: bytes[];
+};
+export type TGetProofResponse = {
+  proof: DLProof;
+  success: bool;
+};
+export type WsGetProofMessage = GetMessageType<chia_data_layer_service, get_proof_command, TGetProofResponse>;
+export async function get_proof<T extends TRPCAgent | TDaemon>(agent: T, params: TGetProofRequest) {
+  type R = ResType<T, TGetProofResponse, WsGetProofMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, get_proof_command, params);
+}
+
+
+export const verify_proof_command = "verify_proof";
+export type verify_proof_command = typeof verify_proof_command;
+export type TVerifyProofRequest = DLProof;
+export type TVerifyProofResponse = VerifyProofResponse;
+export type WsVerifyProofMessage = GetMessageType<chia_data_layer_service, verify_proof_command, TVerifyProofResponse>;
+export async function verify_proof<T extends TRPCAgent | TDaemon>(agent: T, params: TVerifyProofRequest) {
+  type R = ResType<T, TVerifyProofResponse, WsVerifyProofMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, verify_proof_command, params);
+}
+
 export type RpcDataLayerMessage =
   TWalletLogInResponse
   | TCreateDataStoreResponse
@@ -548,6 +577,8 @@ export type RpcDataLayerMessage =
   | TGetSyncStatusResponse
   | TCheckPluginsResponse
   | TClearPendingRootsResponse
+  | TGetProofResponse
+  | TVerifyProofResponse
 ;
 
 export type RpcDataLayerMessageOnWs =
@@ -581,4 +612,6 @@ export type RpcDataLayerMessageOnWs =
   | WsGetSyncStatusMessage
   | WsCheckPluginsMessage
   | WsClearPendingRootsMessage
+  | WsGetProofMessage
+  | WsVerifyProofMessage
 ;

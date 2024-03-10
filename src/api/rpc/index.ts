@@ -555,6 +555,9 @@ export {
   TDlDeleteMirrorRequest,
   TDlDeleteMirrorResponse,
   dl_delete_mirror,
+  TDlVerifyProofRequest,
+  TDlVerifyProofResponse,
+  dl_verify_proof,
   TVcMintRequest,
   TVcMintResponse,
   vc_mint,
@@ -671,6 +674,12 @@ export {
   TClearPendingRootsRequest,
   TClearPendingRootsResponse,
   clear_pending_roots,
+  TGetProofRequest,
+  TGetProofResponse,
+  get_proof,
+  TVerifyProofRequest,
+  TVerifyProofResponse,
+  verify_proof,
 } from "./data_layer/index"
 
 import type {RpcCrawlerMessage} from "./crawler/index";
