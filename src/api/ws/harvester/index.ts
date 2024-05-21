@@ -89,23 +89,23 @@ export async function on_close_connection(daemon: TDaemon, callback: (e: GetMess
 }
 
 export type WsHarvesterMessage = WsGetConnectionsHarvesterMessage
-  | WsGetPlotsMessage
-  | WsFarmingInfoMessage
-  | WsAddConnectionMessage
-  | WsCloseConnectionMessage
+| WsGetPlotsMessage
+| WsFarmingInfoMessage
+| WsAddConnectionMessage
+| WsCloseConnectionMessage
 ;
 // Whole commands for the service
 export type chia_harvester_commands = get_plots_command
-  | farming_info_command
-  | add_connection_command
-  | close_connection_command
-  | get_connections_command
+| farming_info_command
+| add_connection_command
+| close_connection_command
+| get_connections_command
   ;
 export type TChiaHarvesterBroadcast = TGetPlotsBroadCast
-  | TFarmingInfoBroadCast
-  | TAddConnectionBroadCast
-  | TCloseConnectionBroadCast
-  | TGetConnectionsBroadCast
+| TFarmingInfoBroadCast
+| TAddConnectionBroadCast
+| TCloseConnectionBroadCast
+| TGetConnectionsBroadCast
   ;
 export async function on_message_from_harvester(daemon: TDaemon, callback: (e: WsHarvesterMessage) => unknown){
   await daemon.subscribe(wallet_ui_service);

@@ -7,6 +7,21 @@ import {TDaemon} from "../../../daemon/index";
 export const chia_common_service = "";
 export type chia_common_service = typeof chia_common_service;
 
+
+export const get_network_info_command = "get_network_info";
+export type get_network_info_command = typeof get_network_info_command;
+export type TGetNetworkInfoResponse = {
+  network_name: str;
+  network_prefix: str;
+};
+export type WsGetNetworkInfoMessage = GetMessageType<chia_common_service, get_network_info_command, TGetNetworkInfoResponse>;
+
+export async function get_network_info<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetNetworkInfoResponse, WsGetNetworkInfoMessage>;
+  return agent.sendMessage<R>(chia_common_service, get_network_info_command);
+}
+
+
 export const get_connections_command = "get_connections";
 export type get_connections_command = typeof get_connections_command;
 export type TGetConnectionsRequest = {
@@ -46,7 +61,7 @@ export type close_connection_command = typeof close_connection_command;
 export type TCloseConnectionRequest = {
   node_id: str;
 };
-export type TCloseConnectionResponse = {};
+export type TCloseConnectionResponse = Record<string, never>;
 export type WsCloseConnectionMessage = GetMessageType<chia_common_service, close_connection_command, TCloseConnectionResponse>;
 export async function close_connection<T extends TRPCAgent|TDaemon>(agent: T, params: TCloseConnectionRequest) {
   type R = ResType<T, TCloseConnectionResponse, WsCloseConnectionMessage>;
@@ -56,7 +71,7 @@ export async function close_connection<T extends TRPCAgent|TDaemon>(agent: T, pa
 
 export const stop_node_command = "stop_node";
 export type stop_node_command = typeof stop_node_command;
-export type TStopNodeResponse = {};
+export type TStopNodeResponse = Record<string, never>;
 export type WsStopNodeMessage = GetMessageType<chia_common_service, stop_node_command, TStopNodeResponse>;
 export async function stop_node<T extends TRPCAgent|TDaemon>(agent: T) {
   type R = ResType<T, TStopNodeResponse, WsStopNodeMessage>;
@@ -89,7 +104,8 @@ export async function healthz<T extends TRPCAgent|TDaemon>(agent: T) {
 }
 
 export type RpcCommonMessage =
-  TGetConnectionsResponse
+  TGetNetworkInfoResponse
+  | TGetConnectionsResponse
   | TOpenConnectionResponse
   | TCloseConnectionResponse
   | TStopNodeResponse
@@ -98,7 +114,8 @@ export type RpcCommonMessage =
 ;
 
 export type RpcCommonMessageOnWs =
-  WsGetConnectionsMessage
+  WsGetNetworkInfoMessage
+  | WsGetConnectionsMessage
   | WsOpenConnectionMessage
   | WsCloseConnectionMessage
   | WsStopNodeMessage

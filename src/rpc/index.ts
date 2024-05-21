@@ -249,7 +249,7 @@ export class RPCAgent implements APIAgent {
     }
   }
   
-  public async sendMessage<M extends unknown>(
+  public async sendMessage<M>(
     destination: string,
     command: string,
     data?: Record<string, unknown>,

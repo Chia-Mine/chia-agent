@@ -5,6 +5,10 @@ import {Foliage, FoliageTransactionBlock, TransactionsInfo} from "./blockchain_f
 import {Optional, uint32} from "./_python_types_";
 import {SerializedProgram} from "./blockchain_format/serialized_program";
 
+/**
+ * The actual definition of `FullBlock` type was moved to https://github.com/Chia-Network/chia_rs/blob/main/crates/chia-protocol/src/fullblock.rs
+ * from chia-blockchain@2.3.0
+ */
 export type FullBlock = {
   finished_sub_slots: EndOfSubSlotBundle[]; // List[EndOfSubSlotBundle]  # If first sb
   reward_chain_block: RewardChainBlock; // RewardChainBlock  # Reward chain trunk data

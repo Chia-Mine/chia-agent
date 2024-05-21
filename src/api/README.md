@@ -53,7 +53,6 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_additions_and_removals`](./rpc/full_node/README.md#get_additions_and_removalsagent-params)
 - [`get_aggsig_additional_data`](./rpc/full_node/README.md#get_aggsig_additional_dataagent)
 - [`get_initial_freeze_period_of_full_node`](./rpc/full_node/README.md#get_initial_freeze_period_of_full_nodeagent)
-- [`get_network_info_of_full_node`](./rpc/full_node/README.md#get_network_info_of_full_nodeagent)
 - [`get_recent_signage_point_or_eos`](./rpc/full_node/README.md#get_recent_signage_point_or_eosagent-params)
 - [`get_coin_records_by_puzzle_hash`](./rpc/full_node/README.md#get_coin_records_by_puzzle_hashagent-params)
 - [`get_coin_records_by_puzzle_hashes`](./rpc/full_node/README.md#get_coin_records_by_puzzle_hashesagent-params)
@@ -108,7 +107,6 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`set_auto_claim`](./rpc/wallet/README.md#set_auto_claimagent-params)
 - [`get_auto_claim`](./rpc/wallet/README.md#get_auto_claimagent-params)
 - [`get_initial_freeze_period_of_wallet`](./rpc/wallet/README.md#get_initial_freeze_period_of_walletagent)
-- [`get_network_info_of_wallet`](./rpc/wallet/README.md#get_network_info_of_walletagent)
 - [`get_wallets`](./rpc/wallet/README.md#get_walletsagent-params)
 - [`create_new_wallet`](./rpc/wallet/README.md#create_new_walletagent-params)
 - [`get_wallet_balance`](./rpc/wallet/README.md#get_wallet_balanceagent-params)
@@ -232,6 +230,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`create_data_store`](./rpc/data_layer/README.md#create_data_storeagent-params)
 - [`get_owned_stores`](./rpc/data_layer/README.md#get_owned_storesagent)
 - [`batch_update`](./rpc/data_layer/README.md#batch_updateagent-params)
+- [`submit_pending_root`](./rpc/data_layer/README.md#submit_pending_rootagent-params)
 - [`get_value`](./rpc/data_layer/README.md#get_valueagent-params)
 - [`get_keys`](./rpc/data_layer/README.md#get_keysagent-params)
 - [`get_keys_values`](./rpc/data_layer/README.md#get_keys_valuesagent-params)
@@ -266,6 +265,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_ips_after_timestamp`](./rpc/crawler/README.md#get_ips_after_timestampagent-params)
 
 #### [Common RPC API](./rpc/common/README.md#usage)
+- [`get_network_info`](./rpc/common/README.md#get_network_infoagent)
 - [`get_connections`](./rpc/common/README.md#get_connectionsagent-params)
 - [`open_connection`](./rpc/common/README.md#open_connectionagent-params)
 - [`close_connection`](./rpc/common/README.md#close_connectionagent-params)
@@ -320,6 +320,7 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 - [`get_routes`](./ws/daemon/README.md#get_routesdaemon)
 - [`get_wallet_addresses`](./ws/daemon/README.md#get_wallet_addressesdaemon)
 - [`get_keys_for_plotting`](./ws/daemon/README.md#get_keys_for_plottingdaemon)
+- [`get_network_info`](./ws/daemon/README.md#get_network_infodaemon)
 
 Please note that Websocket APIs below is not request/response style but subscribe/listen style.  
 You cannot ask services to reply requested data immediately.  

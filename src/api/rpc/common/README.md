@@ -34,6 +34,24 @@ const agent = new RPCAgent({
 
 ---
 
+## `get_network_info(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_network_info} = require("chia-agent/api/rpc/common");
+const agent = new RPCAgent({service: "farmer"}); // Can be any service like full_node, harvester, etc...
+const response = await get_network_info(agent);
+```
+### response:
+```typescript
+{
+  network_name: str;
+  network_prefix: str;
+}
+```
+
+---
+
 ## `get_connections(agent, params)`
 ### Usage
 ```js

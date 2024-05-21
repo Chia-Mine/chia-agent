@@ -19,8 +19,6 @@ export type chia_full_node_service = typeof chia_full_node_service;
 
 export const get_blockchain_state_command = "get_blockchain_state";
 export type get_blockchain_state_command = typeof get_blockchain_state_command;
-export type TGetBlockchainStateRequest = {
-};
 export type TGetBlockchainStateResponse = {
   blockchain_state: {
     peak: Optional<BlockRecord>;
@@ -189,8 +187,6 @@ export async function get_block_spends_with_conditions<T extends TRPCAgent | TDa
 
 export const get_unfinished_block_headers_command = "get_unfinished_block_headers";
 export type get_unfinished_block_headers_command = typeof get_unfinished_block_headers_command;
-export type TGetUnfinishedBlockHeadersRequest = {
-};
 export type TGetUnfinishedBlockHeadersResponse = {
   headers: UnfinishedHeaderBlock[];
 };
@@ -249,8 +245,6 @@ export async function get_aggsig_additional_data<T extends TRPCAgent | TDaemon>(
 
 export const get_initial_freeze_period_command_of_full_node = "get_initial_freeze_period";
 export type get_initial_freeze_period_command_of_full_node = typeof get_initial_freeze_period_command_of_full_node;
-export type TGetInitialFreezePeriodRequestOfFullNode = {
-};
 export type TGetInitialFreezePeriodResponseOfFullNode = {
   INITIAL_FREEZE_END_TIMESTAMP: uint64;
 };
@@ -258,22 +252,6 @@ export type WsGetInitialFreezePeriodMessageOfFullNode = GetMessageType<chia_full
 export async function get_initial_freeze_period_of_full_node<T extends TRPCAgent | TDaemon>(agent: T) {
   type R = ResType<T, TGetInitialFreezePeriodResponseOfFullNode, WsGetInitialFreezePeriodMessageOfFullNode>;
   return agent.sendMessage<R>(chia_full_node_service, get_initial_freeze_period_command_of_full_node);
-}
-
-
-
-export const get_network_info_command_of_full_node = "get_network_info";
-export type get_network_info_command_of_full_node = typeof get_network_info_command_of_full_node;
-export type TGetNetworkInfoRequestOfFullNode = {
-};
-export type TGetNetworkInfoResponseOfFullNode = {
-  network_name: str;
-  network_prefix: str;
-};
-export type WsGetNetworkInfoMessageOfFullNode = GetMessageType<chia_full_node_service, get_network_info_command_of_full_node, TGetNetworkInfoResponseOfFullNode>;
-export async function get_network_info_of_full_node<T extends TRPCAgent | TDaemon>(agent: T) {
-  type R = ResType<T, TGetNetworkInfoResponseOfFullNode, WsGetNetworkInfoMessageOfFullNode>;
-  return agent.sendMessage<R>(chia_full_node_service, get_network_info_command_of_full_node);
 }
 
 
@@ -452,8 +430,6 @@ export async function get_puzzle_and_solution<T extends TRPCAgent | TDaemon>(age
 
 export const get_all_mempool_tx_ids_command = "get_all_mempool_tx_ids";
 export type get_all_mempool_tx_ids_command = typeof get_all_mempool_tx_ids_command;
-export type TGetAllMempoolTxIdsRequest = {
-};
 export type TGetAllMempoolTxIdsResponse = {
   tx_ids: bytes32[];
 };
@@ -467,8 +443,6 @@ export async function get_all_mempool_tx_ids<T extends TRPCAgent | TDaemon>(agen
 
 export const get_all_mempool_items_command = "get_all_mempool_items";
 export type get_all_mempool_items_command = typeof get_all_mempool_items_command;
-export type TGetAllMempoolItemsRequest = {
-};
 export type TGetAllMempoolItemsResponse = {
   mempool_items: Record<string, MempoolItemInJsonDict>;
 };
@@ -717,7 +691,6 @@ export type RpcFullNodeMessage =
   | TGetInitialFreezePeriodResponseOfFullNode
   | TGetMempoolItemByTxIdResponse
   | TGetMempoolItemsByCoinNameResponse
-  | TGetNetworkInfoResponseOfFullNode
   | TGetNetworkSpaceResponse
   | TGetUnfinishedBlockHeadersResponse
   | TPushTxResponse
@@ -758,7 +731,6 @@ export type RpcFullNodeMessageOnWs =
   | WsGetInitialFreezePeriodMessageOfFullNode
   | WsGetMempoolItemByTxIdMessage
   | WsGetMempoolItemsByCoinNameMessage
-  | WsGetNetworkInfoMessageOfFullNode
   | WsGetNetworkSpaceMessage
   | WsGetUnfinishedBlockHeadersMessage
   | WsPushTxMessage

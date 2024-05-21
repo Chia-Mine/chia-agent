@@ -153,7 +153,7 @@ export async function on_failed_partial(daemon: TDaemon, callback: (e: WsFailedP
 
 export const add_connection_command = "add_connection";
 export type add_connection_command = typeof add_connection_command;
-export type TAddConnectionBroadCast = {};
+export type TAddConnectionBroadCast = Record<string, never>;
 export type WsAddConnectionMessage = GetMessageType<chia_farmer_service, add_connection_command, TAddConnectionBroadCast>;
 export async function on_add_connection(daemon: TDaemon, callback: (e: WsAddConnectionMessage) => unknown) {
   await daemon.subscribe(metrics_service);
@@ -167,7 +167,8 @@ export async function on_add_connection(daemon: TDaemon, callback: (e: WsAddConn
 
 export const close_connection_command = "close_connection";
 export type close_connection_command = typeof close_connection_command;
-export type TCloseConnectionBroadCast = {};
+// {}: empty object
+export type TCloseConnectionBroadCast = Record<string, never>;
 export type WsCloseConnectionMessage = GetMessageType<chia_farmer_service, close_connection_command, TCloseConnectionBroadCast>;
 export async function on_close_connection(daemon: TDaemon, callback: (e: WsCloseConnectionMessage) => unknown) {
   await daemon.subscribe(metrics_service);
@@ -195,24 +196,24 @@ export type WsFarmerMessage =
 
 // Whole commands for the service
 export type chia_farmer_commands = get_connections_command
-  | new_farming_info_command
-  | new_signage_point_command
-  | harvester_update_command
-  | harvester_removed_command
-  | proof_command
-  | submitted_partial_command
-  | add_connection_command
-  | close_connection_command
+| new_farming_info_command
+| new_signage_point_command
+| harvester_update_command
+| harvester_removed_command
+| proof_command
+| submitted_partial_command
+| add_connection_command
+| close_connection_command
 ;
 export type TChiaFarmerBroadcast = TGetConnectionsBroadCast
-  | TNewFarmingInfoBroadCast
-  | TNewSignagePointBroadCast
-  | THarvesterUpdateBroadCast
-  | THarvesterRemovedBroadCast
-  | TProofBroadCast
-  | TSubmittedPartialBroadCast
-  | TAddConnectionBroadCast
-  | TCloseConnectionBroadCast
+| TNewFarmingInfoBroadCast
+| TNewSignagePointBroadCast
+| THarvesterUpdateBroadCast
+| THarvesterRemovedBroadCast
+| TProofBroadCast
+| TSubmittedPartialBroadCast
+| TAddConnectionBroadCast
+| TCloseConnectionBroadCast
 ;
 export async function on_message_from_farmer(daemon: TDaemon, callback: (e: WsFarmerMessage) => unknown){
   await Promise.all([

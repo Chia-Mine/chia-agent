@@ -95,10 +95,6 @@ module.exports = {
         "leadingUnderscore": "allow"
       },
       {
-        "selector": "typeLike",
-        "format": ["PascalCase", "snake_case"]
-      },
-      {
         "selector": "memberLike",
         "modifiers": ["private"],
         "format": ["camelCase"],

@@ -124,16 +124,12 @@ export {
   TStopPlottingRequest,
   TStopPlottingResponse,
   exit,
-  TExitRequest,
   TExitResponse,
   get_status,
-  TGetStatusRequest,
   TGetStatusResponse,
   get_version,
-  TGetVersionRequest,
   TGetVersionResponse,
   get_plotters,
-  TGetPlottersRequest,
   TGetPlottersResponse,
   running_services,
   TRunningServicesResponse,
@@ -215,6 +211,8 @@ export {
   get_keys_for_plotting,
   TGetKeysForPlottingRequest,
   TGetKeysForPlottingResponse,
+  get_network_info,
+  TGetNetworkInfoResponse,
 } from "./daemon/index";
 
 export type WsMessage =

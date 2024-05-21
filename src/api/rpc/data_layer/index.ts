@@ -21,8 +21,7 @@ export type wallet_log_in_command = typeof wallet_log_in_command;
 export type TWalletLogInRequest = {
   fingerprint: int;
 };
-export type TWalletLogInResponse = {
-};
+export type TWalletLogInResponse = Record<string, never>;
 export type WsWalletLogInMessage = GetMessageType<chia_data_layer_service, wallet_log_in_command, TWalletLogInResponse>;
 export async function wallet_log_in<T extends TRPCAgent | TDaemon>(agent: T, params: TWalletLogInRequest) {
   type R = ResType<T, TWalletLogInResponse, WsWalletLogInMessage>;
@@ -70,14 +69,32 @@ export type TBatchUpdateRequest = {
     value?: str;
   }>;
   id: str;
+  submit_on_chain?: bool;
 };
 export type TBatchUpdateResponse = {
-  tx_id: bytes32;
+  tx_id?: bytes32;
 };
 export type WsBatchUpdateMessage = GetMessageType<chia_data_layer_service, batch_update_command, TBatchUpdateResponse>;
 export async function batch_update<T extends TRPCAgent|TDaemon>(agent: T, params: TBatchUpdateRequest) {
   type R = ResType<T, TBatchUpdateResponse, WsBatchUpdateMessage>;
   return agent.sendMessage<R>(chia_data_layer_service, batch_update_command, params);
+}
+
+
+export const submit_pending_root_command = "submit_pending_root";
+export type submit_pending_root_command = typeof submit_pending_root_command;
+export type TSubmitPendingRootRequest = {
+  id: str;
+  fee?: uint64;
+};
+export type TSubmitPendingRootResponse = {
+  tx_id: bytes32;
+};
+export type WsSubmitPendingRootMessage = GetMessageType<chia_data_layer_service, submit_pending_root_command, TSubmitPendingRootResponse>;
+
+export async function submit_pending_root<T extends TRPCAgent | TDaemon>(agent: T, params: TSubmitPendingRootRequest) {
+  type R = ResType<T, TSubmitPendingRootResponse, WsSubmitPendingRootMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, submit_pending_root_command, params);
 }
 
 
@@ -103,9 +120,16 @@ export type get_keys_command = typeof get_keys_command;
 export type TGetKeysRequest = {
   id: str;
   root_hash?: str;
+  page?: int;
+  max_page_size?: int;
 };
 export type TGetKeysResponse = {
   keys: str[];
+} | {
+  keys: str[];
+  total_pages: int;
+  total_bytes: int;
+  root_hash: Optional<bytes32>;
 };
 export type WsGetKeysMessage = GetMessageType<chia_data_layer_service, get_keys_command, TGetKeysResponse>;
 export async function get_keys<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKeysRequest) {
@@ -119,6 +143,8 @@ export type get_keys_values_command = typeof get_keys_values_command;
 export type TGetKeysValuesRequest = {
   id: str;
   root_hash?: str;
+  page?: int;
+  max_page_size?: int;
 };
 export type TGetKeysValuesResponse = {
   keys_values: Array<{
@@ -126,6 +152,15 @@ export type TGetKeysValuesResponse = {
     key: str;
     value: str;
   }>;
+} | {
+  keys_values: Array<{
+    hash: str;
+    key: str;
+    value: str;
+  }>;
+  total_pages: int;
+  total_bytes: int;
+  root_hash: Optional<bytes32>;
 };
 export type WsGetKeysValuesMessage = GetMessageType<chia_data_layer_service, get_keys_values_command, TGetKeysValuesResponse>;
 export async function get_keys_values<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKeysValuesRequest) {
@@ -247,8 +282,7 @@ export type TSubscribeRequest = {
   id: str;
   urls: str[];
 };
-export type TSubscribeResponse = {
-};
+export type TSubscribeResponse = Record<string, never>;
 export type WsSubscribeMessage = GetMessageType<chia_data_layer_service, subscribe_command, TSubscribeResponse>;
 export async function subscribe<T extends TRPCAgent|TDaemon>(agent: T, params: TSubscribeRequest) {
   type R = ResType<T, TSubscribeResponse, WsSubscribeMessage>;
@@ -262,8 +296,7 @@ export type TUnsubscribeRequest = {
   id: str;
   retain?: bool;
 };
-export type TUnsubscribeResponse = {
-};
+export type TUnsubscribeResponse = Record<string, never>;
 export type WsUnsubscribeMessage = GetMessageType<chia_data_layer_service, unsubscribe_command, TUnsubscribeResponse>;
 export async function unsubscribe<T extends TRPCAgent|TDaemon>(agent: T, params: TUnsubscribeRequest) {
   type R = ResType<T, TUnsubscribeResponse, WsUnsubscribeMessage>;
@@ -279,8 +312,7 @@ export type TAddMirrorRequest = {
   amount: uint64;
   fee?: uint64;
 };
-export type TAddMirrorResponse = {
-};
+export type TAddMirrorResponse = Record<string, never>;
 export type WsAddMirrorMessage = GetMessageType<chia_data_layer_service, add_mirror_command, TAddMirrorResponse>;
 export async function add_mirror<T extends TRPCAgent|TDaemon>(agent: T, params: TAddMirrorRequest) {
   type R = ResType<T, TAddMirrorResponse, WsAddMirrorMessage>;
@@ -294,8 +326,7 @@ export type TDeleteMirrorRequest = {
   coin_id: str;
   fee?: uint64;
 };
-export type TDeleteMirrorResponse = {
-};
+export type TDeleteMirrorResponse = Record<string, never>;
 export type WsDeleteMirrorMessage = GetMessageType<chia_data_layer_service, delete_mirror_command, TDeleteMirrorResponse>;
 export async function delete_mirror<T extends TRPCAgent|TDaemon>(agent: T, params: TDeleteMirrorRequest) {
   type R = ResType<T, TDeleteMirrorResponse, WsDeleteMirrorMessage>;
@@ -330,8 +361,7 @@ export type TRemoveSubscriptionsRequest = {
   id: str;
   urls: str[];
 };
-export type TRemoveSubscriptionsResponse = {
-};
+export type TRemoveSubscriptionsResponse = Record<string, never>;
 export type WsRemoveSubscriptionsMessage = GetMessageType<chia_data_layer_service, remove_subscriptions_command, TRemoveSubscriptionsResponse>;
 export async function remove_subscriptions<T extends TRPCAgent|TDaemon>(agent: T, params: TRemoveSubscriptionsRequest) {
   type R = ResType<T, TRemoveSubscriptionsResponse, WsRemoveSubscriptionsMessage>;
@@ -357,6 +387,8 @@ export type TGetKvDiffRequest = {
   id: str;
   hash_1: str;
   hash_2: str;
+  page?: int;
+  max_page_size?: int;
 };
 export type TGetKvDiffResponse = {
   diff: Array<{
@@ -364,6 +396,14 @@ export type TGetKvDiffResponse = {
     key: str;
     value: str;
   }>;
+} | {
+  diff: Array<{
+    type: str;
+    key: str;
+    value: str;
+  }>;
+  total_pages: int;
+  total_bytes: int;
 };
 export type WsGetKvDiffMessage = GetMessageType<chia_data_layer_service, get_kv_diff_command, TGetKvDiffResponse>;
 export async function get_kv_diff<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKvDiffRequest) {
@@ -398,8 +438,7 @@ export type TAddMissingFilesRequest = {
   overwrite?: bool;
   foldername?: str;
 };
-export type TAddMissingFilesResponse = {
-};
+export type TAddMissingFilesResponse = Record<string, never>;
 export type WsAddMissingFilesMessage = GetMessageType<chia_data_layer_service, add_missing_files_command, TAddMissingFilesResponse>;
 export async function add_missing_files<T extends TRPCAgent|TDaemon>(agent: T, params: TAddMissingFilesRequest) {
   type R = ResType<T, TAddMissingFilesResponse, WsAddMissingFilesMessage>;
@@ -551,6 +590,7 @@ export type RpcDataLayerMessage =
   | TCreateDataStoreResponse
   | TGetOwnedStoresResponse
   | TBatchUpdateResponse
+  | TSubmitPendingRootResponse
   | TGetValueResponse
   | TGetKeysResponse
   | TGetKeysValuesResponse
@@ -586,6 +626,7 @@ export type RpcDataLayerMessageOnWs =
   | WsCreateDataStoreMessage
   | WsGetOwnedStoresMessage
   | WsBatchUpdateMessage
+  | WsSubmitPendingRootMessage
   | WsGetValueMessage
   | WsGetKeysMessage
   | WsGetKeysValuesMessage

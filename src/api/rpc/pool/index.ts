@@ -11,7 +11,7 @@ import {
   PutFarmerRequest,
   PutFarmerResponse
 } from "../../chia/protocols/pool_protocol";
-import {FarmerRecord} from "../../chia/pool/store";
+import {FarmerRecord} from "../../chia/pool/record";
 
 
 
@@ -66,7 +66,7 @@ export type TLoginRequest = {
 export type TLoginResponse = {
   farmer_record: FarmerRecord;
   recent_partials: Array<[uint64, uint64]>; // Array of tuple [timestamp, difficulty]
-} | { };
+} | Record<string, never>;
 export async function login(agent: RPCAgent, data: TLoginRequest){
   return agent.request<TLoginResponse>("GET", "login", data);
 }

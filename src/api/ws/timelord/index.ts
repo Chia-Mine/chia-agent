@@ -79,7 +79,7 @@ export async function on_new_peak(daemon: TDaemon, callback: (e: WsNewPeakMessag
 }
 
 export type WsTimelordMessage = WsFinishedPlotMessage
-  | WsNewCompactProofMessage
-  | WsSkippingPeakMessage
-  | WsNewPeakMessage
+| WsNewCompactProofMessage
+| WsSkippingPeakMessage
+| WsNewPeakMessage
 ;

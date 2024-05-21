@@ -1,13 +1,142 @@
 # Changelog
 
+## [14.1.0]
+### Changed
+-`get_network_info` RPC API is now commonized and available in addition to `full_node` and `wallet`.
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`get_keys`](./src/api/rpc/data_layer/README.md#get_keysagent-params)
+    - Added `page` to request parameter
+    - Added `max_page_size` to request parameter
+    - Added `total_pages`, `total_bytes` and `root_hash` to response
+  - [`get_keys_values`](./src/api/rpc/data_layer/README.md#get_keys_valuesagent-params)
+    - Added `page` to request parameter
+    - Added `max_page_size` to request parameter
+    - Added `total_pages`, `total_bytes` and `root_hash` to response
+  - [`batch_update`](./src/api/rpc/data_layer/README.md#batch_updateagent-params)
+    - Added `submit_on_chain` to request parameter
+    - Made `tx_id` in response optional
+  - [`get_kv_diff`](./src/api/rpc/data_layer/README.md#get_kv_diffagent-params)
+    - Added `page` to request parameter
+    - Added `max_page_size` to request parameter
+    - Added `total_pages` and `total_bytes` to response
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`push_transactions`](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
+    - A request parameter `transactions` is allowed to be `TransactionRecordConvenience[]`
+  - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+    - `transactions` is added to response for `cat_wallet` if `mode` in request is `new`
+    - `transactions` is added to response for `dao_wallet`
+    - `transactions` is added to response for `pool_wallet` if `mode` in request is `new`
+  - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+    - Changed the type of `fee` to `uint64` and made it optional
+    - Added `transactions` to response
+  - [`send_transaction_multi`](./src/api/rpc/wallet/README.md#send_transaction_multiagent-params)
+    - Simplified `TSendTransactionMultiRequest`
+    - Added `transactions` to response
+  - [`spend_clawback_coins`](./src/api/rpc/wallet/README.md#spend_clawback_coinsagent-params)
+    - Added `transactions` to response
+  - [`send_notification`](./src/api/rpc/wallet/README.md#send_notificationagent-params)
+    - Added `transactions` to response
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+    - Added `transactions` to response
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+    - Added `transactions` to response
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+    - Added `transactions` to response
+  - [`cancel_offer`](./src/api/rpc/wallet/README.md#cancel_offeragent-params)
+    - Added `transactions` to response
+  - [`cancel_offers`](./src/api/rpc/wallet/README.md#cancel_offersagent-params)
+    - Added `transactions` to response
+  - [`did_update_recovery_ids`](./src/api/rpc/wallet/README.md#did_update_recovery_idsagent-params)
+    - Added `transactions` to response
+  - [`did_message_spend`](./src/api/rpc/wallet/README.md#did_message_spendagent-params)
+    - Added `transactions` to response
+  - [`did_update_metadata`](./src/api/rpc/wallet/README.md#did_update_metadataagent-params)
+    - Added `transactions` to response
+  - [`did_recovery_spend`](./src/api/rpc/wallet/README.md#did_recovery_spendagent-params)
+    - Added `transactions` to response
+  - [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
+    - Added `transactions` to response
+  - [`did_transfer_did`](./src/api/rpc/wallet/README.md#did_transfer_didagent-params)
+    - Added `transactions` to response
+  - [`dao_add_funds_to_treasury`](./src/api/rpc/wallet/README.md#dao_add_funds_to_treasuryagent-params)
+    - Added `transactions` to response
+  - [`dao_send_to_lockup`](./src/api/rpc/wallet/README.md#dao_send_to_lockupagent-params)
+    - Added `transactions` to response
+  - [`dao_exit_lockup`](./src/api/rpc/wallet/README.md#dao_exit_lockupagent-params)
+    - Added `transactions` to response
+  - [`dao_create_proposal`](./src/api/rpc/wallet/README.md#dao_create_proposalagent-params)
+    - Added `transactions` to response
+  - [`dao_vote_on_proposal`](./src/api/rpc/wallet/README.md#dao_vote_on_proposalagent-params)
+    - Added `transactions` to response
+  - [`dao_close_proposal`](./src/api/rpc/wallet/README.md#dao_close_proposalagent-params)
+    - Added `transactions` to response
+  - [`dao_free_coins_from_finished_proposals`](./src/api/rpc/wallet/README.md#dao_free_coins_from_finished_proposalsagent-params)
+    - Added `transactions` to response
+  - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+    - Added `transactions` to response
+  - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+    - Added `transactions` to response
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nft_set_did_bulkagent-params)
+    - Added `transactions` to response
+  - [`nft_transfer_bulk`](./src/api/rpc/wallet/README.md#nft_transfer_bulkagent-params)
+    - Added `transactions` to response
+  - [`nft_transfer_nft`](./src/api/rpc/wallet/README.md#nft_transfer_nftagent-params)
+    - Added `transactions` to response
+  - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+    - Added `transactions` to response
+  - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
+    - Added `transactions` to response
+  - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+    - Added `morph_bytes` to request parameter
+    - Added `transactions` to response
+  - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
+    - Added `transactions` to response
+  - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
+    - Added `transactions` to response
+  - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
+    - Added `transactions` to response
+  - [`dl_update_root`](./src/api/rpc/wallet/README.md#dl_update_rootagent-params)
+    - Added `transactions` to response
+  - [`dl_update_multiple`](./src/api/rpc/wallet/README.md#dl_update_multipleagent-params)
+    - Added `transactions` to response
+- Moved `TxEndpoint` to [src/chia/rpc/util.ts](./src/api/chia/rpc/util.ts) (Previously `src/chia/wallet/util/tx_config.ts`)
+- Renamed `TxEndPoint` to `TXEndpointRequest`
+- Renamed `TxEndpointForCompat` to `TXEndpointForCompat`
+- Renamed `TxConfigLoader` to `TXConfigLoader`
+- Changed the types of `passed` and `closed` in ProposalInfo` to `bool` (Previously they were `Optional<bool>`)  
+  As a result, the RPC APIs below are affected
+  - `dao_get_proposals` of Wallet RPC API
+  - `dao_adjust_filter_level` of Wallet RPC API
+- Upgraded dependencies and replaced `yarn.lock` with `pnpm-lock.yaml`
+- Moved `FarmerRecord` to [src/chia/pool/record.ts](./src/api/chia/pool/record.ts) (
+  Previously `src/chia/pool/store.ts`)
+### Added
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`get_network_info`](./src/api/ws/daemon/README.md#get_network_infodaemon)
+- [Common RPC API](./src/api/rpc/common)
+  - [`get_network_info`](./src/api/rpc/common/README.md#get_network_infoagent)
+- [DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`submit_pending_root`](./src/api/rpc/data_layer/README.md#submit_pending_rootagent-params)
+### Fixed
+- Renamed `ReceiveBlockResult` to `AddBlockResult` (type `ReceiveBlockResult` is still available to avoid breaking change)
+- Fixed an invalid `TCreate_New_DAO_WalletRequest` README location.
+- Fixed an issue where `pubkey` and `pubhash` in request of Wallet RPC API `did_recovery_spend` was not optional in the API doc.
+- Fixed lint errors
+### Removed
+- [FullNode RPC API](./src/api/rpc/data_layer)
+  - `get_network_info_of_full_node`
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - `get_network_info_of_wallet`
+- Removed empty request parameter types like `{}`
+
 ## [14.0.0]
 ### Breaking change
 - When RPC API responds with `success: false`, its `Promise` now does `reject`. (Previously it does `resolve`)
 - At chia-blockchain@2.2.1, in `chia/consensus/cost_calculator.py`,  
   `NPCResult.cost` was removed.  
   As a result, the RPC APIs below might be incompatible between `2.1.4` and `2.2.1`.
-  - `get_all_mempool_items` Of FullNode RPC API
-  - `get_mempool_item_by_tx_id` Of FullNode RPC API
+  - `get_all_mempool_items` of FullNode RPC API
+  - `get_mempool_item_by_tx_id` of FullNode RPC API
 ### Changed
 - Loosened a type of `agent` to call RPC APIs. RPC APIs can be invoked with `agent` which just implements
   `sendMessage` method depicted as below.
@@ -1385,7 +1514,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-
+[14.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.0.0...v14.1.0
 [14.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.2.0...v14.0.0
 [13.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.1.0...v13.2.0
 [13.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.0.1...v13.1.0
