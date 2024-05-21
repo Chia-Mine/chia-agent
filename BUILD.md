@@ -5,8 +5,8 @@ $ cd <Directory you like>
 $ git clone https://github.com/Chia-Mine/chia-agent
 $ cd chia-agent
 $ git checkout <branch you like>
-$ npm run build # Build files into /build directory which git ignores
+$ pnpm run build # or npm run build
 
 # If you check how package is build for release:
-$ npm run build:prod
+$ pnpm run build:prod # or npm run build:prod
 ```
