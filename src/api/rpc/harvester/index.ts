@@ -9,8 +9,6 @@ export type chia_harvester_service = typeof chia_harvester_service;
 
 export const get_plots_command = "get_plots";
 export type get_plots_command = typeof get_plots_command;
-export type TGetPlotsRequest = {
-};
 export type TGetPlotsResponse = {
   plots: Plot[];
   failed_to_open_filenames: str[];
@@ -27,10 +25,7 @@ export async function get_plots<T extends TRPCAgent | TDaemon>(agent: T) {
 
 export const refresh_plots_command = "refresh_plots";
 export type refresh_plots_command = typeof refresh_plots_command;
-export type TRefreshPlotsRequest = {
-};
-export type TRefreshPlotsResponse = {
-};
+export type TRefreshPlotsResponse = Record<string, never>;
 export type WsRefreshPlotsMessage = GetMessageType<chia_harvester_service, refresh_plots_command, TRefreshPlotsResponse>;
 export async function refresh_plots<T extends TRPCAgent | TDaemon>(agent: T) {
   type R = ResType<T, TRefreshPlotsResponse, WsRefreshPlotsMessage>;
@@ -45,8 +40,7 @@ export type delete_plot_command = typeof delete_plot_command;
 export type TDeletePlotRequest = {
   filename: str;
 };
-export type TDeletePlotResponse = {
-};
+export type TDeletePlotResponse = Record<string, never>;
 export type WsDeletePlotMessage = GetMessageType<chia_harvester_service, delete_plot_command, TDeletePlotResponse>;
 export async function delete_plot<T extends TRPCAgent | TDaemon>(agent: T, data: TDeletePlotRequest) {
   type R = ResType<T, TDeletePlotResponse, WsDeletePlotMessage>;
@@ -61,8 +55,7 @@ export type add_plot_directory_command = typeof add_plot_directory_command;
 export type TAddPlotDirectoryRequest = {
   dirname: str;
 };
-export type TAddPlotDirectoryResponse = {
-};
+export type TAddPlotDirectoryResponse = Record<string, never>;
 export type WsAddPlotDirectoryMessage = GetMessageType<chia_harvester_service, add_plot_directory_command, TAddPlotDirectoryResponse>;
 export async function add_plot_directory<T extends TRPCAgent | TDaemon>(agent: T, data: TAddPlotDirectoryRequest) {
   type R = ResType<T, TAddPlotDirectoryResponse, WsAddPlotDirectoryMessage>;
@@ -74,8 +67,6 @@ export async function add_plot_directory<T extends TRPCAgent | TDaemon>(agent: T
 
 export const get_plot_directories_command = "get_plot_directories";
 export type get_plot_directories_command = typeof get_plot_directories_command;
-export type TGetPlotDirectoriesRequest = {
-};
 export type TGetPlotDirectoriesResponse = {
   directories: str[];
 };
@@ -93,8 +84,7 @@ export type remove_plot_directory_command = typeof remove_plot_directory_command
 export type TRemovePlotDirectoryRequest = {
   dirname: str;
 };
-export type TRemovePlotDirectoryResponse = {
-};
+export type TRemovePlotDirectoryResponse = Record<string, never>;
 export type WsRemovePlotDirectoryMessage = GetMessageType<chia_harvester_service, remove_plot_directory_command, TRemovePlotDirectoryResponse>;
 export async function remove_plot_directory<T extends TRPCAgent | TDaemon>(agent: T, data: TRemovePlotDirectoryRequest) {
   type R = ResType<T, TRemovePlotDirectoryResponse, WsRemovePlotDirectoryMessage>;
@@ -134,8 +124,7 @@ export type TUpdateHarvesterConfigRequest = {
   recursive_plot_scan?: bool;
   refresh_parameter_interval_seconds?: uint32;
 };
-export type TUpdateHarvesterConfigResponse = {
-};
+export type TUpdateHarvesterConfigResponse = Record<string, never>;
 export type WsUpdateHarvesterConfigMessage = GetMessageType<chia_harvester_service, update_harvester_config_command, TUpdateHarvesterConfigResponse>;
 export async function update_harvester_config<T extends TRPCAgent | TDaemon>(agent: T, data: TUpdateHarvesterConfigRequest) {
   type R = ResType<T, TUpdateHarvesterConfigResponse, WsUpdateHarvesterConfigMessage>;

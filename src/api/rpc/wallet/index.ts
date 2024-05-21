@@ -85,8 +85,6 @@ export async function get_logged_in_fingerprint<T extends TRPCAgent | TDaemon>(a
 
 export const get_public_keys_command = "get_public_keys";
 export type get_public_keys_command = typeof get_public_keys_command;
-export type TGetPublicKeysRequest = {
-};
 export type TGetPublicKeysResponse = {
   public_key_fingerprints: int[];
 } | {
@@ -131,8 +129,6 @@ export async function get_private_key<T extends TRPCAgent | TDaemon>(agent: T, d
 
 export const generate_mnemonic_command = "generate_mnemonic";
 export type generate_mnemonic_command = typeof generate_mnemonic_command;
-export type TGenerateMnemonicRequest = {
-};
 export type TGenerateMnemonicResponse = {
   mnemonic: str[];
 };
@@ -171,8 +167,7 @@ export type delete_key_command = typeof delete_key_command;
 export type TDeleteKeyRequest = {
   fingerprint: int;
 };
-export type TDeleteKeyResponse = {
-};
+export type TDeleteKeyResponse = Record<string, never>;
 export type WsDeleteKeyMessage = GetMessageType<chia_wallet_service, delete_key_command, TDeleteKeyResponse>;
 export async function delete_key<T extends TRPCAgent | TDaemon>(agent: T, data: TDeleteKeyRequest){
   type R = ResType<T, TDeleteKeyResponse, WsDeleteKeyMessage>;
@@ -237,8 +232,6 @@ export async function set_wallet_resync_on_startup<T extends TRPCAgent | TDaemon
 // # Wallet node
 export const get_sync_status_command = "get_sync_status";
 export type get_sync_status_command = typeof get_sync_status_command;
-export type TGetSyncStatusRequest = {
-};
 export type TGetSyncStatusResponse = {
   synced: bool;
   syncing: bool;
@@ -254,8 +247,6 @@ export async function get_sync_status<T extends TRPCAgent | TDaemon>(agent: T){
 
 export const get_height_info_command = "get_height_info";
 export type get_height_info_command = typeof get_height_info_command;
-export type TGetHeightInfoRequest = {
-};
 export type TGetHeightInfoResponse = {
   height: uint32;
 };
@@ -300,8 +291,7 @@ export type farm_block_command = typeof farm_block_command;
 export type TFarmBlockRequest = {
   address: str;
 };
-export type TFarmBlockResponse = {
-};
+export type TFarmBlockResponse = Record<string, never>;
 export type WsFarmBlockMessage = GetMessageType<chia_wallet_service, farm_block_command, TFarmBlockResponse>;
 export async function farm_block<T extends TRPCAgent | TDaemon>(agent: T, data: TFarmBlockRequest){
   type R = ResType<T, TFarmBlockResponse, WsFarmBlockMessage>;
@@ -346,8 +336,6 @@ export async function get_auto_claim<T extends TRPCAgent | TDaemon>(agent: T) {
 
 export const get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";
 export type get_initial_freeze_period_command_of_wallet = typeof get_initial_freeze_period_command_of_wallet;
-export type TGetInitialFreezePeriodRequestOfWallet = {
-};
 export type TGetInitialFreezePeriodResponseOfWallet = {
   INITIAL_FREEZE_END_TIMESTAMP: 1620061200; // Mon May 03 2021 17:00:00 GMT+0000
 };
@@ -752,8 +740,6 @@ export async function get_transaction_count<T extends TRPCAgent | TDaemon>(agent
 
 export const get_farmed_amount_command = "get_farmed_amount";
 export type get_farmed_amount_command = typeof get_farmed_amount_command;
-export type TGetFarmedAmountRequest = {
-};
 export type TGetFarmedAmountResponse = {
   farmed_amount: int;
   pool_reward_amount: int;
@@ -817,8 +803,7 @@ export type delete_unconfirmed_transactions_command = typeof delete_unconfirmed_
 export type TDeleteUnconfirmedTransactionsRequest = {
   wallet_id: uint32;
 };
-export type TDeleteUnconfirmedTransactionsResponse = {
-};
+export type TDeleteUnconfirmedTransactionsResponse = Record<string, never>;
 export type WsDeleteUnconfirmedTransactionsMessage = GetMessageType<chia_wallet_service, delete_unconfirmed_transactions_command, TDeleteUnconfirmedTransactionsResponse>;
 export async function delete_unconfirmed_transactions<T extends TRPCAgent | TDaemon>(agent: T, data: TDeleteUnconfirmedTransactionsRequest){
   type R = ResType<T, TDeleteUnconfirmedTransactionsResponse, WsDeleteUnconfirmedTransactionsMessage>;
@@ -937,8 +922,7 @@ export type delete_notifications_command = typeof delete_notifications_command;
 export type TDeleteNotificationsRequest = {
   ids?: str[];
 };
-export type TDeleteNotificationsResponse = {
-};
+export type TDeleteNotificationsResponse = Record<string, never>;
 export type WsDeleteNotificationsMessage = GetMessageType<chia_wallet_service, delete_notifications_command, TDeleteNotificationsResponse>;
 export async function delete_notifications<T extends TRPCAgent | TDaemon>(agent: T, data: TDeleteNotificationsRequest){
   type R = ResType<T, TDeleteNotificationsResponse, WsDeleteNotificationsMessage>;
@@ -2446,8 +2430,7 @@ export type TRlSetUserInfoRequest = {
   limit: uint64;
   admin_pubkey: str;
 };
-export type TRlSetUserInfoResponse = {
-};
+export type TRlSetUserInfoResponse = Record<string, never>;
 export type WsRlSetUserInfoMessage = GetMessageType<chia_wallet_service, rl_set_user_info_command, TRlSetUserInfoResponse>;
 export async function rl_set_user_info<T extends TRPCAgent | TDaemon>(agent: T, data: TRlSetUserInfoRequest){
   type R = ResType<T, TRlSetUserInfoResponse, WsRlSetUserInfoMessage>;
@@ -2611,8 +2594,7 @@ export type dl_track_new_command = typeof dl_track_new_command;
 export type TDlTrackNewRequest = {
   launcher_id: str;
 };
-export type TDlTrackNewResponse = {
-};
+export type TDlTrackNewResponse = Record<string, never>;
 export type WsDlTrackNewMessage = GetMessageType<chia_wallet_service, dl_track_new_command, TDlTrackNewResponse>;
 export async function dl_track_new<T extends TRPCAgent | TDaemon>(agent: T, data: TDlTrackNewRequest){
   type R = ResType<T, TDlTrackNewResponse, WsDlTrackNewMessage>;
@@ -2627,8 +2609,7 @@ export type dl_stop_tracking_command = typeof dl_stop_tracking_command;
 export type TDlStopTrackingRequest = {
   launcher_id: str;
 };
-export type TDlStopTrackingResponse = {
-};
+export type TDlStopTrackingResponse = Record<string, never>;
 export type WsDlStopTrackingMessage = GetMessageType<chia_wallet_service, dl_stop_tracking_command, TDlStopTrackingResponse>;
 export async function dl_stop_tracking<T extends TRPCAgent | TDaemon>(agent: T, data: TDlStopTrackingRequest){
   type R = ResType<T, TDlStopTrackingResponse, WsDlStopTrackingMessage>;

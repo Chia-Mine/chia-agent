@@ -16,7 +16,8 @@
   "scripts": {
     "build": "node ./pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./build --outDir ./build",
     "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint --ext '.ts,js' ./src/"
   },
   "keywords": [
     "chia",

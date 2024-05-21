@@ -1,5 +1,5 @@
 export interface APIAgent {
-  sendMessage<M extends unknown>(
+  sendMessage<M>(
     destination: string,
     command: string,
     data?: Record<string, unknown>,

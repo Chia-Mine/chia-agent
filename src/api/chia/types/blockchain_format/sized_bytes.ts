@@ -6,4 +6,4 @@ export type bytes32 = str;
 export type bytes48 = str;
 export type bytes96 = str;
 export type bytes100 = str;
-export type bytes480 = str; 
+export type bytes480 = str;

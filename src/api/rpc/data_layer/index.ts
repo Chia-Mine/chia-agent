@@ -21,8 +21,7 @@ export type wallet_log_in_command = typeof wallet_log_in_command;
 export type TWalletLogInRequest = {
   fingerprint: int;
 };
-export type TWalletLogInResponse = {
-};
+export type TWalletLogInResponse = Record<string, never>;
 export type WsWalletLogInMessage = GetMessageType<chia_data_layer_service, wallet_log_in_command, TWalletLogInResponse>;
 export async function wallet_log_in<T extends TRPCAgent | TDaemon>(agent: T, params: TWalletLogInRequest) {
   type R = ResType<T, TWalletLogInResponse, WsWalletLogInMessage>;
@@ -283,8 +282,7 @@ export type TSubscribeRequest = {
   id: str;
   urls: str[];
 };
-export type TSubscribeResponse = {
-};
+export type TSubscribeResponse = Record<string, never>;
 export type WsSubscribeMessage = GetMessageType<chia_data_layer_service, subscribe_command, TSubscribeResponse>;
 export async function subscribe<T extends TRPCAgent|TDaemon>(agent: T, params: TSubscribeRequest) {
   type R = ResType<T, TSubscribeResponse, WsSubscribeMessage>;
@@ -298,8 +296,7 @@ export type TUnsubscribeRequest = {
   id: str;
   retain?: bool;
 };
-export type TUnsubscribeResponse = {
-};
+export type TUnsubscribeResponse = Record<string, never>;
 export type WsUnsubscribeMessage = GetMessageType<chia_data_layer_service, unsubscribe_command, TUnsubscribeResponse>;
 export async function unsubscribe<T extends TRPCAgent|TDaemon>(agent: T, params: TUnsubscribeRequest) {
   type R = ResType<T, TUnsubscribeResponse, WsUnsubscribeMessage>;
@@ -315,8 +312,7 @@ export type TAddMirrorRequest = {
   amount: uint64;
   fee?: uint64;
 };
-export type TAddMirrorResponse = {
-};
+export type TAddMirrorResponse = Record<string, never>;
 export type WsAddMirrorMessage = GetMessageType<chia_data_layer_service, add_mirror_command, TAddMirrorResponse>;
 export async function add_mirror<T extends TRPCAgent|TDaemon>(agent: T, params: TAddMirrorRequest) {
   type R = ResType<T, TAddMirrorResponse, WsAddMirrorMessage>;
@@ -330,8 +326,7 @@ export type TDeleteMirrorRequest = {
   coin_id: str;
   fee?: uint64;
 };
-export type TDeleteMirrorResponse = {
-};
+export type TDeleteMirrorResponse = Record<string, never>;
 export type WsDeleteMirrorMessage = GetMessageType<chia_data_layer_service, delete_mirror_command, TDeleteMirrorResponse>;
 export async function delete_mirror<T extends TRPCAgent|TDaemon>(agent: T, params: TDeleteMirrorRequest) {
   type R = ResType<T, TDeleteMirrorResponse, WsDeleteMirrorMessage>;
@@ -366,8 +361,7 @@ export type TRemoveSubscriptionsRequest = {
   id: str;
   urls: str[];
 };
-export type TRemoveSubscriptionsResponse = {
-};
+export type TRemoveSubscriptionsResponse = Record<string, never>;
 export type WsRemoveSubscriptionsMessage = GetMessageType<chia_data_layer_service, remove_subscriptions_command, TRemoveSubscriptionsResponse>;
 export async function remove_subscriptions<T extends TRPCAgent|TDaemon>(agent: T, params: TRemoveSubscriptionsRequest) {
   type R = ResType<T, TRemoveSubscriptionsResponse, WsRemoveSubscriptionsMessage>;
@@ -444,8 +438,7 @@ export type TAddMissingFilesRequest = {
   overwrite?: bool;
   foldername?: str;
 };
-export type TAddMissingFilesResponse = {
-};
+export type TAddMissingFilesResponse = Record<string, never>;
 export type WsAddMissingFilesMessage = GetMessageType<chia_data_layer_service, add_missing_files_command, TAddMissingFilesResponse>;
 export async function add_missing_files<T extends TRPCAgent|TDaemon>(agent: T, params: TAddMissingFilesRequest) {
   type R = ResType<T, TAddMissingFilesResponse, WsAddMissingFilesMessage>;

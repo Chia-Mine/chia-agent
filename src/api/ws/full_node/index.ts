@@ -73,7 +73,7 @@ export async function on_get_blockchain_state(daemon: TDaemon, callback: (e: WsG
 
 export const block_command = "block";
 export type block_command = typeof block_command;
-export type TBlockBroadCast = {} | {
+export type TBlockBroadCast = Record<string, never> | {
   transaction_block: bool;
   k_size: uint8;
   header_hash: bytes32;
@@ -114,9 +114,9 @@ export async function on_signage_point(daemon: TDaemon, callback: (e: WsSignageP
 }
 
 export type WsFullNodeMessage = WsGetConnectionFullNodeMessage
-  | WsGetBlockchainStateMessage
-  | WsBlockMessage
-  | WsSignagePointMessage
+| WsGetBlockchainStateMessage
+| WsBlockMessage
+| WsSignagePointMessage
 ;
 // Whole commands for the service
 export type chia_full_node_commands = get_blockchain_state_command | get_connections_command | block_command | signage_point_command;

@@ -26,10 +26,10 @@ export const state_changed_command_of_wallet = "state_changed";
 export type state_changed_command_of_wallet = typeof state_changed_command_of_wallet;
 export type TStateChangedBroadCastOfWallet = {
   state: "add_connection" | "new_block" | "wallet_created"
-    | "added_stray_cat" | "offer_added" | "offer_cancelled" | "new_on_chain_notification";
+  | "added_stray_cat" | "offer_added" | "offer_cancelled" | "new_on_chain_notification";
 } | {
   state: "coin_removed" | "coin_added" | "pending_transaction" | "did_coin_added" | "nft_coin_added"
-    | "nft_coin_removed" | "nft_coin_updated" | "nft_coin_did_set" | "wallet_removed";
+  | "nft_coin_removed" | "nft_coin_updated" | "nft_coin_did_set" | "wallet_removed";
   wallet_id: uint32;
 } | {
   state: "tx_update";
@@ -54,7 +54,7 @@ export async function on_state_changed_of_wallet(daemon: TDaemon, callback: (e: 
 
 export const sync_changed_command = "sync_changed";
 export type sync_changed_command = typeof sync_changed_command;
-export type TSyncChangedBroadCast = {};
+export type TSyncChangedBroadCast = Record<string, never>;
 export type WsSyncChangedWalletMessage = GetMessageType<chia_wallet_service, sync_changed_command, TSyncChangedBroadCast>;
 export async function on_sync_changed(daemon: TDaemon, callback: (e: WsSyncChangedWalletMessage) => unknown){
   await daemon.subscribe(metrics_service);
@@ -116,11 +116,11 @@ export async function on_close_connection(daemon: TDaemon, callback: (e: WsClose
 }
 
 export type WsWalletMessage = WsGetConnectionsWalletMessage
-  | WsSyncChangedWalletMessage
-  | WsStateChangedWalletMessage
-  | WsCoinAddedMessage
-  | WsAddConnectionMessage
-  | WsCloseConnectionMessage
+| WsSyncChangedWalletMessage
+| WsStateChangedWalletMessage
+| WsCoinAddedMessage
+| WsAddConnectionMessage
+| WsCloseConnectionMessage
 ;
 // Whole commands for the service
 export type chia_wallet_commands =

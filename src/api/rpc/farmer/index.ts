@@ -36,8 +36,6 @@ export async function get_signage_point<T extends TRPCAgent|TDaemon>(agent: T, p
 
 export const get_signage_points_command = "get_signage_points";
 export type get_signage_points_command = typeof get_signage_points_command;
-export type TGetSignagePointsRequest = {
-};
 export type TGetSignagePointsResponse = {
   signage_points: TGetSignagePointResponse[];
 };
@@ -78,8 +76,7 @@ export type TSetRewardTargetRequest = {
   farmer_target?: str;
   pool_target?: str;
 };
-export type TSetRewardTargetResponse = {
-};
+export type TSetRewardTargetResponse = Record<string, never>;
 export type WsSetRewardTargetsMessage = GetMessageType<chia_farmer_service, set_reward_targets_command, TSetRewardTargetResponse>;
 export async function set_reward_targets<T extends TRPCAgent | TDaemon>(agent: T, params: TSetRewardTargetRequest){
   type R = ResType<T, TSetRewardTargetResponse, WsSetRewardTargetsMessage>;
@@ -90,8 +87,6 @@ export async function set_reward_targets<T extends TRPCAgent | TDaemon>(agent: T
 
 export const get_pool_state_command = "get_pool_state";
 export type get_pool_state_command = typeof get_pool_state_command;
-export type TGetPoolStateRequest = {
-};
 export type TGetPoolStateResponse = {
   pool_state: PoolState[];
 };
@@ -109,8 +104,7 @@ export type TSetPayoutInstructionsRequest = {
   launcher_id: str;
   payout_instructions: str;
 };
-export type TSetPayoutInstructionsResponse = {
-};
+export type TSetPayoutInstructionsResponse = Record<string, never>;
 export type WsSetPayoutInstructionsMessage = GetMessageType<chia_farmer_service, set_payout_instructions_command, TSetPayoutInstructionsResponse>;
 export async function set_pool_payout_instructions<T extends TRPCAgent | TDaemon>(agent: T, params: TSetPayoutInstructionsRequest){
   type R = ResType<T, TSetPayoutInstructionsResponse, WsSetPayoutInstructionsMessage>;
@@ -120,8 +114,6 @@ export async function set_pool_payout_instructions<T extends TRPCAgent | TDaemon
 
 export const get_harvesters_command = "get_harvesters";
 export type get_harvesters_command = typeof get_harvesters_command;
-export type TGetHarvestersRequest = {
-};
 export type TGetHarvestersResponse = {
   harvesters: Receiver[];
 };
@@ -136,7 +128,7 @@ export async function get_harvesters<T extends TRPCAgent | TDaemon>(agent: T){
 export const get_harvesters_summary_command = "get_harvesters_summary";
 export type get_harvesters_summary_command = typeof get_harvesters_summary_command;
 export type TGetHarvestersSummaryResponse = {
-  harvesters: Receiver<true>[];
+  harvesters: Array<Receiver<true>>;
 };
 export type WsGetHarvestersSummaryMessage = GetMessageType<chia_farmer_service, get_harvesters_summary_command, TGetHarvestersSummaryResponse>;
 export async function get_harvesters_summary<T extends TRPCAgent | TDaemon>(agent: T){

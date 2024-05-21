@@ -1,11 +1,10 @@
 import {readFileSync, existsSync} from "fs";
-import {getConfig, defaultDaemonCertPath, defaultDaemonKeyPath, getPathFromConfig} from "../config";
+import {defaultDaemonCertPath, defaultDaemonKeyPath, getPathFromConfig} from "../config";
 import * as WS from "ws";
 import {Event} from "ws";
 import {getLogger} from "../logger";
 
 function create(url: string) {
-  const config = getConfig();
   const daemonCertPath = getPathFromConfig("/daemon_ssl/private_crt") || defaultDaemonCertPath;
   const daemonKeyPath = getPathFromConfig("/daemon_ssl/private_key") || defaultDaemonKeyPath;
   

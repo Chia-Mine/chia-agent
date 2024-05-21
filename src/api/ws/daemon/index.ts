@@ -12,8 +12,7 @@ export type daemon_service = typeof daemon_service;
 
 export const ping_command = "ping";
 export type ping_command = typeof ping_command;
-export type TPingRequest = {
-};
+export type TPingRequest = Record<string, never>;
 export type TPingResponse = {
   success: True;
   value: str;
@@ -26,7 +25,7 @@ export async function ping(daemon: TDaemon) {
 
 
 export type TService = "chia"|"chia_wallet"|"chia_full_node"|"chia_harvester"|"chia_farmer"
-  |"chia_introducer"|"chia_timelord"|"chia_timelord_launcher"|"chia_full_node_simulator";
+|"chia_introducer"|"chia_timelord"|"chia_timelord_launcher"|"chia_full_node_simulator";
 export const start_service_command = "start_service";
 export type start_service_command = typeof start_service_command;
 export type TStartServiceRequest = {
@@ -122,7 +121,7 @@ export type TMadMaxParams = {
   G?: bool; // Alternate tmpdir/tmp2dir. Default: False
 };
 export type TStartPlottingRequest = TCommonPlottingParams &
-  (TChiaPosParams | TBladeBitRamParams | TBladeBitDiskParams | TBladeBitCudaParams | TMadMaxParams);
+(TChiaPosParams | TBladeBitRamParams | TBladeBitDiskParams | TBladeBitCudaParams | TMadMaxParams);
 export type TStartPlottingResponse = {
   success: bool;
   ids: str[];
@@ -479,7 +478,7 @@ export type TKeyringStatusResponse = {
   user_passphrase_is_set: bool;
   can_set_passphrase_hint: bool;
   passphrase_hint: str;
-  passphrase_requirements: {} | {
+  passphrase_requirements: Record<string, never> | {
     is_optional: True;
     min_length: int;
   };
@@ -595,8 +594,6 @@ export async function notify_keyring_migration_completed(daemon: TDaemon, data: 
 
 export const exit_command = "exit";
 export type exit_command = typeof exit_command;
-export type TExitRequest = {
-};
 export type TExitResponse = {
   success: bool;
 };
@@ -640,8 +637,6 @@ export async function register_service(daemon: TDaemon, data: TRegisterServiceRe
 
 export const get_status_command = "get_status";
 export type get_status_command = typeof get_status_command;
-export type TGetStatusRequest = {
-};
 export type TGetStatusResponse = {
   success: True;
   genesis_initialized: True;
@@ -655,8 +650,6 @@ export async function get_status(daemon: TDaemon) {
 
 export const get_version_command = "get_version";
 export type get_version_command = typeof get_version_command;
-export type TGetVersionRequest = {
-};
 export type TGetVersionResponse = {
   success: bool;
   version: string;
@@ -670,8 +663,6 @@ export async function get_version(daemon: TDaemon) {
 
 export const get_plotters_command = "get_plotters";
 export type get_plotters_command = typeof get_plotters_command;
-export type TGetPlottersRequest = {
-};
 export type TGetPlottersResponse = {
   success: True;
   plotters: {

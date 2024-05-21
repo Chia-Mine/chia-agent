@@ -107,6 +107,7 @@
   As a result, the RPC APIs below are affected
   - `dao_get_proposals` of Wallet RPC API
   - `dao_adjust_filter_level` of Wallet RPC API
+- Upgraded dependencies and replaced `yarn.lock` with `pnpm-lock.yaml`
 ### Added
 - [Daemon WebSocket API](./src/api/ws/daemon)
   - [`get_network_info`](./src/api/ws/daemon/README.md#get_network_infodaemon)
@@ -118,11 +119,13 @@
 - Renamed `ReceiveBlockResult` to `AddBlockResult` (type `ReceiveBlockResult` is still available to avoid breaking change)
 - Fixed an invalid `TCreate_New_DAO_WalletRequest` README location.
 - Fixed an issue where `pubkey` and `pubhash` in request of Wallet RPC API `did_recovery_spend` was not optional in the API doc.
+- Fixed lint errors
 ### Removed
 - [FullNode RPC API](./src/api/rpc/data_layer)
   - `get_network_info_of_full_node`
 - [Wallet RPC API](./src/api/rpc/wallet)
   - `get_network_info_of_wallet`
+- Removed empty request parameter types like `{}`
 
 ## [14.0.0]
 ### Breaking change
