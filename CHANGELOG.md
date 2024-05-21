@@ -108,6 +108,9 @@
   - `dao_get_proposals` of Wallet RPC API
   - `dao_adjust_filter_level` of Wallet RPC API
 - Upgraded dependencies and replaced `yarn.lock` with `pnpm-lock.yaml`
+- Moved `FarmerRecord` to [src/chia/pool/record.ts](./src/api/chia/pool/record.ts) (
+  Previously `src/chia/pool/store.ts`)
+
 ### Added
 - [Daemon WebSocket API](./src/api/ws/daemon)
   - [`get_network_info`](./src/api/ws/daemon/README.md#get_network_infodaemon)
