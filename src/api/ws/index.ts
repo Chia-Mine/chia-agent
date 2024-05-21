@@ -215,6 +215,8 @@ export {
   get_keys_for_plotting,
   TGetKeysForPlottingRequest,
   TGetKeysForPlottingResponse,
+  get_network_info,
+  TGetNetworkInfoResponse,
 } from "./daemon/index";
 
 export type WsMessage =

@@ -262,22 +262,6 @@ export async function get_initial_freeze_period_of_full_node<T extends TRPCAgent
 
 
 
-export const get_network_info_command_of_full_node = "get_network_info";
-export type get_network_info_command_of_full_node = typeof get_network_info_command_of_full_node;
-export type TGetNetworkInfoRequestOfFullNode = {
-};
-export type TGetNetworkInfoResponseOfFullNode = {
-  network_name: str;
-  network_prefix: str;
-};
-export type WsGetNetworkInfoMessageOfFullNode = GetMessageType<chia_full_node_service, get_network_info_command_of_full_node, TGetNetworkInfoResponseOfFullNode>;
-export async function get_network_info_of_full_node<T extends TRPCAgent | TDaemon>(agent: T) {
-  type R = ResType<T, TGetNetworkInfoResponseOfFullNode, WsGetNetworkInfoMessageOfFullNode>;
-  return agent.sendMessage<R>(chia_full_node_service, get_network_info_command_of_full_node);
-}
-
-
-
 export const get_recent_signage_point_or_eos_command = "get_recent_signage_point_or_eos";
 export type get_recent_signage_point_or_eos_command = typeof get_recent_signage_point_or_eos_command;
 export type TGetRecentSignagePointOrEOSCommandRequest = {
@@ -717,7 +701,6 @@ export type RpcFullNodeMessage =
   | TGetInitialFreezePeriodResponseOfFullNode
   | TGetMempoolItemByTxIdResponse
   | TGetMempoolItemsByCoinNameResponse
-  | TGetNetworkInfoResponseOfFullNode
   | TGetNetworkSpaceResponse
   | TGetUnfinishedBlockHeadersResponse
   | TPushTxResponse
@@ -758,7 +741,6 @@ export type RpcFullNodeMessageOnWs =
   | WsGetInitialFreezePeriodMessageOfFullNode
   | WsGetMempoolItemByTxIdMessage
   | WsGetMempoolItemsByCoinNameMessage
-  | WsGetNetworkInfoMessageOfFullNode
   | WsGetNetworkSpaceMessage
   | WsGetUnfinishedBlockHeadersMessage
   | WsPushTxMessage

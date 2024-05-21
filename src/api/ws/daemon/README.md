@@ -1015,6 +1015,27 @@ const response = await get_keys_for_plotting(daemon, params);
 
 ---
 
+## `get_network_info(daemon)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {get_network_info} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await get_network_info(daemon);
+```
+### response:
+
+```typescript
+{
+  success: True;
+  network_name: str;
+  network_prefix: str;
+}
+```
+
+---
+
 ## Usage(Subscription)
 Starting from `chia-blockchain@1.2.8`, `subscribe/listen` style WebSocket API was introduced to `daemon` service.  
 Here's an example.

@@ -70,14 +70,32 @@ export type TBatchUpdateRequest = {
     value?: str;
   }>;
   id: str;
+  submit_on_chain?: bool;
 };
 export type TBatchUpdateResponse = {
-  tx_id: bytes32;
+  tx_id?: bytes32;
 };
 export type WsBatchUpdateMessage = GetMessageType<chia_data_layer_service, batch_update_command, TBatchUpdateResponse>;
 export async function batch_update<T extends TRPCAgent|TDaemon>(agent: T, params: TBatchUpdateRequest) {
   type R = ResType<T, TBatchUpdateResponse, WsBatchUpdateMessage>;
   return agent.sendMessage<R>(chia_data_layer_service, batch_update_command, params);
+}
+
+
+export const submit_pending_root_command = "submit_pending_root";
+export type submit_pending_root_command = typeof submit_pending_root_command;
+export type TSubmitPendingRootRequest = {
+  id: str;
+  fee?: uint64;
+};
+export type TSubmitPendingRootResponse = {
+  tx_id: bytes32;
+};
+export type WsSubmitPendingRootMessage = GetMessageType<chia_data_layer_service, submit_pending_root_command, TSubmitPendingRootResponse>;
+
+export async function submit_pending_root<T extends TRPCAgent | TDaemon>(agent: T, params: TSubmitPendingRootRequest) {
+  type R = ResType<T, TSubmitPendingRootResponse, WsSubmitPendingRootMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, submit_pending_root_command, params);
 }
 
 
@@ -103,9 +121,16 @@ export type get_keys_command = typeof get_keys_command;
 export type TGetKeysRequest = {
   id: str;
   root_hash?: str;
+  page?: int;
+  max_page_size?: int;
 };
 export type TGetKeysResponse = {
   keys: str[];
+} | {
+  keys: str[];
+  total_pages: int;
+  total_bytes: int;
+  root_hash: Optional<bytes32>;
 };
 export type WsGetKeysMessage = GetMessageType<chia_data_layer_service, get_keys_command, TGetKeysResponse>;
 export async function get_keys<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKeysRequest) {
@@ -119,6 +144,8 @@ export type get_keys_values_command = typeof get_keys_values_command;
 export type TGetKeysValuesRequest = {
   id: str;
   root_hash?: str;
+  page?: int;
+  max_page_size?: int;
 };
 export type TGetKeysValuesResponse = {
   keys_values: Array<{
@@ -126,6 +153,15 @@ export type TGetKeysValuesResponse = {
     key: str;
     value: str;
   }>;
+} | {
+  keys_values: Array<{
+    hash: str;
+    key: str;
+    value: str;
+  }>;
+  total_pages: int;
+  total_bytes: int;
+  root_hash: Optional<bytes32>;
 };
 export type WsGetKeysValuesMessage = GetMessageType<chia_data_layer_service, get_keys_values_command, TGetKeysValuesResponse>;
 export async function get_keys_values<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKeysValuesRequest) {
@@ -357,6 +393,8 @@ export type TGetKvDiffRequest = {
   id: str;
   hash_1: str;
   hash_2: str;
+  page?: int;
+  max_page_size?: int;
 };
 export type TGetKvDiffResponse = {
   diff: Array<{
@@ -364,6 +402,14 @@ export type TGetKvDiffResponse = {
     key: str;
     value: str;
   }>;
+} | {
+  diff: Array<{
+    type: str;
+    key: str;
+    value: str;
+  }>;
+  total_pages: int;
+  total_bytes: int;
 };
 export type WsGetKvDiffMessage = GetMessageType<chia_data_layer_service, get_kv_diff_command, TGetKvDiffResponse>;
 export async function get_kv_diff<T extends TRPCAgent|TDaemon>(agent: T, params: TGetKvDiffRequest) {
@@ -551,6 +597,7 @@ export type RpcDataLayerMessage =
   | TCreateDataStoreResponse
   | TGetOwnedStoresResponse
   | TBatchUpdateResponse
+  | TSubmitPendingRootResponse
   | TGetValueResponse
   | TGetKeysResponse
   | TGetKeysValuesResponse
@@ -586,6 +633,7 @@ export type RpcDataLayerMessageOnWs =
   | WsCreateDataStoreMessage
   | WsGetOwnedStoresMessage
   | WsBatchUpdateMessage
+  | WsSubmitPendingRootMessage
   | WsGetValueMessage
   | WsGetKeysMessage
   | WsGetKeysValuesMessage

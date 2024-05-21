@@ -116,6 +116,31 @@ const response = await batch_update(agent, params);
     value?: str;
   }>;
   id: str;
+  submit_on_chain?: bool;
+}
+```
+### response:
+```typescript
+{
+  tx_id?: bytes32;
+}
+```
+
+---
+
+## `submit_pending_root(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {submit_pending_root} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await submit_pending_root(agent, params);
+```
+### params:
+```typescript
+{
+  id: str;
+  fee?: uint64;
 }
 ```
 ### response:
@@ -165,12 +190,19 @@ const response = await get_keys(agent, params);
 {
   id: str;
   root_hash?: str;
+  page?: int;
+  max_page_size?: int;
 }
 ```
 ### response:
 ```typescript
 {
   keys: str[];
+} | {
+  keys: str[];
+  total_pages: int;
+  total_bytes: int;
+  root_hash: Optional<bytes32>;
 }
 ```
 
@@ -536,6 +568,8 @@ const response = await get_kv_diff(agent, params);
   id: str;
   hash_1: str;
   hash_2: str;
+  page?: int;
+  max_page_size?: int;
 }
 ```
 ### response:
@@ -546,6 +580,14 @@ const response = await get_kv_diff(agent, params);
     key: str;
     value: str;
   }>;
+} | {
+  diff: Array<{
+    type: str;
+    key: str;
+    value: str;
+  }>;
+  total_pages: int;
+  total_bytes: int;
 }
 ```
 

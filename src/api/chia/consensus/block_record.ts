@@ -4,6 +4,8 @@ import {Coin} from "../types/blockchain_format/coin";
 import {SubEpochSummary} from "../types/blockchain_format/sub_epoch_summary";
 import {bool, Optional, uint128, uint32, uint64, uint8} from "../types/_python_types_";
 
+// The reference code was moved to https://github.com/Chia-Network/chia_rs/blob/main/crates/chia-protocol/src/block_record.rs
+
 export type BlockRecord = {
   header_hash: bytes32; // bytes32
   prev_hash: bytes32; // bytes32  # Header hash of the previous block

@@ -376,24 +376,6 @@ const response = await get_initial_freeze_period_of_full_node(agent);
 
 ---
 
-## `get_network_info_of_full_node(agent)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {get_network_info_of_full_node} = require("chia-agent/api/rpc/full_node");
-const agent = new RPCAgent({service: "full_node"});
-const response = await get_network_info_of_full_node(agent);
-```
-### response
-```typescript
-{
-  network_name: str;
-  network_prefix: str;
-}
-```
-
----
-
 ## `get_recent_signage_point_or_eos(agent, params)`
 ### Usage
 ```js

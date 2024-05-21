@@ -740,7 +740,21 @@ export async function get_keys_for_plotting(daemon: TDaemon, data: TGetKeysForPl
 }
 
 
-//// From here subscribe/listen style APIs ////
+export const get_network_info_command = "get_network_info";
+export type get_network_info_command = typeof get_network_info_command;
+export type TGetNetworkInfoResponse = {
+  success: True;
+  network_name: str;
+  network_prefix: str;
+};
+export type WsGetNetworkInfoMessage = GetMessageType<daemon_service, get_network_info_command, TGetNetworkInfoResponse>;
+
+export async function get_network_info(daemon: TDaemon) {
+  return daemon.sendMessage<WsGetNetworkInfoMessage>(daemon_service, get_network_info_command);
+}
+
+
+/// From here subscribe/listen style APIs ///
 
 export const keyring_status_changed_command = "keyring_status_changed";
 export type keyring_status_changed_command = typeof keyring_status_changed_command;
@@ -795,5 +809,6 @@ export type WsDaemonMessage =
   | WsGetRoutesMessage
   | WsGetWalletAddressesMessage
   | WsGetKeysForPlottingMessage
+  | WsGetNetworkInfoMessage
   | WsKeyringStatusChangedMessage
 ;
