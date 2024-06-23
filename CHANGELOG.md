@@ -1,5 +1,8 @@
 # Changelog
 
+## [14.1.1]
+...
+
 ## [14.1.0]
 ### Changed
 -`get_network_info` RPC API is now commonized and available in addition to `full_node` and `wallet`.
@@ -1514,6 +1517,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.1.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.1.0...v14.1.1
 [14.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.0.0...v14.1.0
 [14.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.2.0...v14.0.0
 [13.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.1.0...v13.2.0
