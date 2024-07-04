@@ -102,7 +102,6 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_height_info`](./rpc/wallet/README.md#get_height_infoagent)
 - [`push_tx`](./rpc/wallet/README.md#push_txagent-params)
 - [`push_transactions`](./rpc/wallet/README.md#push_transactionsagent-params)
-- [`farm_block`](./rpc/wallet/README.md#farm_blockagent-params)
 - [`get_timestamp_for_height`](./rpc/wallet/README.md#gettimestampforheightagent)
 - [`set_auto_claim`](./rpc/wallet/README.md#set_auto_claimagent-params)
 - [`get_auto_claim`](./rpc/wallet/README.md#get_auto_claimagent-params)
@@ -216,6 +215,9 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`vc_get_proofs_for_root`](./rpc/wallet/README.md#vc_get_proofs_for_rootagent-params)
 - [`vc_revoke`](./rpc/wallet/README.md#vc_revokeagent-params)
 - [`crcat_approve_pending`](./rpc/wallet/README.md#crcat_approve_pendingagent-params)
+- [`gather_signing_info`](./rpc/wallet/README.md#gather_signing_infoagent-params)
+- [`apply_signatures`](./rpc/wallet/README.md#apply_signaturesagent-params)
+- [`submit_transactions`](./rpc/wallet/README.md#submit_transactionsagent-params)
 
 #### [Pool API](./rpc/pool/README.md#usage)
 - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
@@ -230,7 +232,9 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`create_data_store`](./rpc/data_layer/README.md#create_data_storeagent-params)
 - [`get_owned_stores`](./rpc/data_layer/README.md#get_owned_storesagent)
 - [`batch_update`](./rpc/data_layer/README.md#batch_updateagent-params)
+- [`multistore_batch_update`](./rpc/data_layer/README.md#multistore_batch_updateagent-params)
 - [`submit_pending_root`](./rpc/data_layer/README.md#submit_pending_rootagent-params)
+- [`submit_all_pending_roots`](./rpc/data_layer/README.md#submit_all_pending_rootsagent-params)
 - [`get_value`](./rpc/data_layer/README.md#get_valueagent-params)
 - [`get_keys`](./rpc/data_layer/README.md#get_keysagent-params)
 - [`get_keys_values`](./rpc/data_layer/README.md#get_keys_valuesagent-params)
@@ -286,6 +290,7 @@ See how to get Daemon instance before requesting Websocket API [**>>here**](../d
 
 #### [daemon](./ws/daemon/README.md#usage) 
 - [`add_private_key`](./ws/daemon/README.md#add_private_keydaemon-params)
+- [`add_key`](./ws/daemon/README.md#add_keydaemon-params)
 - [`check_keys`](./ws/daemon/README.md#check_keysdaemon-params)
 - [`delete_all_keys`](./ws/daemon/README.md#delete_all_keysdaemon-params)
 - [`delete_key_by_fingerprint`](./ws/daemon/README.md#delete_key_by_fingerprintdaemon-params)
@@ -350,6 +355,7 @@ you need to wait messages in the channel are arrived to your message listener.
 - [`get_blockchain_state`](./ws/full_node/README.md#on_get_blockchain_state)
 - [`block`](./ws/full_node/README.md#on_block)
 - [`signage_point`](./ws/full_node/README.md#on_signage_point)
+- [`unfinished_block`](./ws/full_node/README.md#on_unfinished_block)
 
 #### [harvester](./ws/harvester/README.md#usage)
 - [`get_connections`](./ws/harvester/README.md#on_get_connections)

@@ -1,7 +1,120 @@
 # Changelog
 
-## [14.1.1]
-...
+## [14.2.0]
+### Note
+- [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
+  - The request parameters `kc_user` and `kc_service` is temporarily not working with `chia-blockchain@2.4.0`.  
+    This is a bug and not spec change so `chia-agent` stays to be able to set those params for now.
+### Changed
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`get_key_for_fingerprint`](./src/api/ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
+    - Added a `private` request parameter
+- [Common RPC API](./src/api/rpc/common)
+  - [`get_network_info`](./src/api/rpc/common/README.md#get_network_infoagent)
+    - Added a `genesis_challenge` response parameter
+- [`Mirror`](./src/api/chia/data_layer/data_layer_wallet.ts) now has new `confirmed_at_height` property.  
+  As a result of this addition, [`dl_get_mirrors`](./src/api/rpc/wallet/README.md#dl_get_mirrorsagent-params) is affected.
+- [`PoolWalletInfo`](./src/api/chia/pools/pool_wallet_info.ts)'s `current_inner` property was removed.  
+  As a result of this removal, the following [Wallet RPC API](./src/api/rpc/wallet)s are affected.
+  - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
+  - [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
+- `CHIP-0029` and `sign` request params were added to [`TXEndpointRequest`](./src/api/chia/rpc/util.ts).  
+  Plus, `unsigned_transactions` and `signing_responses` were added to responses of TxEndpoint APIs.
+  As a result of these additions, the following [Wallet RPC API](./src/api/rpc/wallet)s are affected.
+  - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+  - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+  - [`spend_clawback_coins`](./src/api/rpc/wallet/README.md#spend_clawback_coinsagent-params)
+  - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+  - [`send_notification`](./src/api/rpc/wallet/README.md#send_notificationagent-params)
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+  - [`cancel_offer`](./src/api/rpc/wallet/README.md#cancel_offeragent-params)
+  - [`cancel_offers`](./src/api/rpc/wallet/README.md#cancel_offersagent-params)
+  - [`did_update_recovery_ids`](./src/api/rpc/wallet/README.md#did_update_recovery_idsagent-params)
+  - [`did_update_metadata`](./src/api/rpc/wallet/README.md#did_update_metadataagent-params)
+  - [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
+  - [`did_message_spend`](./src/api/rpc/wallet/README.md#did_message_spendagent-params)
+  - [`did_transfer_did`](./src/api/rpc/wallet/README.md#did_transfer_didagent-params)
+  - [`dao_add_funds_to_treasury`](./src/api/rpc/wallet/README.md#dao_add_funds_to_treasuryagent-params)
+  - [`dao_send_to_lockup`](./src/api/rpc/wallet/README.md#dao_send_to_lockupagent-params)
+  - [`dao_exit_lockup`](./src/api/rpc/wallet/README.md#dao_exit_lockupagent-params)
+  - [`dao_create_proposal`](./src/api/rpc/wallet/README.md#dao_create_proposalagent-params)
+  - [`dao_vote_on_proposal`](./src/api/rpc/wallet/README.md#dao_vote_on_proposalagent-params)
+  - [`dao_close_proposal`](./src/api/rpc/wallet/README.md#dao_close_proposalagent-params)
+  - [`dao_free_coins_from_finished_proposals`](./src/api/rpc/wallet/README.md#dao_free_coins_from_finished_proposalsagent-params)
+  - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+  - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nft_set_did_bulkagent-params)
+  - [`nft_transfer_bulk`](./src/api/rpc/wallet/README.md#nft_transfer_bulkagent-params)
+  - [`nft_transfer_nft`](./src/api/rpc/wallet/README.md#nft_transfer_nftagent-params)
+  - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+  - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
+  - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
+  - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
+  - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
+  - [`create_new_dl`](./src/api/rpc/wallet/README.md#create_new_dlagent-params)
+  - [`dl_update_root`](./src/api/rpc/wallet/README.md#dl_update_rootagent-params)
+  - [`dl_update_multiple`](./src/api/rpc/wallet/README.md#dl_update_multipleagent-params)
+  - [`dl_new_mirror`](./src/api/rpc/wallet/README.md#dl_new_mirroragent-params)
+  - [`dl_delete_mirror`](./src/api/rpc/wallet/README.md#dl_delete_mirroragent-params)
+  - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
+  - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
+  - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
+  - [`crcat_approve_pending`](./src/api/rpc/wallet/README.md#crcat_approve_pendingagent-params)
+- [FullNode RPC API](./src/api/rpc/full_node)
+  - `TFarmBlockFullNodeRequest`, `TFarmBlockFullNodeResponse` and `farm_block_fullnode` are now  
+    `TFarmBlockRequest`, `TFarmBlockResponse` and `farm_block`
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`push_transactions`](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
+    - Added `sign` request parameter
+  - [`dl_update_multiple`](./src/api/rpc/wallet/README.md#dl_update_multipleagent-params)
+    - Added `fee` optional request parameter
+    - Removed `tx_records` from response
+### Added
+- [New Daemon WebSocket API](./src/api/ws/daemon)
+  - [`add_key`](./src/api/ws/daemon/README.md#add_keydaemon-params)
+- [New DataLayer RPC API](./src/api/rpc/data_layer)
+  - [`multistore_batch_update`](./src/api/rpc/data_layer/README.md#multistore_batch_updateagent-params)
+  - [`submit_all_pending_roots`](./src/api/rpc/data_layer/README.md#submit_all_pending_rootsagent-params)
+- [New FullNode WebSocket API](./src/api/ws/full_node)
+  - [`unfinished_block`](./src/api/ws/full_node/README.md#on_unfinished_block)
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`gather_signing_info`](./src/api/rpc/wallet/README.md#gather_signing_infoagent-params)
+  - [`apply_signatures`](./src/api/rpc/wallet/README.md#apply_signaturesagent-params)
+  - [`submit_transactions`](./src/api/rpc/wallet/README.md#submit_transactionsagent-params)
+### Removed
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - `farm_block`
+### Fixed
+- [Daemon WebSocket API](./src/api/ws/daemon)
+  - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
+    - Added missing `fingerprint` response property
+  - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
+  - [`check_keys`](./src/api/ws/daemon/README.md#check_keysdaemon-params)
+  - [`delete_all_keys`](./src/api/ws/daemon/README.md#delete_all_keysdaemon-params)
+  - [`delete_key_by_fingerprint`](./src/api/ws/daemon/README.md#delete_key_by_fingerprintdaemon-params)
+  - [`get_all_private_keys`](./src/api/ws/daemon/README.md#get_all_private_keysdaemon-params)
+  - [`get_first_private_key`](./src/api/ws/daemon/README.md#get_first_private_keydaemon-params)
+  - [`get_key_for_fingerprint`](./src/api/ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
+  - [`get_key`](./src/api/ws/daemon/README.md#get_keydaemon-params)
+  - [`get_keys`](./src/api/ws/daemon/README.md#get_keysdaemon-params)
+  - [`get_public_key`](./src/api/ws/daemon/README.md#get_public_keydaemon-params)
+  - [`get_public_keys`](./src/api/ws/daemon/README.md#get_public_keysdaemon-params)
+  - [`set_label`](./src/api/ws/daemon/README.md#set_labeldaemon-params)
+  - [`delete_label`](./src/api/ws/daemon/README.md#delete_labeldaemon-params)
+    - Added a missing `kc_service` request parameter
+    - Removed `kc_test` request parameter
+  - [`get_key_for_fingerprint`](./src/api/ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
+    - Made `error` response parameter non-optional when `success == False`
+- [Common RPC API](./src/api/rpc/common)
+  - [`get_network_info`](./src/api/rpc/common/README.md#get_network_infoagent)
+    - Added a missing `success` response parameter
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+    - Fixed CAT request/response documentation incorrectness
+  - [`dao_close_proposal`](./src/api/rpc/wallet/README.md#dao_close_proposalagent-params)
+    - Fixed response documentation incorrectness
 
 ## [14.1.0]
 ### Changed
@@ -1517,7 +1630,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[14.1.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.1.0...v14.1.1
+[14.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.1.0...v14.2.0
 [14.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.0.0...v14.1.0
 [14.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.2.0...v14.0.0
 [13.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.1.0...v13.2.0

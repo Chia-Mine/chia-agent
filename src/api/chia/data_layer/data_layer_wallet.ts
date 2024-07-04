@@ -1,5 +1,5 @@
 import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {bool, str, uint32, uint64} from "../types/_python_types_";
+import {bool, Optional, str, uint32, uint64} from "../types/_python_types_";
 import {LineageProof} from "../wallet/lineage_proof";
 
 export type SingletonRecord = {
@@ -20,4 +20,5 @@ export type Mirror = {
   amount: uint64;
   urls: str[];
   ours: bool;
+  confirmed_at_height: Optional<uint32>;
 };

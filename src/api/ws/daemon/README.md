@@ -292,7 +292,7 @@ const response = await add_private_key(daemon, params);
 ```typescript
 {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
   mnemonic?: str;
   label?: str;
 }
@@ -300,8 +300,43 @@ const response = await add_private_key(daemon, params);
 ### response:
 ```typescript
 {
-  success: bool;
-  error?: str;
+  success: True;
+  fingerprint: G1Element;
+} | {
+  success: False;
+  error: str;
+  error_details?: {message: str};
+}
+```
+
+---
+
+## `add_key(daemon, params)`
+### Usage
+```js
+const {getDaemon} = require("chia-agent");
+const {add_key} = require("chia-agent/api/ws");
+const daemon = getDaemon(); // This is the websocket connection handler
+await daemon.connect(); // connect to local daemon using config file.
+const response = await add_key(daemon, params);
+```
+### params:
+```typescript
+{
+  kc_user?: str;
+  kc_service?: str;
+  mnemonic?: str;
+  label?: str;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+  fingerprint: G1Element;
+} | {
+  success: False;
+  error: str;
   error_details?: {message: str};
 }
 ```
@@ -321,7 +356,7 @@ const response = await check_keys(daemon, params);
 ```typescript
 {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
   root_path: str;
 }
 ```
@@ -349,7 +384,7 @@ const response = await delete_all_keys(daemon, params);
 ```typescript
 {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
 }
 ```
 ### response:
@@ -376,7 +411,7 @@ const response = await delete_key_by_fingerprint(daemon, params);
 ```typescript
 {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
   fingerprint: int;
 }
 ```
@@ -404,7 +439,7 @@ const response = await get_all_private_keys(daemon, params);
 ```typescript
 {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
 }
 ```
 ### response:
@@ -431,7 +466,7 @@ const response = await get_first_private_key(daemon, params);
 ```typescript
 {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
 }
 ```
 ### response:
@@ -458,15 +493,18 @@ const response = await get_key_for_fingerprint(daemon, params);
 ```typescript
 {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
+  private?: bool;
   fingerprint?: int;
 }
 ```
 ### response:
 ```typescript
 {
-  success: bool;
-  error?: str;
+  success: False;
+  error: str;
+} | {
+  success: True;
   pk: str;
   entropy: str;
 }

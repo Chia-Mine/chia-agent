@@ -1,10 +1,17 @@
 import {BlockRecord} from "../../chia/consensus/block_record";
 import {bool, float, int, None, str, uint128, uint32, uint64, uint8} from "../../chia/types/_python_types_";
 import {TDaemon} from "../../../daemon/index";
-import {GetMessageType, wallet_ui_service, metrics_service, TConnectionGeneral} from "../../types";
+import {
+  GetMessageType,
+  wallet_ui_service,
+  metrics_service,
+  unfinished_block_info_service,
+  TConnectionGeneral,
+} from "../../types";
 import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
 import {NewSignagePoint} from "../../chia/protocols/farmer_protocol";
 import {ReceiveBlockResult} from "../../chia/consensus/blockchain";
+import {UnfinishedBlock} from "../../chia/types/unfinished_block";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -113,14 +120,37 @@ export async function on_signage_point(daemon: TDaemon, callback: (e: WsSignageP
   return daemon.addMessageListener(chia_full_node_service, messageListener);
 }
 
+
+export const unfinished_block_command = "unfinished_block";
+export type unfinished_block_command = typeof unfinished_block_command;
+export type TUnfinishedBlockBroadCast = {
+  block_duration_in_seconds: float;
+  validation_time_in_seconds: float;
+  pre_validation_time_in_seconds: float | None;
+  unfinished_block: UnfinishedBlock;
+};
+export type WsUnfinishedBlockMessage = GetMessageType<chia_full_node_service, unfinished_block_command, TUnfinishedBlockBroadCast>;
+export async function on_unfinished_block(daemon: TDaemon, callback: (e: WsUnfinishedBlockMessage) => unknown) {
+  await daemon.subscribe(unfinished_block_info_service);
+  const messageListener = (e: WsFullNodeMessage) => {
+    if (e.origin === chia_full_node_service && e.command === unfinished_block_command) {
+      callback(e);
+    }
+  };
+  return daemon.addMessageListener(chia_full_node_service, messageListener);
+}
+
 export type WsFullNodeMessage = WsGetConnectionFullNodeMessage
 | WsGetBlockchainStateMessage
 | WsBlockMessage
 | WsSignagePointMessage
+| WsUnfinishedBlockMessage
 ;
 // Whole commands for the service
-export type chia_full_node_commands = get_blockchain_state_command | get_connections_command | block_command | signage_point_command;
-export type TChiaFullNodeBroadcast = TGetBlockchainStateBroadCast | TGetConnectionsBroadCast | TBlockBroadCast | TSignagePointBroadCast;
+export type chia_full_node_commands = get_blockchain_state_command | get_connections_command | block_command
+| signage_point_command | unfinished_block_command;
+export type TChiaFullNodeBroadcast = TGetBlockchainStateBroadCast | TGetConnectionsBroadCast | TBlockBroadCast
+| TSignagePointBroadCast | TUnfinishedBlockBroadCast;
 export async function on_message_from_full_node(daemon: TDaemon, callback: (e: WsFullNodeMessage) => unknown){
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsFullNodeMessage) => {
