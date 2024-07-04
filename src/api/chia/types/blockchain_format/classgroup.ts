@@ -1,5 +1,1 @@
-import {bytes100} from "./sized_bytes";
-
-export type ClassgroupElement = {
-  data: bytes100; // bytes100
-};
+export type {ClassgroupElement} from "../../../chia_rs/chia-protocol/classgroup";

@@ -226,7 +226,7 @@ const response = await partial(agent, params);
 For content of `G2Element`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/_python_types_.ts
 For content of `ProofOfSpace`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/proof_of_space.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/proof_of_space.ts
 
 ---
 
@@ -253,3 +253,5 @@ const response = await login(agent, params);
   recent_partials: Array<[uint64, uint64]>; // Array of tuple [timestamp, difficulty]
 } | { };
 ```
+For content of `FarmerRecord`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/pool-reference/pool/record.ts

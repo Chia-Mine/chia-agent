@@ -1,7 +1,7 @@
-import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {bool, G1Element, str, uint64} from "../types/_python_types_";
-import {CoinSpend} from "../types/coin_spend";
-import {PoolState} from "../pools/pool_wallet_info";
+import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
+import {bool, G1Element, str, uint64} from "../../chia/types/_python_types_";
+import {CoinSpend} from "../../chia/types/coin_spend";
+import {PoolState} from "../../chia/pools/pool_wallet_info";
 
 export type FarmerRecord = {
   launcher_id: bytes32; // # This uniquely identifies the singleton on the blockchain (ID for this farmer)

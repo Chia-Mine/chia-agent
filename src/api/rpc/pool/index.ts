@@ -11,7 +11,7 @@ import {
   PutFarmerRequest,
   PutFarmerResponse
 } from "../../chia/protocols/pool_protocol";
-import {FarmerRecord} from "../../chia/pool/record";
+import {FarmerRecord} from "../../pool-reference/pool/record";
 
 
 

@@ -250,4 +250,4 @@ unsubscribe(); // Stop subscribing messages
 }
 ```
 For content of `UnfinishedBlock`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/unfinished_block.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/unfinished_block.ts

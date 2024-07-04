@@ -583,7 +583,7 @@ type TCreateWalletErrorResponse = {
 };
 ```
 For content of `Coin`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin.ts  
 For content of `TransactionRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
 For content of `TXEndpointRequest` and `UnsignedTransaction`  
@@ -948,7 +948,7 @@ const response = await create_signed_transaction(agent, params);
 For content of `TAdditions`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts  
 For content of `Coin`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin.ts  
 For content of `TCoinAnnouncement`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/wallet/index.ts  
 For content of `TPuzzleAnnouncement`,  
@@ -1007,7 +1007,7 @@ const response = await select_coins(agent, params);
 }
 ```
 For content of `Coin`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin.ts  
 For content of `CoinSelectionConfigLoader`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
@@ -1049,7 +1049,7 @@ const response = await get_spendable_coins(agent, params);
 For content of `CoinRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_records.ts  
 For content of `Coin`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin.ts
 
 ---
 

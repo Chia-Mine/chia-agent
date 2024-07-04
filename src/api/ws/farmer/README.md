@@ -151,7 +151,7 @@ unsubscribe(); // Stop subscribing messages
 }
 ```
 For content of `ProofOfSpace`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/proof_of_space.ts  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/proof_of_space.ts  
 For content of `NewSignagePoint`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/farmer_protocol.ts
 

@@ -67,7 +67,7 @@ const response = await get_blockchain_state(agent);
 }
 ```
 For content of `BlockRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/block_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/block_record.ts
 For content of `CLVMCost`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/clvm_cost.ts
 
@@ -94,7 +94,7 @@ const response = await get_block(agent, params);
 }
 ```
 For content of `FullBlock`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/full_block.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/fullblock.ts
 
 ---
 
@@ -122,7 +122,7 @@ const response = await get_blocks(agent, params);
 }
 ```
 For content of `FullBlock`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/full_block.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/fullblock.ts
 
 ---
 
@@ -168,7 +168,7 @@ const response = await get_block_record_by_height(agent, params);
 }
 ```
 For content of `BlockRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/block_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/block_record.ts
 
 ---
 
@@ -193,7 +193,7 @@ const response = await get_block_record(agent, params);
 }
 ```
 For content of `BlockRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/block_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/block_record.ts
 
 ---
 
@@ -219,7 +219,7 @@ const response = await get_block_records(agent, params);
 }
 ```
 For content of `BlockRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/block_record.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/block_record.ts
 
 ---
 
@@ -244,7 +244,7 @@ const response = await get_block_spends(agent, params);
 }
 ```
 For content of `CoinSpend`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_spend.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin_spend.ts
 
 ---
 
@@ -405,7 +405,7 @@ const response = await get_recent_signage_point_or_eos(agent, params);
 }
 ```
 For content of `EndOfSubSlotBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/end_of_slot_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/end_of_sub_slot_bundle.ts
 
 For content of `SignagePoint`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/full_node/signage_point.ts
@@ -626,7 +626,7 @@ const response = await get_puzzle_and_solution(agent, params);
 }
 ```
 For content of `CoinSpend`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/coin_spend.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin_spend.ts
 
 ---
 
@@ -756,7 +756,7 @@ const response = await get_all_blocks(agent);
 }
 ```
 For content of `FullBlock`,
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/full_block.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/fullblock.ts
 
 ---
 

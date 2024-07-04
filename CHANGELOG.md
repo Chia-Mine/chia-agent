@@ -7,6 +7,7 @@
     `chia-blockchain`.  
     This is a bug and not spec change so `chia-agent` stays to be able to set those params for now.
 ### Changed
+- Reorganized directory structure under `src/api/` in order to make it clear the dependencies from `chia_rs`/`pool_reference`
 - [Daemon WebSocket API](./src/api/ws/daemon)
   - [`get_key_for_fingerprint`](./src/api/ws/daemon/README.md#get_key_for_fingerprintdaemon-params)
     - Added a `private` request parameter
@@ -116,6 +117,7 @@
     - Fixed CAT request/response documentation incorrectness
   - [`dao_close_proposal`](./src/api/rpc/wallet/README.md#dao_close_proposalagent-params)
     - Fixed response documentation incorrectness
+- Fixed an issue where `Spend` and `SpendBundleCondition` were too old and missed several properties in the types.
 
 ## [14.1.0]
 ### Changed
@@ -225,7 +227,7 @@
   - `dao_get_proposals` of Wallet RPC API
   - `dao_adjust_filter_level` of Wallet RPC API
 - Upgraded dependencies and replaced `yarn.lock` with `pnpm-lock.yaml`
-- Moved `FarmerRecord` to [src/chia/pool/record.ts](./src/api/chia/pool/record.ts) (
+- Moved `FarmerRecord` to [src/chia/pool/record.ts](src/api/pool-reference/pool/record.ts) (
   Previously `src/chia/pool/store.ts`)
 ### Added
 - [Daemon WebSocket API](./src/api/ws/daemon)

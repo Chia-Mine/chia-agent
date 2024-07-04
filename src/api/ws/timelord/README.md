@@ -68,9 +68,9 @@ unsubscribe(); // Stop subscribing messages
 For content of `Chain`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/timelord/types.ts
 For content of `VDFInfo`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/vdf.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/vdf.ts
 For content of `VDFProof`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/vdf.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/vdf.ts
 
 ---
 
