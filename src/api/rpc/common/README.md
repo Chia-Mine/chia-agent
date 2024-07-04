@@ -45,8 +45,10 @@ const response = await get_network_info(agent);
 ### response:
 ```typescript
 {
+  success: True;
   network_name: str;
   network_prefix: str;
+  genesis_challenge: str;
 }
 ```
 

@@ -1,7 +1,7 @@
 // The daemon service currently does not provide state_change event as of v1.1.5.
 import {GetMessageType, wallet_ui_service} from "../../types";
 import {TDaemon} from "../../../daemon/index";
-import {bool, False, int, None, Optional, str, True, uint32} from "../../chia/types/_python_types_";
+import {bool, False, G1Element, int, None, Optional, str, True, uint32} from "../../chia/types/_python_types_";
 import {chiapos_install_info} from "../../chia/plotters/chiapos";
 import {bladebit_install_info} from "../../chia/plotters/bladebit";
 import {madmax_install_info} from "../../chia/plotters/maxmax";
@@ -199,14 +199,17 @@ export const add_private_key_command = "add_private_key";
 export type add_private_key_command = typeof add_private_key_command;
 export type TAddPrivateKeyRequest = {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
   mnemonic?: str;
   label?: str;
 };
 export type TAddPrivateKeyResponse = {
-  success: bool;
-  error?: str;
-  error_details?: {message: str};
+  success: True;
+  fingerprint: G1Element;
+} | {
+  success: False;
+  error: str;
+  error_details?: { message: str };
 };
 export type WsAddPrivateKeyMessage = GetMessageType<daemon_service, add_private_key_command, TAddPrivateKeyResponse>;
 export async function add_private_key(daemon: TDaemon, data: TAddPrivateKeyRequest) {
@@ -214,12 +217,34 @@ export async function add_private_key(daemon: TDaemon, data: TAddPrivateKeyReque
 }
 
 
+export const add_key_command = "add_key";
+export type add_key_command = typeof add_key_command;
+export type TAddKeyRequest = {
+  kc_user?: str;
+  kc_service?: str;
+  mnemonic_or_pk?: str;
+  label?: str;
+  private?: bool;
+};
+export type TAddKeyResponse = {
+  success: True;
+  fingerprint: G1Element;
+} | {
+  success: False;
+  error: str;
+  error_details?: { message: str };
+};
+export type WsAddKeyMessage = GetMessageType<daemon_service, add_key_command, TAddKeyResponse>;
+export async function add_key(daemon: TDaemon, data: TAddKeyRequest) {
+  return daemon.sendMessage<WsAddKeyMessage>(daemon_service, add_key_command, data);
+}
+
 
 export const check_keys_command = "check_keys";
 export type check_keys_command = typeof check_keys_command;
 export type TCheckKeysRequest = {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
   root_path: str;
 };
 export type TCheckKeysResponse = {
@@ -238,7 +263,7 @@ export const delete_all_keys_command = "delete_all_keys";
 export type delete_all_keys_command = typeof delete_all_keys_command;
 export type TDeleteAllKeysRequest = {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
 };
 export type TDeleteAllKeysResponse = {
   success: bool;
@@ -256,7 +281,7 @@ export const delete_key_by_fingerprint_command = "delete_key_by_fingerprint";
 export type delete_key_by_fingerprint_command = typeof delete_key_by_fingerprint_command;
 export type TDeleteKeyByFingerprintRequest = {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
   fingerprint: int;
 };
 export type TDeleteKeyByFingerprintResponse = {
@@ -275,7 +300,7 @@ export const get_all_private_keys_command = "get_all_private_keys";
 export type get_all_private_keys_command = typeof get_all_private_keys_command;
 export type TGetAllPrivateKeysRequest = {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
 };
 export type TGetAllPrivateKeysResponse = {
   success: bool;
@@ -293,7 +318,7 @@ export const get_first_private_key_command = "get_first_private_key";
 export type get_first_private_key_command = typeof get_first_private_key_command;
 export type TGetFirstPrivateKeyRequest = {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
 };
 export type TGetFirstPrivateKeyResponse = {
   success: bool;
@@ -311,12 +336,15 @@ export const get_key_for_fingerprint_command = "get_key_for_fingerprint";
 export type get_key_for_fingerprint_command = typeof get_key_for_fingerprint_command;
 export type TGetKeyForFingerprintRequest = {
   kc_user?: str;
-  kc_testing?: bool;
+  kc_service?: str;
+  private?: bool;
   fingerprint?: int;
 };
 export type TGetKeyForFingerprintResponse = {
-  success: bool;
-  error?: str;
+  success: False;
+  error: str;
+} | {
+  success: True;
   pk: str;
   entropy: str;
 };
@@ -777,6 +805,7 @@ export type WsDaemonMessage =
   | WsStopPlottingMessage
   | WsStopServiceMessage
   | WsAddPrivateKeyMessage
+  | WsAddKeyMessage
   | WsCheckKeysMessage
   | WsDeleteAllKeysMessage
   | WsDeleteKeyByFingerprintMessage

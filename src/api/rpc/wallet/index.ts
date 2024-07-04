@@ -43,8 +43,24 @@ import {ConditionValidTimes} from "../../chia/wallet/conditions";
 import {DAOInfo, DAORules, ProposalInfo} from "../../chia/wallet/dao_wallet/dao_info";
 import {ParsedProposalSpend, ParsedProposalUpdate, ProposalState} from "../../chia/wallet/dao_wallet/dao_wallet";
 import {DLProof, VerifyProofResponse} from "../../chia/data_layer/data_layer_util";
-import {GetNotifications, GetNotificationsResponse} from "../../chia/rpc/wallet_request_types";
+import {
+  GetNotifications,
+  GetNotificationsResponse,
+  GatherSigningInfo,
+  GatherSigningInfoCHIP0029,
+  GatherSigningInfoResponse,
+  GatherSigningInfoResponseCHIP0029,
+  ApplySignatures,
+  ApplySignaturesCHIP0029,
+  ApplySignaturesResponse,
+  ApplySignaturesResponseCHIP0029,
+  SubmitTransactions,
+  SubmitTransactionsCHIP0029,
+  SubmitTransactionsResponse,
+  SubmitTransactionsResponseCHIP0029,
+} from "../../chia/rpc/wallet_request_types";
 import {TXEndpointRequest} from "../../chia/rpc/util";
+import {SigningResponse, UnsignedTransaction} from "../../chia/wallet/signer_protocol";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -276,26 +292,13 @@ export const push_transactions_command = "push_transactions";
 export type push_transactions_command = typeof push_transactions_command;
 export type TPushTransactionsRequest = {
   transactions: Array<TransactionRecordConvenience | str>; // TransactionRecord or hex-serialized string
+  sign?: boolean;
 };
 export type TPushTransactionsResponse = Record<string, never>;
 export type WsPushTransactionsMessage = GetMessageType<chia_wallet_service, push_transactions_command, TPushTransactionsResponse>;
 export async function push_transactions<T extends TRPCAgent | TDaemon>(agent: T, data: TPushTransactionsRequest){
   type R = ResType<T, TPushTransactionsResponse, WsPushTransactionsMessage>;
   return agent.sendMessage<R>(chia_wallet_service, push_transactions_command, data);
-}
-
-
-
-export const farm_block_command = "farm_block";
-export type farm_block_command = typeof farm_block_command;
-export type TFarmBlockRequest = {
-  address: str;
-};
-export type TFarmBlockResponse = Record<string, never>;
-export type WsFarmBlockMessage = GetMessageType<chia_wallet_service, farm_block_command, TFarmBlockResponse>;
-export async function farm_block<T extends TRPCAgent | TDaemon>(agent: T, data: TFarmBlockRequest){
-  type R = ResType<T, TFarmBlockResponse, WsFarmBlockMessage>;
-  return agent.sendMessage<R>(chia_wallet_service, farm_block_command, data);
 }
 
 
@@ -386,6 +389,8 @@ export type TCreate_New_CAT_WalletResponse = {
   asset_id: str;
   wallet_id: uint32;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -471,6 +476,8 @@ export type TCreate_New_DAO_WalletResponse = {
   cat_wallet_id: uint32;
   dao_cat_wallet_id: uint32;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -513,6 +520,8 @@ export type TCreate_New_Pool_WalletResponse = {
   total_fee: uint64;
   transaction: TransactionRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
   launcher_id: str;
   p2_singleton_puzzle_hash: str;
 };
@@ -657,6 +666,8 @@ export type TSendTransactionResponse = {
   transaction: TransactionRecordConvenience;
   transactions: TransactionRecordConvenience[];
   transaction_id: TransactionRecord["name"];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsSendTransactionMessage = GetMessageType<chia_wallet_service, send_transaction_command, TSendTransactionResponse>;
 export async function send_transaction<T extends TRPCAgent | TDaemon>(agent: T, data: TSendTransactionRequest){
@@ -696,6 +707,8 @@ export type TSpendClawbackCoinsResponse = {
   success: True;
   transaction_ids: str[];
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsSpendClawbackCoinsMessage = GetMessageType<chia_wallet_service, spend_clawback_coins_command, TSpendClawbackCoinsResponse>;
 export async function spend_clawback_coins<T extends TRPCAgent | TDaemon>(agent: T, data: TSpendClawbackCoinsRequest) {
@@ -788,6 +801,8 @@ export type TCreateSignedTransactionResponse = {
   signed_txs: TransactionRecordConvenience[];
   signed_tx: TransactionRecordConvenience;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsCreateSignedTransactionMessage = GetMessageType<chia_wallet_service, create_signed_transaction_command, TCreateSignedTransactionResponse>;
 export async function create_signed_transaction<T extends TRPCAgent | TDaemon>(agent: T, data: TCreateSignedTransactionRequest){
@@ -943,6 +958,8 @@ export type TSendNotificationRequest = {
 export type TSendNotificationResponse = {
   tx: TransactionRecordConvenience;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsSendNotificationMessage = GetMessageType<chia_wallet_service, send_notification_command, TSendNotificationResponse>;
 export async function send_notification<T extends TRPCAgent | TDaemon>(agent: T, data: TSendNotificationRequest){
@@ -1146,6 +1163,8 @@ export type TCatSpendResponse = {
   transaction: TransactionRecordConvenience;
   transaction_id: TransactionRecord["name"];
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsCatSpendMessage = GetMessageType<chia_wallet_service, cat_spend_command, TCatSpendResponse>;
 export async function cat_spend<T extends TRPCAgent | TDaemon>(agent: T, data: TCatSpendRequest){
@@ -1187,6 +1206,8 @@ export type TCreateOfferForIdsResponse = {
   offer: str;
   trade_record: TradeRecordConvenience;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsCreateOfferForIdsMessage = GetMessageType<chia_wallet_service, create_offer_for_ids_command, TCreateOfferForIdsResponse>;
 export async function create_offer_for_ids<T extends TRPCAgent | TDaemon>(agent: T, data: TCreateOfferForIdsRequest){
@@ -1254,7 +1275,10 @@ export type TTakeOfferRequest = {
 } & TXEndpointRequest;
 export type TTakeOfferResponse = {
   trade_record: TradeRecordConvenience;
+  offer: str;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses: SigningResponse[] | str[];
 };
 export type WsTakeOfferMessage = GetMessageType<chia_wallet_service, take_offer_command, TTakeOfferResponse>;
 export async function take_offer<T extends TRPCAgent | TDaemon>(agent: T, data: TTakeOfferRequest){
@@ -1334,6 +1358,8 @@ export type TCancelOfferRequest = {
 } & TXEndpointRequest;
 export type TCancelOfferResponse = {
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsCancelOfferMessage = GetMessageType<chia_wallet_service, cancel_offer_command, TCancelOfferResponse>;
 export async function cancel_offer<T extends TRPCAgent | TDaemon>(agent: T, data: TCancelOfferRequest){
@@ -1356,6 +1382,8 @@ export type TCancelOffersRequest = {
 export type TCancelOffersResponse = {
   success: True;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsCancelOffersMessage = GetMessageType<chia_wallet_service , cancel_offers_command, TCancelOffersResponse>;
 export async function cancel_offers<T extends TRPCAgent | TDaemon>(agent: T, data: TCancelOffersRequest){
@@ -1418,6 +1446,8 @@ export type TDidUpdateRecoveryIdsRequest = {
 export type TDidUpdateRecoveryIdsResponse = {
   success: bool;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDidUpdateRecoveryIdsMessage = GetMessageType<chia_wallet_service, did_update_recovery_ids_command, TDidUpdateRecoveryIdsResponse>;
 export async function did_update_recovery_ids<T extends TRPCAgent | TDaemon>(agent: T, data: TDidUpdateRecoveryIdsRequest){
@@ -1440,6 +1470,8 @@ export type TDidUpdateMetadataResponse = {
   wallet_id: uint32;
   spend_bundle: SpendBundle;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 } | {
   success: False;
   error: str;
@@ -1587,6 +1619,8 @@ export type TDidCreateAttestResponse = {
   info: [str, str, uint64];
   attest_data: str;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 } | {
   success: False;
 };
@@ -1670,6 +1704,8 @@ export type TDidMessageSpendResponse = {
   success: True;
   spend_bundle: SpendBundle;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDidMessageSpendMessage = GetMessageType<chia_wallet_service, did_message_spend_command, TDidMessageSpendResponse>;
 export async function did_message_spend<T extends TRPCAgent | TDaemon>(agent: T, data: TDidMessageSpendRequest) {
@@ -1743,6 +1779,8 @@ export type TDidTransferDidResponse = {
   transaction: TransactionRecordConvenience;
   transaction_id: bytes32;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDidTransferDidMessage = GetMessageType<chia_wallet_service, did_transfer_did_command, TDidTransferDidResponse>;
 export async function did_transfer_did<T extends TRPCAgent | TDaemon>(agent: T, data: TDidTransferDidRequest){
@@ -1783,6 +1821,8 @@ export type TDaoAddFundsToTreasuryResponse = {
   tx_id: bytes32;
   tx: TransactionRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDaoAddFundsToTreasuryMessage = GetMessageType<chia_wallet_service, dao_add_funds_to_treasury_command, TDaoAddFundsToTreasuryResponse>;
 export async function dao_add_funds_to_treasury<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoAddFundsToTreasuryRequest) {
@@ -1851,6 +1891,8 @@ export type TDaoSendToLockupResponse = {
   tx_id: bytes32;
   txs: TransactionRecord[];
   transactions: TransactionRecord[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDaoSendToLockupMessage = GetMessageType<chia_wallet_service, dao_send_to_lockup_command, TDaoSendToLockupResponse>;
 export async function dao_send_to_lockup<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoSendToLockupRequest) {
@@ -1907,6 +1949,8 @@ export type TDaoExitLockupResponse = {
   tx_id: bytes32;
   tx: TransactionRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDaoExitLockupMessage = GetMessageType<chia_wallet_service, dao_exit_lockup_command, TDaoExitLockupResponse>;
 export async function dao_exit_lockup<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoExitLockupRequest) {
@@ -1958,6 +2002,8 @@ export type TDaoCreateProposalResponse = {
   tx_id: str;
   tx: TransactionRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDaoCreateProposalMessage = GetMessageType<chia_wallet_service, dao_create_proposal_command, TDaoCreateProposalResponse>;
 export async function dao_create_proposal<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoCreateProposalRequest) {
@@ -1980,6 +2026,8 @@ export type TDaoVoteOnProposalResponse = {
   tx_id: bytes32;
   tx: TransactionRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDaoVoteOnProposalMessage = GetMessageType<chia_wallet_service, dao_vote_on_proposal_command, TDaoVoteOnProposalResponse>;
 export async function dao_vote_on_proposal<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoVoteOnProposalRequest) {
@@ -2019,6 +2067,8 @@ export type TDaoCloseProposalResponse = {
   tx_id: bytes32;
   tx: TransactionRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDaoCloseProposalMessage = GetMessageType<chia_wallet_service, dao_close_proposal_command, TDaoCloseProposalResponse>;
 export async function dao_close_proposal<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoCloseProposalRequest) {
@@ -2038,6 +2088,8 @@ export type TDaoFreeCoinsFromFinishedProposalsResponse = {
   tx_id: bytes32;
   tx: TransactionRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDaoFreeCoinsFromFinishedProposalsMessage = GetMessageType<chia_wallet_service, dao_free_coins_from_finished_proposals_command, TDaoFreeCoinsFromFinishedProposalsResponse>;
 export async function dao_free_coins_from_finished_proposals<T extends TRPCAgent | TDaemon>(agent: T, data: TDaoFreeCoinsFromFinishedProposalsRequest) {
@@ -2071,6 +2123,8 @@ export type TNftMintNftResponse = {
   spend_bundle: SpendBundle;
   nft_id: Optional<str>;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsNftMintNftMessage = GetMessageType<chia_wallet_service, nft_mint_nft_command, TNftMintNftResponse>;
 export async function nft_mint_nft<T extends TRPCAgent | TDaemon>(agent: T, data: TNftMintNftRequest){
@@ -2135,6 +2189,8 @@ export type TNftSetNftDidResponse = {
   success: True;
   spend_bundle: SpendBundle;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 } | {
   success: False;
   error: str;
@@ -2162,6 +2218,8 @@ export type TNftSetDidBulkResponse = {
   spend_bundle: SpendBundle;
   tx_num: int;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsNftSetDidBulkMessage = GetMessageType<chia_wallet_service, nft_set_did_bulk_command, TNftSetDidBulkResponse>;
 export async function nft_set_did_bulk<T extends TRPCAgent | TDaemon>(agent: T, data: TNftSetDidBulkRequest) {
@@ -2186,6 +2244,8 @@ export type TNftTransferBulkResponse = {
   spend_bundle: SpendBundle;
   tx_num: int;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsNftTransferBulkMessage = GetMessageType<chia_wallet_service, nft_transfer_bulk_command, TNftTransferBulkResponse>;
 
@@ -2285,6 +2345,8 @@ export type TNftTransferNftResponse = {
   wallet_id: uint32;
   spend_bundle: SpendBundle;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 } | {
   success: False;
   error: str;
@@ -2334,6 +2396,8 @@ export type TNftAddUriResponse = {
   wallet_id: uint32;
   spend_bundle: SpendBundle;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsNftAddUriMessage = GetMessageType<chia_wallet_service, nft_add_uri_command, TNftAddUriResponse>;
 export async function nft_add_uri<T extends TRPCAgent | TDaemon>(agent: T, data: TNftAddUriRequest){
@@ -2407,6 +2471,8 @@ export type TNftMintBulkResponse = {
   spend_bundle: SpendBundle;
   nft_id_list: str[];
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsNftMintBulkMessage = GetMessageType<chia_wallet_service, nft_mint_bulk_command, TNftMintBulkResponse>;
 export async function nft_mint_bulk<T extends TRPCAgent | TDaemon>(agent: T, data: TNftMintBulkRequest){
@@ -2492,6 +2558,8 @@ export type TPwJoinPoolResponse = {
   transaction: TransactionRecord;
   fee_transaction: Optional<TransactionRecord>;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 } | {
   success: False;
   error: "not_initialized";
@@ -2516,6 +2584,8 @@ export type TPwSelfPoolResponse = {
   transaction: TransactionRecord;
   fee_transaction: Optional<TransactionRecord>;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsPwSelfPoolMessage = GetMessageType<chia_wallet_service, pw_self_pool_command, TPwSelfPoolResponse>;
 export async function pw_self_pool<T extends TRPCAgent | TDaemon>(agent: T, data: TPwSelfPoolRequest){
@@ -2538,6 +2608,8 @@ export type TPwAbsorbRewardsResponse = {
   transaction: TransactionRecord;
   fee_transaction: Optional<TransactionRecord>;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsPwAbsorbRewardsMessage = GetMessageType<chia_wallet_service, pw_absorb_rewards_command, TPwAbsorbRewardsResponse>;
 export async function pw_absorb_rewards<T extends TRPCAgent | TDaemon>(agent: T, data: TPwAbsorbRewardsRequest){
@@ -2578,6 +2650,8 @@ export type TCreateNewDlResponse = {
 } | {
   success: True;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
   launcher_id: bytes32;
 };
 export type WsCreateNewDlMessage = GetMessageType<chia_wallet_service, create_new_dl_command, TCreateNewDlResponse>;
@@ -2665,6 +2739,8 @@ export type TDlUpdateRootRequest = {
 export type TDlUpdateRootResponse = {
   tx_record: TransactionRecordConvenience;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDlUpdateRootMessage = GetMessageType<chia_wallet_service, dl_update_root_command, TDlUpdateRootResponse>;
 export async function dl_update_root<T extends TRPCAgent | TDaemon>(agent: T, data: TDlUpdateRootRequest){
@@ -2679,10 +2755,12 @@ export const dl_update_multiple_command = "dl_update_multiple";
 export type dl_update_multiple_command = typeof dl_update_multiple_command;
 export type TDlUpdateMultipleRequest = {
   updates: Record<str, str>; // {[launcher_id]: root}
+  fee?: uint64;
 } & TXEndpointRequest;
 export type TDlUpdateMultipleResponse = {
-  tx_records: TransactionRecordConvenience[];
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDlUpdateMultipleMessage = GetMessageType<chia_wallet_service, dl_update_multiple_command, TDlUpdateMultipleResponse>;
 export async function dl_update_multiple<T extends TRPCAgent | TDaemon>(agent: T, data: TDlUpdateMultipleRequest){
@@ -2756,6 +2834,8 @@ export type TDlNewMirrorRequest = {
 } & TXEndpointRequest;
 export type TDlNewMirrorResponse = {
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDlNewMirrorMessage = GetMessageType<chia_wallet_service, dl_new_mirror_command, TDlNewMirrorResponse>;
 export async function dl_new_mirror<T extends TRPCAgent | TDaemon>(agent: T, data: TDlNewMirrorRequest){
@@ -2774,6 +2854,8 @@ export type TDlDeleteMirrorRequest = {
 } & TXEndpointRequest;
 export type TDlDeleteMirrorResponse = {
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsDlDeleteMirrorMessage = GetMessageType<chia_wallet_service, dl_delete_mirror_command, TDlDeleteMirrorResponse>;
 export async function dl_delete_mirror<T extends TRPCAgent | TDaemon>(agent: T, data: TDlDeleteMirrorRequest){
@@ -2804,6 +2886,8 @@ export type TVcMintRequest = VCMint & TXEndpointRequest;
 export type TVcMintResponse = {
   vc_record: VCRecord;
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsVcMintMessage = GetMessageType<chia_wallet_service, vc_mint_command, TVcMintResponse>;
 export async function vc_mint<T extends TRPCAgent | TDaemon>(agent: T, data: TVcMintRequest) {
@@ -2858,6 +2942,8 @@ export type vc_spend_command = typeof vc_spend_command;
 export type TVcSpendRequest = VcSpend & TXEndpointRequest;
 export type TVcSpendResponse = {
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsVcSpendMessage = GetMessageType<chia_wallet_service, vc_spend_command, TVcSpendResponse>;
 export async function vc_spend<T extends TRPCAgent | TDaemon>(agent: T, data: TVcSpendRequest) {
@@ -2906,6 +2992,8 @@ export type vc_revoke_command = typeof vc_revoke_command;
 export type TVcRevokeRequest = VcRevoke & TXEndpointRequest;
 export type TVcRevokeResponse = {
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsVcRevokeMessage = GetMessageType<chia_wallet_service, vc_revoke_command, TVcRevokeResponse>;
 export async function vc_revoke<T extends TRPCAgent | TDaemon>(agent: T, data: TVcRevokeRequest) {
@@ -2924,12 +3012,64 @@ export type crcat_approve_pending_command = typeof crcat_approve_pending_command
 export type TCrcatApprovePendingRequest = CrcatApprovePending & TXEndpointRequest;
 export type TCrcatApprovePendingResponse = {
   transactions: TransactionRecordConvenience[];
+  unsigned_transactions: UnsignedTransaction[] | str[];
+  signing_responses?: str[];
 };
 export type WsCrcatApprovePendingMessage = GetMessageType<chia_wallet_service, crcat_approve_pending_command, TCrcatApprovePendingResponse>;
-
 export async function crcat_approve_pending<T extends TRPCAgent | TDaemon>(agent: T, data: TCrcatApprovePendingRequest) {
   type R = ResType<T, TCrcatApprovePendingResponse, WsCrcatApprovePendingMessage>;
   return agent.sendMessage<R>(chia_wallet_service, crcat_approve_pending_command, data);
+}
+
+
+export const gather_signing_info_command = "gather_signing_info";
+export type gather_signing_info_command = typeof gather_signing_info_command;
+export type TGatherSigningInfoRequest = GatherSigningInfo | GatherSigningInfoCHIP0029;
+export type TGatherSigningInfoResponse = GatherSigningInfoResponse | GatherSigningInfoResponseCHIP0029;
+export type WsGatherSigningInfoMessage = GetMessageType<chia_wallet_service, gather_signing_info_command, TGatherSigningInfoResponse>;
+export async function gather_signing_info<T extends TRPCAgent | TDaemon, D extends TGatherSigningInfoRequest>(
+  agent: T,
+  data: D,
+) {
+  type RpcMsg = D extends GatherSigningInfoCHIP0029 ?
+    GatherSigningInfoResponseCHIP0029 : GatherSigningInfoResponse;
+  type WsMsg = GetMessageType<chia_wallet_service, gather_signing_info_command, RpcMsg>;
+  type R = ResType<T, RpcMsg, WsMsg>;
+  return agent.sendMessage<R>(chia_wallet_service, gather_signing_info_command, data);
+}
+
+
+export const apply_signatures_command = "apply_signatures";
+export type apply_signatures_command = typeof apply_signatures_command;
+export type TApplySignaturesRequest = ApplySignatures | ApplySignaturesCHIP0029;
+export type TApplySignaturesResponse = ApplySignaturesResponse | ApplySignaturesResponseCHIP0029;
+export type WsApplySignaturesMessage = GetMessageType<chia_wallet_service, apply_signatures_command, TApplySignaturesResponse>;
+export async function apply_signatures<T extends TRPCAgent | TDaemon, D extends TApplySignaturesRequest>(
+  agent: T,
+  data: D,
+) {
+  type RpcMsg = D extends ApplySignaturesCHIP0029 ?
+    ApplySignaturesResponseCHIP0029 : ApplySignaturesResponse;
+  type WsMsg = GetMessageType<chia_wallet_service, apply_signatures_command, RpcMsg>;
+  type R = ResType<T, RpcMsg, WsMsg>;
+  return agent.sendMessage<R>(chia_wallet_service, apply_signatures_command, data);
+}
+
+
+export const submit_transactions_command = "submit_transactions";
+export type submit_transactions_command = typeof submit_transactions_command;
+export type TSubmitTransactionsRequest = SubmitTransactions | SubmitTransactionsCHIP0029;
+export type TSubmitTransactionsResponse = SubmitTransactionsResponse | SubmitTransactionsResponseCHIP0029;
+export type WsSubmitTransactionsMessage = GetMessageType<chia_wallet_service, submit_transactions_command, TSubmitTransactionsResponse>;
+export async function submit_transactions<T extends TRPCAgent | TDaemon, D extends TSubmitTransactionsRequest>(
+  agent: T,
+  data: D,
+) {
+  type RpcMsg = D extends SubmitTransactionsCHIP0029 ?
+    SubmitTransactionsResponseCHIP0029 : SubmitTransactionsResponse;
+  type WsMsg = GetMessageType<chia_wallet_service, submit_transactions_command, RpcMsg>;
+  type R = ResType<T, RpcMsg, WsMsg>;
+  return agent.sendMessage<R>(chia_wallet_service, submit_transactions_command, data);
 }
 
 export type RpcWalletMessage =
@@ -3011,7 +3151,6 @@ export type RpcWalletMessage =
   | TNftTransferNftResponse
   | TNftGetInfoResponse
   | TNftAddUriResponse
-  | TFarmBlockResponse
   | TGetTimestampForHeightResponse
   | TSetAutoClaimResponse
   | TGetAutoClaimResponse
@@ -3070,6 +3209,9 @@ export type RpcWalletMessage =
   | TVcGetProofsForRootResponse
   | TVcRevokeResponse
   | TCrcatApprovePendingResponse
+  | TGatherSigningInfoResponse
+  | TApplySignaturesResponse
+  | TSubmitTransactionsResponse
 ;
 
 export type RpcWalletMessageOnWs =
@@ -3151,7 +3293,6 @@ export type RpcWalletMessageOnWs =
   | WsNftTransferNftMessage
   | WsNftGetInfoMessage
   | WsNftAddUriMessage
-  | WsFarmBlockMessage
   | WsGetTimestampForHeightMessage
   | WsSetAutoClaimMessage
   | WsGetAutoClaimMessage
@@ -3210,4 +3351,7 @@ export type RpcWalletMessageOnWs =
   | WsVcGetProofsForRootMessage
   | WsVcRevokeMessage
   | WsCrcatApprovePendingMessage
+  | WsGatherSigningInfoMessage
+  | WsApplySignaturesMessage
+  | WsSubmitTransactionsMessage
 ;

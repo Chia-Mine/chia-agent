@@ -57,17 +57,25 @@ export async function get_owned_stores<T extends TRPCAgent|TDaemon>(agent: T) {
   return agent.sendMessage<R>(chia_data_layer_service, get_owned_stores_command);
 }
 
-
+export type BatchUpdateChange = {
+  action: "insert";
+  key: str;
+  value: str;
+  reference_node_hash?: str;
+  side?: 0 | 1;
+} | {
+  action: "delete";
+  key: str;
+} | {
+  action: "upsert";
+  key: str;
+  value: str;
+};
 export const batch_update_command = "batch_update";
 export type batch_update_command = typeof batch_update_command;
 export type TBatchUpdateRequest = {
   fee?: uint64;
-  changelist: Array<{
-    key: str;
-    reference_node_hash?: str;
-    side?: 0|1;
-    value?: str;
-  }>;
+  changelist: BatchUpdateChange[];
   id: str;
   submit_on_chain?: bool;
 };
@@ -78,6 +86,26 @@ export type WsBatchUpdateMessage = GetMessageType<chia_data_layer_service, batch
 export async function batch_update<T extends TRPCAgent|TDaemon>(agent: T, params: TBatchUpdateRequest) {
   type R = ResType<T, TBatchUpdateResponse, WsBatchUpdateMessage>;
   return agent.sendMessage<R>(chia_data_layer_service, batch_update_command, params);
+}
+
+
+export const multistore_batch_update_command = "multistore_batch_update";
+export type multistore_batch_update_command = typeof multistore_batch_update_command;
+export type TMultistoreBatchUpdateRequest = {
+  fee?: uint64;
+  store_updates: Array<{
+    store_id: str;
+    changelist: BatchUpdateChange[];
+  }>;
+  submit_on_chain?: bool;
+};
+export type TMultistoreBatchUpdateResponse = {
+  tx_id?: bytes32[];
+};
+export type WsMultistoreBatchUpdateMessage = GetMessageType<chia_data_layer_service, multistore_batch_update_command, TMultistoreBatchUpdateResponse>;
+export async function multistore_batch_update<T extends TRPCAgent | TDaemon>(agent: T, params: TMultistoreBatchUpdateRequest) {
+  type R = ResType<T, TMultistoreBatchUpdateResponse, WsMultistoreBatchUpdateMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, multistore_batch_update_command, params);
 }
 
 
@@ -95,6 +123,22 @@ export type WsSubmitPendingRootMessage = GetMessageType<chia_data_layer_service,
 export async function submit_pending_root<T extends TRPCAgent | TDaemon>(agent: T, params: TSubmitPendingRootRequest) {
   type R = ResType<T, TSubmitPendingRootResponse, WsSubmitPendingRootMessage>;
   return agent.sendMessage<R>(chia_data_layer_service, submit_pending_root_command, params);
+}
+
+
+export const submit_all_pending_roots_command = "submit_all_pending_roots";
+export type submit_all_pending_roots_command = typeof submit_all_pending_roots_command;
+export type TSubmitAllPendingRootsRequest = {
+  fee?: uint64;
+};
+export type TSubmitAllPendingRootsResponse = {
+  tx_id: bytes32[];
+};
+export type WsSubmitAllPendingRootsMessage = GetMessageType<chia_data_layer_service, submit_all_pending_roots_command, TSubmitAllPendingRootsResponse>;
+
+export async function submit_all_pending_roots<T extends TRPCAgent | TDaemon>(agent: T, params: TSubmitAllPendingRootsRequest) {
+  type R = ResType<T, TSubmitAllPendingRootsResponse, WsSubmitAllPendingRootsMessage>;
+  return agent.sendMessage<R>(chia_data_layer_service, submit_all_pending_roots_command, params);
 }
 
 
@@ -590,7 +634,9 @@ export type RpcDataLayerMessage =
   | TCreateDataStoreResponse
   | TGetOwnedStoresResponse
   | TBatchUpdateResponse
+  | TMultistoreBatchUpdateResponse
   | TSubmitPendingRootResponse
+  | TSubmitAllPendingRootsRequest
   | TGetValueResponse
   | TGetKeysResponse
   | TGetKeysValuesResponse
@@ -626,7 +672,9 @@ export type RpcDataLayerMessageOnWs =
   | WsCreateDataStoreMessage
   | WsGetOwnedStoresMessage
   | WsBatchUpdateMessage
+  | WsMultistoreBatchUpdateMessage
   | WsSubmitPendingRootMessage
+  | WsSubmitAllPendingRootsMessage
   | WsGetValueMessage
   | WsGetKeysMessage
   | WsGetKeysValuesMessage

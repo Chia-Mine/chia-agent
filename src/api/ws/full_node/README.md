@@ -210,3 +210,44 @@ unsubscribe(); // Stop subscribing messages
 ```
 For content of `NewSignagePoint`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/protocols/farmer_protocol.ts
+
+---
+
+### `on_unfinished_block`
+Capture broadcast message of command `unfinished_block` from `chia_full_node` service.
+#### Usage
+```typescript
+const {getDaemon} = require("chia-agent");
+const {on_unfinished_block} = require("chia-agent/api/ws");
+
+const daemon = getDaemon();
+await daemon.connect();
+const unsubscribe = await on_unfinished_block(daemon, (event) => {
+  // Format of `event` object is described below.
+  ...
+});
+...
+unsubscribe(); // Stop subscribing messages
+```
+#### event:
+```typescript
+{
+  origin: "chia_full_node";
+  command: "unfinished_block";
+  ack: boolean;
+  data: /*See below*/;
+  request_id: string;
+  destination: "metrics";
+}
+```
+#### data:
+```typescript
+{
+  block_duration_in_seconds: float;
+  validation_time_in_seconds: float;
+  pre_validation_time_in_seconds: float | None;
+  unfinished_block: UnfinishedBlock;
+}
+```
+For content of `UnfinishedBlock`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/unfinished_block.ts

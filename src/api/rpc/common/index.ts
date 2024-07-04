@@ -11,8 +11,10 @@ export type chia_common_service = typeof chia_common_service;
 export const get_network_info_command = "get_network_info";
 export type get_network_info_command = typeof get_network_info_command;
 export type TGetNetworkInfoResponse = {
+  success: True;
   network_name: str;
   network_prefix: str;
+  genesis_challenge: str;
 };
 export type WsGetNetworkInfoMessage = GetMessageType<chia_common_service, get_network_info_command, TGetNetworkInfoResponse>;
 

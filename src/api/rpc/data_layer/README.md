@@ -109,12 +109,7 @@ const response = await batch_update(agent, params);
 ```typescript
 {
   fee?: uint64;
-  changelist: Array<{
-    key: str;
-    reference_node_hash?: str;
-    side?: 0|1;
-    value?: str;
-  }>;
+  changelist: BatchUpdateChange[];
   id: str;
   submit_on_chain?: bool;
 }
@@ -125,6 +120,38 @@ const response = await batch_update(agent, params);
   tx_id?: bytes32;
 }
 ```
+For content of `BatchUpdateChange`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/data_layer/index.ts
+
+---
+
+## `multistore_batch_update(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {multistore_batch_update} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await multistore_batch_update(agent, params);
+```
+### params:
+```typescript
+{
+  fee?: uint64;
+  store_updates: Array<{
+    store_id: str;
+    changelist: BatchUpdateChange[];
+  }>;
+  submit_on_chain?: bool;
+}
+```
+### response:
+```typescript
+{
+  tx_id?: bytes32[];
+}
+```
+For content of `BatchUpdateChange`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/rpc/data_layer/index.ts
 
 ---
 
@@ -147,6 +174,29 @@ const response = await submit_pending_root(agent, params);
 ```typescript
 {
   tx_id: bytes32;
+}
+```
+
+---
+
+## `submit_all_pending_roots(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {submit_all_pending_roots} = require("chia-agent/api/rpc/data_layer");
+const agent = new RPCAgent({service: "data_layer"});
+const response = await submit_all_pending_roots(agent, params);
+```
+### params:
+```typescript
+{
+  fee?: uint64;
+}
+```
+### response:
+```typescript
+{
+  tx_id: bytes32[];
 }
 ```
 

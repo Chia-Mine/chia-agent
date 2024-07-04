@@ -17,6 +17,7 @@ export type ResType<T extends TRPCAgent | TDaemon, A, D> = T extends TDaemon ? D
 
 export const wallet_ui_service = "wallet_ui";
 export const metrics_service = "metrics";
+export const unfinished_block_info_service = "unfinished_block_info";
 
 export type TConnectionGeneral = {
   type: NodeType,

@@ -33,11 +33,13 @@ export {
   TGetBlockchainStateBroadCast,
   TBlockBroadCast,
   TSignagePointBroadCast,
+  TUnfinishedBlockBroadCast,
   on_message_from_full_node,
   on_get_connections as on_get_connections_full_node,
   on_get_blockchain_state,
   on_block,
   on_signage_point,
+  on_unfinished_block,
 } from "./full_node/index";
 
 import type {WsHarvesterMessage} from "./harvester/index";
@@ -139,6 +141,9 @@ export {
   add_private_key,
   TAddPrivateKeyRequest,
   TAddPrivateKeyResponse,
+  add_key,
+  TAddKeyRequest,
+  TAddKeyResponse,
   check_keys,
   TCheckKeysRequest,
   TCheckKeysResponse,

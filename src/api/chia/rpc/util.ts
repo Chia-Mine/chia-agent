@@ -11,6 +11,8 @@ export type TXEndpointRequest = {
   wallet_type: str;
   extra_conditions?: ExtraCondition[];
   push?: bool;
+  "CHIP-0029"?: bool;
+  sign?: bool;
 }
 & TXConfigLoader
 & TXEndpointForCompat
