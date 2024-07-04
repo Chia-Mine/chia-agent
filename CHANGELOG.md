@@ -3,7 +3,8 @@
 ## [14.2.0]
 ### Note
 - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
-  - The request parameters `kc_user` and `kc_service` is temporarily not working with `chia-blockchain@2.4.0`.  
+  - The request parameters `kc_user` and `kc_service` is temporarily not working with `2.4.0` and `2.4.1` of
+    `chia-blockchain`.  
     This is a bug and not spec change so `chia-agent` stays to be able to set those params for now.
 ### Changed
 - [Daemon WebSocket API](./src/api/ws/daemon)
