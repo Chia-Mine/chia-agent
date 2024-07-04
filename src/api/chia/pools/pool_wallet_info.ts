@@ -1,7 +1,6 @@
 import {G1Element, Optional, str, uint32, uint8} from "../types/_python_types_";
 import {bytes32} from "../types/blockchain_format/sized_bytes";
 import {Coin} from "../types/blockchain_format/coin";
-import {Program} from "../types/blockchain_format/program";
 
 export type PoolState = {
   version: uint8;
