@@ -4,7 +4,7 @@
 ### Note
 - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
   - The request parameters `kc_user` and `kc_service` is temporarily not working with `2.4.0` and `2.4.1` of
-    `chia-blockchain`.  
+    `chia-blockchain`. (`2.4.2` fixed this issue)  
     This is a bug and not spec change so `chia-agent` stays to be able to set those params for now.
 ### Changed
 - Reorganized directory structure under `src/api/` in order to make it clear the dependencies from `chia_rs`/`pool_reference`
