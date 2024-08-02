@@ -50,5 +50,6 @@ export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEve
         resolve({ws, openEvent});
       }
     };
+    ws.onerror = (err) => reject(err);
   });
 }
