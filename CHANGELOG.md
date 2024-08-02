@@ -1,5 +1,9 @@
 # Changelog
 
+## [14.2.1]
+### Changed
+- `daemon.connect()` now returns a rejected promise on failure to connect instead of throwing an uncaught exception
+
 ## [14.2.0]
 ### Note
 - [`add_private_key`](./src/api/ws/daemon/README.md#add_private_keydaemon-params)
