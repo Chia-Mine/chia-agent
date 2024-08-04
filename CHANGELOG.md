@@ -2,7 +2,8 @@
 
 ## [14.2.1]
 ### Changed
-- `daemon.connect()` now returns a rejected promise on failure to connect instead of throwing an uncaught exception
+- [`daemon.connect()`](./src/daemon/README.md#daemonconnecturl-string-timeoutms-number) now returns a rejected promise on failure to connect instead of throwing an uncaught exception
+- [`daemon.connect()`](./src/daemon/README.md#daemonconnecturl-string-timeoutms-number) now accepts connection timeout in milliseconds.
 
 ## [14.2.0]
 ### Note

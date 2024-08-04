@@ -88,8 +88,9 @@ class Daemon {
   /**
    * Connect to local daemon via websocket.
    * @param daemonServerURL
+   * @param timeoutMs
    */
-  public async connect(daemonServerURL?: string): Promise<boolean> {
+  public async connect(daemonServerURL?: string, timeoutMs?: number): Promise<boolean> {
     if(!daemonServerURL){
       const config = getConfig();
       const daemonHost = config["/ui/daemon_host"];
@@ -107,7 +108,7 @@ class Daemon {
     
     getLogger().debug(`Opening websocket connection to ${daemonServerURL}`);
     
-    const result = await open(daemonServerURL);
+    const result = await open(daemonServerURL, timeoutMs);
     this._socket = result.ws;
     this._socket.onerror = this.onError;
     this._socket.onmessage = this.onMessage;

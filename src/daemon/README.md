@@ -12,11 +12,11 @@ const {getDaemon} = require("chia-agent");
 const daemon = getDaemon();
 ```
 
-## daemon.connect
+## daemon.connect(url?: string, timeoutMs?: number)
 
 Connect to chia daemon via websocket.
 
-If you don't pass any argument, it tries to connect to an url specified in chia configuration file.  
+If you don't pass any argument, it tries to connect to an url specified in chia configuration file.
 (Note: `chia-agent` cares environment variable `CHIA_ROOT`)
 ```js
 await daemon.connect();
@@ -27,7 +27,17 @@ You can specify chia daemon url to connect to.
 await daemon.connect("wss://hostname:port");
 ```
 
-## daemon.close
+### `url`
+Optional. A URL to the daemon server to connect.  
+The default url is `wss://{DAEMON_HOST}:{DAEMON_PORT}` where
+`DAEMON_HOST` is `ui.daemon_host` and `DAEMON_PORT`  is `ui.daemon_port` in `$CHIA_ROOT/config/config.yaml`  
+(Usually `wss://localhost:55400`)
+
+### `timeoutMs`
+Optional. Connection timeout in milliseconds.  
+The default value is `50000`.
+
+## daemon.close()
 
 Close active connection.  
 If no active connection found, it silently returns without error.
@@ -42,7 +52,7 @@ daemon.addEventListener("close", () => {
 });
 ```
 
-## daemon.subscribe
+## daemon.subscribe(service: string)
 
 Start to monitor message channel via websocket.
 
