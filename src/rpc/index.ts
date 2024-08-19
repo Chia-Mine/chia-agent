@@ -346,7 +346,7 @@ export class RPCAgent implements APIAgent {
                 return reject(new Error(`Response has no 'success' property: ${serializedData}`));
               }
               if(!d.success){
-                getLogger().error(`API failure: ${d.error}`);
+                getLogger().info(`API failure: ${d.error}`);
                 return reject(d);
               }
               return resolve(d);

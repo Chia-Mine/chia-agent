@@ -1,8 +1,12 @@
 # Changelog
 
+## [14.2.2]
+### Changed
+- For the log which is output when `success` property in API response is `false`, the log level is now `INFO` instead of `ERROR`.
+
 ## [14.2.1]
 ### Changed
-- [`daemon.connect()`](./src/daemon/README.md#daemonconnecturl-string-timeoutms-number) now returns a rejected promise on failure to connect instead of throwing an uncaught exception
+- [`daemon.connect()`](./src/daemon/README.md#daemonconnecturl-string-timeoutms-number) now returns a rejected promise on failure instead of throwing an uncaught exception
 - [`daemon.connect()`](./src/daemon/README.md#daemonconnecturl-string-timeoutms-number) now accepts connection timeout in milliseconds.
 
 ## [14.2.0]
@@ -1638,6 +1642,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.2.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.1...v14.2.2
+[14.2.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.0...v14.2.1
 [14.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.1.0...v14.2.0
 [14.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.0.0...v14.1.0
 [14.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v13.2.0...v14.0.0
