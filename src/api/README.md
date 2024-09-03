@@ -218,6 +218,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`gather_signing_info`](./rpc/wallet/README.md#gather_signing_infoagent-params)
 - [`apply_signatures`](./rpc/wallet/README.md#apply_signaturesagent-params)
 - [`submit_transactions`](./rpc/wallet/README.md#submit_transactionsagent-params)
+- [`execute_signing_instructions`](./rpc/wallet/README.md#execute_signing_instructionsagent-params)
 
 #### [Pool API](./rpc/pool/README.md#usage)
 - [`pool_info`](./rpc/pool/README.md#pool_infoagent)
@@ -275,6 +276,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`close_connection`](./rpc/common/README.md#close_connectionagent-params)
 - [`stop_node`](./rpc/common/README.md#stop_nodeagent)
 - [`get_routes`](./rpc/common/README.md#get_routesagent)
+- [`get_version`](./rpc/common/README.md#get_versionagent)
 
 ### Websocket API
 Websocket API is used to connect to chia `daemon`.  

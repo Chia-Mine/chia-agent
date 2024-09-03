@@ -4,6 +4,7 @@ import {bytes32} from "./blockchain_format/sized_bytes";
 import {NPCResult} from "../consensus/cost_calculator";
 import {bool, Optional, uint32, uint64} from "./_python_types_";
 import {CoinSpend} from "./coin_spend";
+import {SpendBundleConditions} from "../../chia_rs/chia-consensus/gen/owned_conditions";
 
 export type BundleCoinSpend = {
   coin_spend: CoinSpend;
@@ -17,7 +18,7 @@ export type BundleCoinSpend = {
 export type MempoolItem = {
   spend_bundle: SpendBundle;
   fee: uint64;
-  npc_result: NPCResult;
+  conds: SpendBundleConditions;
   spend_bundle_name: bytes32;
   height_added_to_mempool: uint32;
   assert_height: Optional<uint32>;

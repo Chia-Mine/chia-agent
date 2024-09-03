@@ -1,8 +1,8 @@
 import {bool, int, Optional, str, uint32} from "../types/_python_types_";
 import {Coin} from "../types/blockchain_format/coin";
 import {CoinType, StreamableWalletIdentifier, WalletType} from "./util/wallet_types";
-import {VersionBlob} from "../util/misc";
 import {ClawbackMetadata} from "./puzzles/clawback/metadata";
+import {VersionBlob} from "../util/streamable";
 
 export type WalletCoinRecord = {
   coin: Coin;
