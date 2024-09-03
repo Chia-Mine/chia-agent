@@ -1,5 +1,67 @@
 # Changelog
 
+## [14.3.0]
+### Changed
+- Removed `RpcWalletMessageOnWs` since it's costly to maintain while there are a few use cases.
+- Enhanced type resolutions on Wallet RPC APIs with `TXEndpointRequest`
+### Removed
+- Removed deprecated `TCreate_New_RL_WalletRequest` and `TCreate_New_RL_WalletResponse`
+### Added
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`execute_signing_instructions`](./src/api/rpc/wallet/README.md#execute_signing_instructionsagent-params)
+- [New Common RPC API](./src/api/rpc/common)
+  - [`get_version`](./src/api/rpc/common/README.md#get_versionagent)
+- New property `translation` was added to [`Marshall`](./src/api/chia/rpc/util.ts).  
+  As a result of this addition, the following [Wallet RPC API](./src/api/rpc/wallet)s are affected.
+  - [`gather_signing_info`](./src/api/rpc/wallet/README.md#gather_signing_infoagent-params)
+  - [`apply_signatures`](./src/api/rpc/wallet/README.md#apply_signaturesagent-params)
+  - [`submit_transactions`](./src/api/rpc/wallet/README.md#submit_transactionsagent-params)
+- `translation` and `merge_spends` were added to [`TXEndpointRequest`](./src/api/chia/rpc/util.ts)  
+  As a result of this addition, the following [Wallet RPC API](./src/api/rpc/wallet)s are affected.
+  - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
+  - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
+  - [`spend_clawback_coins`](./src/api/rpc/wallet/README.md#spend_clawback_coinsagent-params)
+  - [`create_signed_transaction`](./src/api/rpc/wallet/README.md#create_signed_transactionagent-params)
+  - [`send_notification`](./src/api/rpc/wallet/README.md#send_notificationagent-params)
+  - [`cat_spend`](./src/api/rpc/wallet/README.md#cat_spendagent-params)
+  - [`create_offer_for_ids`](./src/api/rpc/wallet/README.md#create_offer_for_idsagent-params)
+  - [`take_offer`](./src/api/rpc/wallet/README.md#take_offeragent-params)
+  - [`cancel_offer`](./src/api/rpc/wallet/README.md#cancel_offeragent-params)
+  - [`cancel_offers`](./src/api/rpc/wallet/README.md#cancel_offersagent-params)
+  - [`did_update_recovery_ids`](./src/api/rpc/wallet/README.md#did_update_recovery_idsagent-params)
+  - [`did_update_metadata`](./src/api/rpc/wallet/README.md#did_update_metadataagent-params)
+  - [`did_create_attest`](./src/api/rpc/wallet/README.md#did_create_attestagent-params)
+  - [`did_message_spend`](./src/api/rpc/wallet/README.md#did_message_spendagent-params)
+  - [`did_transfer_did`](./src/api/rpc/wallet/README.md#did_transfer_didagent-params)
+  - [`dao_add_funds_to_treasury`](./src/api/rpc/wallet/README.md#dao_add_funds_to_treasuryagent-params)
+  - [`dao_send_to_lockup`](./src/api/rpc/wallet/README.md#dao_send_to_lockupagent-params)
+  - [`dao_exit_lockup`](./src/api/rpc/wallet/README.md#dao_exit_lockupagent-params)
+  - [`dao_create_proposal`](./src/api/rpc/wallet/README.md#dao_create_proposalagent-params)
+  - [`dao_vote_on_proposal`](./src/api/rpc/wallet/README.md#dao_vote_on_proposalagent-params)
+  - [`dao_close_proposal`](./src/api/rpc/wallet/README.md#dao_close_proposalagent-params)
+  - [`dao_free_coins_from_finished_proposals`](./src/api/rpc/wallet/README.md#dao_free_coins_from_finished_proposalsagent-params)
+  - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+  - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nft_set_did_bulkagent-params)
+  - [`nft_transfer_bulk`](./src/api/rpc/wallet/README.md#nft_transfer_bulkagent-params)
+  - [`nft_transfer_nft`](./src/api/rpc/wallet/README.md#nft_transfer_nftagent-params)
+  - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+  - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
+  - [`pw_join_pool`](./src/api/rpc/wallet/README.md#pw_join_poolagent-params)
+  - [`pw_self_pool`](./src/api/rpc/wallet/README.md#pw_self_poolagent-params)
+  - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
+  - [`create_new_dl`](./src/api/rpc/wallet/README.md#create_new_dlagent-params)
+  - [`dl_update_root`](./src/api/rpc/wallet/README.md#dl_update_rootagent-params)
+  - [`dl_update_multiple`](./src/api/rpc/wallet/README.md#dl_update_multipleagent-params)
+  - [`dl_new_mirror`](./src/api/rpc/wallet/README.md#dl_new_mirroragent-params)
+  - [`dl_delete_mirror`](./src/api/rpc/wallet/README.md#dl_delete_mirroragent-params)
+  - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
+  - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
+  - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
+  - [`crcat_approve_pending`](./src/api/rpc/wallet/README.md#crcat_approve_pendingagent-params)
+### Fixed
+- Added missing `reason` response property to [`did_recovery_spend`](./src/api/rpc/wallet/README.md#did_recovery_spendagent-params)
+
 ## [14.2.2]
 ### Changed
 - For the log which is output when `success` property in API response is `false`, the log level is now `INFO` instead of `ERROR`.
@@ -30,7 +92,7 @@
   - [`pw_absorb_rewards`](./src/api/rpc/wallet/README.md#pw_absorb_rewardsagent-params)
   - [`pw_status`](./src/api/rpc/wallet/README.md#pw_statusagent-params)
 - `CHIP-0029` and `sign` request params were added to [`TXEndpointRequest`](./src/api/chia/rpc/util.ts).  
-  Plus, `unsigned_transactions` and `signing_responses` were added to responses of TxEndpoint APIs.
+  Plus, `unsigned_transactions` and `signing_responses` were added to responses of TxEndpoint APIs.  
   As a result of these additions, the following [Wallet RPC API](./src/api/rpc/wallet)s are affected.
   - [`create_new_wallet`](./src/api/rpc/wallet/README.md#create_new_walletagent-params)
   - [`send_transaction`](./src/api/rpc/wallet/README.md#send_transactionagent-params)
@@ -1642,6 +1704,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.3.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.2...v14.3.0
 [14.2.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.1...v14.2.2
 [14.2.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.0...v14.2.1
 [14.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.1.0...v14.2.0

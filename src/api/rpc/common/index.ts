@@ -94,6 +94,18 @@ export async function get_routes<T extends TRPCAgent|TDaemon>(agent: T) {
 }
 
 
+export const get_version_command = "get_version";
+export type get_version_command = typeof get_version_command;
+export type TGetVersionResponse = {
+  version: str;
+};
+export type WsGetVersionMessage = GetMessageType<chia_common_service, get_version_command, TGetVersionResponse>;
+export async function get_version<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetVersionResponse, WsGetVersionMessage>;
+  return agent.sendMessage<R>(chia_common_service, get_version_command);
+}
+
+
 export const healthz_command = "healthz";
 export type healthz_command = typeof healthz_command;
 export type THealthzResponse = {
@@ -112,6 +124,7 @@ export type RpcCommonMessage =
   | TCloseConnectionResponse
   | TStopNodeResponse
   | TGetRoutesResponse
+  | TGetVersionResponse
   | THealthzResponse
 ;
 
@@ -122,5 +135,6 @@ export type RpcCommonMessageOnWs =
   | WsCloseConnectionMessage
   | WsStopNodeMessage
   | WsGetRoutesMessage
+  | WsGetVersionMessage
   | WsHealthzMessage
 ;

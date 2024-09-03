@@ -2176,6 +2176,7 @@ const response = await did_recovery_spend(agent, params);
   transactions: TransactionRecordConvenience[];
 } | {
   success: False;
+  reason: str;
 }
 ```
 For content of `SpendBundle`,  
@@ -4138,4 +4139,26 @@ SubmitTransactionsResponse | SubmitTransactionsResponseCHIP0029
 ```
 For content of `SubmitTransactions`, `SubmitTransactionsCHIP0029`, `SubmitTransactionsResponse`
 and `SubmitTransactionsResponseCHIP0029`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts
+
+---
+
+## `execute_signing_instructions(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {execute_signing_instructions} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await execute_signing_instructions(agent, params);
+```
+### params:
+```typescript
+ExecuteSigningInstructions | ExecuteSigningInstructionsCHIP0029
+```
+### response:
+```typescript
+ExecuteSigningInstructionsResponse | ExecuteSigningInstructionsResponseCHIP0029
+```
+For content of `ExecuteSigningInstructions`, `ExecuteSigningInstructionsCHIP0029`, `ExecuteSigningInstructionsResponse`
+and `ExecuteSigningInstructionsResponseCHIP0029`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts

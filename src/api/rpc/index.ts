@@ -264,8 +264,6 @@ export {
   TCreate_New_DID_WalletResponse,
   TCreate_New_DAO_WalletRequest,
   TCreate_New_DAO_WalletResponse,
-  TCreate_New_RL_WalletRequest,
-  TCreate_New_RL_WalletResponse,
   TDeleteAllKeysRequest,
   TDeleteAllKeysResponse,
   delete_all_keys,
@@ -565,6 +563,9 @@ export {
   TSubmitTransactionsRequest,
   TSubmitTransactionsResponse,
   submit_transactions,
+  TExecuteSigningInstructionsRequest,
+  TExecuteSigningInstructionsResponse,
+  execute_signing_instructions,
 } from "./wallet/index";
 
 import type {RpcDataLayerMessage} from "./data_layer/index"
@@ -697,6 +698,7 @@ export {
   TCloseConnectionResponse,
   TStopNodeResponse,
   TGetRoutesResponse,
+  TGetVersionResponse,
   THealthzResponse,
   get_network_info,
   get_connections,
@@ -704,6 +706,7 @@ export {
   close_connection,
   stop_node,
   get_routes,
+  get_version,
   healthz,
 } from "./common/index";
 

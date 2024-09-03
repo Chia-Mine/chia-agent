@@ -161,6 +161,23 @@ const response = await get_routes(agent);
 
 ---
 
+## `get_version(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_version} = require("chia-agent/api/rpc/common");
+const agent = new RPCAgent({service: "crawler"}); // Can be any service like full_node, harvester, etc...
+const response = await get_version(agent);
+```
+### response:
+```typescript
+{
+  version: str;
+}
+```
+
+---
+
 ## `healthz(agent)`
 ### Usage
 ```js
