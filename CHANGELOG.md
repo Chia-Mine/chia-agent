@@ -1,5 +1,9 @@
 # Changelog
 
+## [14.3.1]
+### Changed
+- Added a `Host` header when sending https request to a remote host.
+
 ## [14.3.0]
 ### Changed
 - Removed `RpcWalletMessageOnWs` since it's costly to maintain while there are a few use cases.
@@ -1704,6 +1708,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.3.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.0...v14.3.1
 [14.3.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.2...v14.3.0
 [14.2.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.1...v14.2.2
 [14.2.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.0...v14.2.1
