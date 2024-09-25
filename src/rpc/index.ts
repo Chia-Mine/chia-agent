@@ -265,15 +265,20 @@ export class RPCAgent implements APIAgent {
       const body = data ? JSONbig.stringify(data) : "{}";
       const pathname = `/${path.replace(/^\/+/, "")}`;
       const METHOD = method.toUpperCase();
+      const headers: OutgoingHttpHeaders = {
+        Accept: "application/json, text/plain, */*",
+        "User-Agent": userAgent,
+      };
+      if("options" in this._agent && typeof this._agent.options.host === "string"){
+        // Assuming `this._agent instanceof HttpsAgent` is true.
+        headers.Host = this._agent.options.host;
+      }
+      
       const options: RequestOptions & {checkServerIdentity?: typeof checkServerIdentity;} = {
         path: pathname,
         method: METHOD,
         agent: this._agent,
-        headers: {
-          Host: this._agent.options.host,
-          Accept: "application/json, text/plain, */*",
-          "User-Agent": userAgent,
-        } as OutgoingHttpHeaders,
+        headers,
       };
       
       if(this._skip_hostname_verification){
