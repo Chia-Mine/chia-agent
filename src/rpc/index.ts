@@ -270,6 +270,7 @@ export class RPCAgent implements APIAgent {
         method: METHOD,
         agent: this._agent,
         headers: {
+          Host: this._agent.options.host,
           Accept: "application/json, text/plain, */*",
           "User-Agent": userAgent,
         } as OutgoingHttpHeaders,
