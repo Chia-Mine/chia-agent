@@ -333,6 +333,8 @@ class Daemon {
       this._socket.off("error", this.onError);
       this._socket.off("message", this.onMessage);
       this._socket.off("close", this.onClose);
+      this._socket.off("ping", this.onPing);
+      this._socket.off("pong", this.onPong);
       this._socket = null;
     }
     
