@@ -83,6 +83,8 @@ class Daemon {
     this.onError = this.onError.bind(this);
     this.onMessage = this.onMessage.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.onPing = this.onPing.bind(this);
+    this.onPong = this.onPong.bind(this);
   }
   
   /**
@@ -110,9 +112,11 @@ class Daemon {
     
     const result = await open(daemonServerURL, timeoutMs);
     this._socket = result.ws;
-    this._socket.onerror = this.onError;
-    this._socket.onmessage = this.onMessage;
-    this._socket.onclose = this.onClose;
+    this._socket.on("error", this.onError);
+    this._socket.on("message", this.onMessage);
+    this._socket.on("ping", this.onPing);
+    this._socket.on("pong", this.onPong);
+    this._socket.on("close", this.onClose);
     
     await this.onOpen(result.openEvent, daemonServerURL);
     
@@ -145,7 +149,19 @@ class Daemon {
       this._responseQueue[reqId] = resolve as (v: unknown) => void;
       
       getLogger().debug(`Sending message. dest=${destination} command=${command} reqId=${reqId}`);
-      this._socket.send(JSON.stringify(message));
+      const messageStr = JSON.stringify(message);
+      
+      this._socket.send(messageStr, (err: Error|undefined) => {
+        getLogger().error(`Error while sending message: ${messageStr}`);
+        
+        if(err){
+          getLogger().error(`${err.name}: ${err.message}`);
+          
+          if(err.stack){
+            getLogger().error(err.stack);
+          }
+        }
+      });
     });
   }
   
@@ -314,9 +330,9 @@ class Daemon {
   
   protected onClose(event: CloseEvent){
     if(this._socket){
-      this._socket.removeEventListener("error", this.onError);
-      this._socket.removeEventListener("message", this.onMessage);
-      this._socket.removeEventListener("close", this.onClose);
+      this._socket.off("error", this.onError);
+      this._socket.off("message", this.onMessage);
+      this._socket.off("close", this.onClose);
       this._socket = null;
     }
     
@@ -332,6 +348,14 @@ class Daemon {
       this._onClosePromise();
       this._onClosePromise = undefined;
     }
+  }
+  
+  protected onPing() {
+    getLogger().debug("Received ping");
+  }
+  
+  protected onPong() {
+    getLogger().debug("Received pong");
   }
 }
 
