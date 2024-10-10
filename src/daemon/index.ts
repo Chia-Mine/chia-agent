@@ -112,6 +112,12 @@ class Daemon {
     this._socket.onerror = this.onError;
     this._socket.onmessage = this.onMessage;
     this._socket.onclose = this.onClose;
+    this._socket.on("ping", () => {
+      getLogger().debug(`Received ping`);
+    });
+    this._socket.on("pong", () => {
+      getLogger().debug(`Received pong`);
+    });
     
     await this.onOpen(result.openEvent, daemonServerURL);
     
