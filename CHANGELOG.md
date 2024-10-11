@@ -2,7 +2,9 @@
 
 ## [14.3.2]
 ### Changed
-- Error logs are generated when an error occurs during sending a message.
+- Error logs are generated when
+  - an error occurs during sending a message.
+  - it receives a websocket message with unexpected format.
 - Debug logs are generated when ping/pong events are triggered.
 
 ## [14.3.1]
