@@ -1,5 +1,12 @@
 # Changelog
 
+## [14.3.2]
+### Changed
+- Error logs are generated when
+  - an error occurs during sending a message.
+  - it receives a websocket message with unexpected format.
+- Debug logs are generated when ping/pong events are triggered.
+
 ## [14.3.1]
 ### Changed
 - Added a `Host` header when sending https request to a remote host.
@@ -1708,6 +1715,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.3.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.1...v14.3.2
 [14.3.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.0...v14.3.1
 [14.3.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.2...v14.3.0
 [14.2.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.1...v14.2.2

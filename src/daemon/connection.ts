@@ -28,13 +28,14 @@ function create(url: string) {
   return new WS(url, options);
 }
 
-const defaultTimeoutInMs = 50000;
+export const defaultTimeoutInMs = 50000;
 
 export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEvent: Event }> {
   return new Promise((resolve, reject) => {
     const ws = create(url);
     let timer: ReturnType<typeof setTimeout> | null = null;
     timeoutMs = typeof timeoutMs === "number" ? timeoutMs : defaultTimeoutInMs;
+    let opened = false;
     
     timer = setTimeout(() => {
       timer = null;
@@ -43,14 +44,23 @@ export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEve
       reject("Timeout");
     }, timeoutMs);
     
-    ws.onopen = (openEvent) => {
+    const onOpenError = (err: WS.ErrorEvent) => {
+      if (!opened) {
+        reject(err);
+      }
+    };
+    
+    ws.addEventListener("open", (openEvent: WS.Event)=> {
+      opened = true;
+      ws.removeEventListener("error", onOpenError);
+      
       if (timer !== null) {
         clearTimeout(timer);
         timer = null;
         resolve({ws, openEvent});
       }
-    };
+    });
     
-    ws.onerror = (err) => reject(err);
+    ws.addEventListener("error", onOpenError);
   });
 }

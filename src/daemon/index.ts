@@ -83,6 +83,8 @@ class Daemon {
     this.onError = this.onError.bind(this);
     this.onMessage = this.onMessage.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.onPing = this.onPing.bind(this);
+    this.onPong = this.onPong.bind(this);
   }
   
   /**
@@ -110,9 +112,11 @@ class Daemon {
     
     const result = await open(daemonServerURL, timeoutMs);
     this._socket = result.ws;
-    this._socket.onerror = this.onError;
-    this._socket.onmessage = this.onMessage;
-    this._socket.onclose = this.onClose;
+    this._socket.addEventListener("error", this.onError);
+    this._socket.addEventListener("message", this.onMessage);
+    this._socket.addEventListener("close", this.onClose);
+    this._socket.addListener("ping", this.onPing);
+    this._socket.addListener("pong", this.onPong);
     
     await this.onOpen(result.openEvent, daemonServerURL);
     
@@ -145,7 +149,14 @@ class Daemon {
       this._responseQueue[reqId] = resolve as (v: unknown) => void;
       
       getLogger().debug(`Sending message. dest=${destination} command=${command} reqId=${reqId}`);
-      this._socket.send(JSON.stringify(message));
+      const messageStr = JSON.stringify(message);
+      
+      this._socket.send(messageStr, (err: Error|undefined) => {
+        if(err){
+          getLogger().error(`Error while sending message: ${messageStr}`);
+          getLogger().error(JSON.stringify(err));
+        }
+      });
     });
   }
   
@@ -289,10 +300,22 @@ class Daemon {
   }
   
   protected onMessage(event: MessageEvent){
-    const payload = JSON.parse(event.data as string) as WsMessage;
-    const {request_id, origin, command} = payload;
+    let payload: WsMessage;
+    let request_id: string;
+    let origin: WsMessage["origin"];
+    let command: WsMessage["command"];
+    
+    try {
+      payload = JSON.parse(event.data as string) as WsMessage;
+      ({request_id, origin, command} = payload);
+    } catch(err: unknown){
+      getLogger().error(`Failed to parse message data: ${JSON.stringify(err)}`);
+      getLogger().error(`payload: ${event.data}`);
+      return;
+    }
+    
     getLogger().debug(`Arrived message. origin=${origin} command=${command} reqId=${request_id}`);
-  
+    
     const resolver = this._responseQueue[request_id];
     if(resolver){
       delete this._responseQueue[request_id];
@@ -317,6 +340,8 @@ class Daemon {
       this._socket.removeEventListener("error", this.onError);
       this._socket.removeEventListener("message", this.onMessage);
       this._socket.removeEventListener("close", this.onClose);
+      this._socket.removeListener("ping", this.onPing);
+      this._socket.removeListener("pong", this.onPong);
       this._socket = null;
     }
     
@@ -332,6 +357,14 @@ class Daemon {
       this._onClosePromise();
       this._onClosePromise = undefined;
     }
+  }
+  
+  protected onPing() {
+    getLogger().debug("Received ping");
+  }
+  
+  protected onPong() {
+    getLogger().debug("Received pong");
   }
 }
 
