@@ -50,9 +50,9 @@ export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEve
       }
     };
     
-    ws.on("open", function(openEvent: WS.Event){
+    ws.addEventListener("open", (openEvent: WS.Event)=> {
       opened = true;
-      this.off("error", onOpenError);
+      ws.removeEventListener("error", onOpenError);
       
       if (timer !== null) {
         clearTimeout(timer);
@@ -61,6 +61,6 @@ export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEve
       }
     });
     
-    ws.on("error", onOpenError);
+    ws.addEventListener("error", onOpenError);
   });
 }
