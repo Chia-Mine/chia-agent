@@ -19,16 +19,16 @@ type EventListenerOf<T> =
 
 export type MessageListener<D extends WsMessage> = (msg: D) => unknown;
 
-const chia_agent_service = "chia_agent";
+const DEFAULT_SERVICE_NAME = "wallet_ui";
 
 let daemon: Daemon|null = null;
 
-export function getDaemon(){
+export function getDaemon(serviceName?: string){
   if(daemon){
     return daemon;
   }
   
-  return daemon = new Daemon();
+  return daemon = new Daemon(serviceName);
 }
 
 // Gracefully disconnect from remote daemon server on Ctrl+C.
@@ -69,6 +69,7 @@ class Daemon {
   protected _closing: boolean = false;
   protected _onClosePromise: (() => unknown)|undefined;
   protected _subscriptions: string[] = [];
+  protected _serviceName: string = DEFAULT_SERVICE_NAME;
   
   public get connected(){
     return Boolean(this._connectedUrl);
@@ -78,13 +79,17 @@ class Daemon {
     return this._closing;
   }
   
-  public constructor() {
+  public constructor(serviceName?: string) {
     this.onOpen = this.onOpen.bind(this);
     this.onError = this.onError.bind(this);
     this.onMessage = this.onMessage.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onPing = this.onPing.bind(this);
     this.onPong = this.onPong.bind(this);
+    
+    if(serviceName){
+      this._serviceName = serviceName;
+    }
   }
   
   /**
@@ -112,11 +117,11 @@ class Daemon {
     
     const result = await open(daemonServerURL, timeoutMs);
     this._socket = result.ws;
-    this._socket.addEventListener("error", this.onError);
+    this._socket.on("error", this.onError);
     this._socket.addEventListener("message", this.onMessage);
-    this._socket.addEventListener("close", this.onClose);
-    this._socket.addListener("ping", this.onPing);
-    this._socket.addListener("pong", this.onPong);
+    this._socket.on("close", this.onClose);
+    this._socket.on("ping", this.onPing);
+    this._socket.on("pong", this.onPong);
     
     await this.onOpen(result.openEvent, daemonServerURL);
     
@@ -165,7 +170,7 @@ class Daemon {
       command,
       data,
       ack: false,
-      origin: chia_agent_service,
+      origin: this._serviceName,
       destination,
       request_id: randomBytes(32).toString("hex"),
     };
@@ -183,7 +188,7 @@ class Daemon {
         data: { success: true },
         ack: true,
         origin: "daemon",
-        destination: chia_agent_service,
+        destination: service,
         request_id: "",
       } as T;
     }
@@ -291,7 +296,7 @@ class Daemon {
     this._connectedUrl = url;
     this._openEventListeners.forEach(l => l(event));
   
-    return this.subscribe(chia_agent_service);
+    return this.subscribe(this._serviceName);
   }
   
   protected onError(error: ErrorEvent){
@@ -337,11 +342,11 @@ class Daemon {
   
   protected onClose(event: CloseEvent){
     if(this._socket){
-      this._socket.removeEventListener("error", this.onError);
+      this._socket.off("error", this.onError);
       this._socket.removeEventListener("message", this.onMessage);
-      this._socket.removeEventListener("close", this.onClose);
-      this._socket.removeListener("ping", this.onPing);
-      this._socket.removeListener("pong", this.onPong);
+      this._socket.off("close", this.onClose);
+      this._socket.off("ping", this.onPing);
+      this._socket.off("pong", this.onPong);
       this._socket = null;
     }
     
