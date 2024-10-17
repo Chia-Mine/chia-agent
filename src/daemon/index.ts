@@ -112,11 +112,11 @@ class Daemon {
     
     const result = await open(daemonServerURL, timeoutMs);
     this._socket = result.ws;
-    this._socket.addEventListener("error", this.onError);
+    this._socket.on("error", this.onError);
     this._socket.addEventListener("message", this.onMessage);
-    this._socket.addEventListener("close", this.onClose);
-    this._socket.addListener("ping", this.onPing);
-    this._socket.addListener("pong", this.onPong);
+    this._socket.on("close", this.onClose);
+    this._socket.on("ping", this.onPing);
+    this._socket.on("pong", this.onPong);
     
     await this.onOpen(result.openEvent, daemonServerURL);
     
@@ -183,7 +183,7 @@ class Daemon {
         data: { success: true },
         ack: true,
         origin: "daemon",
-        destination: chia_agent_service,
+        destination: service,
         request_id: "",
       } as T;
     }
@@ -337,11 +337,11 @@ class Daemon {
   
   protected onClose(event: CloseEvent){
     if(this._socket){
-      this._socket.removeEventListener("error", this.onError);
+      this._socket.off("error", this.onError);
       this._socket.removeEventListener("message", this.onMessage);
-      this._socket.removeEventListener("close", this.onClose);
-      this._socket.removeListener("ping", this.onPing);
-      this._socket.removeListener("pong", this.onPong);
+      this._socket.off("close", this.onClose);
+      this._socket.off("ping", this.onPing);
+      this._socket.off("pong", this.onPong);
       this._socket = null;
     }
     
