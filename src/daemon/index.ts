@@ -19,16 +19,16 @@ type EventListenerOf<T> =
 
 export type MessageListener<D extends WsMessage> = (msg: D) => unknown;
 
-const chia_agent_service = "chia_agent";
+const DEFAULT_SERVICE_NAME = "wallet_ui";
 
 let daemon: Daemon|null = null;
 
-export function getDaemon(){
+export function getDaemon(serviceName?: string){
   if(daemon){
     return daemon;
   }
   
-  return daemon = new Daemon();
+  return daemon = new Daemon(serviceName);
 }
 
 // Gracefully disconnect from remote daemon server on Ctrl+C.
@@ -69,6 +69,7 @@ class Daemon {
   protected _closing: boolean = false;
   protected _onClosePromise: (() => unknown)|undefined;
   protected _subscriptions: string[] = [];
+  protected _serviceName: string = DEFAULT_SERVICE_NAME;
   
   public get connected(){
     return Boolean(this._connectedUrl);
@@ -78,13 +79,17 @@ class Daemon {
     return this._closing;
   }
   
-  public constructor() {
+  public constructor(serviceName?: string) {
     this.onOpen = this.onOpen.bind(this);
     this.onError = this.onError.bind(this);
     this.onMessage = this.onMessage.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onPing = this.onPing.bind(this);
     this.onPong = this.onPong.bind(this);
+    
+    if(serviceName){
+      this._serviceName = serviceName;
+    }
   }
   
   /**
@@ -165,7 +170,7 @@ class Daemon {
       command,
       data,
       ack: false,
-      origin: chia_agent_service,
+      origin: this._serviceName,
       destination,
       request_id: randomBytes(32).toString("hex"),
     };
@@ -291,7 +296,7 @@ class Daemon {
     this._connectedUrl = url;
     this._openEventListeners.forEach(l => l(event));
   
-    return this.subscribe(chia_agent_service);
+    return this.subscribe(this._serviceName);
   }
   
   protected onError(error: ErrorEvent){

@@ -1,5 +1,10 @@
 # Changelog
 
+## [14.3.3]
+### Changed
+- The default service name which [`Daemon`](./src/daemon/index.ts) client tries to register is now `wallet_ui`.  
+  Previously `chia_agent` service and optionally `wallet_ui` service were registered to `chia-blockchain`'s `Daemon`.  
+
 ## [14.3.2]
 ### Changed
 - Error logs are generated when
@@ -1715,6 +1720,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.3.3]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.2...v14.3.3
 [14.3.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.1...v14.3.2
 [14.3.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.0...v14.3.1
 [14.3.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.2.2...v14.3.0
