@@ -41,16 +41,13 @@ const response = await log_in(agent, params);
 ### params:
 ```typescript
 {
-  fingerprint: int;
+  fingerprint: uint32;
 }
 ```
 ### response:
 ```typescript
 {
-  fingerprint: int;
-} | {
-  success: False;
-  error: "Unknown Error";
+  fingerprint: uint32;
 }
 ```
 
@@ -67,10 +64,9 @@ const response = await get_logged_in_fingerprint(agent);
 ### response:
 ```typescript
 {
-  fingerprint: Optional<int>;
+  fingerprint: Optional<uint32>;
 }
 ```
-
 
 ---
 
@@ -85,9 +81,8 @@ const response = await get_public_keys(agent);
 ### response:
 ```typescript
 {
-  public_key_fingerprints: int[];
-} | {
-  keyring_is_locked: True;
+  keyring_is_locked: bool;
+  public_key_fingerprints?: uint32[];
 }
 ```
 
@@ -104,18 +99,18 @@ const response = await get_private_key(agent, params);
 ### params:
 ```typescript
 {
-  fingerprint: int;
+  fingerprint: uint32;
 }
 ```
 ### response:
 ```typescript
 private_key: {
-  fingerprint: int;
+  fingerprint: uint32;
   sk: str;
   pk: str;
   farmer_pk: str;
   pool_pk: str;
-  seed: str;
+  seed: Optional<str>;
 }
 ```
 
@@ -155,11 +150,7 @@ const response = await add_key(agent, params);
 ### response:
 ```typescript
 {
-  success: false;
-  error: str;
-  word?: unknown; // @todo replace unknown to actual type
-} | {
-  fingerprint: int;
+  fingerprint: uint32;
 }
 ```
 
@@ -176,7 +167,7 @@ const response = await delete_key(agent, params);
 ### params:
 ```typescript
 {
-  fingerprint: int;
+  fingerprint: uint32;
 }
 ```
 ### response:
@@ -197,14 +188,14 @@ const response = await check_delete_key(agent, params);
 ### params:
 ```typescript
 {
-  fingerprint: int;
-  max_ph_to_search?: int;
+  fingerprint: uint32;
+  max_ph_to_search?: uint32;
 }
 ```
 ### response:
 ```typescript
 {
-  fingerprint: int;
+  fingerprint: uint32;
   used_for_farmer_rewards: bool;
   used_for_pool_rewards: bool;
   wallet_balance: bool;
@@ -223,10 +214,7 @@ const response = await delete_all_keys(agent);
 ```
 ### response:
 ```typescript
-{} | {
-  success: False;
-  error: str;
-}
+{}
 ```
 No params nor response 
 
@@ -325,13 +313,15 @@ const response = await push_transactions(agent, params);
 ```typescript
 {
   transactions: Array<str | TransactionRecordConvenience>; // TransactionRecord or hex-serialized string
-  sign?: boolean;
-}
+  fee?: uint64;
+} & TXEndpointRequest
 ```
 ### response:
 ```typescript
 {}
 ```
+For content of `TXEndpointRequest`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
 
@@ -391,23 +381,6 @@ AutoClaimSettings
 ```
 For content of `AutoClaimSettings`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzles/clawback/metadata.ts
-
----
-
-## `get_initial_freeze_period_of_wallet(agent)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {get_initial_freeze_period_of_wallet} = require("chia-agent/api/rpc/wallet");
-const agent = new RPCAgent({service: "wallet"});
-const response = await get_initial_freeze_period_of_wallet(agent);
-```
-### response:
-```typescript
-{
-  INITIAL_FREEZE_END_TIMESTAMP: 1620061200; // Mon May 03 2021 17:00:00 GMT+0000
-}
-```
 
 ---
 
@@ -998,7 +971,7 @@ const response = await select_coins(agent, params);
   wallet_id: uint32;
   exclude_coins? : Optional<Coin[]>;
   excluded_coins? : Optional<Coin[]>;
-} & CoinSelectionConfigLoader
+} & TXConfigLoader
 ```
 ### response:
 ```typescript
@@ -1008,7 +981,7 @@ const response = await select_coins(agent, params);
 ```
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin.ts  
-For content of `CoinSelectionConfigLoader`,  
+For content of `TXConfigLoader`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/tx_config.ts
 
 ---
@@ -1258,6 +1231,54 @@ const response = await get_transaction_memo(agent, params);
 
 ---
 
+## `split_coins(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {split_coins} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await split_coins(agent, params);
+```
+### params:
+```typescript
+SplitCoins & TXEndpointRequest
+```
+### response:
+```typescript
+SplitCoinsResponse | SplitCoinsResponseCHIP0029
+```
+For content of `SplitCoins`, `SplitCoinsResponse` and `SplitCoinsResponseCHIP0029`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts
+
+For content of `TXEndpointRequest`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
+
+---
+
+## `combine_coins(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {combine_coins} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await combine_coins(agent, params);
+```
+### params:
+```typescript
+CombineCoins & TXEndpointRequest
+```
+### response:
+```typescript
+CombineCoinsResponse | CombineCoinsResponseCHIP0029
+```
+For content of `CombineCoins`, `CombineCoinsResponse` and `CombineCoinsResponseCHIP0029`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts
+
+For content of `TXEndpointRequest`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
+
+---
+
 ## `sign_message_by_address(agent, params)`
 ### Usage
 ```js
@@ -1399,15 +1420,15 @@ const response = await nft_mint_bulk(agent, params);
   error: str;
 } | {
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   nft_id_list: str[];
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -1443,15 +1464,15 @@ const response = await nft_set_did_bulk(agent, params);
 {
   success: True;
   wallet_id: uint32[];
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   tx_num: int;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -1487,15 +1508,15 @@ const response = await nft_transfer_bulk(agent, params);
 {
   success: True;
   wallet_id: uint32[];
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   tx_num: int;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -2081,7 +2102,7 @@ const response = await did_update_metadata(agent, params);
 {
   success: True;
   wallet_id: uint32;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
@@ -2090,8 +2111,8 @@ const response = await did_update_metadata(agent, params);
   error: str;
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -2376,12 +2397,15 @@ const response = await did_message_spend(agent, params);
 ```typescript
 {
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
 }
 ```
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
+
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
 
@@ -3032,15 +3056,15 @@ const response = await nft_mint_nft(agent, params);
 {
   wallet_id: uint32;
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   nft_id: Optional<str>;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -3132,7 +3156,7 @@ const response = await nft_set_nft_did(agent, params);
 {
   wallet_id: uint32;
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
@@ -3141,8 +3165,8 @@ const response = await nft_set_nft_did(agent, params);
   error: str;
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -3272,7 +3296,7 @@ const response = await nft_transfer_nft(agent, params);
 {
   success: True;
   wallet_id: uint32;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
@@ -3281,8 +3305,8 @@ const response = await nft_transfer_nft(agent, params);
   error: str;
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -3345,14 +3369,14 @@ const response = await nft_add_uri(agent, params);
 {
   success: True;
   wallet_id: uint32;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
   signing_responses?: str[];
 }
 ```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+For content of `WalletSpendBundle`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/wallet_spend_bundle.ts
 
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
@@ -3738,7 +3762,11 @@ const response = await dl_owned_singletons(agent);
 {
   singletons: SingletonRecord[];
   count: int;
+} | {
+  success: False;
+  error: str;
 }
+;
 ```
 For content of `SingletonRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/lineage_proof.ts

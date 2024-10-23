@@ -359,23 +359,6 @@ const response = await get_aggsig_additional_data(agent);
 
 ---
 
-## `get_initial_freeze_period_of_full_node(agent)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {get_initial_freeze_period_of_full_node} = require("chia-agent/api/rpc/full_node");
-const agent = new RPCAgent({service: "full_node"});
-const response = await get_initial_freeze_period_of_full_node(agent);
-```
-### response
-```typescript
-{
-  INITIAL_FREEZE_END_TIMESTAMP: uint64;
-}
-```
-
----
-
 ## `get_recent_signage_point_or_eos(agent, params)`
 ### Usage
 ```js

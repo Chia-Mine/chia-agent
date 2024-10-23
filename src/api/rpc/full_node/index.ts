@@ -243,6 +243,7 @@ export async function get_aggsig_additional_data<T extends TRPCAgent | TDaemon>(
 }
 
 
+// This API was removed in `chia-blockchain@2.4.4`. Will be removed from `chia-agent` in the future.
 export const get_initial_freeze_period_command_of_full_node = "get_initial_freeze_period";
 export type get_initial_freeze_period_command_of_full_node = typeof get_initial_freeze_period_command_of_full_node;
 export type TGetInitialFreezePeriodResponseOfFullNode = {

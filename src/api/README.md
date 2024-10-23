@@ -129,6 +129,8 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`send_notification`](./rpc/wallet/README.md#send_notificationagent-params)
 - [`verify_signature`](./rpc/wallet/README.md#verify_signatureagent-params)
 - [`get_transaction_memo`](./rpc/wallet/README.md#get_transaction_memoagent-params)
+- [`split_coins`](./rpc/wallet/README.md#split_coinsagent-params)
+- [`combine_coins`](./rpc/wallet/README.md#combine_coinsagent-params)
 - [`sign_message_by_address`](./rpc/wallet/README.md#sign_message_by_addressagent-params)
 - [`sign_message_by_id`](./rpc/wallet/README.md#sign_message_by_idagent-params)
 - [`nft_calculate_royalties`](./rpc/wallet/README.md#nft_calculate_royaltiesagent-params)
