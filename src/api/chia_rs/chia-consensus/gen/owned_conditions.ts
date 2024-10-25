@@ -2,7 +2,7 @@ import {bytes, Optional, uint128, uint32, uint64} from "../../../chia/types/_pyt
 import {bytes32} from "../../../chia/types/blockchain_format/sized_bytes";
 import {PublicKey} from "../../chia-bls/public_key";
 
-export type Spend = {
+export type SpendConditions = {
   coin_id: bytes32;
   parent_id: bytes32;
   puzzle_hash: bytes32;
@@ -25,7 +25,7 @@ export type Spend = {
 };
 
 export type SpendBundleConditions = {
-  spends: Spend[];
+  spends: SpendConditions[];
   reserve_fee: uint64;
   // the highest height/time conditions (i.e. most strict)
   height_absolute: uint32;

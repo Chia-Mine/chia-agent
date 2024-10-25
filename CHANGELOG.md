@@ -40,6 +40,7 @@
 - [`dl_owned_singletons](./src/api/rpc/wallet/README.md#dl_owned_singletonsagent-params)
   - Added error response
 - Updated the type of `spend_bundle` in [`TransactionRecordOld`](./src/api/chia/wallet/transaction_record.ts) to `WalletSpendBundle` from `SpendBundle`
+- Renamed `Spend` to [`SpendConditions`](./src/api/chia_rs/chia-consensus/gen/owned_conditions.ts)
 ### Removed
 - Removed document of `get_initial_freeze_period` (Wallet/FullNode RPC API) since it was removed in `chia-blockchain@2.4.4`
 ### Added
