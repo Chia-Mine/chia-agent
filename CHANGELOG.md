@@ -1,5 +1,59 @@
 # Changelog
 
+## [14.4.0]
+### Changed
+- Updated npm dependencies
+  - `ws` to 8.18.0 from 8.17.0
+  - `@types/ws` to 8.5.12 from 8.5.10
+- Changed the response type of `spend_bundle` for some Wallet RPC API to `WalletSpendBundle` from `SpendBundle`.  
+  (Currently `WalletSpendBundle` is equivalent to `SpendBundle`)
+  - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
+  - [`nft_set_did_bulk`](./src/api/rpc/wallet/README.md#nft_set_did_bulkagent-params)
+  - [`nft_transfer_bulk`](./src/api/rpc/wallet/README.md#nft_transfer_bulkagent-params)
+  - [`did_update_metadata`](./src/api/rpc/wallet/README.md#did_update_metadataagent-params)
+  - [`did_message_spend`](./src/api/rpc/wallet/README.md#did_message_spendagent-params)
+  - [`nft_mint_nft`](./src/api/rpc/wallet/README.md#nft_mint_nftagent-params)
+  - [`nft_set_nft_did`](./src/api/rpc/wallet/README.md#nft_set_nft_didagent-params)
+  - [`nft_transfer_nft`](./src/api/rpc/wallet/README.md#nft_transfer_nftagent-params)
+  - [`nft_add_uri`](./src/api/rpc/wallet/README.md#nft_add_uriagent-params)
+- [`log_in`](./src/api/rpc/wallet/README.md#log_inagent-params)
+  - Changed the type of `fingerprint` request/response properties to `uint32` from `int`
+- [`get_logged_in_fingerprint`](./src/api/rpc/wallet/README.md#get_logged_in_fingerprintagent)
+  - Changed the type of `fingerprint` response properties to `uint32` from `int`
+- [`get_public_keys`](./src/api/rpc/wallet/README.md#get_public_keysagent)
+  - Made response type of `public_key_fingerprints` optional and `uint32[]`
+- [`get_private_key`](./src/api/rpc/wallet/README.md#get_private_keyagent-params)
+  - Dropped one of the possible response type where its `success` property is `False`.
+- [`add_key`](./src/api/rpc/wallet/README.md#add_keyagent-params)
+  - Dropped one of the possible response type where its `success` property is `False`.
+  - Changed the type of `fingerprint` response properties to `uint32` from `int`
+- [`delete_key`](./src/api/rpc/wallet/README.md#delete_keyagent-params)
+  - Changed the type of `fingerprint` request properties to `uint32` from `int`
+- [`check_delete_key`](./src/api/rpc/wallet/README.md#check_delete_keyagent-params)
+  - Changed the type of `fingerprint` request/response properties to `uint32` from `int`
+  - Changed the type of `max_ph_to_search` request properties to `uint32?` from `int?`
+- [`delete_all_keys`](./src/api/rpc/wallet/README.md#delete_all_keysagent)
+  - Dropped one of the possible response type where its `success` property is `False`.
+- [`push_transactions`](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
+  - Added `TXEndpointRequest` to request
+  - Removed `sign` request property
+  - Added `fee` request property
+- [`select_coins`](./src/api/rpc/wallet/README.md#select_coinsagent-params)
+  - `CoinSelectionConfigLoader` was replaced by `TXConfigLoader`
+- [`dl_owned_singletons`](./src/api/rpc/wallet/README.md#dl_owned_singletonsagent-params)
+  - Added error response
+- Updated the type of `spend_bundle` in [`TransactionRecordOld`](./src/api/chia/wallet/transaction_record.ts) to `WalletSpendBundle` from `SpendBundle`
+- Renamed `Spend` to [`SpendConditions`](./src/api/chia_rs/chia-consensus/gen/owned_conditions.ts)
+### Removed
+- Removed document of `get_initial_freeze_period` (Wallet/FullNode RPC API) since it was removed in `chia-blockchain@2.4.4`
+### Added
+- [New Wallet RPC API](./src/api/rpc/wallet)
+  - [`split_coins`](./src/api/rpc/wallet/README.md#split_coinsagent-params)
+  - [`combine_coins`](./src/api/rpc/wallet/README.md#combine_coinsagent-params)
+### Fixed
+- Fixed `dao_rules` property was set [unknown](./src/api/chia/wallet/dao_wallet/dao_wallet.ts). (`unknown` -> `DAORules`)
+- Fixed missing types in [`ParsedProposalSpend`](./src/api/chia/wallet/dao_wallet/dao_wallet.ts)
+
 ## [14.3.3]
 ### Changed
 - The default service name which [`Daemon`](./src/daemon/index.ts) client tries to register is now `wallet_ui`.  
@@ -1720,6 +1774,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.4.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.4.0
 [14.3.3]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.2...v14.3.3
 [14.3.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.1...v14.3.2
 [14.3.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.0...v14.3.1

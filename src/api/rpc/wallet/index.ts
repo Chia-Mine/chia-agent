@@ -4,10 +4,12 @@ import {
   bool,
   bytes,
   False,
-  int, None,
+  int,
+  None,
   Optional,
   str,
-  True, uint128,
+  True,
+  uint128,
   uint16,
   uint32,
   uint64,
@@ -38,7 +40,7 @@ import {GetCoinRecords} from "../../chia/wallet/wallet_coin_store";
 import {WalletCoinRecordWithMetadata} from "../../chia/wallet/wallet_coin_record";
 import {VCRecord} from "../../chia/wallet/vc_wallet/vc_store";
 import {TransactionTypeFilter} from "../../chia/wallet/util/quality_filter";
-import {CoinSelectionConfigLoader} from "../../chia/wallet/util/tx_config";
+import {TXConfigLoader} from "../../chia/wallet/util/tx_config";
 import {ConditionValidTimes} from "../../chia/wallet/conditions";
 import {DAOInfo, DAORules, ProposalInfo} from "../../chia/wallet/dao_wallet/dao_info";
 import {ParsedProposalSpend, ParsedProposalUpdate, ProposalState} from "../../chia/wallet/dao_wallet/dao_wallet";
@@ -60,10 +62,28 @@ import {
   SubmitTransactionsResponseCHIP0029,
   ExecuteSigningInstructionsCHIP0029,
   ExecuteSigningInstructionsResponseCHIP0029,
-  ExecuteSigningInstructionsResponse, ExecuteSigningInstructions,
+  ExecuteSigningInstructionsResponse,
+  ExecuteSigningInstructions,
+  SplitCoins,
+  SplitCoinsResponse,
+  SplitCoinsResponseCHIP0029,
+  CombineCoinsResponse,
+  CombineCoins,
+  CombineCoinsResponseCHIP0029,
+  LogIn,
+  LogInResponse,
+  GetLoggedInFingerprintResponse,
+  GetPublicKeysResponse,
+  GetPrivateKeyRequest,
+  GetPrivateKeyResponse,
+  GenerateMnemonicResponse,
+  AddKeyRequest,
+  AddKeyResponse,
+  DeleteKeyRequest, CheckDeleteKeyRequest, CheckDeleteKeyResponse,
 } from "../../chia/rpc/wallet_request_types";
 import {TXEndpointRequest, TxeResp} from "../../chia/rpc/util";
 import {SigningResponse, UnsignedTransaction} from "../../chia/wallet/signer_protocol";
+import {WalletSpendBundle} from "../../chia/wallet/wallet_spend_bundle";
 
 export const chia_wallet_service = "chia_wallet";
 export type chia_wallet_service = typeof chia_wallet_service;
@@ -72,15 +92,8 @@ export type chia_wallet_service = typeof chia_wallet_service;
 
 export const log_in_command = "log_in";
 export type log_in_command = typeof log_in_command;
-export type TLoginRequest = {
-  fingerprint: int;
-};
-export type TLoginResponse = {
-  fingerprint: int;
-} | {
-  success: False;
-  error: "Unknown Error";
-};
+export type TLoginRequest = LogIn;
+export type TLoginResponse = LogInResponse;
 export type WsLoginMessage = GetMessageType<chia_wallet_service, log_in_command, TLoginResponse>;
 export async function log_in<T extends TRPCAgent | TDaemon>(agent: T, data: TLoginRequest){
   type R = ResType<T, TLoginResponse, WsLoginMessage>;
@@ -91,9 +104,7 @@ export async function log_in<T extends TRPCAgent | TDaemon>(agent: T, data: TLog
 
 export const get_logged_in_fingerprint_command = "get_logged_in_fingerprint";
 export type get_logged_in_fingerprint_command = typeof get_logged_in_fingerprint_command;
-export type TGetLoggedInFingerprintResponse = {
-  fingerprint: Optional<int>;
-};
+export type TGetLoggedInFingerprintResponse = GetLoggedInFingerprintResponse;
 export type WsGetLoggedInFingerprintMessage = GetMessageType<chia_wallet_service, get_logged_in_fingerprint_command, TGetLoggedInFingerprintResponse>;
 export async function get_logged_in_fingerprint<T extends TRPCAgent | TDaemon>(agent: T){
   type R = ResType<T, TGetLoggedInFingerprintResponse, WsGetLoggedInFingerprintMessage>;
@@ -104,11 +115,7 @@ export async function get_logged_in_fingerprint<T extends TRPCAgent | TDaemon>(a
 
 export const get_public_keys_command = "get_public_keys";
 export type get_public_keys_command = typeof get_public_keys_command;
-export type TGetPublicKeysResponse = {
-  public_key_fingerprints: int[];
-} | {
-  keyring_is_locked: True;
-};
+export type TGetPublicKeysResponse = GetPublicKeysResponse;
 export type WsGetPublicKeysMessage = GetMessageType<chia_wallet_service, get_public_keys_command, TGetPublicKeysResponse>;
 export async function get_public_keys<T extends TRPCAgent | TDaemon>(agent: T){
   type R = ResType<T, TGetPublicKeysResponse, WsGetPublicKeysMessage>;
@@ -119,24 +126,8 @@ export async function get_public_keys<T extends TRPCAgent | TDaemon>(agent: T){
 
 export const get_private_key_command = "get_private_key";
 export type get_private_key_command = typeof get_private_key_command;
-export type TGetPrivateKeyRequest = {
-  fingerprint: int; // https://github.com/Chia-Network/bls-signatures/blob/main/python-impl/ec.py#L164
-};
-export type TGetPrivateKeyResponse = {
-  private_key: {
-    fingerprint: int;
-    sk: str;
-    pk: str;
-    farmer_pk: str;
-    pool_pk: str;
-    seed: Optional<str>;
-  };
-} | {
-  success: False;
-  private_key: {
-    fingerprint: int;
-  };
-};
+export type TGetPrivateKeyRequest = GetPrivateKeyRequest;
+export type TGetPrivateKeyResponse = GetPrivateKeyResponse;
 export type WsGetPrivateKeyMessage = GetMessageType<chia_wallet_service, get_private_key_command, TGetPrivateKeyResponse>;
 export async function get_private_key<T extends TRPCAgent | TDaemon>(agent: T, data: TGetPrivateKeyRequest){
   type R = ResType<T, TGetPrivateKeyResponse, WsGetPrivateKeyMessage>;
@@ -145,12 +136,9 @@ export async function get_private_key<T extends TRPCAgent | TDaemon>(agent: T, d
 
 
 
-
 export const generate_mnemonic_command = "generate_mnemonic";
 export type generate_mnemonic_command = typeof generate_mnemonic_command;
-export type TGenerateMnemonicResponse = {
-  mnemonic: str[];
-};
+export type TGenerateMnemonicResponse = GenerateMnemonicResponse;
 export type WsGenerateMnemonicMessage = GetMessageType<chia_wallet_service, generate_mnemonic_command, TGenerateMnemonicResponse>;
 export async function generate_mnemonic<T extends TRPCAgent | TDaemon>(agent: T){
   type R = ResType<T, TGenerateMnemonicResponse, WsGenerateMnemonicMessage>;
@@ -159,19 +147,10 @@ export async function generate_mnemonic<T extends TRPCAgent | TDaemon>(agent: T)
 
 
 
-
 export const add_key_command = "add_key";
 export type add_key_command = typeof add_key_command;
-export type TAddKeyRequest = {
-  mnemonic: str[];
-};
-export type TAddKeyResponse = {
-  success: false;
-  error: str;
-  word?: unknown; // `word` is e.args[0] where e = KeyError
-} | {
-  fingerprint: int;
-};
+export type TAddKeyRequest = AddKeyRequest;
+export type TAddKeyResponse = AddKeyResponse;
 export type WsAddKeyMessage = GetMessageType<chia_wallet_service, add_key_command, TAddKeyResponse>;
 export async function add_key<T extends TRPCAgent | TDaemon>(agent: T, data: TAddKeyRequest){
   type R = ResType<T, TAddKeyResponse, WsAddKeyMessage>;
@@ -180,12 +159,9 @@ export async function add_key<T extends TRPCAgent | TDaemon>(agent: T, data: TAd
 
 
 
-
 export const delete_key_command = "delete_key";
 export type delete_key_command = typeof delete_key_command;
-export type TDeleteKeyRequest = {
-  fingerprint: int;
-};
+export type TDeleteKeyRequest = DeleteKeyRequest;
 export type TDeleteKeyResponse = Record<string, never>;
 export type WsDeleteKeyMessage = GetMessageType<chia_wallet_service, delete_key_command, TDeleteKeyResponse>;
 export async function delete_key<T extends TRPCAgent | TDaemon>(agent: T, data: TDeleteKeyRequest){
@@ -195,19 +171,10 @@ export async function delete_key<T extends TRPCAgent | TDaemon>(agent: T, data: 
 
 
 
-
 export const check_delete_key_command = "check_delete_key";
 export type check_delete_key_command = typeof check_delete_key_command;
-export type TCheckDeleteKeyRequest = {
-  fingerprint: int;
-  max_ph_to_search?: int;
-};
-export type TCheckDeleteKeyResponse = {
-  fingerprint: int;
-  used_for_farmer_rewards: bool;
-  used_for_pool_rewards: bool;
-  wallet_balance: bool;
-};
+export type TCheckDeleteKeyRequest = CheckDeleteKeyRequest;
+export type TCheckDeleteKeyResponse = CheckDeleteKeyResponse;
 export type WsCheckDeleteKeyMessage = GetMessageType<chia_wallet_service, check_delete_key_command, TCheckDeleteKeyResponse>;
 export async function check_delete_key<T extends TRPCAgent | TDaemon>(agent: T, data: TCheckDeleteKeyRequest){
   type R = ResType<T, TCheckDeleteKeyResponse, WsCheckDeleteKeyMessage>;
@@ -216,16 +183,9 @@ export async function check_delete_key<T extends TRPCAgent | TDaemon>(agent: T, 
 
 
 
-
 export const delete_all_keys_command = "delete_all_keys";
 export type delete_all_keys_command = typeof delete_all_keys_command;
-export type TDeleteAllKeysRequest = {
-  // no input
-};
-export type TDeleteAllKeysResponse = Record<string, never> | {
-  success: False;
-  error: str;
-};
+export type TDeleteAllKeysResponse = Record<string, never>;
 export type WsDeleteAllKeysMessage = GetMessageType<chia_wallet_service, delete_all_keys_command, TDeleteAllKeysResponse>;
 export async function delete_all_keys<T extends TRPCAgent | TDaemon>(agent: T){
   type R = ResType<T, TDeleteAllKeysResponse, WsDeleteAllKeysMessage>;
@@ -295,8 +255,8 @@ export const push_transactions_command = "push_transactions";
 export type push_transactions_command = typeof push_transactions_command;
 export type TPushTransactionsRequest = {
   transactions: Array<TransactionRecordConvenience | str>; // TransactionRecord or hex-serialized string
-  sign?: boolean;
-};
+  fee?: uint64;
+} & TXEndpointRequest;
 export type TPushTransactionsResponse = Record<string, never>;
 export type WsPushTransactionsMessage = GetMessageType<chia_wallet_service, push_transactions_command, TPushTransactionsResponse>;
 export async function push_transactions<T extends TRPCAgent | TDaemon>(agent: T, data: TPushTransactionsRequest){
@@ -340,6 +300,7 @@ export async function get_auto_claim<T extends TRPCAgent | TDaemon>(agent: T) {
 }
 
 
+// This API was removed in `chia-blockchain@2.4.4`. Will be removed from `chia-agent` in the future.
 export const get_initial_freeze_period_command_of_wallet = "get_initial_freeze_period";
 export type get_initial_freeze_period_command_of_wallet = typeof get_initial_freeze_period_command_of_wallet;
 export type TGetInitialFreezePeriodResponseOfWallet = {
@@ -826,7 +787,7 @@ export type TSelectCoinsRequest = {
   wallet_id: uint32;
   exclude_coins?: Optional<Coin[]>;
   excluded_coins?: Optional<Coin[]>;
-} & CoinSelectionConfigLoader;
+} & TXConfigLoader;
 export type TSelectCoinsResponse = {
   coins: Coin[];
 };
@@ -995,6 +956,40 @@ export type WsGetTransactionMemoMessage = GetMessageType<chia_wallet_service, ge
 export async function get_transaction_memo<T extends TRPCAgent | TDaemon>(agent: T, data: TGetTransactionMemoRequest) {
   type R = ResType<T, TGetTransactionMemoResponse, WsGetTransactionMemoMessage>;
   return agent.sendMessage<R>(chia_wallet_service, get_transaction_memo_command, data);
+}
+
+
+export const split_coins_command = "split_coins";
+export type split_coins_command = typeof split_coins_command;
+export type TSplitCoinsRequest = SplitCoins & TXEndpointRequest;
+export type TSplitCoinsResponse = SplitCoinsResponse | SplitCoinsResponseCHIP0029;
+export type WsSplitCoinsMessage<R> = GetMessageType<chia_wallet_service, split_coins_command, R>;
+export async function split_coins<T extends TRPCAgent | TDaemon, D extends TSplitCoinsRequest>(
+  agent: T,
+  data: D,
+) {
+  type RpcMsg = D extends {"CHIP-0029": true} ?
+    SplitCoinsResponse : SplitCoinsResponseCHIP0029;
+  type TER = TxeResp<D, RpcMsg>;
+  type R = ResType<T, TER, WsSplitCoinsMessage<TER>>;
+  return agent.sendMessage<R>(chia_wallet_service, split_coins_command, data);
+}
+
+
+export const combine_coins_command = "combine_coins";
+export type combine_coins_command = typeof combine_coins_command;
+export type TCombineCoinsRequest = CombineCoins & TXEndpointRequest;
+export type TCombineCoinsResponse = CombineCoinsResponse | CombineCoinsResponseCHIP0029;
+export type WsCombineCoinsMessage<R> = GetMessageType<chia_wallet_service, combine_coins_command, R>;
+export async function combine_coins<T extends TRPCAgent | TDaemon, D extends TCombineCoinsRequest>(
+  agent: T,
+  data: D,
+) {
+  type RpcMsg = D extends { "CHIP-0029": true } ?
+    TCombineCoinsResponse : CombineCoinsResponseCHIP0029;
+  type TER = TxeResp<D, RpcMsg>;
+  type R = ResType<T, TER, WsCombineCoinsMessage<TER>>;
+  return agent.sendMessage<R>(chia_wallet_service, combine_coins_command, data);
 }
 
 
@@ -1459,7 +1454,7 @@ export type TDidUpdateMetadataRequest = {
 export type TDidUpdateMetadataResponse = {
   success: True;
   wallet_id: uint32;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
 } | {
@@ -1694,7 +1689,7 @@ export type TDidMessageSpendRequest = {
 } & TXEndpointRequest;
 export type TDidMessageSpendResponse = {
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
 };
@@ -2112,7 +2107,7 @@ export type TNftMintNftRequest = {
 export type TNftMintNftResponse = {
   wallet_id: uint32;
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   nft_id: Optional<str>;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
@@ -2179,7 +2174,7 @@ export type TNftSetNftDidRequest = {
 export type TNftSetNftDidResponse = {
   wallet_id: uint32;
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
 } | {
@@ -2207,7 +2202,7 @@ export type TNftSetDidBulkResponse = {
 } | {
   success: True;
   wallet_id: uint32[];
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   tx_num: int;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
@@ -2232,7 +2227,7 @@ export type TNftTransferBulkResponse = {
 } | {
   success: True;
   wallet_id: uint32[];
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   tx_num: int;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
@@ -2333,7 +2328,7 @@ export type TNftTransferNftRequest = {
 export type TNftTransferNftResponse = {
   success: True;
   wallet_id: uint32;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
 } | {
@@ -2384,7 +2379,7 @@ export type TNftAddUriRequest = {
 export type TNftAddUriResponse = {
   success: True;
   wallet_id: uint32;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
 };
@@ -2458,7 +2453,7 @@ export type TNftMintBulkResponse = {
   error: str;
 } | {
   success: True;
-  spend_bundle: SpendBundle;
+  spend_bundle: WalletSpendBundle;
   nft_id_list: str[];
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
@@ -2787,6 +2782,9 @@ export type dl_owned_singletons_command = typeof dl_owned_singletons_command;
 export type TDlOwnedSingletonsResponse = {
   singletons: SingletonRecord[];
   count: int;
+} | {
+  success: False;
+  error: str;
 };
 export type WsDlOwnedSingletonsMessage = GetMessageType<chia_wallet_service, dl_owned_singletons_command, TDlOwnedSingletonsResponse>;
 export async function dl_owned_singletons<T extends TRPCAgent | TDaemon>(agent: T){
@@ -3103,6 +3101,8 @@ export type RpcWalletMessage =
   | TSignMessageByIdResponse
   | TVerifySignatureResponse
   | TGetTransactionMemoResponse
+  | TSplitCoinsResponse
+  | TCombineCoinsResponse
   | TNftCalculateRoyaltiesResponse
   | TNftMintBulkResponse
   | TNftSetDidBulkResponse

@@ -1,5 +1,6 @@
 import {bool, bytes, int, None} from "../../types/_python_types_";
 import {Program} from "../../types/blockchain_format/program";
+import {DAORules} from "./dao_info";
 
 // Return type of get_proposal_state
 export type ProposalState = {
@@ -18,11 +19,14 @@ export type ParsedProposalSpend = {
   proposed_puzzle_reveal: Program;
   xch_conditions: Array<{puzzle_hash: bytes; amount: int}>;
   asset_conditions: Array<{asset_id: bytes; condition: Array<{ puzzle_hash: bytes; amount: int}>;}>;
-};
+} & ({
+  mint_amount: int;
+  new_cat_puzhash: bytes;
+} | object);
 
 // Return type of parse_proposal
 export type ParsedProposalUpdate = {
   state: ProposalState;
   proposal_type: "u";
-  dao_rules: unknown;
+  dao_rules: DAORules;
 };

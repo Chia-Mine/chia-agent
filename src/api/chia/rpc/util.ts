@@ -10,7 +10,7 @@ export type ExtraCondition = {
 
 export type TranslationLayerKey = "CHIP-0028";
 
-export type CHIP0029 = { "CHIP-0029"?: True } | { "CHIP-0029"?: False };
+export type CHIP0029 = { "CHIP-0029": True } | { "CHIP-0029"?: False };
 
 export type Marshall = {
   translation?: TranslationLayerKey;
