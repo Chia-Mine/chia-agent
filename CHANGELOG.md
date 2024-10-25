@@ -2,6 +2,9 @@
 
 ## [14.4.0]
 ### Changed
+- Updated npm dependencies
+  - `ws` to 8.18.0 from 8.17.0
+  - `@types/ws` to 8.5.12 from 8.5.10
 - Changed the response type of `spend_bundle` for some Wallet RPC API to `WalletSpendBundle` from `SpendBundle`.  
   (Currently `WalletSpendBundle` is equivalent to `SpendBundle`)
   - [`nft_mint_bulk`](./src/api/rpc/wallet/README.md#nft_mint_bulkagent-params)
