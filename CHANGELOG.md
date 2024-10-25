@@ -32,15 +32,15 @@
 - [`check_delete_key`](./src/api/rpc/wallet/README.md#check_delete_keyagent-params)
   - Changed the type of `fingerprint` request/response properties to `uint32` from `int`
   - Changed the type of `max_ph_to_search` request properties to `uint32?` from `int?`
-- [`delete_all_keys](./src/api/rpc/wallet/README.md#delete_all_keysagent)
+- [`delete_all_keys`](./src/api/rpc/wallet/README.md#delete_all_keysagent)
   - Dropped one of the possible response type where its `success` property is `False`.
-- [`push_transactions](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
+- [`push_transactions`](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
   - Added `TXEndpointRequest` to request
   - Removed `sign` request property
   - Added `fee` request property
-- [`select_coins](./src/api/rpc/wallet/README.md#select_coinsagent-params)
+- [`select_coins`](./src/api/rpc/wallet/README.md#select_coinsagent-params)
   - `CoinSelectionConfigLoader` was replaced by `TXConfigLoader`
-- [`dl_owned_singletons](./src/api/rpc/wallet/README.md#dl_owned_singletonsagent-params)
+- [`dl_owned_singletons`](./src/api/rpc/wallet/README.md#dl_owned_singletonsagent-params)
   - Added error response
 - Updated the type of `spend_bundle` in [`TransactionRecordOld`](./src/api/chia/wallet/transaction_record.ts) to `WalletSpendBundle` from `SpendBundle`
 - Renamed `Spend` to [`SpendConditions`](./src/api/chia_rs/chia-consensus/gen/owned_conditions.ts)
