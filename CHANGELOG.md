@@ -1,5 +1,9 @@
 # Changelog
 
+## [14.4.1]
+### Changed
+- Added error logs
+
 ## [14.4.0]
 ### Changed
 - Updated npm dependencies
@@ -1774,6 +1778,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.4.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.4.0...v14.4.1
 [14.4.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.4.0
 [14.3.3]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.2...v14.3.3
 [14.3.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.1...v14.3.2
