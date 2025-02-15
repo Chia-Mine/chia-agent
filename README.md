@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `2.4.4` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
+Supports all RPC/Websocket API available at `2.4.4`/`2.5.0` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
@@ -22,8 +22,8 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`39739520211670d398173f87cd1e97c755274195`](https://github.com/Chia-Network/chia-blockchain/tree/39739520211670d398173f87cd1e97c755274195) of [chia-blockchain 2.4.4](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/39739520211670d398173f87cd1e97c755274195...main)
+- [`40ca4f94fc44fafc422b5cf20bfbd2db2b883f06`](https://github.com/Chia-Network/chia-blockchain/tree/40ca4f94fc44fafc422b5cf20bfbd2db2b883f06) of [chia-blockchain 2.5.0](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/40ca4f94fc44fafc422b5cf20bfbd2db2b883f06...main)
 - [`54fffb4968364640b4f5dd18d586821e67eaa631`](https://github.com/Chia-Network/pool-reference/tree/54fffb4968364640b4f5dd18d586821e67eaa631) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
   - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/54fffb4968364640b4f5dd18d586821e67eaa631...main)
 - [`c6cd98f637f07e60f68203c4c27b8cf3a559ae9b`](https://github.com/Chia-Network/chia_rs/tree/c6cd98f637f07e60f68203c4c27b8cf3a559ae9b) of [chia_rs 0.14.0](https://github.com/Chia-Network/chia_rs)
