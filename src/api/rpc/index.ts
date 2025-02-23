@@ -705,6 +705,9 @@ export {
   TGetRoutesResponse,
   TGetVersionResponse,
   THealthzResponse,
+  TGetLogLevelResponse,
+  TSetLogLevelResponse,
+  TResetLogLevelResponse,
   get_network_info,
   get_connections,
   open_connection,
@@ -713,6 +716,9 @@ export {
   get_routes,
   get_version,
   healthz,
+  get_log_level,
+  set_log_level,
+  reset_log_level,
 } from "./common/index";
 
 export type RpcMessage =

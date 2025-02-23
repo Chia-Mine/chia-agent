@@ -192,3 +192,72 @@ const response = await healthz(agent);
   success: "true";
 }
 ```
+
+---
+
+## `get_log_level(agent)`
+
+### Usage
+
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_log_level} = require("chia-agent/api/rpc/common");
+const agent = new RPCAgent({service: "crawler"}); // Can be any service like full_node, harvester, etc...
+const response = await get_log_level(agent);
+```
+
+### response:
+
+```typescript
+{
+  success: "true";
+  level: str;
+  available_levels: str[];
+}
+```
+
+---
+
+## `set_log_level(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {set_log_level} = require("chia-agent/api/rpc/common");
+const agent = new RPCAgent({service: "farmer"}); // Can be any service like full_node, harvester, etc...
+const response = await set_log_level(agent, params);
+```
+### params:
+```typescript
+{
+  level: str;
+}
+```
+### response:
+```typescript
+{
+  success: bool;
+  level: str;
+  available_levels: str[];
+  errors: str[];
+}
+```
+
+---
+
+## `reset_log_level(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {reset_log_level} = require("chia-agent/api/rpc/common");
+const agent = new RPCAgent({service: "crawler"}); // Can be any service like full_node, harvester, etc...
+const response = await reset_log_level(agent);
+```
+### response:
+```typescript
+{
+  success: bool;
+  level: str;
+  available_levels: str[];
+  errors: str[];
+}
+```
