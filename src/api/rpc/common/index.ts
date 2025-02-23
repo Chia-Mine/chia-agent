@@ -1,4 +1,4 @@
-import {False, str, True, uint16} from "../../chia/types/_python_types_";
+import {bool, False, str, True, uint16} from "../../chia/types/_python_types_";
 import {TRPCAgent} from "../../../rpc/index";
 import {GetMessageType, ResType, TConnectionGeneral} from "../../types";
 import {TConnectionFullNode} from "../../ws/full_node/index";
@@ -117,6 +117,48 @@ export async function healthz<T extends TRPCAgent|TDaemon>(agent: T) {
   return agent.sendMessage<R>(chia_common_service, healthz_command);
 }
 
+
+export const get_log_level_command = "get_log_level";
+export type get_log_level_command = typeof get_log_level_command;
+export type TGetLogLevelResponse = {
+  success: True;
+  level: str;
+  available_levels: str[];
+};
+export type WsGetLogLevelMessage = GetMessageType<chia_common_service, get_log_level_command, TGetLogLevelResponse>;
+
+export async function get_log_level<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TGetLogLevelResponse, WsGetLogLevelMessage>;
+  return agent.sendMessage<R>(chia_common_service, get_log_level_command);
+}
+
+
+export const set_log_level_command = "set_log_level";
+export type set_log_level_command = typeof set_log_level_command;
+export type TSetLogLevelRequest = {
+  level: str;
+};
+export type TSetLogLevelResponse = TGetLogLevelResponse & {
+  success: bool;
+  errors: str[];
+};
+export type WsSetLogLevelMessage = GetMessageType<chia_common_service, set_log_level_command, TSetLogLevelResponse>;
+export async function set_log_level<T extends TRPCAgent | TDaemon>(agent: T, params: TSetLogLevelRequest) {
+  type R = ResType<T, TSetLogLevelResponse, WsSetLogLevelMessage>;
+  return agent.sendMessage<R>(chia_common_service, set_log_level_command, params);
+}
+
+
+export const reset_log_level_command = "reset_log_level";
+export type reset_log_level_command = typeof reset_log_level_command;
+export type TResetLogLevelResponse = TSetLogLevelResponse;
+export type WsResetLogLevelMessage = GetMessageType<chia_common_service, reset_log_level_command, TResetLogLevelResponse>;
+
+export async function reset_log_level<T extends TRPCAgent | TDaemon>(agent: T) {
+  type R = ResType<T, TResetLogLevelResponse, WsResetLogLevelMessage>;
+  return agent.sendMessage<R>(chia_common_service, reset_log_level_command);
+}
+
 export type RpcCommonMessage =
   TGetNetworkInfoResponse
   | TGetConnectionsResponse
@@ -126,6 +168,9 @@ export type RpcCommonMessage =
   | TGetRoutesResponse
   | TGetVersionResponse
   | THealthzResponse
+  | TGetLogLevelResponse
+  | TSetLogLevelResponse
+  | TResetLogLevelResponse
 ;
 
 export type RpcCommonMessageOnWs =
@@ -137,4 +182,7 @@ export type RpcCommonMessageOnWs =
   | WsGetRoutesMessage
   | WsGetVersionMessage
   | WsHealthzMessage
+  | WsGetLogLevelMessage
+  | WsSetLogLevelMessage
+  | WsResetLogLevelMessage
 ;

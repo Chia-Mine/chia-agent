@@ -232,6 +232,7 @@ const response = await set_wallet_resync_on_startup(agent, params);
 ```typescript
 {
   enable?: bool;
+  "CHIP-0029"?: True;
 }
 ```
 ### response:
@@ -249,7 +250,13 @@ const response = await set_wallet_resync_on_startup(agent, params);
 const {RPCAgent} = require("chia-agent");
 const {get_sync_status} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
-const response = await get_sync_status(agent);
+const response = await get_sync_status(agent); // or get_sync_status(agent, {"CHIP-0029": true});
+```
+### params:
+```typescript
+{
+  "CHIP-0029"?: bool;
+}
 ```
 ### response:
 ```typescript
@@ -268,7 +275,13 @@ const response = await get_sync_status(agent);
 const {RPCAgent} = require("chia-agent");
 const {get_height_info} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
-const response = await get_height_info(agent);
+const response = await get_height_info(agent); // or get_height_info(agent, {"CHIP-0029": true});
+```
+### params:
+```typescript
+{
+  "CHIP-0029"?: bool;
+}
 ```
 ### response:
 ```typescript
@@ -290,7 +303,8 @@ const response = await push_tx(agent, params);
 ### params:
 ```typescript
 {
-  spend_bundle: str; // SpendBundle serialized to hex string 
+  spend_bundle: WalletSpendBundle | str; // str: SpendBundle serialized to hex string 
+  "CHIP-0029"?: True;
 }
 ```
 ### response:
@@ -309,35 +323,43 @@ const agent = new RPCAgent({service: "wallet"});
 const response = await push_transactions(agent, params);
 ```
 ### params:
-
 ```typescript
-{
-  transactions: Array<str | TransactionRecordConvenience>; // TransactionRecord or hex-serialized string
-  fee?: uint64;
-} & TXEndpointRequest
+TransactionEndpointRequest & {
+  transactions: Array<TransactionRecord | TransactionRecordConvenience | str>;
+  push: Optional<bool>;
+} & TXEndpointRequest & Partial<Marshall>
 ```
 ### response:
 ```typescript
-{}
+PushTransactionResponse
 ```
+For content of `TransactionEndpointRequest` and `PushTransactionResponse`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts  
 For content of `TXEndpointRequest`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_rpc_api.ts  
+For content of `TransactionRecord` and `TransactionRecordConvenience`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
+For content of `Marshall`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
 
 ## `get_timestamp_for_height(agent)`
-
 ### Usage
-
 ```js
 const {RPCAgent} = require("chia-agent");
 const {get_timestamp_for_height} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
-const response = await get_timestamp_for_height(agent);
+const response = await get_timestamp_for_height(agent, params);
 ```
-
+### params:
+```typescript
+{
+  height: uint32;
+  "CHIP-0029"?: True;
+}
+```
 ### response:
-
 ```typescript
 {
   timestamp: uint64;
@@ -356,15 +378,14 @@ const response = await set_auto_claim(agent, params);
 ```
 ### params:
 ```typescript
-AutoClaimSettings
+AutoClaimSettings | AutoClaimSettingsCHIP0029
 ```
 ### response:
 ```typescript
-AutoClaimSettings
+AutoClaimSettings | AutoClaimSettingsCHIP0029
 ```
-For content of `AutoClaimSettings`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzles/clawback/metadata.ts
-
+For content of `AutoClaimSettings` and `AutoClaimSettingsCHIP0029`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzles/clawback/metadata.ts  
 ---
 
 ## `get_auto_claim(agent, params)`
@@ -373,14 +394,20 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzle
 const {RPCAgent} = require("chia-agent");
 const {get_auto_claim} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
-const response = await get_auto_claim(agent);
+const response = await get_auto_claim(agent, params); // params is optional and can be `undefined`
+```
+### params:
+```typescript
+undefined | Marshall
 ```
 ### response:
 ```typescript
-AutoClaimSettings
+AutoClaimSettings | AutoClaimSettingsCHIP0029
 ```
-For content of `AutoClaimSettings`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzles/clawback/metadata.ts
+For content of `AutoClaimSettings` and `AutoClaimSettingsCHIP0029`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/puzzles/clawback/metadata.ts  
+For content of `Marshall`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
 
@@ -1241,17 +1268,23 @@ const response = await split_coins(agent, params);
 ```
 ### params:
 ```typescript
-SplitCoins & TXEndpointRequest
+TransactionEndpointRequest & {
+  wallet_id: uint32;
+  number_of_coins: uint16;
+  amount_per_coin: uint64;
+  target_coin_id: bytes32;
+} & TXEndpointRequest & Partial<Marshall>
 ```
 ### response:
 ```typescript
 SplitCoinsResponse | SplitCoinsResponseCHIP0029
 ```
-For content of `SplitCoins`, `SplitCoinsResponse` and `SplitCoinsResponseCHIP0029`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts
-
+For content of `TransactionEndpointRequest`, `SplitCoinsResponse` and `SplitCoinsResponseCHIP0029`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts  
 For content of `TXEndpointRequest`  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_rpc_api.ts  
+For content of `Marshall`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts  
 
 ---
 
@@ -1265,16 +1298,24 @@ const response = await combine_coins(agent, params);
 ```
 ### params:
 ```typescript
-CombineCoins & TXEndpointRequest
+TransactionEndpointRequest & {
+  wallet_id: uint32;
+  number_of_coins: uint16;
+  largest_first: bool;
+  target_coin_ids: bytes32[];
+  target_coin_amount?: uint64;
+  coin_num_limit: uint16;
+} & TXEndpointRequest & Partial<Marshall>
 ```
 ### response:
 ```typescript
 CombineCoinsResponse | CombineCoinsResponseCHIP0029
 ```
-For content of `CombineCoins`, `CombineCoinsResponse` and `CombineCoinsResponseCHIP0029`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts
-
+For content of `TransactionEndpointRequest`, `CombineCoinsResponse` and `CombineCoinsResponseCHIP0029`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts  
 For content of `TXEndpointRequest`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_rpc_api.ts  
+For content of `Marshall`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
@@ -3890,26 +3931,32 @@ const response = await vc_mint(agent, params);
 ```
 ### params:
 ```typescript
-{
+TransactionEndpointRequest & {
   did_id: str;
   target_address: Optional<str>;
-  fee: uint64;
-} & TXEndpointRequest
+} & TXEndpointRequest & Partial<Marshall>
 ```
 ### response:
 ```typescript
 {
-  vc_record: VCRecord;
+  unsigned_transactions: UnsignedTransaction[];
   transactions: TransactionRecordConvenience[];
-  unsigned_transactions: UnsignedTransaction[] | str[];
-  signing_responses?: str[];
+  vc_record: VCRecord;
+} | {
+  unsigned_transactions: str[];
+  transactions: TransactionRecordConvenience[];
+  vc_record: VCRecord;
 }
 ```
+For content of `TransactionEndpointRequest`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_types.ts  
+For content of `TXEndpointRequest`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_rpc_api.ts  
 For content of `VCRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/vc_wallet/vc_store.ts  
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
-For content of `TXEndpointRequest` and `UnsignedTransaction`  
+For content of `Marshall`, `TXEndpointRequest` and `UnsignedTransaction`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
@@ -3926,16 +3973,18 @@ const response = await vc_get(agent, params);
 ```typescript
 {
   vc_id: bytes32;
-}
+} & Partial<Marshall>
 ```
 ### response:
 ```typescript
 {
-  vc_record: VCRecord | None;
+  vc_record: Optional<VCRecord>;
 }
 ```
 For content of `VCRecord`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/vc_wallet/vc_store.ts  
+For content of `Marshall`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts  
 
 ---
 
@@ -3952,17 +4001,19 @@ const response = await vc_get_list(agent, params);
 {
   start: uint32;
   end: uint32;
-}
+} & Partial<Marshall>
 ```
 ### response:
 ```typescript
 {
-  vc_records: Array<VCRecord & { coin_id: str; }>;
-  proofs: Record<str, Record<str, str> | None>;
+  vc_records: VcRecordWithCoinID[];
+  proofs: VCProofWithHash[];
 }
 ```
-For content of `VCRecord`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/vc_wallet/vc_store.ts  
+For content of `VCProofWithHash` and `VcRecordWithCoinID`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/wallet_request_type.ts  
+For content of `Marshall`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
 
@@ -3982,19 +4033,23 @@ const response = await vc_spend(agent, params);
   new_proof_hash: Optional<bytes32>;
   provider_inner_puzhash: Optional<bytes32>;
   fee: uint64;
-} & TXEndpointRequest
+} & TXEndpointRequest & Partial<Marshall>
 ```
 ### response:
 ```typescript
 {
+  unsigned_transactions: UnsignedTransaction[];
   transactions: TransactionRecordConvenience[];
-  unsigned_transactions: UnsignedTransaction[] | str[];
-  signing_responses?: str[];
+} | {
+  unsigned_transactions: str[];
+  transactions: TransactionRecordConvenience[];
 }
 ```
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
 For content of `TXEndpointRequest` and `UnsignedTransaction`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts  
+For content of `Marshall`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
@@ -4010,15 +4065,15 @@ const response = await vc_add_proofs(agent, params);
 ### params:
 ```typescript
 {
-  proofs: {
-    key_value_pairs: Record<str, str>;
-  };
-}
+  key_value_pairs: Array<[str, str]>;
+} & Partial<Marshall>
 ```
 ### response:
 ```typescript
 {}
 ```
+For content of `Marshall`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
 
@@ -4034,14 +4089,16 @@ const response = await vc_get_proofs_for_root(agent, params);
 ```typescript
 {
   root: bytes32;
-}
+} & Partial<Marshall>
 ```
 ### response:
 ```typescript
 {
-  proofs: Record<str, str>;
+  key_value_pairs: Array<[str, str]>;
 }
 ```
+For content of `Marshall`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
 
 ---
 
@@ -4058,20 +4115,24 @@ const response = await vc_revoke(agent, params);
 {
   vc_parent_id: bytes32;
   fee: uint64;
-} & TXEndpointRequest
+} & Partial<Marshall>
 ```
 ### response:
 ```typescript
 {
   transactions: TransactionRecordConvenience[];
-  unsigned_transactions: UnsignedTransaction[] | str[];
-  signing_responses?: str[];
+  unsigned_transactions: UnsignedTransaction[];
+} | {
+  transactions: TransactionRecordConvenience[];
+  unsigned_transactions: str[];
 }
 ```
 For content of `TransactionRecordConvenience`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
-For content of `TXEndpointRequest` and `UnsignedTransaction`  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
+For content of `UnsignedTransaction`  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts  
+For content of `Marshall`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts  
 
 ---
 

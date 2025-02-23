@@ -1,4 +1,4 @@
-import {bytes, Optional, uint128, uint32, uint64} from "../../../chia/types/_python_types_";
+import {bool, bytes, Optional, uint128, uint32, uint64} from "../../../chia/types/_python_types_";
 import {bytes32} from "../../../chia/types/blockchain_format/sized_bytes";
 import {PublicKey} from "../../chia-bls/public_key";
 
@@ -42,4 +42,9 @@ export type SpendBundleConditions = {
   removal_amount: uint128;
   // the sum of all amounts of CREATE_COIN conditions
   addition_amount: uint128;
+  // set if the aggregate signature of the block/spend bundle was
+  // successfully validated
+  validated_signature: bool;
+  execution_cost: uint64;
+  condition_cost: uint64;
 };

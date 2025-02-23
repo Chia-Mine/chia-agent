@@ -1,5 +1,57 @@
 # Changelog
 
+## [14.5.0]
+### Changed
+- Added error logs
+- [Wallet RPC API](./src/api/rpc/wallet)
+  - Added CHIP-0029 support for the following Wallet RPC APIs
+    - [`set_wallet_resync_on_startup`](./src/api/rpc/wallet/README.md#set_wallet_resync_on_startupagent-params)
+    - [`get_sync_status`](./src/api/rpc/wallet/README.md#get_sync_statusagent)
+    - [`get_height_info`](./src/api/rpc/wallet/README.md#get_height_infoagent)
+    - [`push_tx`](./src/api/rpc/wallet/README.md#push_txagent-params)
+    - [`push_transactions`](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
+    - [`get_timestamp_for_height`](./src/api/rpc/wallet/README.md#get_timestamp_for_heightagent)
+    - [`set_auto_claim`](./src/api/rpc/wallet/README.md#set_auto_claimagent-params)
+    - [`get_auto_claim`](./src/api/rpc/wallet/README.md#get_auto_claimagent-params)
+    - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
+    - [`vc_get`](./src/api/rpc/wallet/README.md#vc_getagent-params)
+    - [`vc_get_list`](./src/api/rpc/wallet/README.md#vc_get_listagent-params)
+    - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
+    - [`vc_add_proofs`](./src/api/rpc/wallet/README.md#vc_add_proofsagent-params)
+    - [`vc_get_proofs_for_root`](./src/api/rpc/wallet/README.md#vc_get_proofs_for_rootagent-params)
+    - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
+  - [`vc_get_list`](./src/api/rpc/wallet/README.md#vc_get_listagent-params)
+    - Changed the response type of `proofs`
+  - [`vc_add_proofs`](./src/api/rpc/wallet/README.md#vc_add_proofsagent-params)
+    - Changed the request type
+  - [`vc_get_proofs_for_root`](./src/api/rpc/wallet/README.md#vc_get_proofs_for_rootagent-params)
+    - Changed the response type
+  - [`vc_mint`](./src/api/rpc/wallet/README.md#vc_mintagent-params)
+    - Removed `signing_responses` from the response properties.
+  - [`vc_spend`](./src/api/rpc/wallet/README.md#vc_spendagent-params)
+    - Removed `signing_responses` from the response properties.
+  - [`vc_revoke`](./src/api/rpc/wallet/README.md#vc_revokeagent-params)
+    - Removed `signing_responses` from the response properties.
+  - Add the following properties to `SpendBundleConditions`
+    - `validated_signature`
+    - `execution_cost`
+    - `condition_cost`
+### Added
+- [New Common RPC API](./src/api/rpc/common)
+  - [`get_log_level`](./src/api/rpc/common/README.md#get_log_levelagent)
+  - [`set_log_level`](./src/api/rpc/common/README.md#set_log_levelagent-params)
+  - [`reset_log_level`](./src/api/rpc/common/README.md#reset_log_levelagent)
+### Fixed
+- [`get_timestamp_for_height`](./src/api/rpc/wallet/README.md#get_timestamp_for_heightagent)
+ - Fixed a missing request param 
+- [`vc_get`](./src/api/rpc/wallet/README.md#vc_getagent-params)
+  - Fixed the response type to `Optional<VCRecord>` from `VCRecord | None`.
+- [`push_transactions`](./src/api/rpc/wallet/README.md#push_transactionsagent-params)
+  - Each element of `transactions` in the request can be `TransactionRecord`
+- Fixed the type of [`TransactionEndpointResponseCHIP0029`](./src/api/chia/rpc/wallet_request_types.ts)
+- Fixed a typo: `VersionBlob` -> `VersionedBlob`
+- Fixed incorrect type of [`WalletCoinRecordWithMetadata`](./src/api/chia/wallet/wallet_coin_record.ts)
+
 ## [14.4.0]
 ### Changed
 - Updated npm dependencies
@@ -1774,6 +1826,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.4.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.4.0...v14.4.1
 [14.4.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.4.0
 [14.3.3]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.2...v14.3.3
 [14.3.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.1...v14.3.2

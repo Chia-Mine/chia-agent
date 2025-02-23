@@ -86,10 +86,33 @@ class Daemon {
     this.onClose = this.onClose.bind(this);
     this.onPing = this.onPing.bind(this);
     this.onPong = this.onPong.bind(this);
+    this.onRejection = this.onRejection.bind(this);
     
     if(serviceName){
       this._serviceName = serviceName;
     }
+  }
+  
+  protected onRejection(e: unknown) {
+    if(typeof e === "string"){
+      getLogger().error(`Error: ${e}`);
+    }
+    else if(e instanceof Error){
+      getLogger().error(`Error ${e.name}: ${e.message}`);
+      if(e.stack){
+        getLogger().error(e.stack);
+      }
+    }
+    else {
+      try {
+        getLogger().error(`Error: ${JSON.stringify(e)}`);
+      }
+      catch(_){
+        getLogger().error("Unknown error");
+      }
+    }
+    
+    return null;
   }
   
   /**
@@ -115,7 +138,11 @@ class Daemon {
     
     getLogger().debug(`Opening websocket connection to ${daemonServerURL}`);
     
-    const result = await open(daemonServerURL, timeoutMs);
+    const result = await open(daemonServerURL, timeoutMs)
+      .catch(this.onRejection);
+    if(!result){
+      return false;
+    }
     this._socket = result.ws;
     this._socket.on("error", this.onError);
     this._socket.addEventListener("message", this.onMessage);
@@ -123,7 +150,7 @@ class Daemon {
     this._socket.on("ping", this.onPing);
     this._socket.on("pong", this.onPong);
     
-    await this.onOpen(result.openEvent, daemonServerURL);
+    await this.onOpen(result.openEvent, daemonServerURL).catch(this.onRejection);
     
     return true;
   }
@@ -137,6 +164,7 @@ class Daemon {
       getLogger().debug("Closing web socket connection");
       this._socket.close();
       this._closing = true;
+      this._connectedUrl = "";
       this._onClosePromise = resolve as () => unknown; // Resolved in onClose function.
     }));
   }
@@ -201,6 +229,7 @@ class Daemon {
     
     if(error || !result){
       getLogger().error("Failed to register agent service to daemon");
+      getLogger().error(error instanceof Error ? `${error.name}: ${error.message}` : JSON.stringify(error));
       throw new Error("Subscribe failed");
     }
     
@@ -356,7 +385,7 @@ class Daemon {
     this._closeEventListeners.forEach(l => l(event));
     this.clearAllEventListeners();
     
-    getLogger().info("Closed ws connection");
+    getLogger().info(`Closed ws connection. code:${event.code} wasClean:${event.wasClean} reason:${event.reason}`);
     
     if(this._onClosePromise){
       this._onClosePromise();
