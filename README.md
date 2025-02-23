@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `2.4.4`/`2.5.0` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
+Supports all RPC/Websocket API available at `2.5.1` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
@@ -22,12 +22,12 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`40ca4f94fc44fafc422b5cf20bfbd2db2b883f06`](https://github.com/Chia-Network/chia-blockchain/tree/40ca4f94fc44fafc422b5cf20bfbd2db2b883f06) of [chia-blockchain 2.5.0](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/40ca4f94fc44fafc422b5cf20bfbd2db2b883f06...main)
-- [`54fffb4968364640b4f5dd18d586821e67eaa631`](https://github.com/Chia-Network/pool-reference/tree/54fffb4968364640b4f5dd18d586821e67eaa631) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
-  - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/54fffb4968364640b4f5dd18d586821e67eaa631...main)
-- [`c6cd98f637f07e60f68203c4c27b8cf3a559ae9b`](https://github.com/Chia-Network/chia_rs/tree/c6cd98f637f07e60f68203c4c27b8cf3a559ae9b) of [chia_rs 0.14.0](https://github.com/Chia-Network/chia_rs)
-  - [Diff to the main branch of chia_rs](https://github.com/Chia-Network/chia_rs/compare/c6cd98f637f07e60f68203c4c27b8cf3a559ae9b...main)
+- [`76e877f5d3647639be65a2b39090984f27ece7e9`](https://github.com/Chia-Network/chia-blockchain/tree/76e877f5d3647639be65a2b39090984f27ece7e9) of [chia-blockchain 2.5.1](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/76e877f5d3647639be65a2b39090984f27ece7e9...main)
+- [`ac72355b9220fa975bab857fe740892845017a30`](https://github.com/Chia-Network/pool-reference/tree/ac72355b9220fa975bab857fe740892845017a30) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
+  - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/ac72355b9220fa975bab857fe740892845017a30...main)
+- [`0b6571ea254fe22dfc692f9ef058b6a4e224a081`](https://github.com/Chia-Network/chia_rs/tree/0b6571ea254fe22dfc692f9ef058b6a4e224a081) of [chia_rs 0.18.0](https://github.com/Chia-Network/chia_rs)
+  - [Diff to the main branch of chia_rs](https://github.com/Chia-Network/chia_rs/compare/0b6571ea254fe22dfc692f9ef058b6a4e224a081...main)
 
 ## API
 There are 2 kinds of APIs in chia.  
