@@ -107,7 +107,7 @@ class Daemon {
       try {
         getLogger().error(`Error: ${JSON.stringify(e)}`);
       }
-      catch(_){
+      catch(_e){
         getLogger().error("Unknown error");
       }
     }
