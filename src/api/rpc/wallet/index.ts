@@ -367,7 +367,7 @@ export async function get_wallets<T extends TRPCAgent | TDaemon>(agent: T, data:
 
 
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_CAT_WalletRequest = {
   fee?: uint64;
   wallet_type: "cat_wallet"
@@ -381,7 +381,7 @@ export type TCreate_New_CAT_WalletRequest = {
   mode: "existing";
   asset_id: str;
 };
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_CAT_WalletResponse = {
   type: uint8;
   asset_id: str;
@@ -406,7 +406,7 @@ export type TCreateNewDidWalletRequestRecovery = {
   did_type: "recovery";
   backup_data: str;
 }
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_DID_WalletRequest = TCreateNewDidWalletRequestNew | TCreateNewDidWalletRequestRecovery;
 export type TCreateNewDidWalletResponseNew = {
   success: True;
@@ -426,10 +426,10 @@ export type TCreateNewDidWalletResponseRecovery = {
   backup_dids: bytes[];
   num_verifications_required: uint64;
 };
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_DID_WalletResponse = TCreateNewDidWalletResponseNew | TCreateNewDidWalletResponseRecovery;
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_DAO_WalletRequest = {
   wallet_type: "dao_wallet";
   name?: str;
@@ -440,7 +440,7 @@ export type TCreate_New_DAO_WalletRequest = {
   fee_for_cat: uint64;
   treasury_id: str;
 };
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_DAO_WalletResponse = {
   success: True;
   type: uint8;
@@ -453,21 +453,21 @@ export type TCreate_New_DAO_WalletResponse = {
   signing_responses?: str[];
 };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_NFT_WalletRequest = {
   fee?: uint64;
   wallet_type: "nft_wallet";
   did_id?: str;
   name?: str;
 };
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_NFT_WalletResponse = {
   success: True;
   type: uint8;
   wallet_id: uint32;
 };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_Pool_WalletRequest = {
   fee?: uint64;
   wallet_type: "pool_wallet";
@@ -488,7 +488,7 @@ export type TCreate_New_Pool_WalletRequest = {
   mode: "recovery";
 };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 export type TCreate_New_Pool_WalletResponse = {
   total_fee: uint64;
   transaction: TransactionRecord;

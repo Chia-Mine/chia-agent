@@ -364,12 +364,12 @@ export class RPCAgent implements APIAgent {
             getLogger().error("RPC Server returned no data. This is not expected.");
             reject(new Error("Server responded without expected data"));
           }
-          catch (e) {
+          catch (_e) {
             getLogger().error("Failed to parse response data");
             try{
               getLogger().error(Buffer.concat(chunks).toString());
             }
-            catch(_){ /* Do nothing */ }
+            catch(_e2){ /* Do nothing */ }
           
             reject(new Error("Server responded without expected data"));
           }

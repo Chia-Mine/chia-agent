@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./build",
     "module": "CommonJS",
-    "target": "es6",
+    "target": "es2020",
     "allowJs": true,
     "lib": [
       "dom",
