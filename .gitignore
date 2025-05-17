@@ -258,3 +258,4 @@ $RECYCLE.BIN/
 .npmrc
 build/
 dist/
+.vscode/
