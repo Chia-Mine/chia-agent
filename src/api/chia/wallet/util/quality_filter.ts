@@ -1,5 +1,5 @@
-import {uint32, uint64, uint8} from "../../types/_python_types_";
-import {bytes32} from "../../types/blockchain_format/sized_bytes";
+import { uint32, uint64, uint8 } from "../../types/_python_types_";
+import { bytes32 } from "../../types/blockchain_format/sized_bytes";
 
 export type TransactionTypeFilter = {
   values: uint8[];

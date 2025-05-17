@@ -1,5 +1,10 @@
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {bytes, G1Element, Optional, uint8} from "../../chia/types/_python_types_";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import {
+  bytes,
+  G1Element,
+  Optional,
+  uint8,
+} from "../../chia/types/_python_types_";
 
 export type ProofOfSpace = {
   challenge: bytes32; // byte32

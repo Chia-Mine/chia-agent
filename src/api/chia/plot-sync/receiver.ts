@@ -1,7 +1,15 @@
-import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {bool, float, int, None, Optional, str, uint32} from "../types/_python_types_";
-import {Plot} from "../protocols/harvester_protocol";
-import {HarvestingMode} from "../plotting/util";
+import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import {
+  bool,
+  float,
+  int,
+  None,
+  Optional,
+  str,
+  uint32,
+} from "../types/_python_types_";
+import { Plot } from "../protocols/harvester_protocol";
+import { HarvestingMode } from "../plotting/util";
 
 export type MayBeSummary<S, O> = S extends true ? int : O;
 
@@ -20,11 +28,13 @@ export type Receiver<SUMMARY extends boolean = false> = {
   duplicates: MayBeSummary<SUMMARY, str[]>;
   total_plot_size: int;
   total_effective_plot_size: int;
-  syncing: {
-    initial: bool;
-    plot_files_processed: uint32;
-    plot_files_total: uint32;
-  } | None;
+  syncing:
+    | {
+        initial: bool;
+        plot_files_processed: uint32;
+        plot_files_total: uint32;
+      }
+    | None;
   last_sync_time: Optional<float>;
   harvesting_mode: Optional<HarvestingMode>;
 };

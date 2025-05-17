@@ -1,4 +1,11 @@
-import {bytes, G1Element, PrivateKey, Optional, str, uint32} from "../types/_python_types_";
+import {
+  bytes,
+  G1Element,
+  PrivateKey,
+  Optional,
+  str,
+  uint32,
+} from "../types/_python_types_";
 
 export type KeyDataSecrets = {
   mnemonic: str[];

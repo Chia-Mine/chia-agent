@@ -1,6 +1,13 @@
-import {float, int, str, uint32, uint64, uint8} from "../types/_python_types_";
-import {PoolWalletConfig} from "../pools/pool_config";
-import {ErrorResponse} from "../protocols/pool_protocol";
+import {
+  float,
+  int,
+  str,
+  uint32,
+  uint64,
+  uint8,
+} from "../types/_python_types_";
+import { PoolWalletConfig } from "../pools/pool_config";
+import { ErrorResponse } from "../protocols/pool_protocol";
 
 // dependency: self.pool_state, by: get_pool_state of Farmer RPC API
 /*

@@ -1,1 +1,1 @@
-export type {SubEpochSummary} from "../../../chia_rs/chia-protocol/sub_epoch_summary";
+export type { SubEpochSummary } from "../../../chia_rs/chia-protocol/sub_epoch_summary";

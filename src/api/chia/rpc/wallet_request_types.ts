@@ -1,18 +1,30 @@
-import {bool, G1Element, Optional, PrivateKey, str, uint16, uint32, uint64} from "../types/_python_types_";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {Notification} from "../wallet/notification_store";
+import {
+  bool,
+  G1Element,
+  Optional,
+  PrivateKey,
+  str,
+  uint16,
+  uint32,
+  uint64,
+} from "../types/_python_types_";
+import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { Notification } from "../wallet/notification_store";
 import {
   SignedTransaction,
   SigningInstructions,
   SigningResponse,
   Spend,
-  UnsignedTransaction
+  UnsignedTransaction,
 } from "../wallet/signer_protocol";
-import {Marshall} from "./util";
-import {TransactionRecord, TransactionRecordConvenience} from "../wallet/transaction_record";
-import {WalletSpendBundle} from "../wallet/wallet_spend_bundle";
-import {TXEndpointRequest} from "./wallet_rpc_api";
-import {VCRecord} from "../wallet/vc_wallet/vc_store";
+import { Marshall } from "./util";
+import {
+  TransactionRecord,
+  TransactionRecordConvenience,
+} from "../wallet/transaction_record";
+import { WalletSpendBundle } from "../wallet/wallet_spend_bundle";
+import { TXEndpointRequest } from "./wallet_rpc_api";
+import { VCRecord } from "../wallet/vc_wallet/vc_store";
 
 export type GetNotifications = {
   ids?: bytes32[];
@@ -108,19 +120,21 @@ export type TransactionEndpointResponseCHIP0029 = {
 };
 
 export type PushTransactions = TransactionEndpointRequest & {
-  transactions: Array<TransactionRecord|TransactionRecordConvenience|str>;
+  transactions: Array<TransactionRecord | TransactionRecordConvenience | str>;
   push: Optional<bool>;
 } & TXEndpointRequest;
 
 export type PushTransactionsCHIP0029 = PushTransactions & Marshall;
 
 export type PushTransactionsResponse = TransactionEndpointResponse;
-export type PushTransactionsResponseCHIP0029 = TransactionEndpointResponseCHIP0029;
+export type PushTransactionsResponseCHIP0029 =
+  TransactionEndpointResponseCHIP0029;
 
 export type GetTimestampForHeightRequest = {
   height: uint32;
 };
-export type GetTimestampForHeightRequestCHIP0029 = GetTimestampForHeightRequest & Marshall;
+export type GetTimestampForHeightRequestCHIP0029 =
+  GetTimestampForHeightRequest & Marshall;
 export type GetTimestampForHeightResponse = {
   timestamp: uint64;
 };
@@ -182,12 +196,11 @@ export type VCProofWithHash = {
   hash: bytes32;
   proof: Optional<VCProofsRPC>;
 };
-export type VcRecordWithCoinID = VCRecord & { coin_id: bytes32; };
+export type VcRecordWithCoinID = VCRecord & { coin_id: bytes32 };
 export type VcGetListResponse = {
   vc_records: VcRecordWithCoinID[];
   proofs: VCProofWithHash[];
 };
-
 
 export type VcSpend = TransactionEndpointRequest & {
   vc_id: bytes32;
@@ -282,7 +295,8 @@ export type SetWalletResyncOnStartup = {
   enable?: bool;
 };
 
-export type SetWalletResyncOnStartupCHIP0029 = SetWalletResyncOnStartup & Marshall;
+export type SetWalletResyncOnStartupCHIP0029 = SetWalletResyncOnStartup &
+  Marshall;
 
 export type GetSyncStatus = Marshall;
 
@@ -296,7 +310,7 @@ export type GetHeightInfo = Marshall;
 
 export type GetHeightInfoResponse = {
   height: uint32;
-}
+};
 
 export type PushTX = {
   spend_bundle: WalletSpendBundle | str;

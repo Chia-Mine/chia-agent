@@ -1,4 +1,4 @@
-import {Optional} from "../../chia/types/_python_types_";
+import { Optional } from "../../chia/types/_python_types_";
 import {
   ChallengeChainSubSlot,
   InfusedChallengeChainSubSlot,

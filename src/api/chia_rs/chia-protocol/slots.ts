@@ -1,6 +1,6 @@
-import {Optional, uint64, uint8} from "../../chia/types/_python_types_";
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {VDFInfo, VDFProof} from "./vdf";
+import { Optional, uint64, uint8 } from "../../chia/types/_python_types_";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { VDFInfo, VDFProof } from "./vdf";
 
 export type ChallengeChainSubSlot = {
   challenge_chain_end_of_slot_vdf: VDFInfo;

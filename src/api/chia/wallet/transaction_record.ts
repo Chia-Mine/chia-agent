@@ -1,9 +1,17 @@
-import {bool, bytes, Optional, str, uint32, uint64, uint8} from "../types/_python_types_";
-import {Coin} from "../types/blockchain_format/coin";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {ClawbackMetadata} from "./puzzles/clawback/metadata";
-import {ConditionValidTimes} from "./conditions";
-import {WalletSpendBundle} from "./wallet_spend_bundle";
+import {
+  bool,
+  bytes,
+  Optional,
+  str,
+  uint32,
+  uint64,
+  uint8,
+} from "../types/_python_types_";
+import { Coin } from "../types/blockchain_format/coin";
+import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { ClawbackMetadata } from "./puzzles/clawback/metadata";
+import { ConditionValidTimes } from "./conditions";
+import { WalletSpendBundle } from "./wallet_spend_bundle";
 
 export type TransactionRecordOld = {
   confirmed_at_height: uint32;
@@ -17,12 +25,12 @@ export type TransactionRecordOld = {
   additions: Coin[];
   removals: Coin[];
   wallet_id: uint32;
-  
+
   // # Represents the list of peers that we sent the transaction to, whether each one
   // # included it in the mempool, and what the error message (if any) was
-  sent_to: Array<[string, uint8, string|undefined]>;// List[Tuple[str, uint8, Optional[str]]]
+  sent_to: Array<[string, uint8, string | undefined]>; // List[Tuple[str, uint8, Optional[str]]]
   trade_id: Optional<bytes32>;
-  type: uint32  // # TransactionType
+  type: uint32; // # TransactionType
   name: bytes32;
   memos: Array<[bytes32, bytes[]]>;
 };

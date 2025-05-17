@@ -1,4 +1,4 @@
-import {uint128, uint32, uint64} from "../types/_python_types_";
+import { uint128, uint32, uint64 } from "../types/_python_types_";
 
 export type Balance = {
   confirmed_wallet_balance: uint128;

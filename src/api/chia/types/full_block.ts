@@ -1,1 +1,1 @@
-export type {FullBlock} from "../../chia_rs/chia-protocol/fullblock";
+export type { FullBlock } from "../../chia_rs/chia-protocol/fullblock";

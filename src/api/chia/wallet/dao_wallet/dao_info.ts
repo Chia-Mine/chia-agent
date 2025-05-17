@@ -1,8 +1,8 @@
-import {bool, Optional, uint32, uint64} from "../../types/_python_types_";
-import {bytes32} from "../../types/blockchain_format/sized_bytes";
-import {Program} from "../../types/blockchain_format/program";
-import {Coin} from "../../types/blockchain_format/coin";
-import {LineageProof} from "../lineage_proof";
+import { bool, Optional, uint32, uint64 } from "../../types/_python_types_";
+import { bytes32 } from "../../types/blockchain_format/sized_bytes";
+import { Program } from "../../types/blockchain_format/program";
+import { Coin } from "../../types/blockchain_format/coin";
+import { LineageProof } from "../lineage_proof";
 
 export type ProposalInfo = {
   proposal_id: bytes32; // this is launcher_id

@@ -1,4 +1,4 @@
-import type {WsFarmerMessage} from "./farmer/index";
+import type { WsFarmerMessage } from "./farmer/index";
 export {
   chia_farmer_service,
   TChiaFarmerBroadcast,
@@ -25,7 +25,7 @@ export {
   on_close_connection,
 } from "./farmer/index";
 
-import type {WsFullNodeMessage} from "./full_node/index";
+import type { WsFullNodeMessage } from "./full_node/index";
 export {
   chia_full_node_service,
   TChiaFullNodeBroadcast,
@@ -42,7 +42,7 @@ export {
   on_unfinished_block,
 } from "./full_node/index";
 
-import type {WsHarvesterMessage} from "./harvester/index";
+import type { WsHarvesterMessage } from "./harvester/index";
 export {
   chia_harvester_service,
   TGetConnectionsBroadCast as TGetConnectionsHarvesterBroadCast,
@@ -59,7 +59,7 @@ export {
   on_close_connection as on_close_connection_harvester,
 } from "./harvester/index";
 
-import type {WsWalletMessage} from "./wallet/index";
+import type { WsWalletMessage } from "./wallet/index";
 export {
   chia_wallet_service,
   TGetConnectionsBroadCast as TGetConnectionsWalletBroadCast,
@@ -76,7 +76,7 @@ export {
   on_message_from_wallet,
 } from "./wallet/index";
 
-import type {WsPlotsMessage} from "./chia_plots_create/index";
+import type { WsPlotsMessage } from "./chia_plots_create/index";
 export {
   chia_plotter_service,
   state_changed_command_of_plots,
@@ -84,7 +84,7 @@ export {
   on_state_changed_of_plots,
 } from "./chia_plots_create/index";
 
-import type {WsCrawlerMessage} from "./crawler/index";
+import type { WsCrawlerMessage } from "./crawler/index";
 export {
   chia_crawler_service,
   TLoadedInitialPeersBroadCast,
@@ -94,7 +94,7 @@ export {
   on_crawl_batch_completed,
 } from "./crawler/index";
 
-import type {WsTimelordMessage} from "./timelord/index";
+import type { WsTimelordMessage } from "./timelord/index";
 export {
   chia_timelord_service,
   TFinishedPotBroadCast,
@@ -107,7 +107,7 @@ export {
   on_new_peak,
 } from "./timelord/index";
 
-import type {WsDaemonMessage} from "./daemon/index";
+import type { WsDaemonMessage } from "./daemon/index";
 export {
   daemon_service,
   register_service,
@@ -221,12 +221,11 @@ export {
 } from "./daemon/index";
 
 export type WsMessage =
-  WsFarmerMessage
+  | WsFarmerMessage
   | WsFullNodeMessage
   | WsHarvesterMessage
   | WsWalletMessage
   | WsPlotsMessage
   | WsCrawlerMessage
   | WsTimelordMessage
-  | WsDaemonMessage
-;
+  | WsDaemonMessage;

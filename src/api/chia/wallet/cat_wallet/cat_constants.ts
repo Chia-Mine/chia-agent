@@ -1,4 +1,4 @@
-import {str} from "../../types/_python_types_";
+import { str } from "../../types/_python_types_";
 
 export type CAT = {
   asset_id: str; // hex_str

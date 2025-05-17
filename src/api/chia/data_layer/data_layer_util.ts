@@ -1,5 +1,5 @@
-import {bool, int, Optional, str, uint8} from "../types/_python_types_";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
+import { bool, int, Optional, str, uint8 } from "../types/_python_types_";
+import { bytes32 } from "../types/blockchain_format/sized_bytes";
 
 export type KeyValueMarshalled = {
   key: str;
@@ -9,7 +9,7 @@ export type KeyValueMarshalled = {
 export type OfferStoreMarshalled = {
   store_id: str;
   inclusions: KeyValueMarshalled[];
-}
+};
 
 export type StoreProofsMarshalled = {
   store_id: str;
@@ -24,7 +24,7 @@ export type ProofMarshalled = {
 };
 
 export type LayerMarshalled = {
-  other_hash_side: "left"|"right";
+  other_hash_side: "left" | "right";
   other_hash: str;
   combined_hash: str;
 };
@@ -47,7 +47,7 @@ export type PluginStatusMarshalled = {
   plugin_status: {
     uploaders: Record<str, Record<str, any>>;
     downloaders: Record<str, Record<str, any>>;
-  }
+  };
 };
 
 export type RootMarshalled = {
@@ -67,7 +67,7 @@ export type HashOnlyProof = {
   key_clvm_hash: bytes32;
   value_clvm_hash: bytes32;
   node_hash: bytes32;
-  layers: ProofLayer[]
+  layers: ProofLayer[];
 };
 
 export type KeyValueHashes = {
@@ -76,7 +76,7 @@ export type KeyValueHashes = {
 };
 
 export type ProofResultInclusions = {
-  store_id: bytes32
+  store_id: bytes32;
   inclusions: KeyValueHashes[];
 };
 
@@ -93,6 +93,6 @@ export type DLProof = {
 
 export type VerifyProofResponse = {
   verified_clvm_hashes: ProofResultInclusions;
-  current_root: bool
+  current_root: bool;
   success: bool;
 };

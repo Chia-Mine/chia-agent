@@ -1,17 +1,24 @@
-import {bool, G2Element, Optional, uint128, uint32, uint8} from "../../chia/types/_python_types_";
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {ProofOfSpace} from "./proof_of_space";
-import {VDFInfo} from "./vdf";
+import {
+  bool,
+  G2Element,
+  Optional,
+  uint128,
+  uint32,
+  uint8,
+} from "../../chia/types/_python_types_";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { ProofOfSpace } from "./proof_of_space";
+import { VDFInfo } from "./vdf";
 
 export type RewardChainBlockUnfinished = {
-  total_iters: uint128
-  signage_point_index: uint8
-  pos_ss_cc_challenge_hash: bytes32
-  proof_of_space: ProofOfSpace
+  total_iters: uint128;
+  signage_point_index: uint8;
+  pos_ss_cc_challenge_hash: bytes32;
+  proof_of_space: ProofOfSpace;
   challenge_chain_sp_vdf: Optional<VDFInfo>; // Optional[VDFInfo]  # Not present for first sp in slot
-  challenge_chain_sp_signature: G2Element
+  challenge_chain_sp_signature: G2Element;
   reward_chain_sp_vdf: Optional<VDFInfo>; // Optional[VDFInfo]  # Not present for first sp in slot
-  reward_chain_sp_signature: G2Element
+  reward_chain_sp_signature: G2Element;
 };
 
 export type RewardChainBlock = {

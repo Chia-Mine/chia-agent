@@ -1,6 +1,6 @@
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {bool, bytes, uint64, uint8} from "../../chia/types/_python_types_";
-import {ClassgroupElement} from "./classgroup";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { bool, bytes, uint64, uint8 } from "../../chia/types/_python_types_";
+import { ClassgroupElement } from "./classgroup";
 
 export type VDFInfo = {
   challenge: bytes32; // bytes32  # Used to generate the discriminant (VDF group)

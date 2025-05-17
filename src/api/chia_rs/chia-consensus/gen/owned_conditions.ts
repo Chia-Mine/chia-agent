@@ -1,6 +1,13 @@
-import {bool, bytes, Optional, uint128, uint32, uint64} from "../../../chia/types/_python_types_";
-import {bytes32} from "../../../chia/types/blockchain_format/sized_bytes";
-import {PublicKey} from "../../chia-bls/public_key";
+import {
+  bool,
+  bytes,
+  Optional,
+  uint128,
+  uint32,
+  uint64,
+} from "../../../chia/types/_python_types_";
+import { bytes32 } from "../../../chia/types/blockchain_format/sized_bytes";
+import { PublicKey } from "../../chia-bls/public_key";
 
 export type SpendConditions = {
   coin_id: bytes32;
