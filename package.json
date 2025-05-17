@@ -29,7 +29,7 @@
     "typescript"
   ],
   "engines": {
-    "node": ">=12.13.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@chiamine/json-bigint": "^1.0.3",
