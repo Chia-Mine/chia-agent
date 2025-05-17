@@ -1,10 +1,19 @@
 // dependency: TradeRecord, by: `get_trade` of Wallet RPC API
 
-import {bool, bytes, int, Optional, str, uint32, uint64, uint8} from "../types/_python_types_";
-import {Coin} from "../types/blockchain_format/coin";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {TDriverDict} from "./puzzle_drivers";
-import {ConditionValidTimes} from "./conditions";
+import {
+  bool,
+  bytes,
+  int,
+  Optional,
+  str,
+  uint32,
+  uint64,
+  uint8,
+} from "../types/_python_types_";
+import { Coin } from "../types/blockchain_format/coin";
+import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { TDriverDict } from "./puzzle_drivers";
+import { ConditionValidTimes } from "./conditions";
 
 export type TradeRecordOld = {
   confirmed_at_index: uint32;
@@ -16,7 +25,7 @@ export type TradeRecordOld = {
   taken_offer: Optional<bytes>;
   coins_of_interest: Coin[];
   trade_id: bytes32;
-  status: uint32;  // # TradeStatus, enum not streamable
+  status: uint32; // # TradeStatus, enum not streamable
   sent_to: Array<[str, uint8, Optional<str>]>;
 };
 

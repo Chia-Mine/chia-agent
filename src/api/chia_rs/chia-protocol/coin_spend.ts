@@ -1,5 +1,5 @@
-import {Coin} from "./coin";
-import {Program} from "./program";
+import { Coin } from "./coin";
+import { Program } from "./program";
 
 export type CoinSpend = {
   coin: Coin;

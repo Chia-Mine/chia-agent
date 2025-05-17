@@ -1,1 +1,1 @@
-export {SpendBundleConditions} from "../../chia_rs/chia-consensus/gen/owned_conditions";
+export { SpendBundleConditions } from "../../chia_rs/chia-consensus/gen/owned_conditions";

@@ -1,9 +1,9 @@
-import {Optional, uint32} from "../../chia/types/_python_types_";
-import {EndOfSubSlotBundle} from "./end_of_sub_slot_bundle";
-import {RewardChainBlock} from "./reward_chain_block";
-import {VDFProof} from "./vdf";
-import {Foliage, FoliageTransactionBlock, TransactionsInfo} from "./foliage";
-import {Program} from "./program";
+import { Optional, uint32 } from "../../chia/types/_python_types_";
+import { EndOfSubSlotBundle } from "./end_of_sub_slot_bundle";
+import { RewardChainBlock } from "./reward_chain_block";
+import { VDFProof } from "./vdf";
+import { Foliage, FoliageTransactionBlock, TransactionsInfo } from "./foliage";
+import { Program } from "./program";
 
 export type FullBlock = {
   finished_sub_slots: EndOfSubSlotBundle[]; // List[EndOfSubSlotBundle]  # If first sb

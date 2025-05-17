@@ -1,22 +1,28 @@
-import {readFileSync, existsSync} from "fs";
-import {defaultDaemonCertPath, defaultDaemonKeyPath, getPathFromConfig} from "../config";
+import { readFileSync, existsSync } from "fs";
+import {
+  defaultDaemonCertPath,
+  defaultDaemonKeyPath,
+  getPathFromConfig,
+} from "../config";
 import * as WS from "ws";
-import {Event} from "ws";
-import {getLogger} from "../logger";
+import { Event } from "ws";
+import { getLogger } from "../logger";
 
 function create(url: string) {
-  const daemonCertPath = getPathFromConfig("/daemon_ssl/private_crt") || defaultDaemonCertPath;
-  const daemonKeyPath = getPathFromConfig("/daemon_ssl/private_key") || defaultDaemonKeyPath;
-  
-  if(!existsSync(daemonCertPath)){
+  const daemonCertPath =
+    getPathFromConfig("/daemon_ssl/private_crt") || defaultDaemonCertPath;
+  const daemonKeyPath =
+    getPathFromConfig("/daemon_ssl/private_key") || defaultDaemonKeyPath;
+
+  if (!existsSync(daemonCertPath)) {
     getLogger().error("daemon cert file was not found at: " + daemonCertPath);
     throw new Error("Cert file not found");
   }
-  if(!existsSync(daemonCertPath)){
+  if (!existsSync(daemonCertPath)) {
     getLogger().error("daemon key file was not found at: " + daemonCertPath);
     throw new Error("Key file not found");
   }
-  
+
   const cert = readFileSync(daemonCertPath);
   const key = readFileSync(daemonKeyPath);
   const options = {
@@ -24,43 +30,46 @@ function create(url: string) {
     key,
     rejectUnauthorized: false,
   };
-  
+
   return new WS(url, options);
 }
 
 export const defaultTimeoutInMs = 50000;
 
-export function open(url: string, timeoutMs?: number): Promise<{ ws: WS, openEvent: Event }> {
+export function open(
+  url: string,
+  timeoutMs?: number,
+): Promise<{ ws: WS; openEvent: Event }> {
   return new Promise((resolve, reject) => {
     const ws = create(url);
     let timer: ReturnType<typeof setTimeout> | null = null;
     timeoutMs = typeof timeoutMs === "number" ? timeoutMs : defaultTimeoutInMs;
     let opened = false;
-    
+
     timer = setTimeout(() => {
       timer = null;
-      
+
       getLogger().error("Request to open connection timed out");
       reject("Timeout");
     }, timeoutMs);
-    
+
     const onOpenError = (err: WS.ErrorEvent) => {
       if (!opened) {
         reject(err);
       }
     };
-    
-    ws.on("open", (openEvent: WS.Event)=> {
+
+    ws.on("open", (openEvent: WS.Event) => {
       opened = true;
       ws.off("error", onOpenError);
-      
+
       if (timer !== null) {
         clearTimeout(timer);
         timer = null;
-        resolve({ws, openEvent});
+        resolve({ ws, openEvent });
       }
     });
-    
+
     ws.on("error", onOpenError);
   });
 }

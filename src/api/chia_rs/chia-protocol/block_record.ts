@@ -1,8 +1,15 @@
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {bool, Optional, uint128, uint32, uint64, uint8} from "../../chia/types/_python_types_";
-import {ClassgroupElement} from "./classgroup";
-import {Coin} from "./coin";
-import {SubEpochSummary} from "./sub_epoch_summary";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import {
+  bool,
+  Optional,
+  uint128,
+  uint32,
+  uint64,
+  uint8,
+} from "../../chia/types/_python_types_";
+import { ClassgroupElement } from "./classgroup";
+import { Coin } from "./coin";
+import { SubEpochSummary } from "./sub_epoch_summary";
 
 export type BlockRecord = {
   header_hash: bytes32; // bytes32
@@ -22,18 +29,18 @@ export type BlockRecord = {
   deficit: uint8; // uint8  # A deficit of 16 is an overflow block after an infusion. Deficit of 15 is a challenge block
   overflow: bool; // bool
   prev_transaction_block_height: uint32; // uint32
-  
+
   // # Transaction block (present iff is_transaction_block)
   timestamp: Optional<uint64>; // Optional[uint64]
   prev_transaction_block_hash: Optional<bytes32>; // Optional[bytes32]  # Header hash of the previous transaction block
   fees: Optional<uint64>; // Optional[uint64]
   reward_claims_incorporated: Optional<Coin[]>; // Optional[List[Coin]]
-  
+
   // # Slot (present iff this is the first SB in sub slot)
   finished_challenge_slot_hashes: Optional<bytes32[]>; // Optional[List[bytes32]]
   finished_infused_challenge_slot_hashes: Optional<bytes32[]>; // Optional[List[bytes32]]
   finished_reward_slot_hashes: Optional<bytes32[]>; // Optional[List[bytes32]]
-  
+
   // # Sub-epoch (present iff this is the first SB after sub-epoch)
   sub_epoch_summary_included: Optional<SubEpochSummary>; // Optional[SubEpochSummary]
 };

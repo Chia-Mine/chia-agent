@@ -17,7 +17,10 @@
     "build": "node ./pre_publish.js && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./build --outDir ./build",
     "build:prod": "node ./pre_publish.js --prod && tsc --project tsconfig.json --allowJS false --declaration --declarationDir ./dist --outDir ./dist",
     "test": "jest",
-    "lint": "eslint --ext '.ts,js' ./src/",
+    "check:lint": "eslint .",
+    "check:prettier": "prettier --check --ignore-path .gitignore --ignore-path .prettierignore . \"!**/*.{yaml,md}\"",
+    "autofix:lint": "eslint --fix .",
+    "autofix:prettier": "prettier --write --ignore-path .gitignore --ignore-path .prettierignore . \"!**/*.{yaml,md}\"",
     "prepare": "husky"
   },
   "keywords": [
@@ -33,7 +36,8 @@
     "node": ">=20.0.0"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "pnpm run lint"
+    "*.{js,ts}": "eslint",
+    "*": "prettier --check --ignore-path .gitignore --ignore-path .prettierignore . \"!**/*.{yaml,md}\""
   },
   "dependencies": {
     "@chiamine/json-bigint": "^1.0.3",

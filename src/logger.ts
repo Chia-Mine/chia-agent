@@ -1,4 +1,4 @@
-export type TLogLevel = "error"|"warning"|"info"|"debug"|"none";
+export type TLogLevel = "error" | "warning" | "info" | "debug" | "none";
 export type TDestination = "console";
 export type Writer = {
   write: (message: string) => void;
@@ -13,122 +13,120 @@ const logPriority: Record<TLogLevel, number> = {
 };
 
 class ConsoleWriter implements Writer {
-  write(message: string){
+  write(message: string) {
     console.log(message);
   }
 }
 
 let currentLogLevel: TLogLevel = "error";
-export function getLogLevel(){ return currentLogLevel; }
-export function setLogLevel(logLevel: TLogLevel){ return currentLogLevel = logLevel; }
+export function getLogLevel() {
+  return currentLogLevel;
+}
+export function setLogLevel(logLevel: TLogLevel) {
+  return (currentLogLevel = logLevel);
+}
 
-function stringify(obj: any, indent?: number){
-  if(typeof obj === "string"){
+function stringify(obj: any, indent?: number) {
+  if (typeof obj === "string") {
     return obj;
-  }
-  else if(typeof obj === "number"){
+  } else if (typeof obj === "number") {
     return `${obj}`;
-  }
-  else if(typeof obj === "boolean"){
+  } else if (typeof obj === "boolean") {
     return `${obj}`;
-  }
-  else if(typeof obj === "bigint"){
+  } else if (typeof obj === "bigint") {
     return `${obj}`;
-  }
-  else if(typeof obj === "symbol"){
+  } else if (typeof obj === "symbol") {
     return obj.toString();
-  }
-  else if(typeof obj === "undefined"){
+  } else if (typeof obj === "undefined") {
     return "undefined";
-  }
-  else if(typeof obj === "function"){
+  } else if (typeof obj === "function") {
     return "[Function]";
   }
-  
+
   const seen = new WeakSet();
-  return JSON.stringify(obj, (k, v) => {
-    if(typeof v === "object" && v !== null){
-      if(seen.has(v)){
-        return undefined;
+  return JSON.stringify(
+    obj,
+    (k, v) => {
+      if (typeof v === "object" && v !== null) {
+        if (seen.has(v)) {
+          return undefined;
+        }
+        seen.add(v);
+      } else if (typeof v === "bigint") {
+        return `${v}n`;
       }
-      seen.add(v);
-    }
-    else if(typeof v === "bigint"){
-      return `${v}n`;
-    }
-    return v;
-  }, indent);
+      return v;
+    },
+    indent,
+  );
 }
 
 const loggers: Partial<Record<TDestination, Logger>> = {};
 
-export function getLogger(writer?: TDestination){
+export function getLogger(writer?: TDestination) {
   const w = writer || "console";
-  
+
   const logger = loggers[w];
-  if(logger && logger.loglevel === currentLogLevel){
+  if (logger && logger.loglevel === currentLogLevel) {
     return logger;
   }
-  
-  return loggers[w] = Logger.getLogger(currentLogLevel, w);
+
+  return (loggers[w] = Logger.getLogger(currentLogLevel, w));
 }
 
 class Logger {
   public loglevel: TLogLevel = "error";
   protected _writer: Writer;
-  
-  protected constructor(logLevel: TLogLevel, writer?: TDestination|Writer) {
-    if(writer === "console"){
+
+  protected constructor(logLevel: TLogLevel, writer?: TDestination | Writer) {
+    if (writer === "console") {
       this._writer = new ConsoleWriter();
-    }
-    else if(writer){
+    } else if (writer) {
       this._writer = writer;
-    }
-    else{
+    } else {
       this._writer = new ConsoleWriter();
     }
-    
+
     this.loglevel = logLevel;
   }
-  
-  public static getLogger(logLevel: TLogLevel, writer?: TDestination){
+
+  public static getLogger(logLevel: TLogLevel, writer?: TDestination) {
     return new Logger(logLevel, writer);
   }
-  
-  public setLogLevel(level: TLogLevel){
+
+  public setLogLevel(level: TLogLevel) {
     this.loglevel = level;
   }
-  
-  public shouldWrite(logLevel: TLogLevel){
+
+  public shouldWrite(logLevel: TLogLevel) {
     return logPriority[this.loglevel] <= logPriority[logLevel];
   }
-  
-  public formatMessage(level: TLogLevel, body: string){
-    return `${(new Date()).toLocaleString()} [${level.toUpperCase()}] ${body}`;
+
+  public formatMessage(level: TLogLevel, body: string) {
+    return `${new Date().toLocaleString()} [${level.toUpperCase()}] ${body}`;
   }
-  
-  public debug(msg: any){
-    if(this.shouldWrite("debug")){
+
+  public debug(msg: any) {
+    if (this.shouldWrite("debug")) {
       this._writer.write(this.formatMessage("debug", stringify(msg)));
     }
   }
-  
-  public info(msg: any){
-    if(this.shouldWrite("info")){
+
+  public info(msg: any) {
+    if (this.shouldWrite("info")) {
       this._writer.write(this.formatMessage("info", stringify(msg)));
     }
   }
-  
-  public warning(msg: any){
-    if(this.shouldWrite("warning")){
+
+  public warning(msg: any) {
+    if (this.shouldWrite("warning")) {
       this._writer.write(this.formatMessage("warning", stringify(msg)));
     }
   }
-  
-  public error(msg: any){
-    if(this.shouldWrite("error")){
+
+  public error(msg: any) {
+    if (this.shouldWrite("error")) {
       this._writer.write(this.formatMessage("error", stringify(msg)));
     }
   }
 }
-

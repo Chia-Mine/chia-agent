@@ -1,6 +1,16 @@
-import {BlockRecord} from "../../chia/consensus/block_record";
-import {bool, float, int, None, str, uint128, uint32, uint64, uint8} from "../../chia/types/_python_types_";
-import {TDaemon} from "../../../daemon/index";
+import { BlockRecord } from "../../chia/consensus/block_record";
+import {
+  bool,
+  float,
+  int,
+  None,
+  str,
+  uint128,
+  uint32,
+  uint64,
+  uint8,
+} from "../../chia/types/_python_types_";
+import { TDaemon } from "../../../daemon/index";
 import {
   GetMessageType,
   wallet_ui_service,
@@ -8,34 +18,48 @@ import {
   unfinished_block_info_service,
   TConnectionGeneral,
 } from "../../types";
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {NewSignagePoint} from "../../chia/protocols/farmer_protocol";
-import {ReceiveBlockResult} from "../../chia/consensus/blockchain";
-import {UnfinishedBlock} from "../../chia/types/unfinished_block";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { NewSignagePoint } from "../../chia/protocols/farmer_protocol";
+import { ReceiveBlockResult } from "../../chia/consensus/blockchain";
+import { UnfinishedBlock } from "../../chia/types/unfinished_block";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
 
-export type TConnectionFullNode = ({
-  peak_height: uint32,
-  peak_weight: uint128,
-  peak_hash: bytes32,
-} | {
-  peak_height: None,
-  peak_weight: None,
-  peak_hash: None,
-}) & TConnectionGeneral;
+export type TConnectionFullNode = (
+  | {
+      peak_height: uint32;
+      peak_weight: uint128;
+      peak_hash: bytes32;
+    }
+  | {
+      peak_height: None;
+      peak_weight: None;
+      peak_hash: None;
+    }
+) &
+  TConnectionGeneral;
 
 export const get_connections_command = "get_connections";
 export type get_connections_command = typeof get_connections_command;
 export type TGetConnectionsBroadCast = {
   connections: TConnectionFullNode[];
 };
-export type WsGetConnectionFullNodeMessage = GetMessageType<chia_full_node_service, get_connections_command, TGetConnectionsBroadCast>;
-export async function on_get_connections(daemon: TDaemon, callback: (e: WsGetConnectionFullNodeMessage) => unknown){
+export type WsGetConnectionFullNodeMessage = GetMessageType<
+  chia_full_node_service,
+  get_connections_command,
+  TGetConnectionsBroadCast
+>;
+export async function on_get_connections(
+  daemon: TDaemon,
+  callback: (e: WsGetConnectionFullNodeMessage) => unknown,
+) {
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsFullNodeMessage) => {
-    if(e.origin === chia_full_node_service && e.command === get_connections_command){
+    if (
+      e.origin === chia_full_node_service &&
+      e.command === get_connections_command
+    ) {
       callback(e);
     }
   };
@@ -59,19 +83,29 @@ export type TGetBlockchainStateBroadCast = {
     space: uint128;
     mempool_size: int;
     mempool_cost: int;
-    "mempool_min_fees": {
-      "cost_5000000": float,
-    },
-    "mempool_max_total_cost": int,
-    "block_max_cost": int,
-    "node_id": str,
+    mempool_min_fees: {
+      cost_5000000: float;
+    };
+    mempool_max_total_cost: int;
+    block_max_cost: int;
+    node_id: str;
   };
 };
-export type WsGetBlockchainStateMessage = GetMessageType<chia_full_node_service, get_blockchain_state_command, TGetBlockchainStateBroadCast>;
-export async function on_get_blockchain_state(daemon: TDaemon, callback: (e: WsGetBlockchainStateMessage) => unknown){
+export type WsGetBlockchainStateMessage = GetMessageType<
+  chia_full_node_service,
+  get_blockchain_state_command,
+  TGetBlockchainStateBroadCast
+>;
+export async function on_get_blockchain_state(
+  daemon: TDaemon,
+  callback: (e: WsGetBlockchainStateMessage) => unknown,
+) {
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsFullNodeMessage) => {
-    if(e.origin === chia_full_node_service && e.command === get_blockchain_state_command){
+    if (
+      e.origin === chia_full_node_service &&
+      e.command === get_blockchain_state_command
+    ) {
       callback(e);
     }
   };
@@ -80,46 +114,63 @@ export async function on_get_blockchain_state(daemon: TDaemon, callback: (e: WsG
 
 export const block_command = "block";
 export type block_command = typeof block_command;
-export type TBlockBroadCast = Record<string, never> | {
-  transaction_block: bool;
-  k_size: uint8;
-  header_hash: bytes32;
-  height: uint32;
-  block_cost?: uint64;
-  block_fees?: uint64;
-  timestamp?: uint64;
-  transaction_generator_size_bytes?: int;
-  transaction_generator_ref_list: uint32[];
-  receive_block_result?: ReceiveBlockResult;
-};
-export type WsBlockMessage = GetMessageType<chia_full_node_service, block_command, TBlockBroadCast>;
-export async function on_block(daemon: TDaemon, callback: (e: WsBlockMessage) => unknown){
+export type TBlockBroadCast =
+  | Record<string, never>
+  | {
+      transaction_block: bool;
+      k_size: uint8;
+      header_hash: bytes32;
+      height: uint32;
+      block_cost?: uint64;
+      block_fees?: uint64;
+      timestamp?: uint64;
+      transaction_generator_size_bytes?: int;
+      transaction_generator_ref_list: uint32[];
+      receive_block_result?: ReceiveBlockResult;
+    };
+export type WsBlockMessage = GetMessageType<
+  chia_full_node_service,
+  block_command,
+  TBlockBroadCast
+>;
+export async function on_block(
+  daemon: TDaemon,
+  callback: (e: WsBlockMessage) => unknown,
+) {
   await daemon.subscribe(metrics_service);
   const messageListener = (e: WsFullNodeMessage) => {
-    if(e.origin === chia_full_node_service && e.command === block_command){
+    if (e.origin === chia_full_node_service && e.command === block_command) {
       callback(e);
     }
   };
   return daemon.addMessageListener(chia_full_node_service, messageListener);
 }
-
 
 export const signage_point_command = "signage_point";
 export type signage_point_command = typeof signage_point_command;
 export type TSignagePointBroadCast = {
   broadcast_farmer: NewSignagePoint;
 };
-export type WsSignagePointMessage = GetMessageType<chia_full_node_service, signage_point_command, TSignagePointBroadCast>;
-export async function on_signage_point(daemon: TDaemon, callback: (e: WsSignagePointMessage) => unknown){
+export type WsSignagePointMessage = GetMessageType<
+  chia_full_node_service,
+  signage_point_command,
+  TSignagePointBroadCast
+>;
+export async function on_signage_point(
+  daemon: TDaemon,
+  callback: (e: WsSignagePointMessage) => unknown,
+) {
   await daemon.subscribe(metrics_service);
   const messageListener = (e: WsFullNodeMessage) => {
-    if(e.origin === chia_full_node_service && e.command === signage_point_command){
+    if (
+      e.origin === chia_full_node_service &&
+      e.command === signage_point_command
+    ) {
       callback(e);
     }
   };
   return daemon.addMessageListener(chia_full_node_service, messageListener);
 }
-
 
 export const unfinished_block_command = "unfinished_block";
 export type unfinished_block_command = typeof unfinished_block_command;
@@ -129,32 +180,53 @@ export type TUnfinishedBlockBroadCast = {
   pre_validation_time_in_seconds: float | None;
   unfinished_block: UnfinishedBlock;
 };
-export type WsUnfinishedBlockMessage = GetMessageType<chia_full_node_service, unfinished_block_command, TUnfinishedBlockBroadCast>;
-export async function on_unfinished_block(daemon: TDaemon, callback: (e: WsUnfinishedBlockMessage) => unknown) {
+export type WsUnfinishedBlockMessage = GetMessageType<
+  chia_full_node_service,
+  unfinished_block_command,
+  TUnfinishedBlockBroadCast
+>;
+export async function on_unfinished_block(
+  daemon: TDaemon,
+  callback: (e: WsUnfinishedBlockMessage) => unknown,
+) {
   await daemon.subscribe(unfinished_block_info_service);
   const messageListener = (e: WsFullNodeMessage) => {
-    if (e.origin === chia_full_node_service && e.command === unfinished_block_command) {
+    if (
+      e.origin === chia_full_node_service &&
+      e.command === unfinished_block_command
+    ) {
       callback(e);
     }
   };
   return daemon.addMessageListener(chia_full_node_service, messageListener);
 }
 
-export type WsFullNodeMessage = WsGetConnectionFullNodeMessage
-| WsGetBlockchainStateMessage
-| WsBlockMessage
-| WsSignagePointMessage
-| WsUnfinishedBlockMessage
-;
+export type WsFullNodeMessage =
+  | WsGetConnectionFullNodeMessage
+  | WsGetBlockchainStateMessage
+  | WsBlockMessage
+  | WsSignagePointMessage
+  | WsUnfinishedBlockMessage;
 // Whole commands for the service
-export type chia_full_node_commands = get_blockchain_state_command | get_connections_command | block_command
-| signage_point_command | unfinished_block_command;
-export type TChiaFullNodeBroadcast = TGetBlockchainStateBroadCast | TGetConnectionsBroadCast | TBlockBroadCast
-| TSignagePointBroadCast | TUnfinishedBlockBroadCast;
-export async function on_message_from_full_node(daemon: TDaemon, callback: (e: WsFullNodeMessage) => unknown){
+export type chia_full_node_commands =
+  | get_blockchain_state_command
+  | get_connections_command
+  | block_command
+  | signage_point_command
+  | unfinished_block_command;
+export type TChiaFullNodeBroadcast =
+  | TGetBlockchainStateBroadCast
+  | TGetConnectionsBroadCast
+  | TBlockBroadCast
+  | TSignagePointBroadCast
+  | TUnfinishedBlockBroadCast;
+export async function on_message_from_full_node(
+  daemon: TDaemon,
+  callback: (e: WsFullNodeMessage) => unknown,
+) {
   await daemon.subscribe(wallet_ui_service);
   const messageListener = (e: WsFullNodeMessage) => {
-    if(e.origin === chia_full_node_service){
+    if (e.origin === chia_full_node_service) {
       callback(e);
     }
   };

@@ -1,1 +1,1 @@
-export {Coin} from "../../../chia_rs/chia-protocol/coin";
+export { Coin } from "../../../chia_rs/chia-protocol/coin";

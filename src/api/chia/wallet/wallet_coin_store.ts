@@ -1,5 +1,10 @@
-import {bool, Optional, uint32, uint8} from "../types/_python_types_";
-import {AmountFilter, HashFilter, UInt32Range, UInt64Range} from "./util/quality_filter";
+import { bool, Optional, uint32, uint8 } from "../types/_python_types_";
+import {
+  AmountFilter,
+  HashFilter,
+  UInt32Range,
+  UInt64Range,
+} from "./util/quality_filter";
 
 export type GetCoinRecords = {
   offset: uint32;

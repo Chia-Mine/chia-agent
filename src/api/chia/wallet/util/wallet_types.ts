@@ -1,7 +1,7 @@
-import {uint32, uint8} from "../../types/_python_types_";
+import { uint32, uint8 } from "../../types/_python_types_";
 
 export const WalletType = {
-// # Wallet Types
+  // # Wallet Types
   STANDARD_WALLET: 0,
   // RATE_LIMITED: 1, // Deprecated at chia-blockchain@1.6.1
   ATOMIC_SWAP: 2,

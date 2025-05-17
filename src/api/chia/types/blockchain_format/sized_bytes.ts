@@ -1,4 +1,4 @@
-import {str} from "../_python_types_";
+import { str } from "../_python_types_";
 
 export type bytes4 = str;
 export type bytes8 = str;

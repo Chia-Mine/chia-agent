@@ -1,7 +1,7 @@
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {G2Element, Optional, uint64} from "../../chia/types/_python_types_";
-import {PoolTarget} from "./pool_target";
-import {Coin} from "./coin";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { G2Element, Optional, uint64 } from "../../chia/types/_python_types_";
+import { PoolTarget } from "./pool_target";
+import { Coin } from "./coin";
 
 export type Foliage = {
   prev_block_hash: bytes32; // bytes32

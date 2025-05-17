@@ -1,3 +1,3 @@
-import {bytes} from "../../chia/types/_python_types_";
+import { bytes } from "../../chia/types/_python_types_";
 
 export type Program = bytes;

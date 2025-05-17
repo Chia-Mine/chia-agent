@@ -1,6 +1,6 @@
-import {bytes, str, uint64} from "../types/_python_types_";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
-import {Program} from "../types/blockchain_format/program";
+import { bytes, str, uint64 } from "../types/_python_types_";
+import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { Program } from "../types/blockchain_format/program";
 
 export type Coin = {
   parent_coin_id: bytes32;
@@ -16,7 +16,7 @@ export type Spend = {
 
 export type TransactionInfo = {
   spends: Spend[];
-}
+};
 
 export type SigningTarget = {
   fingerprint: bytes;

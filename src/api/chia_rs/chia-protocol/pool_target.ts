@@ -1,5 +1,5 @@
-import {bytes32} from "../../chia/types/blockchain_format/sized_bytes";
-import {uint32} from "../../chia/types/_python_types_";
+import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { uint32 } from "../../chia/types/_python_types_";
 
 export type PoolTarget = {
   puzzle_hash: bytes32; // bytes32

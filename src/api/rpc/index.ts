@@ -1,4 +1,4 @@
-import type {RpcFarmerMessage} from "./farmer/index";
+import type { RpcFarmerMessage } from "./farmer/index";
 export {
   chia_farmer_service,
   RpcFarmerMessage,
@@ -39,7 +39,7 @@ export {
   get_pool_login_link,
 } from "./farmer/index";
 
-import type {RpcFullNodeMessage} from "./full_node/index";
+import type { RpcFullNodeMessage } from "./full_node/index";
 export {
   chia_full_node_service,
   TGetAdditionsAndRemovalsRequest,
@@ -141,10 +141,10 @@ export {
   revert_blocks,
   TReorgBlocksRequest,
   TReorgBlocksResponse,
-  reorg_blocks
+  reorg_blocks,
 } from "./full_node/index";
 
-import type {RpcHarvesterMessage} from "./harvester/index";
+import type { RpcHarvesterMessage } from "./harvester/index";
 export {
   chia_harvester_service,
   TAddPlotDirectoryRequest,
@@ -169,7 +169,7 @@ export {
   update_harvester_config,
 } from "./harvester/index";
 
-import type {RpcWalletMessage} from "./wallet/index";
+import type { RpcWalletMessage } from "./wallet/index";
 export {
   chia_wallet_service,
   TAddKeyRequest,
@@ -573,7 +573,7 @@ export {
   execute_signing_instructions,
 } from "./wallet/index";
 
-import type {RpcDataLayerMessage} from "./data_layer/index"
+import type { RpcDataLayerMessage } from "./data_layer/index";
 export {
   chia_data_layer_service,
   TWalletLogInRequest,
@@ -678,9 +678,9 @@ export {
   TVerifyProofRequest,
   TVerifyProofResponse,
   verify_proof,
-} from "./data_layer/index"
+} from "./data_layer/index";
 
-import type {RpcCrawlerMessage} from "./crawler/index";
+import type { RpcCrawlerMessage } from "./crawler/index";
 export {
   chia_crawler_service,
   TGetIpsAfterTimestampRequest,
@@ -690,8 +690,7 @@ export {
   get_peer_counts,
 } from "./crawler/index";
 
-
-import type {RpcCommonMessage} from "./common/index";
+import type { RpcCommonMessage } from "./common/index";
 export {
   chia_common_service,
   TGetNetworkInfoResponse,
@@ -722,11 +721,10 @@ export {
 } from "./common/index";
 
 export type RpcMessage =
-  RpcFarmerMessage
+  | RpcFarmerMessage
   | RpcFullNodeMessage
   | RpcHarvesterMessage
   | RpcWalletMessage
   | RpcDataLayerMessage
   | RpcCrawlerMessage
-  | RpcCommonMessage
-;
+  | RpcCommonMessage;

@@ -1,5 +1,5 @@
-import {G1Element, str} from "../types/_python_types_";
-import {bytes32} from "../types/blockchain_format/sized_bytes";
+import { G1Element, str } from "../types/_python_types_";
+import { bytes32 } from "../types/blockchain_format/sized_bytes";
 
 export type PoolWalletConfig = {
   launcher_id: bytes32;
