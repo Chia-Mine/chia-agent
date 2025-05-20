@@ -1,8 +1,11 @@
 import { EndOfSubSlotBundle } from "./end_of_slot_bundle";
 import { VDFProof } from "./blockchain_format/vdf";
-import { Foliage, FoliageTransactionBlock } from "./blockchain_format/foliage";
 import { bytes, Optional } from "./_python_types_";
-import { RewardChainBlockUnfinished } from "./blockchain_format/reward_chain_block";
+import {
+  Foliage,
+  FoliageTransactionBlock,
+} from "../../chia_rs/chia-protocol/foliage";
+import { RewardChainBlockUnfinished } from "../../chia_rs/chia-protocol/reward_chain_block";
 
 export type UnfinishedHeaderBlock = {
   // # Same as a FullBlock but without TransactionInfo and Generator, used by light clients
