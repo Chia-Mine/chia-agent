@@ -1,11 +1,10 @@
+import { float, str } from "../types/_python_types_";
 import {
-  float,
   int,
-  str,
   uint32,
   uint64,
   uint8,
-} from "../types/_python_types_";
+} from "../../chia_rs/wheel/python/sized_ints";
 import { PoolWalletConfig } from "../pools/pool_config";
 import { ErrorResponse } from "../protocols/pool_protocol";
 

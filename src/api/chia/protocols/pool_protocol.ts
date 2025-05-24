@@ -1,15 +1,12 @@
+import { bool, Optional, str } from "../types/_python_types_";
+import { G1Element, G2Element } from "../../chia_rs/chia-bls/lib";
 import {
-  bool,
-  G1Element,
-  G2Element,
-  Optional,
-  str,
   uint16,
   uint32,
   uint64,
   uint8,
-} from "../types/_python_types_";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+} from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { ProofOfSpace } from "../types/blockchain_format/proof_of_space";
 
 export const PoolErrorCode = {

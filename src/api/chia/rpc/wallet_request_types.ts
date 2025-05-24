@@ -1,14 +1,8 @@
-import {
-  bool,
-  G1Element,
-  Optional,
-  PrivateKey,
-  str,
-  uint16,
-  uint32,
-  uint64,
-} from "../types/_python_types_";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { bool, Optional, str } from "../types/_python_types_";
+import { PrivateKey } from "../../chia_rs/chia-bls/secret_key";
+import { G1Element } from "../../chia_rs/chia-bls/lib";
+import { uint16, uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { Notification } from "../wallet/notification_store";
 import {
   SignedTransaction,

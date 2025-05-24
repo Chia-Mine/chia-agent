@@ -1,11 +1,7 @@
-import {
-  bytes,
-  G1Element,
-  PrivateKey,
-  Optional,
-  str,
-  uint32,
-} from "../types/_python_types_";
+import { bytes, Optional, str } from "../types/_python_types_";
+import { PrivateKey } from "../../chia_rs/chia-bls/secret_key";
+import { G1Element } from "../../chia_rs/chia-bls/lib";
+import { uint32 } from "../../chia_rs/wheel/python/sized_ints";
 
 export type KeyDataSecrets = {
   mnemonic: str[];

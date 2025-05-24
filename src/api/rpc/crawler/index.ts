@@ -1,5 +1,6 @@
-import { int, str, uint64 } from "../../chia/types/_python_types_";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { str } from "../../chia/types/_python_types_";
+import { int, uint64 } from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { TRPCAgent } from "../../../rpc/index";
 import { TDaemon } from "../../../daemon/index";
 import { GetMessageType, ResType } from "../../types";

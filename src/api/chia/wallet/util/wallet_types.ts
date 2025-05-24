@@ -1,4 +1,4 @@
-import { uint32, uint8 } from "../../types/_python_types_";
+import { uint32, uint8 } from "../../../chia_rs/wheel/python/sized_ints";
 
 export const WalletType = {
   // # Wallet Types
@@ -16,8 +16,6 @@ export const WalletType = {
   DATA_LAYER: 11,
   DATA_LAYER_OFFER: 12,
   VC: 13,
-  DAO: 14,
-  DAO_CAT: 15,
   CRCAT: 57,
 } as const;
 

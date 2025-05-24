@@ -1,15 +1,12 @@
 import { BlockRecord } from "../../chia/consensus/block_record";
+import { bool, float, None, str } from "../../chia/types/_python_types_";
 import {
-  bool,
-  float,
   int,
-  None,
-  str,
   uint128,
   uint32,
   uint64,
   uint8,
-} from "../../chia/types/_python_types_";
+} from "../../chia_rs/wheel/python/sized_ints";
 import { TDaemon } from "../../../daemon/index";
 import {
   GetMessageType,
@@ -18,7 +15,7 @@ import {
   unfinished_block_info_service,
   TConnectionGeneral,
 } from "../../types";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { NewSignagePoint } from "../../chia/protocols/farmer_protocol";
 import { ReceiveBlockResult } from "../../chia/consensus/blockchain";
 import { UnfinishedBlock } from "../../chia/types/unfinished_block";

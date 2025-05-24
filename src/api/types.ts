@@ -1,6 +1,7 @@
 import { NodeType } from "./chia/server/outbound_message";
-import { float, int, str, uint16 } from "./chia/types/_python_types_";
-import { bytes32 } from "./chia/types/blockchain_format/sized_bytes";
+import { float, str } from "./chia/types/_python_types_";
+import { int, uint16 } from "./chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "./chia_rs/wheel/python/sized_bytes";
 import { TRPCAgent } from "../rpc/index";
 import { TDaemon } from "../daemon/index";
 

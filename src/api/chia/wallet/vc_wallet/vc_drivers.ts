@@ -1,4 +1,4 @@
-import { bytes32 } from "../../types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../../chia_rs/wheel/python/sized_bytes";
 import { Optional } from "../../types/_python_types_";
 import { LineageProof } from "../lineage_proof";
 import { Coin } from "../../types/blockchain_format/coin";

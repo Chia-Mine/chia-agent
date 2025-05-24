@@ -4,18 +4,19 @@ import {
   bool,
   bytes,
   False,
-  int,
   None,
   Optional,
   str,
   True,
-  uint128,
+} from "../../chia/types/_python_types_";
+import {
+  int,
   uint16,
   uint32,
   uint64,
   uint8,
-} from "../../chia/types/_python_types_";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+} from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import {
   TransactionRecord,
   TransactionRecordConvenience,
@@ -28,10 +29,8 @@ import { TradeRecordConvenience } from "../../chia/wallet/trade_record";
 import { CAT } from "../../chia/wallet/cat_wallet/cat_constants";
 import { TDriverDict } from "../../chia/wallet/puzzle_drivers";
 import { NFTInfo } from "../../chia/wallet/nft_wallet/nft_info";
-import {
-  Mirror,
-  SingletonRecord,
-} from "../../chia/data_layer/data_layer_wallet";
+import { Mirror } from "../../chia/data_layer/data_layer_wallet";
+import { SingletonRecord } from "../../chia/data_layer/singleton_record";
 import { TPushTxResponseOfWallet } from "../index";
 import { GetMessageType, ResType } from "../../types";
 import { TDaemon } from "../../../daemon/index";
@@ -47,16 +46,6 @@ import { WalletCoinRecordWithMetadata } from "../../chia/wallet/wallet_coin_reco
 import { TransactionTypeFilter } from "../../chia/wallet/util/quality_filter";
 import { TXConfigLoader } from "../../chia/wallet/util/tx_config";
 import { ConditionValidTimes } from "../../chia/wallet/conditions";
-import {
-  DAOInfo,
-  DAORules,
-  ProposalInfo,
-} from "../../chia/wallet/dao_wallet/dao_info";
-import {
-  ParsedProposalSpend,
-  ParsedProposalUpdate,
-  ProposalState,
-} from "../../chia/wallet/dao_wallet/dao_wallet";
 import {
   DLProof,
   VerifyProofResponse,
@@ -624,29 +613,6 @@ export type TCreate_New_DID_WalletResponse =
   | TCreateNewDidWalletResponseNew
   | TCreateNewDidWalletResponseRecovery;
 
-export type TCreate_New_DAO_WalletRequest = {
-  wallet_type: "dao_wallet";
-  name?: str;
-  mode: "new" | "existing";
-  amount_of_cats?: uint64;
-  filter_amount: uint64;
-  fee: uint64;
-  fee_for_cat: uint64;
-  treasury_id: str;
-};
-
-export type TCreate_New_DAO_WalletResponse = {
-  success: True;
-  type: uint8;
-  my_did: str;
-  wallet_id: uint32;
-  treasury_id: bytes32;
-  cat_wallet_id: uint32;
-  dao_cat_wallet_id: uint32;
-  transactions: TransactionRecordConvenience[];
-  signing_responses?: str[];
-};
-
 export type TCreate_New_NFT_WalletRequest = {
   fee?: uint64;
   wallet_type: "nft_wallet";
@@ -702,7 +668,6 @@ export const create_new_wallet_command = "create_new_wallet";
 export type create_new_wallet_command = typeof create_new_wallet_command;
 export type TCreateNewWalletRequestWithTx =
   | TCreate_New_CAT_WalletRequest
-  | TCreate_New_DAO_WalletRequest
   | TCreate_New_Pool_WalletRequest;
 export type TCreateNewWalletRequestWithoutTx =
   | TCreate_New_DID_WalletRequest
@@ -716,7 +681,6 @@ export type TCreateNewWalletRequest = (
 export type TCreateNewWalletResponse =
   | TCreate_New_CAT_WalletResponse
   | TCreate_New_DID_WalletResponse
-  | TCreate_New_DAO_WalletResponse
   | TCreate_New_NFT_WalletResponse
   | TCreate_New_Pool_WalletResponse
   | TCreateWalletErrorResponse;
@@ -728,11 +692,9 @@ export type GetCreateNewWalletResponse<REQ extends TCreateNewWalletRequest> =
       ? REQ extends TCreateNewDidWalletRequestNew
         ? TCreateNewDidWalletResponseNew
         : TCreateNewDidWalletResponseRecovery
-      : REQ extends TCreate_New_DAO_WalletRequest
-        ? TCreate_New_DAO_WalletResponse
-        : REQ extends TCreate_New_NFT_WalletRequest
-          ? TCreate_New_NFT_WalletResponse
-          : TCreate_New_Pool_WalletResponse;
+      : REQ extends TCreate_New_NFT_WalletRequest
+        ? TCreate_New_NFT_WalletResponse
+        : TCreate_New_Pool_WalletResponse;
 
 export type WsCreateNewWalletMessage<R> = GetMessageType<
   chia_wallet_service,
@@ -2543,476 +2505,6 @@ export async function did_transfer_did<
   );
 }
 
-// # DAO Wallet
-export const dao_adjust_filter_level_command = "dao_adjust_filter_level";
-export type dao_adjust_filter_level_command =
-  typeof dao_adjust_filter_level_command;
-export type TDaoAdjustFilterLevelRequest = {
-  wallet_id: uint32;
-  filter_level: uint64;
-};
-export type TDaoAdjustFilterLevelResponse = {
-  success: True;
-  dao_info: DAOInfo;
-};
-export type WsDaoAdjustFilterLevelMessage = GetMessageType<
-  chia_wallet_service,
-  dao_adjust_filter_level_command,
-  TDaoAdjustFilterLevelResponse
->;
-export async function dao_adjust_filter_level<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDaoAdjustFilterLevelRequest,
-) {
-  type R = ResType<
-    T,
-    TDaoAdjustFilterLevelResponse,
-    WsDaoAdjustFilterLevelMessage
-  >;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_adjust_filter_level_command,
-    data,
-  );
-}
-
-export const dao_add_funds_to_treasury_command = "dao_add_funds_to_treasury";
-export type dao_add_funds_to_treasury_command =
-  typeof dao_add_funds_to_treasury_command;
-export type TDaoAddFundsToTreasuryRequest = {
-  wallet_id: uint32;
-  funding_wallet_id: uint32;
-  amount: uint64;
-  fee?: uint64;
-} & TXEndpointRequest;
-export type TDaoAddFundsToTreasuryResponse = {
-  success: True;
-  tx_id: bytes32;
-  tx: TransactionRecord;
-  transactions: TransactionRecordConvenience[];
-  signing_responses?: str[];
-};
-export type WsDaoAddFundsToTreasuryMessage<R> = GetMessageType<
-  chia_wallet_service,
-  dao_add_funds_to_treasury_command,
-  R
->;
-export async function dao_add_funds_to_treasury<
-  T extends TRPCAgent | TDaemon,
-  D extends TDaoAddFundsToTreasuryRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDaoAddFundsToTreasuryResponse>;
-  type R = ResType<T, TER, WsDaoAddFundsToTreasuryMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_add_funds_to_treasury_command,
-    data,
-  );
-}
-
-export const dao_get_treasury_balance_command = "dao_get_treasury_balance";
-export type dao_get_treasury_balance_command =
-  typeof dao_get_treasury_balance_command;
-export type TDaoGetTreasuryBalanceRequest = {
-  wallet_id: uint32;
-};
-export type TDaoGetTreasuryBalanceResponse = {
-  success: True;
-  balance: Record<str, uint128>;
-};
-export type WsDaoGetTreasuryBalanceMessage = GetMessageType<
-  chia_wallet_service,
-  dao_get_treasury_balance_command,
-  TDaoGetTreasuryBalanceResponse
->;
-export async function dao_get_treasury_balance<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDaoGetTreasuryBalanceRequest,
-) {
-  type R = ResType<
-    T,
-    TDaoGetTreasuryBalanceResponse,
-    WsDaoGetTreasuryBalanceMessage
-  >;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_get_treasury_balance_command,
-    data,
-  );
-}
-
-export const dao_get_treasury_id_command = "dao_get_treasury_id";
-export type dao_get_treasury_id_command = typeof dao_get_treasury_id_command;
-export type TDaoGetTreasuryIdRequest = {
-  wallet_id: uint32;
-};
-export type TDaoGetTreasuryIdResponse = {
-  success: True;
-  treasury_id: bytes32;
-};
-export type WsDaoGetTreasuryIdMessage = GetMessageType<
-  chia_wallet_service,
-  dao_get_treasury_id_command,
-  TDaoGetTreasuryIdResponse
->;
-export async function dao_get_treasury_id<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDaoGetTreasuryIdRequest,
-) {
-  type R = ResType<T, TDaoGetTreasuryIdResponse, WsDaoGetTreasuryIdMessage>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_get_treasury_id_command,
-    data,
-  );
-}
-
-export const dao_get_rules_command = "dao_get_rules";
-export type dao_get_rules_command = typeof dao_get_rules_command;
-export type TDaoGetRulesRequest = {
-  wallet_id: uint32;
-};
-export type TDaoGetRulesResponse = {
-  success: True;
-  rules: DAORules;
-};
-export type WsDaoGetRulesMessage = GetMessageType<
-  chia_wallet_service,
-  dao_get_rules_command,
-  TDaoGetRulesResponse
->;
-export async function dao_get_rules<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDaoGetRulesRequest,
-) {
-  type R = ResType<T, TDaoGetRulesResponse, WsDaoGetRulesMessage>;
-  return agent.sendMessage<R>(chia_wallet_service, dao_get_rules_command, data);
-}
-
-export const dao_send_to_lockup_command = "dao_send_to_lockup";
-export type dao_send_to_lockup_command = typeof dao_send_to_lockup_command;
-export type TDaoSendToLockupRequest = {
-  wallet_id: uint32;
-  amount: uint64;
-  fee?: uint64;
-} & TXEndpointRequest;
-export type TDaoSendToLockupResponse = {
-  success: True;
-  tx_id: bytes32;
-  txs: TransactionRecord[];
-  transactions: TransactionRecord[];
-  signing_responses?: str[];
-};
-export type WsDaoSendToLockupMessage<R> = GetMessageType<
-  chia_wallet_service,
-  dao_send_to_lockup_command,
-  R
->;
-export async function dao_send_to_lockup<
-  T extends TRPCAgent | TDaemon,
-  D extends TDaoSendToLockupRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDaoSendToLockupResponse>;
-  type R = ResType<T, TER, WsDaoSendToLockupMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_send_to_lockup_command,
-    data,
-  );
-}
-
-export const dao_get_proposals_command = "dao_get_proposals";
-export type dao_get_proposals_command = typeof dao_get_proposals_command;
-export type TDaoGetProposalsRequest = {
-  wallet_id: uint32;
-  include_closed?: bool;
-};
-export type TDaoGetProposalsResponse = {
-  success: True;
-  proposals: ProposalInfo[];
-  proposal_timelock: uint64;
-  soft_close_length: uint64;
-};
-export type WsDaoGetProposalsMessage = GetMessageType<
-  chia_wallet_service,
-  dao_get_proposals_command,
-  TDaoGetProposalsResponse
->;
-export async function dao_get_proposals<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDaoGetProposalsRequest,
-) {
-  type R = ResType<T, TDaoGetProposalsResponse, WsDaoGetProposalsMessage>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_get_proposals_command,
-    data,
-  );
-}
-
-export const dao_get_proposal_state_command = "dao_get_proposal_state";
-export type dao_get_proposal_state_command =
-  typeof dao_get_proposal_state_command;
-export type TDaoGetProposalStateRequest = {
-  wallet_id: uint32;
-  proposal_id: str;
-};
-export type TDaoGetProposalStateResponse = {
-  success: True;
-  state: ProposalState;
-};
-export type WsDaoGetProposalStateMessage = GetMessageType<
-  chia_wallet_service,
-  dao_get_proposal_state_command,
-  TDaoGetProposalStateResponse
->;
-export async function dao_get_proposal_state<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDaoGetProposalStateRequest,
-) {
-  type R = ResType<
-    T,
-    TDaoGetProposalStateResponse,
-    WsDaoGetProposalStateMessage
-  >;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_get_proposal_state_command,
-    data,
-  );
-}
-
-export const dao_exit_lockup_command = "dao_exit_lockup";
-export type dao_exit_lockup_command = typeof dao_exit_lockup_command;
-export type TDaoExitLockupRequest = {
-  wallet_id: uint32;
-  coins: Coin[] | undefined;
-  fee?: uint64;
-} & TXEndpointRequest;
-export type TDaoExitLockupResponse = {
-  success: True;
-  tx_id: bytes32;
-  tx: TransactionRecord;
-  transactions: TransactionRecordConvenience[];
-  signing_responses?: str[];
-};
-export type WsDaoExitLockupMessage<R> = GetMessageType<
-  chia_wallet_service,
-  dao_exit_lockup_command,
-  R
->;
-export async function dao_exit_lockup<
-  T extends TRPCAgent | TDaemon,
-  D extends TDaoExitLockupRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDaoExitLockupResponse>;
-  type R = ResType<T, TER, WsDaoExitLockupMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_exit_lockup_command,
-    data,
-  );
-}
-
-export const dao_create_proposal_command = "dao_create_proposal";
-export type dao_create_proposal_command = typeof dao_create_proposal_command;
-export type TDaoCreateProposalRequest = (
-  | {
-      wallet_id: uint32;
-      proposal_type: "spend";
-      additions: Array<{
-        asset_id?: str;
-        puzzle_hash: str;
-        amount: uint64;
-      }>;
-      vote_amount?: uint64;
-      fee?: uint64;
-    }
-  | {
-      wallet_id: uint32;
-      proposal_type: "spend";
-      amount: uint64;
-      inner_address: str;
-      asset_id: str;
-      vote_amount?: uint64;
-      fee?: uint64;
-    }
-  | {
-      wallet_id: uint32;
-      proposal_type: "update";
-      new_dao_rules: Partial<DAORules>;
-      vote_amount?: uint64;
-      fee?: uint64;
-    }
-  | {
-      wallet_id: uint32;
-      proposal_type: "mint";
-      amount: uint64;
-      cat_target_address: str;
-      vote_amount?: uint64;
-      fee?: uint64;
-    }
-) &
-  TXEndpointRequest;
-export type TDaoCreateProposalResponse =
-  | {
-      success: False;
-      error: str;
-    }
-  | {
-      success: True;
-      proposal_id: bytes32;
-      tx_id: str;
-      tx: TransactionRecord;
-      transactions: TransactionRecordConvenience[];
-      signing_responses?: str[];
-    };
-export type WsDaoCreateProposalMessage<R> = GetMessageType<
-  chia_wallet_service,
-  dao_create_proposal_command,
-  R
->;
-export async function dao_create_proposal<
-  T extends TRPCAgent | TDaemon,
-  D extends TDaoCreateProposalRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDaoCreateProposalResponse>;
-  type R = ResType<T, TER, WsDaoCreateProposalMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_create_proposal_command,
-    data,
-  );
-}
-
-export const dao_vote_on_proposal_command = "dao_vote_on_proposal";
-export type dao_vote_on_proposal_command = typeof dao_vote_on_proposal_command;
-export type TDaoVoteOnProposalRequest = {
-  wallet_id: uint32;
-  vote_amount?: uint64;
-  fee?: uint64;
-  proposal_id: str;
-  is_yes_vote: bool;
-} & TXEndpointRequest;
-export type TDaoVoteOnProposalResponse = {
-  success: True;
-  tx_id: bytes32;
-  tx: TransactionRecord;
-  transactions: TransactionRecordConvenience[];
-  signing_responses?: str[];
-};
-export type WsDaoVoteOnProposalMessage<R> = GetMessageType<
-  chia_wallet_service,
-  dao_vote_on_proposal_command,
-  R
->;
-export async function dao_vote_on_proposal<
-  T extends TRPCAgent | TDaemon,
-  D extends TDaoVoteOnProposalRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDaoVoteOnProposalResponse>;
-  type R = ResType<T, TER, WsDaoVoteOnProposalMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_vote_on_proposal_command,
-    data,
-  );
-}
-
-export const dao_parse_proposal_command = "dao_parse_proposal";
-export type dao_parse_proposal_command = typeof dao_parse_proposal_command;
-export type TDaoParseProposalRequest = {
-  wallet_id: uint32;
-  proposal_id: str;
-};
-export type TDaoParseProposalResponse = {
-  success: True;
-  proposal_dictionary: ParsedProposalSpend | ParsedProposalUpdate;
-};
-export type WsDaoParseProposalMessage = GetMessageType<
-  chia_wallet_service,
-  dao_parse_proposal_command,
-  TDaoParseProposalResponse
->;
-export async function dao_parse_proposal<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDaoParseProposalRequest,
-) {
-  type R = ResType<T, TDaoParseProposalResponse, WsDaoParseProposalMessage>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_parse_proposal_command,
-    data,
-  );
-}
-
-export const dao_close_proposal_command = "dao_close_proposal";
-export type dao_close_proposal_command = typeof dao_close_proposal_command;
-export type TDaoCloseProposalRequest = {
-  wallet_id: uint32;
-  fee?: uint64;
-  genesis_id?: str;
-  self_destruct?: bool;
-  proposal_id: str;
-} & TXEndpointRequest;
-export type TDaoCloseProposalResponse = {
-  success: True;
-  tx_id: bytes32;
-  tx: TransactionRecord;
-  transactions: TransactionRecordConvenience[];
-  signing_responses?: str[];
-};
-export type WsDaoCloseProposalMessage<R> = GetMessageType<
-  chia_wallet_service,
-  dao_close_proposal_command,
-  R
->;
-export async function dao_close_proposal<
-  T extends TRPCAgent | TDaemon,
-  D extends TDaoCloseProposalRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDaoCloseProposalResponse>;
-  type R = ResType<T, TER, WsDaoCloseProposalMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_close_proposal_command,
-    data,
-  );
-}
-
-export const dao_free_coins_from_finished_proposals_command =
-  "dao_free_coins_from_finished_proposals";
-export type dao_free_coins_from_finished_proposals_command =
-  typeof dao_free_coins_from_finished_proposals_command;
-export type TDaoFreeCoinsFromFinishedProposalsRequest = {
-  wallet_id: uint32;
-  fee?: uint64;
-} & TXEndpointRequest;
-export type TDaoFreeCoinsFromFinishedProposalsResponse = {
-  success: True;
-  tx_id: bytes32;
-  tx: TransactionRecord;
-  transactions: TransactionRecordConvenience[];
-  signing_responses?: str[];
-};
-export type WsDaoFreeCoinsFromFinishedProposalsMessage<R> = GetMessageType<
-  chia_wallet_service,
-  dao_free_coins_from_finished_proposals_command,
-  R
->;
-export async function dao_free_coins_from_finished_proposals<
-  T extends TRPCAgent | TDaemon,
-  D extends TDaoFreeCoinsFromFinishedProposalsRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDaoFreeCoinsFromFinishedProposalsResponse>;
-  type R = ResType<T, TER, WsDaoFreeCoinsFromFinishedProposalsMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    dao_free_coins_from_finished_proposals_command,
-    data,
-  );
-}
-
 // # NFT Wallet
 export const nft_mint_nft_command = "nft_mint_nft";
 export type nft_mint_nft_command = typeof nft_mint_nft_command;
@@ -4409,20 +3901,6 @@ export type RpcWalletMessage =
   | TDidSpendResponse
   | TDidUpdateRecoveryIdsResponse
   | TDidUpdateMetadataResponse
-  | TDaoAdjustFilterLevelResponse
-  | TDaoAddFundsToTreasuryResponse
-  | TDaoGetTreasuryBalanceResponse
-  | TDaoGetTreasuryIdResponse
-  | TDaoGetRulesResponse
-  | TDaoSendToLockupResponse
-  | TDaoGetProposalsResponse
-  | TDaoGetProposalStateResponse
-  | TDaoExitLockupResponse
-  | TDaoCreateProposalResponse
-  | TDaoVoteOnProposalResponse
-  | TDaoParseProposalResponse
-  | TDaoCloseProposalResponse
-  | TDaoFreeCoinsFromFinishedProposalsResponse
   | TNftMintNftResponse
   | TNftCountNftsResponse
   | TNftGetNftsResponse

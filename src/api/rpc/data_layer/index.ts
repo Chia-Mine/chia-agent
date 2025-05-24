@@ -2,14 +2,13 @@ import { TRPCAgent } from "../../../rpc/index";
 import {
   bool,
   bytes,
-  int,
   None,
   Optional,
   str,
-  uint64,
 } from "../../chia/types/_python_types_";
+import { int, uint64 } from "../../chia_rs/wheel/python/sized_ints";
 import { TransactionRecord } from "../../chia/wallet/transaction_record";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import {
   DLProof,
   OfferMarshalled,

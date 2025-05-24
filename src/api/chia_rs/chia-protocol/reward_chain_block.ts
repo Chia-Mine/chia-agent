@@ -1,12 +1,7 @@
-import {
-  bool,
-  G2Element,
-  Optional,
-  uint128,
-  uint32,
-  uint8,
-} from "../../chia/types/_python_types_";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { bool, Optional } from "../../chia/types/_python_types_";
+import { G2Element } from "../chia-bls/lib";
+import { uint128, uint32, uint8 } from "../wheel/python/sized_ints";
+import { bytes32 } from "../wheel/python/sized_bytes";
 import { ProofOfSpace } from "./proof_of_space";
 import { VDFInfo } from "./vdf";
 

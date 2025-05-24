@@ -1,12 +1,6 @@
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
-import {
-  bool,
-  Optional,
-  uint128,
-  uint32,
-  uint64,
-  uint8,
-} from "../../chia/types/_python_types_";
+import { bytes32 } from "../wheel/python/sized_bytes";
+import { bool, Optional } from "../../chia/types/_python_types_";
+import { uint128, uint32, uint64, uint8 } from "../wheel/python/sized_ints";
 import { ClassgroupElement } from "./classgroup";
 import { Coin } from "./coin";
 import { SubEpochSummary } from "./sub_epoch_summary";

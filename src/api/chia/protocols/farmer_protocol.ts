@@ -1,14 +1,9 @@
-import {
-  bool,
-  G2Element,
-  Optional,
-  uint32,
-  uint64,
-  uint8,
-} from "../types/_python_types_";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { bool, Optional } from "../types/_python_types_";
+import { G2Element } from "../../chia_rs/chia-bls/lib";
+import { uint32, uint64, uint8 } from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { ProofOfSpace } from "../types/blockchain_format/proof_of_space";
-import { PoolTarget } from "../types/blockchain_format/pool_target";
+import { PoolTarget } from "../../chia_rs/chia-protocol/pool_target";
 import { ClassgroupElement } from "../types/blockchain_format/classgroup";
 import {
   ChallengeChainSubSlot,
@@ -17,8 +12,8 @@ import {
 import {
   FoliageBlockData,
   FoliageTransactionBlock,
-} from "../types/blockchain_format/foliage";
-import { RewardChainBlockUnfinished } from "../types/blockchain_format/reward_chain_block";
+} from "../../chia_rs/chia-protocol/foliage";
+import { RewardChainBlockUnfinished } from "../../chia_rs/chia-protocol/reward_chain_block";
 
 export type SPSubSlotSourceData = {
   cc_sub_slot: ChallengeChainSubSlot;

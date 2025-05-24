@@ -1,17 +1,14 @@
 // dependency: TradeRecord, by: `get_trade` of Wallet RPC API
 
+import { bool, bytes, Optional, str } from "../types/_python_types_";
 import {
-  bool,
-  bytes,
   int,
-  Optional,
-  str,
   uint32,
   uint64,
   uint8,
-} from "../types/_python_types_";
+} from "../../chia_rs/wheel/python/sized_ints";
 import { Coin } from "../types/blockchain_format/coin";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { TDriverDict } from "./puzzle_drivers";
 import { ConditionValidTimes } from "./conditions";
 

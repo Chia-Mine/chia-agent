@@ -1,5 +1,6 @@
-import { bytes, uint32, uint64 } from "../types/_python_types_";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { bytes } from "../types/_python_types_";
+import { uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 
 export type Notification = {
   id: bytes32;

@@ -1,5 +1,5 @@
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
-import { uint64 } from "../../chia/types/_python_types_";
+import { bytes32 } from "../wheel/python/sized_bytes";
+import { uint64 } from "../wheel/python/sized_ints";
 
 export type Coin = {
   parent_coin_info: bytes32; // bytes32

@@ -1,5 +1,6 @@
-import { bool, uint16, uint64 } from "../../../types/_python_types_";
-import { bytes32 } from "../../../types/blockchain_format/sized_bytes";
+import { bool } from "../../../types/_python_types_";
+import { uint16, uint64 } from "../../../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../../../chia_rs/wheel/python/sized_bytes";
 import { Marshall } from "../../../rpc/util";
 
 export type AutoClaimSettings = {

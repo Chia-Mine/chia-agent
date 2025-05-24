@@ -1,4 +1,5 @@
-import { Optional, uint32 } from "../../chia/types/_python_types_";
+import { Optional } from "../../chia/types/_python_types_";
+import { uint32 } from "../wheel/python/sized_ints";
 import { VDFProof } from "./vdf";
 import { Foliage, FoliageTransactionBlock, TransactionsInfo } from "./foliage";
 import { RewardChainBlockUnfinished } from "./reward_chain_block";

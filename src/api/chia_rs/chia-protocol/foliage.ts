@@ -1,5 +1,7 @@
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
-import { G2Element, Optional, uint64 } from "../../chia/types/_python_types_";
+import { bytes32 } from "../wheel/python/sized_bytes";
+import { Optional } from "../../chia/types/_python_types_";
+import { G2Element } from "../chia-bls/lib";
+import { uint64 } from "../wheel/python/sized_ints";
 import { PoolTarget } from "./pool_target";
 import { Coin } from "./coin";
 

@@ -1,5 +1,29 @@
 # Changelog
 
+## [15.0.0]
+### Breaking change
+- The following Wallet RPC APIs for DAO were removed
+  - dao_get_proposals
+  - dao_create_proposal
+  - dao_parse_proposal
+  - dao_vote_on_proposal
+  - dao_get_treasury_balance
+  - dao_get_treasury_id
+  - dao_get_rules
+  - dao_close_proposal
+  - dao_exit_lockup
+  - dao_adjust_filter_level
+  - dao_add_funds_to_treasury
+  - dao_send_to_lockup
+  - dao_get_proposal_state
+  - dao_free_coins_from_finished_proposals
+- DAO wallet can no longer be created
+- `DAO` and `DAO_CAT` were removed from [`WalletType`](./src/api/chia/wallet/util/wallet_types.ts)
+### Internal change
+- Upgraded eslint to v9
+- Moved the definitions of `sized_ints` and `sized_bytes` under `chia_rs`
+- Updated the minimal Node.js support to 20
+
 ## [14.5.0]
 ### Changed
 - Added error logs
@@ -1826,6 +1850,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[15.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.5.0...v15.0.0
 [14.5.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.4.0...v14.5.0
 [14.4.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.4.0
 [14.3.3]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.2...v14.3.3

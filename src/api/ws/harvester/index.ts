@@ -6,7 +6,8 @@ import {
   wallet_ui_service,
   metrics_service,
 } from "../../types";
-import { float, int, None, str } from "../../chia/types/_python_types_";
+import { float, None, str } from "../../chia/types/_python_types_";
+import { int } from "../../chia_rs/wheel/python/sized_ints";
 
 export const chia_harvester_service = "chia_harvester";
 export type chia_harvester_service = typeof chia_harvester_service;

@@ -1,4 +1,5 @@
-import { bool, Optional, uint32, uint8 } from "../types/_python_types_";
+import { bool, Optional } from "../types/_python_types_";
+import { uint32, uint8 } from "../../chia_rs/wheel/python/sized_ints";
 import {
   AmountFilter,
   HashFilter,

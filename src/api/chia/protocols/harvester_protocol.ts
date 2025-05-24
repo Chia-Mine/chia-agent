@@ -1,11 +1,7 @@
-import {
-  G1Element,
-  Optional,
-  str,
-  uint64,
-  uint8,
-} from "../types/_python_types_";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { Optional, str } from "../types/_python_types_";
+import { G1Element } from "../../chia_rs/chia-bls/lib";
+import { uint64, uint8 } from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 
 export type Plot = {
   filename: str;

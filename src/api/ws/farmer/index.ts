@@ -3,15 +3,9 @@ import {
   DeclareProofOfSpace,
   NewSignagePoint,
 } from "../../chia/protocols/farmer_protocol";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
-import {
-  bool,
-  float,
-  Optional,
-  str,
-  uint32,
-  uint64,
-} from "../../chia/types/_python_types_";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
+import { bool, float, Optional, str } from "../../chia/types/_python_types_";
+import { uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
 import { TDaemon } from "../../../daemon/index";
 import {
   GetMessageType,

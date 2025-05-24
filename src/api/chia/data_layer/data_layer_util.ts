@@ -1,5 +1,6 @@
-import { bool, int, Optional, str, uint8 } from "../types/_python_types_";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { bool, Optional, str } from "../types/_python_types_";
+import { int, uint8 } from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 
 export type KeyValueMarshalled = {
   key: str;
