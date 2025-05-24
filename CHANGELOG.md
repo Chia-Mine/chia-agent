@@ -2,7 +2,7 @@
 
 ## [15.0.0]
 ### Breaking change
-- The following Wallet RPC APIs were removed
+- The following Wallet RPC APIs for DAO were removed
   - dao_get_proposals
   - dao_create_proposal
   - dao_parse_proposal
@@ -19,6 +19,10 @@
   - dao_free_coins_from_finished_proposals
 - DAO wallet can no longer be created
 - `DAO` and `DAO_CAT` were removed from [`WalletType`](./src/api/chia/wallet/util/wallet_types.ts)
+### Internal change
+- Upgraded eslint to v9
+- Moved the definitions of `sized_ints` and `sized_bytes` under `chia_rs`
+- Updated the minimal Node.js support to 20
 
 ## [14.5.0]
 ### Changed
