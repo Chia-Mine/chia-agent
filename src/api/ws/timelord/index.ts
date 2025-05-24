@@ -1,9 +1,10 @@
 import { TDaemon } from "../../../daemon/index";
 import { GetMessageType, metrics_service } from "../../types";
-import { float, uint32, uint64, uint8 } from "../../chia/types/_python_types_";
+import { float } from "../../chia/types/_python_types_";
+import { uint32, uint64, uint8 } from "../../chia_rs/wheel/python/sized_ints";
 import { Chain } from "../../chia/timelord/types";
 import { VDFInfo, VDFProof } from "../../chia/types/blockchain_format/vdf";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 
 export const chia_timelord_service = "chia_timelord";
 export type chia_timelord_service = typeof chia_timelord_service;

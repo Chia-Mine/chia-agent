@@ -1,4 +1,5 @@
-import { bool, int, str, True, uint32 } from "../../chia/types/_python_types_";
+import { bool, str, True } from "../../chia/types/_python_types_";
+import { int, uint32 } from "../../chia_rs/wheel/python/sized_ints";
 import { TRPCAgent } from "../../../rpc";
 import { Plot } from "../../chia/harvester/harvester";
 import { GetMessageType, ResType } from "../../types";

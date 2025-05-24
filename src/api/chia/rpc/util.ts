@@ -1,4 +1,5 @@
-import { int, str, True } from "../types/_python_types_";
+import { str, True } from "../types/_python_types_";
+import { int } from "../../chia_rs/wheel/python/sized_ints";
 import { Condition } from "../wallet/conditions";
 
 export type ExtraCondition = {

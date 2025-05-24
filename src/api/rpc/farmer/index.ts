@@ -1,14 +1,12 @@
 import { ProofOfSpace } from "../../chia/types/blockchain_format/proof_of_space";
+import { bool, Optional, str } from "../../chia/types/_python_types_";
 import {
-  bool,
   int,
-  Optional,
-  str,
   uint32,
   uint64,
   uint8,
-} from "../../chia/types/_python_types_";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+} from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { TRPCAgent } from "../../../rpc/index";
 import { PoolState } from "../../chia/farmer/farmer";
 import { Receiver } from "../../chia/plot-sync/receiver";

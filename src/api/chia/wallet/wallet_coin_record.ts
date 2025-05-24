@@ -1,11 +1,5 @@
-import {
-  bool,
-  int,
-  Optional,
-  str,
-  uint32,
-  uint64,
-} from "../types/_python_types_";
+import { bool, Optional, str } from "../types/_python_types_";
+import { int, uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
 import { Coin } from "../types/blockchain_format/coin";
 import {
   CoinType,
@@ -14,7 +8,7 @@ import {
 } from "./util/wallet_types";
 import { ClawbackMetadata } from "./puzzles/clawback/metadata";
 import { VersionedBlob } from "../util/streamable";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 
 export type WalletCoinRecord = {
   coin: Coin;

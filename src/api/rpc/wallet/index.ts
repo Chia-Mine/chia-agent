@@ -4,17 +4,19 @@ import {
   bool,
   bytes,
   False,
-  int,
   None,
   Optional,
   str,
   True,
+} from "../../chia/types/_python_types_";
+import {
+  int,
   uint16,
   uint32,
   uint64,
   uint8,
-} from "../../chia/types/_python_types_";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+} from "../../chia_rs/wheel/python/sized_ints";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import {
   TransactionRecord,
   TransactionRecordConvenience,

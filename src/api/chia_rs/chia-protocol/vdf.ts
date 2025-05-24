@@ -1,5 +1,6 @@
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
-import { bool, bytes, uint64, uint8 } from "../../chia/types/_python_types_";
+import { bytes32 } from "../wheel/python/sized_bytes";
+import { bool, bytes } from "../../chia/types/_python_types_";
+import { uint64, uint8 } from "../wheel/python/sized_ints";
 import { ClassgroupElement } from "./classgroup";
 
 export type VDFInfo = {

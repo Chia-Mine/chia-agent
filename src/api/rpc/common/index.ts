@@ -1,10 +1,5 @@
-import {
-  bool,
-  False,
-  str,
-  True,
-  uint16,
-} from "../../chia/types/_python_types_";
+import { bool, False, str, True } from "../../chia/types/_python_types_";
+import { uint16 } from "../../chia_rs/wheel/python/sized_ints";
 import { TRPCAgent } from "../../../rpc/index";
 import { GetMessageType, ResType, TConnectionGeneral } from "../../types";
 import { TConnectionFullNode } from "../../ws/full_node/index";

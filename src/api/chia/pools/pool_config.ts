@@ -1,5 +1,6 @@
-import { G1Element, str } from "../types/_python_types_";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { str } from "../types/_python_types_";
+import { G1Element } from "../../chia_rs/chia-bls/lib";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 
 export type PoolWalletConfig = {
   launcher_id: bytes32;

@@ -1,13 +1,6 @@
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
-import {
-  bool,
-  float,
-  int,
-  None,
-  Optional,
-  str,
-  uint32,
-} from "../types/_python_types_";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
+import { bool, float, None, Optional, str } from "../types/_python_types_";
+import { int, uint32 } from "../../chia_rs/wheel/python/sized_ints";
 import { Plot } from "../protocols/harvester_protocol";
 import { HarvestingMode } from "../plotting/util";
 

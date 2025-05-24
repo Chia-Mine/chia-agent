@@ -5,7 +5,8 @@ import {
   TConnectionGeneral,
   wallet_ui_service,
 } from "../../types";
-import { int, str, uint32 } from "../../chia/types/_python_types_";
+import { str } from "../../chia/types/_python_types_";
+import { int, uint32 } from "../../chia_rs/wheel/python/sized_ints";
 import { TransactionRecord } from "../../chia/wallet/transaction_record";
 
 export const chia_wallet_service = "chia_wallet";

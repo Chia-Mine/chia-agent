@@ -1,4 +1,5 @@
-import { str, uint64 } from "../../chia/types/_python_types_";
+import { str } from "../../chia/types/_python_types_";
+import { uint64 } from "../../chia_rs/wheel/python/sized_ints";
 import type { RPCAgent } from "../../../rpc";
 import {
   ErrorResponse,

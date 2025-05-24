@@ -1,14 +1,7 @@
-import {
-  bool,
-  bytes,
-  Optional,
-  str,
-  uint32,
-  uint64,
-  uint8,
-} from "../types/_python_types_";
+import { bool, bytes, Optional, str } from "../types/_python_types_";
+import { uint32, uint64, uint8 } from "../../chia_rs/wheel/python/sized_ints";
 import { Coin } from "../types/blockchain_format/coin";
-import { bytes32 } from "../types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { ClawbackMetadata } from "./puzzles/clawback/metadata";
 import { ConditionValidTimes } from "./conditions";
 import { WalletSpendBundle } from "./wallet_spend_bundle";

@@ -1,22 +1,19 @@
 import { FullBlock } from "../../chia/types/full_block";
 import { BlockRecord } from "../../chia/consensus/block_record";
+import { bool, float, Optional, str } from "../../chia/types/_python_types_";
 import {
-  bool,
-  float,
   int,
-  Optional,
-  str,
   uint128,
   uint32,
   uint64,
-} from "../../chia/types/_python_types_";
+} from "../../chia_rs/wheel/python/sized_ints";
 import { UnfinishedHeaderBlock } from "../../chia/types/unfinished_header_block";
 import {
   CoinRecord,
   CoinRecordBackwardCompatible,
 } from "../../chia/types/coin_record";
 import { SpendBundle } from "../../chia/types/spend_bundle";
-import { bytes32 } from "../../chia/types/blockchain_format/sized_bytes";
+import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { MempoolItemInJsonDict } from "../../chia/types/mempool_item";
 import { TRPCAgent } from "../../../rpc";
 import { EndOfSubSlotBundle } from "../../chia/types/end_of_slot_bundle";

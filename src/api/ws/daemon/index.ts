@@ -4,14 +4,13 @@ import { TDaemon } from "../../../daemon/index";
 import {
   bool,
   False,
-  G1Element,
-  int,
   None,
   Optional,
   str,
   True,
-  uint32,
 } from "../../chia/types/_python_types_";
+import { G1Element } from "../../chia_rs/chia-bls/lib";
+import { int, uint32 } from "../../chia_rs/wheel/python/sized_ints";
 import { chiapos_install_info } from "../../chia/plotters/chiapos";
 import { bladebit_install_info } from "../../chia/plotters/bladebit";
 import { madmax_install_info } from "../../chia/plotters/maxmax";
