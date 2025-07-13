@@ -369,7 +369,9 @@ class Daemon {
   }
 
   protected onError(error: ErrorEvent) {
-    getLogger().error(`ws connection error: ${error.message}`);
+    getLogger().error(
+      `ws connection error: ${error.type} ${error.target} ${error.error} ${error.message}`,
+    );
     this._errorEventListeners.forEach((l) => l(error));
   }
 
