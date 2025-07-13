@@ -1,5 +1,31 @@
 # Changelog
 
+## [15.1.0]
+### Changed
+- Improved logger system
+  - Added logger instance caching
+  - Added support for multiple loggers with per-instance configuration
+  - Added `NullWriter` for complete log suppression
+  - Updated `ConsoleWriter` to use proper console methods
+  - Added `trace` log level
+  - Added environment variable support: `LOG_LEVEL` and `LOG_SUPPRESS`
+  - Refactored API to use named loggers
+### Fixed
+- Fixed WebSocket message handling issues
+  - Added timeout handling for sent messages (default 30s)
+  - Fixed connection state check to use actual WebSocket readyState
+  - Preserved event listeners on connection close for reconnection support
+  - Added proper cleanup of message timeouts on response
+### Added
+- Added auto-reconnection mechanism for WebSocket connections
+  - Configurable via `reconnectOptions` parameter in `connect()` method
+  - Exponential backoff with configurable parameters
+  - Automatic re-subscription to services after reconnection
+  - Emits events for reconnection monitoring
+  - Disabled by default for backward compatibility
+### Internal change
+- Removed `TDestination` type in favor of Writer-based approach
+
 ## [15.0.0]
 ### Breaking change
 - The following Wallet RPC APIs for DAO were removed
@@ -1850,6 +1876,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[15.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v15.0.0...v15.0.1
 [15.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.5.0...v15.0.0
 [14.5.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.4.0...v14.5.0
 [14.4.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.4.0
