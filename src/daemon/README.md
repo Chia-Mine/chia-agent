@@ -12,9 +12,9 @@ const {getDaemon} = require("chia-agent");
 const daemon = getDaemon();
 ```
 
-## daemon.connect(url?: string, timeoutMs?: number)
+## daemon.connect(url?: string, timeoutMs?: number, reconnectOptions?: ReconnectOptions)
 
-Connect to chia daemon via websocket.
+Connect to chia daemon via websocket with optional auto-reconnection support.
 
 If you don't pass any argument, it tries to connect to an url specified in chia configuration file.
 (Note: `chia-agent` cares environment variable `CHIA_ROOT`)
@@ -27,6 +27,17 @@ You can specify chia daemon url to connect to.
 await daemon.connect("wss://hostname:port");
 ```
 
+Enable auto-reconnection with custom options:
+```js
+await daemon.connect("wss://hostname:port", 50000, {
+  enabled: true,
+  maxAttempts: 15,
+  initialDelay: 2000,
+  maxDelay: 60000,
+  backoffMultiplier: 2
+});
+```
+
 ### `url`
 Optional. A URL to the daemon server to connect.  
 The default url is `wss://{DAEMON_HOST}:{DAEMON_PORT}` where
@@ -36,6 +47,20 @@ The default url is `wss://{DAEMON_HOST}:{DAEMON_PORT}` where
 ### `timeoutMs`
 Optional. Connection timeout in milliseconds.  
 The default value is `50000`.
+
+### `reconnectOptions`
+Optional. Configuration for auto-reconnection behavior.  
+By default, auto-reconnection is disabled for backward compatibility.
+
+```typescript
+interface ReconnectOptions {
+  enabled: boolean;              // Enable/disable auto-reconnection (default: false)
+  maxAttempts?: number;          // Maximum reconnection attempts (default: 10)
+  initialDelay?: number;         // Initial delay in ms (default: 1000)
+  maxDelay?: number;             // Maximum delay in ms (default: 30000)
+  backoffMultiplier?: number;    // Exponential backoff multiplier (default: 1.5)
+}
+```
 
 ## daemon.close()
 
@@ -91,4 +116,69 @@ The format of incoming `message` is:
   destination: string;
   origin: string;
 }
+```
+
+## daemon.sendMessage(destination: string, command: string, data?: object, timeoutMs?: number)
+
+Send a message to a specific service and wait for response.
+
+```js
+const response = await daemon.sendMessage("chia_full_node", "get_blockchain_state", {});
+```
+
+### `destination`
+Required. The target service to send the message to (e.g., "chia_full_node", "chia_wallet").
+
+### `command`
+Required. The command to execute (e.g., "get_blockchain_state", "get_wallet_balance").
+
+### `data`
+Optional. The data payload for the command. Defaults to an empty object.
+
+### `timeoutMs`
+Optional. Message timeout in milliseconds. If the response doesn't arrive within this time, the promise will be rejected with a timeout error. Default is 30000ms (30 seconds).
+
+## Event Handling
+
+The daemon supports several event types for monitoring connection status:
+
+### Connection Events
+
+```js
+// Connection opened
+daemon.addEventListener("open", (event) => {
+  if (event.type === "reconnected") {
+    console.log("Successfully reconnected to daemon");
+  } else {
+    console.log("Connected to daemon");
+  }
+});
+
+// Connection error
+daemon.addEventListener("error", (event) => {
+  if (event.message === "Max reconnection attempts reached") {
+    console.error("Failed to reconnect after maximum attempts");
+  } else {
+    console.error("WebSocket error:", event.error);
+  }
+});
+
+// Connection closed
+daemon.addEventListener("close", (event) => {
+  console.log(`Connection closed: code=${event.code}, reason=${event.reason}`);
+});
+
+// Message received
+daemon.addEventListener("message", (event) => {
+  console.log("Raw message received:", event.data);
+});
+```
+
+### Removing Event Listeners
+
+```js
+const listener = (event) => console.log(event);
+daemon.addEventListener("open", listener);
+// Later...
+daemon.removeEventListener("open", listener);
 ```
