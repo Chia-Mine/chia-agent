@@ -259,3 +259,5 @@ $RECYCLE.BIN/
 build/
 dist/
 .vscode/
+CLAUDE.md
+.claude/
