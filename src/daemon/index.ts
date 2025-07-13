@@ -63,8 +63,13 @@ process.addListener("SIGINT", onProcessExit);
 class Daemon {
   protected _socket: WS | null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: { [request_id: string]: (value: unknown) => void } =
-    {};
+  protected _responseQueue: {
+    [request_id: string]: {
+      resolver: (value: unknown) => void;
+      rejecter: (error: unknown) => void;
+      timeout: NodeJS.Timeout;
+    };
+  } = {};
   protected _openEventListeners: Array<(e: Event) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
@@ -79,7 +84,11 @@ class Daemon {
   protected _serviceName: string = DEFAULT_SERVICE_NAME;
 
   public get connected() {
-    return Boolean(this._connectedUrl);
+    return (
+      Boolean(this._connectedUrl) &&
+      this._socket !== null &&
+      this._socket.readyState === WS.OPEN
+    );
   }
 
   public get closing() {
@@ -184,6 +193,7 @@ class Daemon {
     destination: string,
     command: string,
     data?: Record<string, unknown>,
+    timeoutMs: number = 30000,
   ): Promise<M> {
     return new Promise((resolve, reject) => {
       if (!this.connected || !this._socket) {
@@ -198,7 +208,25 @@ class Daemon {
         data || {},
       );
       const reqId = message.request_id;
-      this._responseQueue[reqId] = resolve as (v: unknown) => void;
+
+      // Set up timeout
+      const timeout = setTimeout(() => {
+        const entry = this._responseQueue[reqId];
+        if (entry) {
+          delete this._responseQueue[reqId];
+          entry.rejecter(
+            new Error(
+              `Message timeout after ${timeoutMs}ms. dest=${destination} command=${command} reqId=${reqId}`,
+            ),
+          );
+        }
+      }, timeoutMs);
+
+      this._responseQueue[reqId] = {
+        resolver: resolve as (v: unknown) => void,
+        rejecter: reject,
+        timeout,
+      };
 
       getLogger().debug(
         `Sending message. dest=${destination} command=${command} reqId=${reqId}`,
@@ -209,6 +237,13 @@ class Daemon {
         if (err) {
           getLogger().error(`Error while sending message: ${messageStr}`);
           getLogger().error(JSON.stringify(err));
+          // Clean up on send error
+          const entry = this._responseQueue[reqId];
+          if (entry) {
+            clearTimeout(entry.timeout);
+            delete this._responseQueue[reqId];
+            reject(err);
+          }
         }
       });
     });
@@ -394,10 +429,11 @@ class Daemon {
       `Arrived message. origin=${origin} command=${command} reqId=${request_id}`,
     );
 
-    const resolver = this._responseQueue[request_id];
-    if (resolver) {
+    const entry = this._responseQueue[request_id];
+    if (entry) {
+      clearTimeout(entry.timeout);
       delete this._responseQueue[request_id];
-      resolver(payload);
+      entry.resolver(payload);
     }
 
     this._messageEventListeners.forEach((l) => l(event));
@@ -427,7 +463,8 @@ class Daemon {
     this._connectedUrl = "";
     this._subscriptions = [];
     this._closeEventListeners.forEach((l) => l(event));
-    this.clearAllEventListeners();
+    // Don't clear event listeners - preserve them for reconnection
+    // this.clearAllEventListeners();
 
     getLogger().info(
       `Closed ws connection. code:${event.code} wasClean:${event.wasClean} reason:${event.reason}`,
