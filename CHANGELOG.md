@@ -18,7 +18,7 @@
   - Added proper cleanup of message timeouts on response
 ### Added
 - Added auto-reconnection mechanism for WebSocket connections
-  - Configurable via `reconnectOptions` parameter in `connect()` method
+  - Configurable via `reconnectOptions` parameter in `connect()` method with `autoReconnect` flag
   - Exponential backoff with configurable parameters
   - Automatic re-subscription to services after reconnection
   - Emits events for reconnection monitoring

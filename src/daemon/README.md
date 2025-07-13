@@ -30,7 +30,7 @@ await daemon.connect("wss://hostname:port");
 Enable auto-reconnection with custom options:
 ```js
 await daemon.connect("wss://hostname:port", 50000, {
-  enabled: true,
+  autoReconnect: true,
   maxAttempts: 15,
   initialDelay: 2000,
   maxDelay: 60000,
@@ -54,7 +54,7 @@ By default, auto-reconnection is disabled for backward compatibility.
 
 ```typescript
 interface ReconnectOptions {
-  enabled: boolean;              // Enable/disable auto-reconnection (default: false)
+  autoReconnect: boolean;        // Enable/disable auto-reconnection (default: false)
   maxAttempts?: number;          // Maximum reconnection attempts (default: 10)
   initialDelay?: number;         // Initial delay in ms (default: 1000)
   maxDelay?: number;             // Maximum delay in ms (default: 30000)

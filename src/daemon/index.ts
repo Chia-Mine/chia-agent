@@ -24,7 +24,7 @@ type EventListenerOf<T> = T extends "open"
 export type MessageListener<D extends WsMessage> = (msg: D) => unknown;
 
 export interface ReconnectOptions {
-  enabled: boolean;
+  autoReconnect: boolean;
   maxAttempts?: number;
   initialDelay?: number;
   maxDelay?: number;
@@ -33,7 +33,7 @@ export interface ReconnectOptions {
 
 const DEFAULT_SERVICE_NAME = "wallet_ui";
 const DEFAULT_RECONNECT_OPTIONS: Required<ReconnectOptions> = {
-  enabled: false,
+  autoReconnect: false,
   maxAttempts: 10,
   initialDelay: 1000,
   maxDelay: 30000,
@@ -222,7 +222,7 @@ class Daemon {
       }
 
       // Disable reconnection for manual close
-      this._reconnectOptions.enabled = false;
+      this._reconnectOptions.autoReconnect = false;
       this._isReconnecting = false;
 
       getLogger().debug("Closing web socket connection");
@@ -523,7 +523,7 @@ class Daemon {
 
     // Attempt reconnection if enabled and not manually closed
     if (
-      this._reconnectOptions.enabled &&
+      this._reconnectOptions.autoReconnect &&
       this._lastConnectionUrl &&
       !this._isReconnecting &&
       event.code !== 1000 // 1000 = normal closure
