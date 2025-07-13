@@ -1,29 +1,98 @@
-export type TLogLevel = "error" | "warning" | "info" | "debug" | "none";
-export type TDestination = "console";
-export type Writer = {
-  write: (message: string) => void;
-};
+export type TLogLevel =
+  | "error"
+  | "warning"
+  | "info"
+  | "debug"
+  | "trace"
+  | "none";
+
+export interface Writer {
+  write: (message: string, level?: TLogLevel) => void;
+}
 
 const logPriority: Record<TLogLevel, number> = {
   none: 9999,
-  error: 4,
-  warning: 3,
-  info: 2,
-  debug: 1,
+  error: 5,
+  warning: 4,
+  info: 3,
+  debug: 2,
+  trace: 1,
 };
 
 class ConsoleWriter implements Writer {
-  write(message: string) {
-    console.log(message);
+  write(message: string, level?: TLogLevel) {
+    switch (level) {
+      case "error":
+        console.error(message);
+        break;
+      case "warning":
+        console.warn(message);
+        break;
+      case "info":
+        console.info(message);
+        break;
+      case "debug":
+        console.debug(message);
+        break;
+      case "trace":
+        console.trace(message);
+        break;
+      default:
+        console.log(message);
+    }
   }
 }
 
-let currentLogLevel: TLogLevel = "error";
-export function getLogLevel() {
-  return currentLogLevel;
+class NullWriter implements Writer {
+  write(_message: string, _level?: TLogLevel) {
+    // Suppress all output
+  }
 }
-export function setLogLevel(logLevel: TLogLevel) {
-  return (currentLogLevel = logLevel);
+
+// Global defaults
+let defaultLogLevel: TLogLevel =
+  (process.env.LOG_LEVEL as TLogLevel) || "error";
+let defaultWriter: Writer =
+  process.env.LOG_SUPPRESS === "true" ? new NullWriter() : new ConsoleWriter();
+
+// Logger instance cache
+const loggerCache = new Map<string, Logger>();
+
+// Configuration functions for global defaults
+export function setDefaultLogLevel(level: TLogLevel) {
+  defaultLogLevel = level;
+}
+
+export function getDefaultLogLevel() {
+  return defaultLogLevel;
+}
+
+export function setDefaultWriter(writer: Writer) {
+  defaultWriter = writer;
+}
+
+// Factory function with caching
+export function getLogger(name: string = "default"): Logger {
+  let logger = loggerCache.get(name);
+  if (!logger) {
+    logger = new Logger(name, defaultLogLevel, defaultWriter);
+    loggerCache.set(name, logger);
+  }
+  return logger;
+}
+
+// Clear logger cache (useful for testing)
+export function clearLoggerCache() {
+  loggerCache.clear();
+}
+
+// Helper to create writers
+export function createConsoleWriter(): Writer {
+  return new ConsoleWriter();
+}
+
+export function createNullWriter(): Writer {
+  return new NullWriter();
 }
 
 function stringify(obj: any, indent?: number) {
@@ -46,7 +115,7 @@ function stringify(obj: any, indent?: number) {
   const seen = new WeakSet();
   return JSON.stringify(
     obj,
-    (k, v) => {
+    (_k, v) => {
       if (typeof v === "object" && v !== null) {
         if (seen.has(v)) {
           return undefined;
@@ -61,72 +130,86 @@ function stringify(obj: any, indent?: number) {
   );
 }
 
-const loggers: Partial<Record<TDestination, Logger>> = {};
-
-export function getLogger(writer?: TDestination) {
-  const w = writer || "console";
-
-  const logger = loggers[w];
-  if (logger && logger.loglevel === currentLogLevel) {
-    return logger;
-  }
-
-  return (loggers[w] = Logger.getLogger(currentLogLevel, w));
-}
-
 class Logger {
-  public loglevel: TLogLevel = "error";
-  protected _writer: Writer;
+  private _name: string;
+  private _logLevel: TLogLevel;
+  private _writer: Writer;
 
-  protected constructor(logLevel: TLogLevel, writer?: TDestination | Writer) {
-    if (writer === "console") {
-      this._writer = new ConsoleWriter();
-    } else if (writer) {
-      this._writer = writer;
-    } else {
-      this._writer = new ConsoleWriter();
-    }
-
-    this.loglevel = logLevel;
+  constructor(name: string, logLevel: TLogLevel, writer: Writer) {
+    this._name = name;
+    this._logLevel = logLevel;
+    this._writer = writer;
   }
 
-  public static getLogger(logLevel: TLogLevel, writer?: TDestination) {
-    return new Logger(logLevel, writer);
-  }
-
+  // Allow changing log level for this specific logger
   public setLogLevel(level: TLogLevel) {
-    this.loglevel = level;
+    this._logLevel = level;
   }
 
-  public shouldWrite(logLevel: TLogLevel) {
-    return logPriority[this.loglevel] <= logPriority[logLevel];
+  public getLogLevel() {
+    return this._logLevel;
   }
 
-  public formatMessage(level: TLogLevel, body: string) {
-    return `${new Date().toLocaleString()} [${level.toUpperCase()}] ${body}`;
+  // Allow changing writer for this specific logger
+  public setWriter(writer: Writer) {
+    this._writer = writer;
+  }
+
+  public getWriter() {
+    return this._writer;
+  }
+
+  public getName() {
+    return this._name;
+  }
+
+  private _shouldWrite(logLevel: TLogLevel) {
+    return logPriority[this._logLevel] <= logPriority[logLevel];
+  }
+
+  private _formatMessage(level: TLogLevel, body: string) {
+    return `${new Date().toISOString()} [${level.toUpperCase()}] [${this._name}] ${body}`;
+  }
+
+  public trace(msg: any) {
+    if (this._shouldWrite("trace")) {
+      this._writer.write(this._formatMessage("trace", stringify(msg)), "trace");
+    }
   }
 
   public debug(msg: any) {
-    if (this.shouldWrite("debug")) {
-      this._writer.write(this.formatMessage("debug", stringify(msg)));
+    if (this._shouldWrite("debug")) {
+      this._writer.write(this._formatMessage("debug", stringify(msg)), "debug");
     }
   }
 
   public info(msg: any) {
-    if (this.shouldWrite("info")) {
-      this._writer.write(this.formatMessage("info", stringify(msg)));
+    if (this._shouldWrite("info")) {
+      this._writer.write(this._formatMessage("info", stringify(msg)), "info");
     }
   }
 
   public warning(msg: any) {
-    if (this.shouldWrite("warning")) {
-      this._writer.write(this.formatMessage("warning", stringify(msg)));
+    if (this._shouldWrite("warning")) {
+      this._writer.write(
+        this._formatMessage("warning", stringify(msg)),
+        "warning",
+      );
     }
   }
 
   public error(msg: any) {
-    if (this.shouldWrite("error")) {
-      this._writer.write(this.formatMessage("error", stringify(msg)));
+    if (this._shouldWrite("error")) {
+      this._writer.write(this._formatMessage("error", stringify(msg)), "error");
     }
   }
+}
+
+// For backward compatibility
+export function getLogLevel() {
+  return getDefaultLogLevel();
+}
+
+export function setLogLevel(level: TLogLevel) {
+  setDefaultLogLevel(level);
 }
