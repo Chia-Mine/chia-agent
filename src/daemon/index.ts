@@ -23,7 +23,28 @@ type EventListenerOf<T> = T extends "open"
 
 export type MessageListener<D extends WsMessage> = (msg: D) => unknown;
 
+export interface RetryOptions {
+  maxAttempts?: number;
+  initialDelay?: number;
+  maxDelay?: number;
+  backoffMultiplier?: number;
+}
+
+export interface ConnectOptions {
+  timeoutMs?: number;
+  autoReconnect?: boolean;
+  retryOptions?: RetryOptions;
+}
+
 const DEFAULT_SERVICE_NAME = "wallet_ui";
+const DEFAULT_AUTO_RECONNECT = true;
+const DEFAULT_TIMEOUT_MS = 30000;
+const DEFAULT_RETRY_OPTIONS: Required<RetryOptions> = {
+  maxAttempts: 5,
+  initialDelay: 1000,
+  maxDelay: 30000,
+  backoffMultiplier: 1.5,
+};
 
 let daemon: Daemon | null = null;
 
@@ -63,8 +84,13 @@ process.addListener("SIGINT", onProcessExit);
 class Daemon {
   protected _socket: WS | null = null;
   protected _connectedUrl: string = "";
-  protected _responseQueue: { [request_id: string]: (value: unknown) => void } =
-    {};
+  protected _responseQueue: {
+    [request_id: string]: {
+      resolver: (value: unknown) => void;
+      rejecter: (error: unknown) => void;
+      timeout: NodeJS.Timeout;
+    };
+  } = {};
   protected _openEventListeners: Array<(e: Event) => unknown> = [];
   protected _messageEventListeners: Array<(e: MessageEvent) => unknown> = [];
   protected _errorEventListeners: Array<(e: ErrorEvent) => unknown> = [];
@@ -77,9 +103,20 @@ class Daemon {
   protected _onClosePromise: (() => unknown) | undefined;
   protected _subscriptions: string[] = [];
   protected _serviceName: string = DEFAULT_SERVICE_NAME;
+  protected _autoReconnect: boolean = DEFAULT_AUTO_RECONNECT;
+  protected _retryOptions: Required<RetryOptions> = DEFAULT_RETRY_OPTIONS;
+  protected _timeoutMs: number = DEFAULT_TIMEOUT_MS;
+  protected _reconnectAttempts: number = 0;
+  protected _reconnectTimer: NodeJS.Timeout | null = null;
+  protected _lastConnectionUrl: string = "";
+  protected _isReconnecting: boolean = false;
 
   public get connected() {
-    return Boolean(this._connectedUrl);
+    return (
+      Boolean(this._connectedUrl) &&
+      this._socket !== null &&
+      this._socket.readyState === WS.OPEN
+    );
   }
 
   public get closing() {
@@ -121,18 +158,38 @@ class Daemon {
 
   /**
    * Connect to local daemon via websocket.
-   * @param daemonServerURL
-   * @param timeoutMs
+   * @param daemonServerURL - The websocket URL to connect to. If not provided, uses config values.
+   * @param options - Connection options including timeout, reconnect settings, and retry settings
    */
   public async connect(
     daemonServerURL?: string,
-    timeoutMs?: number,
+    options?: ConnectOptions,
   ): Promise<boolean> {
     if (!daemonServerURL) {
       const config = getConfig();
       const daemonHost = config["/ui/daemon_host"];
       const daemonPort = config["/ui/daemon_port"];
       daemonServerURL = `wss://${daemonHost}:${daemonPort}`;
+    }
+
+    // Extract options with defaults
+    const timeoutMs = options?.timeoutMs || this._timeoutMs;
+
+    // Store timeout for reconnection attempts
+    if (options?.timeoutMs !== undefined) {
+      this._timeoutMs = options.timeoutMs;
+    }
+
+    // Update settings from options
+    if (options?.autoReconnect !== undefined) {
+      this._autoReconnect = options.autoReconnect;
+    }
+
+    if (options?.retryOptions !== undefined) {
+      this._retryOptions = {
+        ...DEFAULT_RETRY_OPTIONS,
+        ...options.retryOptions,
+      };
     }
 
     if (this._connectedUrl === daemonServerURL) {
@@ -144,26 +201,63 @@ class Daemon {
       return false;
     }
 
-    getLogger().debug(`Opening websocket connection to ${daemonServerURL}`);
+    // Store URL for reconnection
+    this._lastConnectionUrl = daemonServerURL;
 
-    const result = await open(daemonServerURL, timeoutMs).catch(
-      this.onRejection,
-    );
-    if (!result) {
-      return false;
+    // Attempt connection with retry logic
+    let lastError: unknown;
+    for (
+      let attempt = 1;
+      attempt <= this._retryOptions.maxAttempts;
+      attempt++
+    ) {
+      getLogger().debug(
+        `Opening websocket connection to ${daemonServerURL} (attempt ${attempt}/${this._retryOptions.maxAttempts})`,
+      );
+
+      const result = await open(daemonServerURL, timeoutMs).catch((error) => {
+        lastError = error;
+        return null;
+      });
+
+      if (result) {
+        this._socket = result.ws;
+        this._socket.on("error", this.onError);
+        this._socket.addEventListener("message", this.onMessage);
+        this._socket.on("close", this.onClose);
+        this._socket.on("ping", this.onPing);
+        this._socket.on("pong", this.onPong);
+
+        // Call onOpen but don't check result (maintain original behavior)
+        await this.onOpen(result.openEvent, daemonServerURL).catch(
+          this.onRejection,
+        );
+
+        return true;
+      }
+
+      // If not the last attempt, wait before retrying
+      if (attempt < this._retryOptions.maxAttempts) {
+        const delay = Math.min(
+          this._retryOptions.initialDelay *
+            Math.pow(this._retryOptions.backoffMultiplier, attempt - 1),
+          this._retryOptions.maxDelay,
+        );
+
+        getLogger().info(
+          `Connection attempt ${attempt} failed. Retrying in ${delay}ms...`,
+        );
+
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
     }
-    this._socket = result.ws;
-    this._socket.on("error", this.onError);
-    this._socket.addEventListener("message", this.onMessage);
-    this._socket.on("close", this.onClose);
-    this._socket.on("ping", this.onPing);
-    this._socket.on("pong", this.onPong);
 
-    await this.onOpen(result.openEvent, daemonServerURL).catch(
-      this.onRejection,
+    // All attempts failed
+    getLogger().error(
+      `Failed to connect after ${this._retryOptions.maxAttempts} attempts`,
     );
-
-    return true;
+    this.onRejection(lastError);
+    return false;
   }
 
   public async close() {
@@ -171,6 +265,16 @@ class Daemon {
       if (this._closing || !this._socket) {
         return;
       }
+
+      // Cancel any pending reconnection
+      if (this._reconnectTimer) {
+        clearTimeout(this._reconnectTimer);
+        this._reconnectTimer = null;
+      }
+
+      // Disable reconnection for manual close
+      this._autoReconnect = false;
+      this._isReconnecting = false;
 
       getLogger().debug("Closing web socket connection");
       this._socket.close();
@@ -184,6 +288,7 @@ class Daemon {
     destination: string,
     command: string,
     data?: Record<string, unknown>,
+    timeoutMs: number = 30000,
   ): Promise<M> {
     return new Promise((resolve, reject) => {
       if (!this.connected || !this._socket) {
@@ -198,10 +303,28 @@ class Daemon {
         data || {},
       );
       const reqId = message.request_id;
-      this._responseQueue[reqId] = resolve as (v: unknown) => void;
+
+      // Set up timeout
+      const timeout = setTimeout(() => {
+        const entry = this._responseQueue[reqId];
+        if (entry) {
+          delete this._responseQueue[reqId];
+          entry.rejecter(
+            new Error(
+              `Message timeout after ${timeoutMs}ms. dest=${destination} command=${command} reqId=${reqId}`,
+            ),
+          );
+        }
+      }, timeoutMs);
+
+      this._responseQueue[reqId] = {
+        resolver: resolve as (v: unknown) => void,
+        rejecter: reject,
+        timeout,
+      };
 
       getLogger().debug(
-        `Sending message. dest=${destination} command=${command} reqId=${reqId}`,
+        `Sending Ws message. dest=${destination} command=${command} reqId=${reqId}`,
       );
       const messageStr = JSON.stringify(message);
 
@@ -209,6 +332,13 @@ class Daemon {
         if (err) {
           getLogger().error(`Error while sending message: ${messageStr}`);
           getLogger().error(JSON.stringify(err));
+          // Clean up on send error
+          const entry = this._responseQueue[reqId];
+          if (entry) {
+            clearTimeout(entry.timeout);
+            delete this._responseQueue[reqId];
+            reject(err);
+          }
         }
       });
     });
@@ -369,7 +499,9 @@ class Daemon {
   }
 
   protected onError(error: ErrorEvent) {
-    getLogger().error(`ws connection error: ${error.message}`);
+    getLogger().error(
+      `ws connection error: ${error.type} ${error.target} ${error.error} ${error.message}`,
+    );
     this._errorEventListeners.forEach((l) => l(error));
   }
 
@@ -383,20 +515,28 @@ class Daemon {
       payload = JSON.parse(event.data as string) as WsMessage;
       ({ request_id, origin, command } = payload);
     } catch (err: unknown) {
-      getLogger().error(`Failed to parse message data: ${JSON.stringify(err)}`);
-      getLogger().error(`payload: ${event.data}`);
+      getLogger().error(
+        `Failed to parse ws message data: ${JSON.stringify(err)}`,
+      );
+      getLogger().error(`ws payload: ${event.data}`);
       return;
     }
 
-    getLogger().debug(
-      `Arrived message. origin=${origin} command=${command} reqId=${request_id}`,
-    );
-
-    const resolver = this._responseQueue[request_id];
-    if (resolver) {
+    const entry = this._responseQueue[request_id];
+    if (entry) {
+      clearTimeout(entry.timeout);
       delete this._responseQueue[request_id];
-      resolver(payload);
+      getLogger().debug(
+        `Ws response received. origin=${origin} command=${command} reqId=${request_id}`,
+      );
+      entry.resolver(payload);
+    } else {
+      getLogger().debug(
+        `Ws message arrived. origin=${origin} command=${command} reqId=${request_id}`,
+      );
     }
+
+    getLogger().trace(`Ws message: ${JSON.stringify(payload)}`);
 
     this._messageEventListeners.forEach((l) => l(event));
     for (const o in this._messageListeners) {
@@ -412,6 +552,8 @@ class Daemon {
   }
 
   protected onClose(event: CloseEvent) {
+    const previousSubscriptions = [...this._subscriptions];
+
     if (this._socket) {
       this._socket.off("error", this.onError);
       this._socket.removeEventListener("message", this.onMessage);
@@ -425,7 +567,8 @@ class Daemon {
     this._connectedUrl = "";
     this._subscriptions = [];
     this._closeEventListeners.forEach((l) => l(event));
-    this.clearAllEventListeners();
+    // Don't clear event listeners - preserve them for reconnection
+    // this.clearAllEventListeners();
 
     getLogger().info(
       `Closed ws connection. code:${event.code} wasClean:${event.wasClean} reason:${event.reason}`,
@@ -435,6 +578,17 @@ class Daemon {
       this._onClosePromise();
       this._onClosePromise = undefined;
     }
+
+    // Attempt reconnection if enabled and not manually closed
+    if (
+      this._autoReconnect &&
+      this._lastConnectionUrl &&
+      !this._isReconnecting &&
+      event.code !== 1000 // 1000 = normal closure
+    ) {
+      this._isReconnecting = true;
+      this._attemptReconnection(previousSubscriptions);
+    }
   }
 
   protected onPing() {
@@ -443,6 +597,76 @@ class Daemon {
 
   protected onPong() {
     getLogger().debug("Received pong");
+  }
+
+  protected _attemptReconnection(previousSubscriptions: string[]) {
+    if (this._reconnectAttempts >= this._retryOptions.maxAttempts) {
+      getLogger().error(
+        `Max reconnection attempts (${this._retryOptions.maxAttempts}) reached. Giving up.`,
+      );
+      this._isReconnecting = false;
+      this._reconnectAttempts = 0;
+      // Emit a custom event for max retries reached
+      const errorEvent = {
+        type: "error",
+        message: "Max reconnection attempts reached",
+        error: new Error("Max reconnection attempts reached"),
+        target: this._socket,
+      } as ErrorEvent;
+      this._errorEventListeners.forEach((l) => l(errorEvent));
+      return;
+    }
+
+    const delay = Math.min(
+      this._retryOptions.initialDelay *
+        Math.pow(this._retryOptions.backoffMultiplier, this._reconnectAttempts),
+      this._retryOptions.maxDelay,
+    );
+
+    this._reconnectAttempts++;
+    getLogger().info(
+      `Attempting reconnection ${this._reconnectAttempts}/${this._retryOptions.maxAttempts} in ${delay}ms...`,
+    );
+
+    this._reconnectTimer = setTimeout(async () => {
+      this._reconnectTimer = null;
+
+      try {
+        const connected = await this.connect(this._lastConnectionUrl, {
+          timeoutMs: this._timeoutMs,
+          autoReconnect: this._autoReconnect,
+          retryOptions: this._retryOptions,
+        });
+        if (connected) {
+          getLogger().info("Reconnection successful");
+          this._reconnectAttempts = 0;
+          this._isReconnecting = false;
+
+          // Re-establish previous subscriptions
+          for (const service of previousSubscriptions) {
+            try {
+              await this.subscribe(service);
+              getLogger().debug(`Re-subscribed to ${service}`);
+            } catch (e) {
+              getLogger().error(`Failed to re-subscribe to ${service}: ${e}`);
+            }
+          }
+
+          // Emit successful reconnection event
+          const reconnectedEvent = {
+            type: "reconnected",
+            target: this._socket,
+          } as Event;
+          this._openEventListeners.forEach((l) => l(reconnectedEvent));
+        } else {
+          // Connection failed, try again
+          this._attemptReconnection(previousSubscriptions);
+        }
+      } catch (error) {
+        getLogger().error(`Reconnection attempt failed: ${error}`);
+        this._attemptReconnection(previousSubscriptions);
+      }
+    }, delay);
   }
 }
 

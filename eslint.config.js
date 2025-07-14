@@ -246,6 +246,7 @@ module.exports = defineConfig([
     "**/bin/",
     "**/nyc.config.ts",
     "**/build/",
+    "**/dist/",
     "**/example/",
     "**/eslint.config.js",
     "**/jest.config.js",

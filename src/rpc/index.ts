@@ -161,6 +161,8 @@ export type TRPCAgentProps =
     }
   | {
       httpAgent: HttpAgent;
+      host: string;
+      port: number;
       skip_hostname_verification?: boolean;
     };
 
@@ -170,6 +172,8 @@ export class RPCAgent implements APIAgent {
   protected _protocol: "http" | "https";
   protected _agent: HttpsAgent | HttpAgent;
   protected _skip_hostname_verification: boolean = false;
+  protected _host: string = "";
+  protected _port: number = 0;
 
   public constructor(props: TRPCAgentProps) {
     if ("httpsAgent" in props) {
@@ -178,11 +182,32 @@ export class RPCAgent implements APIAgent {
       this._skip_hostname_verification = Boolean(
         props.skip_hostname_verification,
       );
+      // Extract host/port from httpsAgent options
+      // Note: TypeScript doesn't expose options property, but it exists at runtime
+      const agent = this._agent as HttpsAgent & {
+        options?: { host?: string; port?: number };
+      };
+      if (agent.options && agent.options.host && agent.options.port) {
+        this._host = agent.options.host;
+        this._port = agent.options.port;
+        getLogger().debug(
+          `Constructing RPCAgent with httpsAgent: ${this._host}:${this._port}`,
+        );
+      } else {
+        getLogger().debug(
+          "Constructing RPCAgent with httpsAgent (host/port not available in agent options)",
+        );
+      }
     } else if ("httpAgent" in props) {
       this._protocol = "http";
       this._agent = props.httpAgent;
+      this._host = props.host;
+      this._port = props.port;
       this._skip_hostname_verification = Boolean(
         props.skip_hostname_verification,
+      );
+      getLogger().debug(
+        `Constructing RPCAgent with httpAgent: ${this._host}:${this._port}`,
       );
     } else if ("protocol" in props) {
       this._protocol = props.protocol;
@@ -204,6 +229,9 @@ export class RPCAgent implements APIAgent {
         typeof props.timeout === "number" && props.timeout > 0
           ? props.timeout
           : undefined;
+
+      this._host = host;
+      this._port = port;
 
       if (props.protocol === "https") {
         if ("configPath" in props) {
@@ -238,6 +266,10 @@ export class RPCAgent implements APIAgent {
           maxSockets,
           timeout,
         });
+
+        getLogger().debug(
+          `Constructed RPCAgent with httpsAgent: ${host}:${port}`,
+        );
       } else {
         this._agent = new HttpAgent({
           keepAlive,
@@ -283,6 +315,9 @@ export class RPCAgent implements APIAgent {
         props.skip_hostname_verification,
       );
 
+      this._host = host!;
+      this._port = port!;
+
       this._agent = new HttpsAgent({
         host: host,
         port: port,
@@ -305,7 +340,7 @@ export class RPCAgent implements APIAgent {
   ): Promise<M> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(
-      `Sending message. dest=${destination} command=${command}`,
+      `Sending RPC message. dest=${destination} command=${command}`,
     );
 
     return this.request<M>("POST", command, data);
@@ -320,12 +355,8 @@ export class RPCAgent implements APIAgent {
         Accept: "application/json, text/plain, */*",
         "User-Agent": userAgent,
       };
-      if (
-        "options" in this._agent &&
-        typeof this._agent.options.host === "string"
-      ) {
-        // Assuming `this._agent instanceof HttpsAgent` is true.
-        headers.Host = this._agent.options.host;
+      if (this._host) {
+        headers.Host = this._host;
       }
 
       const options: RequestOptions & {
@@ -336,6 +367,12 @@ export class RPCAgent implements APIAgent {
         agent: this._agent,
         headers,
       };
+
+      // For HTTP protocol, we need to explicitly set hostname and port
+      if (this._protocol === "http") {
+        options.hostname = this._host;
+        options.port = this._port;
+      }
 
       if (this._skip_hostname_verification) {
         options.checkServerIdentity = () => {
@@ -372,8 +409,11 @@ export class RPCAgent implements APIAgent {
         this._protocol === "https" ? httpsRequest : httpRequest;
 
       getLogger().debug(
-        `Requesting to ${options.protocol}//${options.hostname}:${options.port}${options.path}`,
+        `Dispatching RPC ${METHOD} request to ${this._protocol}//${this._host}:${this._port}${options.path}`,
       );
+
+      getLogger().trace(`Request options: ${JSON.stringify(options)}`);
+      getLogger().trace(`Request body: ${body}`);
 
       const req = transporter(options, (res) => {
         if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
@@ -399,6 +439,9 @@ export class RPCAgent implements APIAgent {
           if (chunks.length === 0) {
             getLogger().debug("The first response chunk data arrived");
           }
+          getLogger().trace(
+            `Response chunk #${chunks.length} - ${chunk.length} bytes: ${chunk.toString()}`,
+          );
         });
 
         res.on("end", () => {
@@ -426,6 +469,12 @@ export class RPCAgent implements APIAgent {
                 getLogger().info(`API failure: ${d.error}`);
                 return reject(d);
               }
+
+              getLogger().debug(
+                `RPC response received from ${this._protocol}//${this._host}:${this._port}${options.path}`,
+              );
+              getLogger().trace(`RPC response data: ${JSON.stringify(d)}`);
+
               return resolve(d);
             }
 
@@ -436,8 +485,10 @@ export class RPCAgent implements APIAgent {
               "RPC Server returned no data. This is not expected.",
             );
             reject(new Error("Server responded without expected data"));
-          } catch (_e) {
-            getLogger().error("Failed to parse response data");
+          } catch (e) {
+            getLogger().error(
+              `Failed to parse response data: ${JSON.stringify(e)}`,
+            );
             try {
               getLogger().error(Buffer.concat(chunks).toString());
             } catch (_e2) {
