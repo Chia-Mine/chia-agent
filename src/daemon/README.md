@@ -12,9 +12,9 @@ const {getDaemon} = require("chia-agent");
 const daemon = getDaemon();
 ```
 
-## daemon.connect(url?: string, timeoutMs?: number, reconnectOptions?: ReconnectOptions)
+## daemon.connect(url?: string, options?: ConnectOptions)
 
-Connect to chia daemon via websocket with optional auto-reconnection support.
+Connect to chia daemon via websocket with automatic retry and optional auto-reconnection support.
 
 If you don't pass any argument, it tries to connect to an url specified in chia configuration file.
 (Note: `chia-agent` cares environment variable `CHIA_ROOT`)
@@ -27,14 +27,17 @@ You can specify chia daemon url to connect to.
 await daemon.connect("wss://hostname:port");
 ```
 
-Enable auto-reconnection with custom options:
+Connect with custom options:
 ```js
-await daemon.connect("wss://hostname:port", 50000, {
-  autoReconnect: true,
-  maxAttempts: 15,
-  initialDelay: 2000,
-  maxDelay: 60000,
-  backoffMultiplier: 2
+await daemon.connect("wss://hostname:port", {
+  timeoutMs: 50000,
+  autoReconnect: false,  // Disable auto-reconnection
+  retryOptions: {
+    maxAttempts: 3,
+    initialDelay: 2000,
+    maxDelay: 10000,
+    backoffMultiplier: 2
+  }
 });
 ```
 
@@ -44,23 +47,23 @@ The default url is `wss://{DAEMON_HOST}:{DAEMON_PORT}` where
 `DAEMON_HOST` is `ui.daemon_host` and `DAEMON_PORT`  is `ui.daemon_port` in `$CHIA_ROOT/config/config.yaml`  
 (Usually `wss://localhost:55400`)
 
-### `timeoutMs`
-Optional. Connection timeout in milliseconds.  
-The default value is `50000`.
-
-### `reconnectOptions`
-Optional. Configuration for auto-reconnection behavior.  
-By default, auto-reconnection is enabled.
+### `options`
+Optional. Connection configuration options.
 
 ```typescript
-interface ReconnectOptions {
-  autoReconnect: boolean;        // Enable/disable auto-reconnection (default: true)
-  maxAttempts?: number;          // Maximum reconnection attempts (default: 10)
-  initialDelay?: number;         // Initial delay in ms (default: 1000)
-  maxDelay?: number;             // Maximum delay in ms (default: 30000)
-  backoffMultiplier?: number;    // Exponential backoff multiplier (default: 1.5)
+interface ConnectOptions {
+  timeoutMs?: number;        // Connection timeout in milliseconds
+  autoReconnect?: boolean;   // Enable/disable auto-reconnection (default: true)
+  retryOptions?: {           // Retry configuration for both connection and reconnection
+    maxAttempts?: number;    // Maximum retry attempts (default: 5)
+    initialDelay?: number;   // Initial delay in ms (default: 1000)
+    maxDelay?: number;       // Maximum delay in ms (default: 30000)
+    backoffMultiplier?: number; // Exponential backoff multiplier (default: 1.5)
+  };
 }
 ```
+
+The connection will automatically retry with exponential backoff if it fails. The same retry configuration is used for both initial connection attempts and reconnection attempts after disconnection.
 
 ## daemon.close()
 

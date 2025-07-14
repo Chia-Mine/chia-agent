@@ -1,6 +1,10 @@
 # Changelog
 
-## [15.1.0]
+## [16.0.0]
+### Breaking change
+- Changed `daemon.connect()` API signature from `connect(url?, timeoutMs?)` to `connect(url?, options?)`
+  - All connection options are now consolidated into a single `options` parameter
+  - Existing code calling `connect()` without parameters remains compatible
 ### Changed
 - Improved logger system
   - Added logger instance caching
@@ -11,6 +15,7 @@
   - Added environment variable support: `LOG_LEVEL` and `LOG_SUPPRESS`
   - Refactored API to use named loggers
   - Added customizable log formatting with built-in formatters
+- Auto-reconnection is now enabled by default
 ### Fixed
 - Fixed WebSocket message handling issues
   - Added timeout handling for sent messages (default 30s)
@@ -19,11 +24,11 @@
   - Added proper cleanup of message timeouts on response
 - Fixed RPC agent to properly handle HTTP connections with explicit host/port
 ### Added
-- Added auto-reconnection mechanism for WebSocket connections
-  - Configurable via `reconnectOptions` parameter in `connect()` method with `autoReconnect` flag (enabled by default)
+- Added automatic retry/reconnection mechanism for WebSocket connection attempts
   - Exponential backoff with configurable parameters
+  - Configurable retry parameters (maxAttempts, initialDelay, maxDelay, backoffMultiplier)
   - Automatic re-subscription to services after reconnection
-  - Emits events for reconnection monitoring
+  - Same retry configuration applies to both initial connection and reconnection
 ### Internal change
 - Removed `TDestination` type in favor of Writer-based approach
 
@@ -1877,7 +1882,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
-[15.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v15.0.0...v15.0.1
+[16.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v15.0.0...v16.0.0
 [15.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.5.0...v15.0.0
 [14.5.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.4.0...v14.5.0
 [14.4.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.4.0
