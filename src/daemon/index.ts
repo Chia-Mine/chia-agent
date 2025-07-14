@@ -464,21 +464,28 @@ class Daemon {
       payload = JSON.parse(event.data as string) as WsMessage;
       ({ request_id, origin, command } = payload);
     } catch (err: unknown) {
-      getLogger().error(`Failed to parse message data: ${JSON.stringify(err)}`);
-      getLogger().error(`payload: ${event.data}`);
+      getLogger().error(
+        `Failed to parse ws message data: ${JSON.stringify(err)}`,
+      );
+      getLogger().error(`ws payload: ${event.data}`);
       return;
     }
-
-    getLogger().debug(
-      `Arrived message. origin=${origin} command=${command} reqId=${request_id}`,
-    );
 
     const entry = this._responseQueue[request_id];
     if (entry) {
       clearTimeout(entry.timeout);
       delete this._responseQueue[request_id];
+      getLogger().debug(
+        `Ws response received. origin=${origin} command=${command} reqId=${request_id}`,
+      );
       entry.resolver(payload);
+    } else {
+      getLogger().debug(
+        `Ws message arrived. origin=${origin} command=${command} reqId=${request_id}`,
+      );
     }
+
+    getLogger().trace(`Ws message: ${JSON.stringify(payload)}`);
 
     this._messageEventListeners.forEach((l) => l(event));
     for (const o in this._messageListeners) {
