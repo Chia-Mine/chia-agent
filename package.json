@@ -10,6 +10,7 @@
   },
   "bugs": "https://github.com/Chia-Mine/chia-agent/issues",
   "main": "./index.js",
+  "types": "./index.d.ts",
   "bin": {
     "chia-agent": "./bin/cli.js"
   },
