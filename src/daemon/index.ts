@@ -38,6 +38,7 @@ export interface ConnectOptions {
 
 const DEFAULT_SERVICE_NAME = "wallet_ui";
 const DEFAULT_AUTO_RECONNECT = true;
+const DEFAULT_TIMEOUT_MS = 30000;
 const DEFAULT_RETRY_OPTIONS: Required<RetryOptions> = {
   maxAttempts: 5,
   initialDelay: 1000,
@@ -104,6 +105,7 @@ class Daemon {
   protected _serviceName: string = DEFAULT_SERVICE_NAME;
   protected _autoReconnect: boolean = DEFAULT_AUTO_RECONNECT;
   protected _retryOptions: Required<RetryOptions> = DEFAULT_RETRY_OPTIONS;
+  protected _timeoutMs: number = DEFAULT_TIMEOUT_MS;
   protected _reconnectAttempts: number = 0;
   protected _reconnectTimer: NodeJS.Timeout | null = null;
   protected _lastConnectionUrl: string = "";
@@ -171,7 +173,12 @@ class Daemon {
     }
 
     // Extract options with defaults
-    const timeoutMs = options?.timeoutMs;
+    const timeoutMs = options?.timeoutMs || this._timeoutMs;
+
+    // Store timeout for reconnection attempts
+    if (options?.timeoutMs !== undefined) {
+      this._timeoutMs = options.timeoutMs;
+    }
 
     // Update settings from options
     if (options?.autoReconnect !== undefined) {
@@ -626,6 +633,7 @@ class Daemon {
 
       try {
         const connected = await this.connect(this._lastConnectionUrl, {
+          timeoutMs: this._timeoutMs,
           autoReconnect: this._autoReconnect,
           retryOptions: this._retryOptions,
         });
