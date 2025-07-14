@@ -340,7 +340,7 @@ export class RPCAgent implements APIAgent {
   ): Promise<M> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(
-      `Sending message. dest=${destination} command=${command}`,
+      `Sending RPC message. dest=${destination} command=${command}`,
     );
 
     return this.request<M>("POST", command, data);

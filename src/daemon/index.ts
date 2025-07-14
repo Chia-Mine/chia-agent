@@ -324,7 +324,7 @@ class Daemon {
       };
 
       getLogger().debug(
-        `Sending message. dest=${destination} command=${command} reqId=${reqId}`,
+        `Sending Ws message. dest=${destination} command=${command} reqId=${reqId}`,
       );
       const messageStr = JSON.stringify(message);
 
