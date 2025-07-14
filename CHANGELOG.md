@@ -10,12 +10,14 @@
   - Added `trace` log level
   - Added environment variable support: `LOG_LEVEL` and `LOG_SUPPRESS`
   - Refactored API to use named loggers
+  - Added customizable log formatting with built-in formatters
 ### Fixed
 - Fixed WebSocket message handling issues
   - Added timeout handling for sent messages (default 30s)
   - Fixed connection state check to use actual WebSocket readyState
   - Preserved event listeners on connection close for reconnection support
   - Added proper cleanup of message timeouts on response
+- Fixed RPC agent to properly handle HTTP connections with explicit host/port
 ### Added
 - Added auto-reconnection mechanism for WebSocket connections
   - Configurable via `reconnectOptions` parameter in `connect()` method with `autoReconnect` flag
