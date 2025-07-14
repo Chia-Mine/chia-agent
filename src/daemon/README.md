@@ -50,11 +50,11 @@ The default value is `50000`.
 
 ### `reconnectOptions`
 Optional. Configuration for auto-reconnection behavior.  
-By default, auto-reconnection is disabled for backward compatibility.
+By default, auto-reconnection is enabled.
 
 ```typescript
 interface ReconnectOptions {
-  autoReconnect: boolean;        // Enable/disable auto-reconnection (default: false)
+  autoReconnect: boolean;        // Enable/disable auto-reconnection (default: true)
   maxAttempts?: number;          // Maximum reconnection attempts (default: 10)
   initialDelay?: number;         // Initial delay in ms (default: 1000)
   maxDelay?: number;             // Maximum delay in ms (default: 30000)

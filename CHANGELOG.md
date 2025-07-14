@@ -20,11 +20,10 @@
 - Fixed RPC agent to properly handle HTTP connections with explicit host/port
 ### Added
 - Added auto-reconnection mechanism for WebSocket connections
-  - Configurable via `reconnectOptions` parameter in `connect()` method with `autoReconnect` flag
+  - Configurable via `reconnectOptions` parameter in `connect()` method with `autoReconnect` flag (enabled by default)
   - Exponential backoff with configurable parameters
   - Automatic re-subscription to services after reconnection
   - Emits events for reconnection monitoring
-  - Disabled by default for backward compatibility
 ### Internal change
 - Removed `TDestination` type in favor of Writer-based approach
 

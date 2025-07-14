@@ -33,7 +33,7 @@ export interface ReconnectOptions {
 
 const DEFAULT_SERVICE_NAME = "wallet_ui";
 const DEFAULT_RECONNECT_OPTIONS: Required<ReconnectOptions> = {
-  autoReconnect: false,
+  autoReconnect: true,
   maxAttempts: 10,
   initialDelay: 1000,
   maxDelay: 30000,
