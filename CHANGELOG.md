@@ -1,5 +1,9 @@
 # Changelog
 
+## [16.0.1]
+### Fixed
+- Fixed an issue where it exhausts heap when logging an object with circular references
+
 ## [16.0.0]
 ### Breaking change
 - Changed `daemon.connect()` API signature from `connect(url?, timeoutMs?)` to `connect(url?, options?)`
@@ -1882,6 +1886,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[16.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v16.0.0...v16.0.1
 [16.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v15.0.0...v16.0.0
 [15.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.5.0...v15.0.0
 [14.5.0]: https://github.com/Chia-Mine/chia-agent/compare/v14.4.0...v14.5.0
