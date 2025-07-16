@@ -1,7 +1,7 @@
 import type { CloseEvent, ErrorEvent, MessageEvent, Event } from "ws";
 import * as WS from "ws";
 import { randomBytes } from "crypto";
-import { getLogger } from "../logger";
+import { getLogger, stringify } from "../logger";
 import { open } from "./connection";
 import { getConfig } from "../config/index";
 import { WsMessage } from "../api/ws";
@@ -67,14 +67,14 @@ const onProcessExit = () => {
   setTimeout(async () => {
     try {
       if (daemon && daemon.connected && !daemon.closing) {
-        getLogger().debug("Detected Ctrl+C. Initiating shutdown...");
+        getLogger().debug(() => "Detected Ctrl+C. Initiating shutdown...");
         await daemon.close();
 
         process.removeListener("SIGINT", onProcessExit);
         process.kill(process.pid, "SIGINT");
       }
     } catch (e) {
-      process.stderr.write(JSON.stringify(e));
+      process.stderr.write(stringify(e));
       process.exit(1);
     }
   }, 67);
@@ -147,7 +147,7 @@ class Daemon {
       }
     } else {
       try {
-        getLogger().error(`Error: ${JSON.stringify(e)}`);
+        getLogger().error(() => `Error: ${stringify(e)}`);
       } catch (_e) {
         getLogger().error("Unknown error");
       }
@@ -212,7 +212,7 @@ class Daemon {
       attempt++
     ) {
       getLogger().debug(
-        `Opening websocket connection to ${daemonServerURL} (attempt ${attempt}/${this._retryOptions.maxAttempts})`,
+        () => `Opening websocket connection to ${daemonServerURL} (attempt ${attempt}/${this._retryOptions.maxAttempts})`,
       );
 
       const result = await open(daemonServerURL, timeoutMs).catch((error) => {
@@ -276,7 +276,7 @@ class Daemon {
       this._autoReconnect = false;
       this._isReconnecting = false;
 
-      getLogger().debug("Closing web socket connection");
+      getLogger().debug(() => "Closing web socket connection");
       this._socket.close();
       this._closing = true;
       this._connectedUrl = "";
@@ -324,14 +324,14 @@ class Daemon {
       };
 
       getLogger().debug(
-        `Sending Ws message. dest=${destination} command=${command} reqId=${reqId}`,
+        () => `Sending Ws message. dest=${destination} command=${command} reqId=${reqId}`,
       );
-      const messageStr = JSON.stringify(message);
+      const messageStr = stringify(message);
 
       this._socket.send(messageStr, (err: Error | undefined) => {
         if (err) {
           getLogger().error(`Error while sending message: ${messageStr}`);
-          getLogger().error(JSON.stringify(err));
+          getLogger().error(() => stringify(err));
           // Clean up on send error
           const entry = this._responseQueue[reqId];
           if (entry) {
@@ -393,7 +393,7 @@ class Daemon {
       getLogger().error(
         error instanceof Error
           ? `${error.name}: ${error.message}`
-          : JSON.stringify(error),
+          : stringify(error),
       );
       throw new Error("Subscribe failed");
     }
@@ -516,7 +516,7 @@ class Daemon {
       ({ request_id, origin, command } = payload);
     } catch (err: unknown) {
       getLogger().error(
-        `Failed to parse ws message data: ${JSON.stringify(err)}`,
+        `Failed to parse ws message data: ${stringify(err)}`,
       );
       getLogger().error(`ws payload: ${event.data}`);
       return;
@@ -527,16 +527,16 @@ class Daemon {
       clearTimeout(entry.timeout);
       delete this._responseQueue[request_id];
       getLogger().debug(
-        `Ws response received. origin=${origin} command=${command} reqId=${request_id}`,
+        () => `Ws response received. origin=${origin} command=${command} reqId=${request_id}`,
       );
       entry.resolver(payload);
     } else {
       getLogger().debug(
-        `Ws message arrived. origin=${origin} command=${command} reqId=${request_id}`,
+        () => `Ws message arrived. origin=${origin} command=${command} reqId=${request_id}`,
       );
     }
 
-    getLogger().trace(`Ws message: ${JSON.stringify(payload)}`);
+    getLogger().trace(() => `Ws message: ${stringify(payload)}`);
 
     this._messageEventListeners.forEach((l) => l(event));
     for (const o in this._messageListeners) {
@@ -592,11 +592,11 @@ class Daemon {
   }
 
   protected onPing() {
-    getLogger().debug("Received ping");
+    getLogger().debug(() => "Received ping");
   }
 
   protected onPong() {
-    getLogger().debug("Received pong");
+    getLogger().debug(() => "Received pong");
   }
 
   protected _attemptReconnection(previousSubscriptions: string[]) {
@@ -646,7 +646,7 @@ class Daemon {
           for (const service of previousSubscriptions) {
             try {
               await this.subscribe(service);
-              getLogger().debug(`Re-subscribed to ${service}`);
+              getLogger().debug(() => `Re-subscribed to ${service}`);
             } catch (e) {
               getLogger().error(`Failed to re-subscribe to ${service}: ${e}`);
             }
