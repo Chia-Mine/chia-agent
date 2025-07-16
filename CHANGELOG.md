@@ -1,5 +1,9 @@
 # Changelog
 
+## [14.3.7]
+### Fixed
+- Fixed an issue where `Daemon.sendMessage()` could send invalid message
+
 ## [14.3.6]
 ### Fixed
 - Fixed logging issues where it crashes upon stringifying an object with circular references
@@ -1760,6 +1764,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.3.7]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.6...v14.3.7
 [14.3.6]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.5...v14.3.6
 [14.3.5]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.4...v14.3.5
 [14.3.4]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.3.4
