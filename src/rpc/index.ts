@@ -112,59 +112,59 @@ export function loadCertFilesFromConfig(config: TConfig) {
 
 export type TRPCAgentProps =
   | {
-      protocol: "https";
-      host: string;
-      port: number;
-      ca_cert?: string | Buffer;
-      client_cert?: string | Buffer;
-      client_key?: string | Buffer;
-      skip_hostname_verification?: boolean;
-      keepAlive?: boolean;
-      keepAliveMsecs?: number;
-      maxSockets?: number;
-      timeout?: number;
-    }
+    protocol: "https";
+    host: string;
+    port: number;
+    ca_cert?: string | Buffer;
+    client_cert?: string | Buffer;
+    client_key?: string | Buffer;
+    skip_hostname_verification?: boolean;
+    keepAlive?: boolean;
+    keepAliveMsecs?: number;
+    maxSockets?: number;
+    timeout?: number;
+  }
   | {
-      protocol: "https";
-      host: string;
-      port: number;
-      configPath: string;
-      skip_hostname_verification?: boolean;
-      keepAlive?: boolean;
-      keepAliveMsecs?: number;
-      maxSockets?: number;
-      timeout?: number;
-    }
+    protocol: "https";
+    host: string;
+    port: number;
+    configPath: string;
+    skip_hostname_verification?: boolean;
+    keepAlive?: boolean;
+    keepAliveMsecs?: number;
+    maxSockets?: number;
+    timeout?: number;
+  }
   | {
-      protocol: "http";
-      host: string;
-      port: number;
-      keepAlive?: boolean;
-      keepAliveMsecs?: number;
-      maxSockets?: number;
-      timeout?: number;
-    }
+    protocol: "http";
+    host: string;
+    port: number;
+    keepAlive?: boolean;
+    keepAliveMsecs?: number;
+    maxSockets?: number;
+    timeout?: number;
+  }
   | {
-      service: TDestination;
-      host?: string;
-      port?: number;
-      configPath?: string;
-      skip_hostname_verification?: boolean;
-      keepAlive?: boolean;
-      keepAliveMsecs?: number;
-      maxSockets?: number;
-      timeout?: number;
-    }
+    service: TDestination;
+    host?: string;
+    port?: number;
+    configPath?: string;
+    skip_hostname_verification?: boolean;
+    keepAlive?: boolean;
+    keepAliveMsecs?: number;
+    maxSockets?: number;
+    timeout?: number;
+  }
   | {
-      httpsAgent: HttpsAgent;
-      skip_hostname_verification?: boolean;
-    }
+    httpsAgent: HttpsAgent;
+    skip_hostname_verification?: boolean;
+  }
   | {
-      httpAgent: HttpAgent;
-      host: string;
-      port: number;
-      skip_hostname_verification?: boolean;
-    };
+    httpAgent: HttpAgent;
+    host: string;
+    port: number;
+    skip_hostname_verification?: boolean;
+  };
 
 const userAgent = "chia-agent/1.0.0";
 
@@ -424,7 +424,7 @@ export class RPCAgent implements APIAgent {
             );
             getLogger().error(
               "For example, this happens when invoking 'new_farming_info' rpc command" +
-                " to 'full_node' service, which 'farm' service is correct",
+              " to 'full_node' service, which 'farm' service is correct",
             );
             getLogger().error(
               "Check invoking command is correct and connecting service/host is right for the command",
