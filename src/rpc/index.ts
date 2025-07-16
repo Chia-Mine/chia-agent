@@ -11,7 +11,7 @@ import {
 import type { checkServerIdentity } from "tls";
 import { existsSync, readFileSync } from "fs";
 import * as JSONbigBuilder from "@chiamine/json-bigint";
-import { getLogger } from "../logger";
+import { getLogger, stringify } from "../logger";
 import {
   configPath as defaultConfigPath,
   getConfig,
@@ -91,9 +91,9 @@ export function loadCertFilesFromConfig(config: TConfig) {
     config["/private_ssl_ca/crt"],
   ] as string[]);
 
-  getLogger().debug(`Loading client cert file from ${clientCertPath}`);
-  getLogger().debug(`Loading client key file from ${clientKeyPath}`);
-  getLogger().debug(`Loading ca cert file from ${caCertPath}`);
+  getLogger().debug(() => `Loading client cert file from ${clientCertPath}`);
+  getLogger().debug(() => `Loading client key file from ${clientKeyPath}`);
+  getLogger().debug(() => `Loading ca cert file from ${caCertPath}`);
 
   const getCertOrKey = (path: string) => {
     if (!existsSync(path)) {
@@ -191,11 +191,13 @@ export class RPCAgent implements APIAgent {
         this._host = agent.options.host;
         this._port = agent.options.port;
         getLogger().debug(
-          `Constructing RPCAgent with httpsAgent: ${this._host}:${this._port}`,
+          () =>
+            `Constructing RPCAgent with httpsAgent: ${this._host}:${this._port}`,
         );
       } else {
         getLogger().debug(
-          "Constructing RPCAgent with httpsAgent (host/port not available in agent options)",
+          () =>
+            "Constructing RPCAgent with httpsAgent (host/port not available in agent options)",
         );
       }
     } else if ("httpAgent" in props) {
@@ -207,7 +209,8 @@ export class RPCAgent implements APIAgent {
         props.skip_hostname_verification,
       );
       getLogger().debug(
-        `Constructing RPCAgent with httpAgent: ${this._host}:${this._port}`,
+        () =>
+          `Constructing RPCAgent with httpAgent: ${this._host}:${this._port}`,
       );
     } else if ("protocol" in props) {
       this._protocol = props.protocol;
@@ -268,7 +271,7 @@ export class RPCAgent implements APIAgent {
         });
 
         getLogger().debug(
-          `Constructed RPCAgent with httpsAgent: ${host}:${port}`,
+          () => `Constructed RPCAgent with httpsAgent: ${host}:${port}`,
         );
       } else {
         this._agent = new HttpAgent({
@@ -307,7 +310,7 @@ export class RPCAgent implements APIAgent {
         host = props.host ? props.host : info.hostname;
         port = typeof props.port === "number" ? props.port : info.port;
       }
-      getLogger().debug(`Picked ${host}:${port} for ${props.service}`);
+      getLogger().debug(() => `Picked ${host}:${port} for ${props.service}`);
 
       const certs = loadCertFilesFromConfig(config);
       const { clientCert, clientKey, caCert } = certs;
@@ -340,7 +343,7 @@ export class RPCAgent implements APIAgent {
   ): Promise<M> {
     // parameter `destination` is not used because target rpc server is determined by url.
     getLogger().debug(
-      `Sending RPC message. dest=${destination} command=${command}`,
+      () => `Sending RPC message. dest=${destination} command=${command}`,
     );
 
     return this.request<M>("POST", command, data);
@@ -409,11 +412,12 @@ export class RPCAgent implements APIAgent {
         this._protocol === "https" ? httpsRequest : httpRequest;
 
       getLogger().debug(
-        `Dispatching RPC ${METHOD} request to ${this._protocol}//${this._host}:${this._port}${options.path}`,
+        () =>
+          `Dispatching RPC ${METHOD} request to ${this._protocol}//${this._host}:${this._port}${options.path}`,
       );
 
-      getLogger().trace(`Request options: ${JSON.stringify(options)}`);
-      getLogger().trace(`Request body: ${body}`);
+      getLogger().trace(() => `Request options: ${stringify(options)}`);
+      getLogger().trace(() => `Request body: ${body}`);
 
       const req = transporter(options, (res) => {
         if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
@@ -437,10 +441,11 @@ export class RPCAgent implements APIAgent {
         res.on("data", (chunk) => {
           chunks.push(chunk);
           if (chunks.length === 0) {
-            getLogger().debug("The first response chunk data arrived");
+            getLogger().debug(() => "The first response chunk data arrived");
           }
           getLogger().trace(
-            `Response chunk #${chunks.length} - ${chunk.length} bytes: ${chunk.toString()}`,
+            () =>
+              `Response chunk #${chunks.length} - ${chunk.length} bytes: ${chunk.toString()}`,
           );
         });
 
@@ -471,9 +476,10 @@ export class RPCAgent implements APIAgent {
               }
 
               getLogger().debug(
-                `RPC response received from ${this._protocol}//${this._host}:${this._port}${options.path}`,
+                () =>
+                  `RPC response received from ${this._protocol}//${this._host}:${this._port}${options.path}`,
               );
-              getLogger().trace(`RPC response data: ${JSON.stringify(d)}`);
+              getLogger().trace(() => `RPC response data: ${stringify(d)}`);
 
               return resolve(d);
             }
@@ -486,9 +492,7 @@ export class RPCAgent implements APIAgent {
             );
             reject(new Error("Server responded without expected data"));
           } catch (e) {
-            getLogger().error(
-              `Failed to parse response data: ${JSON.stringify(e)}`,
-            );
+            getLogger().error(`Failed to parse response data: ${stringify(e)}`);
             try {
               getLogger().error(Buffer.concat(chunks).toString());
             } catch (_e2) {
@@ -501,7 +505,7 @@ export class RPCAgent implements APIAgent {
       });
 
       req.on("error", (error) => {
-        getLogger().error(JSON.stringify(error));
+        getLogger().error(() => stringify(error));
         reject(error);
       });
 
