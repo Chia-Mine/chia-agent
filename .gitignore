@@ -258,3 +258,6 @@ $RECYCLE.BIN/
 .npmrc
 build/
 dist/
+.vscode/
+CLAUDE.md
+.claude/

@@ -113,6 +113,33 @@ setTimeout(async () => {
  */
 ```
 
+## Logging
+The logger system supports multiple log levels and formatters:
+
+```js
+const {setLogLevel, getLogger, setDefaultFormatter, simpleLogFormatter} = require("chia-agent");
+
+// Set log level (case-insensitive)
+setLogLevel("DEBUG"); // "error", "warning", "info", "debug", "trace", "none"
+
+// Use built-in formatters
+setDefaultFormatter(simpleLogFormatter); // Simple format without timestamp
+
+// Custom formatter
+const myFormatter = (context) => {
+  return `[${context.level}] ${context.message}`;
+};
+setDefaultFormatter(myFormatter);
+
+// Named loggers
+const logger = getLogger("MyModule");
+logger.info("Module initialized");
+
+// Per-logger configuration
+logger.setLogLevel("debug");
+logger.setFormatter(myFormatter);
+```
+
 ## API Reference
 [See Documentation here](https://github.com/Chia-Mine/chia-agent/blob/main/src/api/README.md)
 

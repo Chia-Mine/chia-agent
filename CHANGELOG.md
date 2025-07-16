@@ -1,5 +1,37 @@
 # Changelog
 
+## [14.3.4]
+### Breaking change
+- Changed `daemon.connect()` API signature from `connect(url?, timeoutMs?)` to `connect(url?, options?)`
+  - All connection options are now consolidated into a single `options` parameter
+  - Existing code calling `connect()` without parameters remains compatible
+### Changed
+- Improved logger system
+  - Added logger instance caching
+  - Added support for multiple loggers with per-instance configuration
+  - Added `NullWriter` for complete log suppression
+  - Updated `ConsoleWriter` to use proper console methods
+  - Added `trace` log level
+  - Added environment variable support: `LOG_LEVEL` and `LOG_SUPPRESS`
+  - Refactored API to use named loggers
+  - Added customizable log formatting with built-in formatters
+- Auto-reconnection is now enabled by default
+### Fixed
+- Fixed WebSocket message handling issues
+  - Added timeout handling for sent messages (default 30s)
+  - Fixed connection state check to use actual WebSocket readyState
+  - Preserved event listeners on connection close for reconnection support
+  - Added proper cleanup of message timeouts on response
+- Fixed RPC agent to properly handle HTTP connections with explicit host/port
+### Added
+- Added automatic retry/reconnection mechanism for WebSocket connection attempts
+  - Exponential backoff with configurable parameters
+  - Configurable retry parameters (maxAttempts, initialDelay, maxDelay, backoffMultiplier)
+  - Automatic re-subscription to services after reconnection
+  - Same retry configuration applies to both initial connection and reconnection
+### Internal change
+- Removed `TDestination` type in favor of Writer-based approach
+
 ## [14.3.3]
 ### Changed
 - The default service name which [`Daemon`](./src/daemon/index.ts) client tries to register is now `wallet_ui`.  
@@ -1720,6 +1752,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.3.4]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.3.4
 [14.3.3]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.2...v14.3.3
 [14.3.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.1...v14.3.2
 [14.3.1]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.0...v14.3.1
