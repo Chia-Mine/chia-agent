@@ -326,7 +326,7 @@ class Daemon {
       getLogger().debug(
         () => `Sending Ws message. dest=${destination} command=${command} reqId=${reqId}`,
       );
-      const messageStr = stringify(message);
+      const messageStr = JSON.stringify(message);
 
       this._socket.send(messageStr, (err: Error | undefined) => {
         if (err) {
