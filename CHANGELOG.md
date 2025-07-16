@@ -1,5 +1,9 @@
 # Changelog
 
+## [14.3.6]
+### Fixed
+- Fixed logging issues where it crashes upon stringifying an object with circular references
+
 ## [14.3.5]
 ### Fixed
 - Fixed an issue where it exhausts heap when logging an object with circular references
@@ -1756,6 +1760,8 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[14.3.6]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.5...v14.3.6
+[14.3.5]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.4...v14.3.5
 [14.3.4]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.3...v14.3.4
 [14.3.3]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.2...v14.3.3
 [14.3.2]: https://github.com/Chia-Mine/chia-agent/compare/v14.3.1...v14.3.2
