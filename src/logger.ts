@@ -203,24 +203,36 @@ function stringify(obj: any, indent?: number) {
     return "undefined";
   } else if (typeof obj === "function") {
     return "[Function]";
+  } else if (obj === null) {
+    return "null";
   }
 
-  const seen = new WeakSet();
-  return JSON.stringify(
-    obj,
-    (_k, v) => {
-      if (typeof v === "object" && v !== null) {
-        if (seen.has(v)) {
-          return undefined;
+  try {
+    // Custom replacer for circular references
+    const getCircularReplacer = () => {
+      const seen = new WeakSet();
+      return (_key: string, value: any) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) {
+            return "[Circular]";
+          }
+          seen.add(value);
+        } else if (typeof value === "bigint") {
+          return `${value}n`;
+        } else if (typeof value === "function") {
+          return "[Function]";
+        } else if (typeof value === "symbol") {
+          return value.toString();
         }
-        seen.add(v);
-      } else if (typeof v === "bigint") {
-        return `${v}n`;
-      }
-      return v;
-    },
-    indent,
-  );
+        return value;
+      };
+    };
+
+    return JSON.stringify(obj, getCircularReplacer(), indent);
+  } catch (error) {
+    const msg = error && typeof error === "object" && "message" in error ? error.message : "Unknown error";
+    return `[Error stringifying object: ${msg}]`;
+  }
 }
 
 export class Logger {

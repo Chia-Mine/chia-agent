@@ -1,5 +1,9 @@
 # Changelog
 
+## [14.3.5]
+### Fixed
+- Fixed an issue where it exhausts heap when logging an object with circular references
+
 ## [14.3.4]
 ### Breaking change
 - Changed `daemon.connect()` API signature from `connect(url?, timeoutMs?)` to `connect(url?, options?)`
