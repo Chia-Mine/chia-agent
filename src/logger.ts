@@ -188,7 +188,7 @@ export function createNullWriter(): Writer {
   return new NullWriter();
 }
 
-function stringify(obj: any, indent?: number) {
+export function stringify(obj: any, indent?: number) {
   if (typeof obj === "string") {
     return obj;
   } else if (typeof obj === "number") {
@@ -203,24 +203,79 @@ function stringify(obj: any, indent?: number) {
     return "undefined";
   } else if (typeof obj === "function") {
     return "[Function]";
+  } else if (obj === null) {
+    return "null";
   }
 
-  const seen = new WeakSet();
-  return JSON.stringify(
-    obj,
-    (k, v) => {
-      if (typeof v === "object" && v !== null) {
-        if (seen.has(v)) {
-          return undefined;
+  try {
+    // Deep clone the object while removing circular references
+    const seen = new WeakSet();
+
+    const deepCloneWithoutCircular = (value: any, path: string[] = []): any => {
+      // Handle primitives and null
+      if (value === null || typeof value !== "object") {
+        if (typeof value === "bigint") {
+          return `${value}n`;
+        } else if (typeof value === "function") {
+          return "[Function]";
+        } else if (typeof value === "symbol") {
+          return value.toString();
         }
-        seen.add(v);
-      } else if (typeof v === "bigint") {
-        return `${v}n`;
+        return value;
       }
-      return v;
-    },
-    indent,
-  );
+
+      // Check for circular reference
+      if (seen.has(value)) {
+        return undefined; // This will cause the property to be omitted
+      }
+
+      seen.add(value);
+
+      try {
+        // Handle arrays
+        if (Array.isArray(value)) {
+          const clonedArray: any[] = [];
+          for (let i = 0; i < value.length; i++) {
+            const clonedValue = deepCloneWithoutCircular(value[i], [
+              ...path,
+              String(i),
+            ]);
+            if (clonedValue !== undefined) {
+              clonedArray.push(clonedValue);
+            }
+          }
+          return clonedArray;
+        }
+
+        // Handle objects
+        const cloned: any = {};
+        for (const key in value) {
+          if (Object.prototype.hasOwnProperty.call(value, key)) {
+            const clonedValue = deepCloneWithoutCircular(value[key], [
+              ...path,
+              key,
+            ]);
+            if (clonedValue !== undefined) {
+              cloned[key] = clonedValue;
+            }
+          }
+        }
+        return cloned;
+      } finally {
+        // Remove from seen set when we're done processing this level
+        seen.delete(value);
+      }
+    };
+
+    const clonedObj = deepCloneWithoutCircular(obj);
+    return JSON.stringify(clonedObj, null, indent);
+  } catch (error) {
+    const msg =
+      error && typeof error === "object" && "message" in error
+        ? error.message
+        : "Unknown error";
+    return `[Error stringifying object: ${msg}]`;
+  }
 }
 
 export class Logger {
@@ -299,36 +354,53 @@ export class Logger {
     return this._formatter(context);
   }
 
-  public trace(msg: any) {
+  public trace(msg: any | (() => any)) {
     if (this._shouldWrite("trace")) {
-      this._writer.write(this._formatMessage("trace", stringify(msg)), "trace");
-    }
-  }
-
-  public debug(msg: any) {
-    if (this._shouldWrite("debug")) {
-      this._writer.write(this._formatMessage("debug", stringify(msg)), "debug");
-    }
-  }
-
-  public info(msg: any) {
-    if (this._shouldWrite("info")) {
-      this._writer.write(this._formatMessage("info", stringify(msg)), "info");
-    }
-  }
-
-  public warning(msg: any) {
-    if (this._shouldWrite("warning")) {
+      const message = typeof msg === "function" ? msg() : msg;
       this._writer.write(
-        this._formatMessage("warning", stringify(msg)),
+        this._formatMessage("trace", stringify(message)),
+        "trace",
+      );
+    }
+  }
+
+  public debug(msg: any | (() => any)) {
+    if (this._shouldWrite("debug")) {
+      const message = typeof msg === "function" ? msg() : msg;
+      this._writer.write(
+        this._formatMessage("debug", stringify(message)),
+        "debug",
+      );
+    }
+  }
+
+  public info(msg: any | (() => any)) {
+    if (this._shouldWrite("info")) {
+      const message = typeof msg === "function" ? msg() : msg;
+      this._writer.write(
+        this._formatMessage("info", stringify(message)),
+        "info",
+      );
+    }
+  }
+
+  public warning(msg: any | (() => any)) {
+    if (this._shouldWrite("warning")) {
+      const message = typeof msg === "function" ? msg() : msg;
+      this._writer.write(
+        this._formatMessage("warning", stringify(message)),
         "warning",
       );
     }
   }
 
-  public error(msg: any) {
+  public error(msg: any | (() => any)) {
     if (this._shouldWrite("error")) {
-      this._writer.write(this._formatMessage("error", stringify(msg)), "error");
+      const message = typeof msg === "function" ? msg() : msg;
+      this._writer.write(
+        this._formatMessage("error", stringify(message)),
+        "error",
+      );
     }
   }
 }
