@@ -5,3 +5,5 @@ webpack.*.js
 test/
 bin/
 nyc.config.ts
+/build/
+/dist/
