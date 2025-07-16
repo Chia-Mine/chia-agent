@@ -196,46 +196,31 @@ function stringify(obj: any, indent?: number) {
   } else if (typeof obj === "boolean") {
     return `${obj}`;
   } else if (typeof obj === "bigint") {
-    return `${obj}`;
+    return `${obj}n`;
   } else if (typeof obj === "symbol") {
     return obj.toString();
   } else if (typeof obj === "undefined") {
     return "undefined";
   } else if (typeof obj === "function") {
     return "[Function]";
-  } else if (obj === null) {
-    return "null";
   }
 
-  try {
-    // Custom replacer for circular references
-    const getCircularReplacer = () => {
-      const seen = new WeakSet();
-      return (_key: string, value: any) => {
-        if (typeof value === "object" && value !== null) {
-          if (seen.has(value)) {
-            return "[Circular]";
-          }
-          seen.add(value);
-        } else if (typeof value === "bigint") {
-          return `${value}n`;
-        } else if (typeof value === "function") {
-          return "[Function]";
-        } else if (typeof value === "symbol") {
-          return value.toString();
+  const seen = new WeakSet();
+  return JSON.stringify(
+    obj,
+    (k, v) => {
+      if (typeof v === "object" && v !== null) {
+        if (seen.has(v)) {
+          return undefined;
         }
-        return value;
-      };
-    };
-
-    return JSON.stringify(obj, getCircularReplacer(), indent);
-  } catch (error) {
-    const msg =
-      error && typeof error === "object" && "message" in error
-        ? error.message
-        : "Unknown error";
-    return `[Error stringifying object: ${msg}]`;
-  }
+        seen.add(v);
+      } else if (typeof v === "bigint") {
+        return `${v}n`;
+      }
+      return v;
+    },
+    indent,
+  );
 }
 
 export class Logger {
