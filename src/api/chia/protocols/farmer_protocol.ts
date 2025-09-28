@@ -2,13 +2,13 @@ import { bool, Optional } from "../types/_python_types_";
 import { G2Element } from "../../chia_rs/chia-bls/lib";
 import { uint32, uint64, uint8 } from "../../chia_rs/wheel/python/sized_ints";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
-import { ProofOfSpace } from "../types/blockchain_format/proof_of_space";
+import { ProofOfSpace } from "../../chia_rs/chia-protocol/proof_of_space";
 import { PoolTarget } from "../../chia_rs/chia-protocol/pool_target";
 import { ClassgroupElement } from "../types/blockchain_format/classgroup";
 import {
   ChallengeChainSubSlot,
   RewardChainSubSlot,
-} from "../types/blockchain_format/slots";
+} from "../../chia_rs/chia-protocol/slots";
 import {
   FoliageBlockData,
   FoliageTransactionBlock,
@@ -38,6 +38,7 @@ export type NewSignagePoint = {
   sub_slot_iters: uint64;
   signage_point_index: uint8;
   peak_height: uint32;
+  last_tx_height: uint32;
   sp_source_data: Optional<SignagePointSourceData>;
 };
 

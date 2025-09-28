@@ -1,4 +1,4 @@
-import { ProofOfSpace } from "../../chia/types/blockchain_format/proof_of_space";
+import { ProofOfSpace } from "../../chia_rs/chia-protocol/proof_of_space";
 import {
   DeclareProofOfSpace,
   NewSignagePoint,

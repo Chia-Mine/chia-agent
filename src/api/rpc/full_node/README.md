@@ -583,7 +583,7 @@ const response = await push_tx(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/spend_bundle.ts
 
 ---
 
@@ -715,7 +715,7 @@ const response = await get_fee_estimate(agent, params);
 }
 ```
 For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/spend_bundle.ts
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/spend_bundle.ts
 For content of `CLVMCost`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/clvm_cost.ts
 For content of `Mojos`,  

@@ -1,5 +1,31 @@
 # Changelog
 
+## [16.1.0]
+### Added
+- [Farmer Protocol](./src/api/chia/protocols/farmer_protocol.ts)
+  - `sp_source_data` to `NewSignagePoint`
+  - `include_signature_source_data` to `DeclareProofOfSpace`
+  - `rc_block_unfinished` to `RequestSignedValues`
+
+### Internal Changes
+- Migrated multiple protocol/types to `chia_rs` sources:
+  - `ProofOfSpace`, `PoolTarget`, `Foliage`, `FoliageTransactionBlock`
+  - `RewardChainBlockUnfinished`, `ChallengeChainSubSlot`, `RewardChainSubSlot`  
+  - `EndOfSubSlotBundle`, `SpendBundle`, `CoinSpend`
+  - All are now imported from `./src/api/chia_rs/chia-protocol/*`
+- Moved `NodeType` to [`./src/api/chia/protocols/outbound_message.ts`](./src/api/chia/protocols/outbound_message.ts)
+- Moved `owned_conditions.ts` from `./src/api/chia_rs/chia-consensus/gen/` to `./src/api/chia_rs/chia-consensus/`
+- Removed legacy python-derived type definitions in favor of `chia_rs`:
+  - `./src/api/chia/consensus/block_record.ts`
+  - `./src/api/chia/types/blockchain_format/proof_of_space.ts`
+  - `./src/api/chia/types/blockchain_format/slots.ts`
+  - `./src/api/chia/types/blockchain_format/sub_epoch_summary.ts`
+  - `./src/api/chia/types/end_of_slot_bundle.ts`
+  - `./src/api/chia/types/full_block.ts`
+  - `./src/api/chia/types/spend_bundle.ts`
+  - `./src/api/chia/types/spend_bundle_condition.ts`
+  - `./src/api/chia/types/unfinished_block.ts`
+
 ## [16.0.2]
 ### Fixed
 - Fixed logging issues where it crashes upon stringifying an object with circular references
@@ -1890,6 +1916,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[16.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v16.0.2...v16.1.0
 [16.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v16.0.1...v16.0.2
 [16.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v16.0.0...v16.0.1
 [16.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v15.0.0...v16.0.0

@@ -1,11 +1,17 @@
-import { SpendBundle } from "./spend_bundle";
 import { Coin } from "./blockchain_format/coin";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { NPCResult } from "../consensus/cost_calculator";
 import { bool, Optional } from "./_python_types_";
 import { uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
-import { CoinSpend } from "./coin_spend";
-import { SpendBundleConditions } from "../../chia_rs/chia-consensus/gen/owned_conditions";
+import { CoinSpend } from "../../chia_rs/chia-protocol/coin_spend";
+import { SpendBundle } from "../../chia_rs/chia-protocol/spend_bundle";
+import { SpendBundleConditions } from "../../chia_rs/chia-consensus/owned_conditions";
+
+export type UnspentLineageInfo = {
+  coin_id: bytes32;
+  parent_id: bytes32;
+  parent_parent_id: bytes32;
+};
 
 export type BundleCoinSpend = {
   coin_spend: CoinSpend;
@@ -15,10 +21,10 @@ export type BundleCoinSpend = {
   // cost on the specific solution in this item
   cost: Optional<uint64>;
   // If this spend is eligible for fast forward, this may be set to the
-  // current unspent coin belonging to this singleton, that we would rebase
-  // this spend on top of if we were to make a block now.
-  // When finding MempoolItems by coin ID, we use this Coin ID if it's set.
-  latest_singleton_coin: Optional<bytes32>;
+  // current unspent lineage belonging to this singleton, that we would rebase
+  // this spend on top of if we were to make a block now
+  // When finding MempoolItems by coin ID, we use Coin ID from it if it's set
+  latest_singleton_lineage: Optional<UnspentLineageInfo>;
 };
 
 export type MempoolItem = {

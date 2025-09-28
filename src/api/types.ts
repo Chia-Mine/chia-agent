@@ -1,4 +1,4 @@
-import { NodeType } from "./chia/server/outbound_message";
+import { NodeType } from "./chia/protocols/outbound_message";
 import { float, str } from "./chia/types/_python_types_";
 import { int, uint16 } from "./chia_rs/wheel/python/sized_ints";
 import { bytes32 } from "./chia_rs/wheel/python/sized_bytes";

@@ -7,7 +7,7 @@ import {
   uint8,
 } from "../../chia_rs/wheel/python/sized_ints";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
-import { ProofOfSpace } from "../types/blockchain_format/proof_of_space";
+import { ProofOfSpace } from "../../chia_rs/chia-protocol/proof_of_space";
 
 export const PoolErrorCode = {
   REVERTED_SIGNAGE_POINT: 1,

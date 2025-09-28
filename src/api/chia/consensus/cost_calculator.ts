@@ -1,4 +1,4 @@
-import { SpendBundleConditions } from "../types/spend_bundle_condition";
+import { SpendBundleConditions } from "../../chia_rs/chia-consensus/owned_conditions";
 import { Optional } from "../types/_python_types_";
 import { uint16 } from "../../chia_rs/wheel/python/sized_ints";
 
