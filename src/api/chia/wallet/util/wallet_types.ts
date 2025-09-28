@@ -17,6 +17,7 @@ export const WalletType = {
   DATA_LAYER_OFFER: 12,
   VC: 13,
   CRCAT: 57,
+  RCAT: 132,
 } as const;
 
 export const CoinType = {

@@ -165,10 +165,10 @@ unsubscribe(); // Stop subscribing messages
   timestamp?: uint64;
   transaction_generator_size_bytes?: int;
   transaction_generator_ref_list: uint32[];
-  receive_block_result?: ReceiveBlockResult;
+  receive_block_result?: AddBlockResult;
 }
 ```
-For content of `ReceiveBlockResult`,  
+For content of `AddBlockResult`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/consensus/blockchain.ts
 
 ---

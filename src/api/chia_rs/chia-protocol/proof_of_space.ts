@@ -8,6 +8,6 @@ export type ProofOfSpace = {
   pool_public_key: Optional<G1Element>; // Optional[G1Element]
   pool_contract_puzzle_hash: Optional<bytes32>; // Optional[bytes32]
   plot_public_key: G1Element; // G1Element
-  size: uint8; // uint8
+  size: uint8; // uint8 // The original name of `size` is `version_and_size` in chia-rs, so in the future we may change it to `version_and_size`
   proof: bytes; // bytes
 };

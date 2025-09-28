@@ -1,4 +1,4 @@
-import { EndOfSubSlotBundle } from "./end_of_slot_bundle";
+import { EndOfSubSlotBundle } from "../../chia_rs/chia-protocol/end_of_sub_slot_bundle";
 import { VDFProof } from "./blockchain_format/vdf";
 import { bytes, Optional } from "./_python_types_";
 import {

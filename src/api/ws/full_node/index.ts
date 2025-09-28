@@ -1,4 +1,4 @@
-import { BlockRecord } from "../../chia/consensus/block_record";
+import { BlockRecord } from "../../chia_rs/chia-protocol/block_record";
 import { bool, float, None, str } from "../../chia/types/_python_types_";
 import {
   int,
@@ -17,8 +17,8 @@ import {
 } from "../../types";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { NewSignagePoint } from "../../chia/protocols/farmer_protocol";
-import { ReceiveBlockResult } from "../../chia/consensus/blockchain";
-import { UnfinishedBlock } from "../../chia/types/unfinished_block";
+import { AddBlockResult } from "../../chia/consensus/blockchain";
+import { UnfinishedBlock } from "../../chia_rs/chia-protocol/unfinished_block";
 
 export const chia_full_node_service = "chia_full_node";
 export type chia_full_node_service = typeof chia_full_node_service;
@@ -123,7 +123,7 @@ export type TBlockBroadCast =
       timestamp?: uint64;
       transaction_generator_size_bytes?: int;
       transaction_generator_ref_list: uint32[];
-      receive_block_result?: ReceiveBlockResult;
+      receive_block_result?: AddBlockResult;
     };
 export type WsBlockMessage = GetMessageType<
   chia_full_node_service,

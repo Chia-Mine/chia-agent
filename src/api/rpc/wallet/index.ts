@@ -22,7 +22,7 @@ import {
   TransactionRecordConvenience,
   TransactionRecordConvenienceWithMetadata,
 } from "../../chia/wallet/transaction_record";
-import { SpendBundle } from "../../chia/types/spend_bundle";
+import { SpendBundle } from "../../chia_rs/chia-protocol/spend_bundle";
 import { TRPCAgent } from "../../../rpc";
 import { PoolWalletInfo } from "../../chia/pools/pool_wallet_info";
 import { TradeRecordConvenience } from "../../chia/wallet/trade_record";

@@ -2,7 +2,7 @@ import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { bool, str } from "../../chia/types/_python_types_";
 import { G1Element } from "../../chia_rs/chia-bls/lib";
 import { uint64 } from "../../chia_rs/wheel/python/sized_ints";
-import { CoinSpend } from "../../chia/types/coin_spend";
+import { CoinSpend } from "../../chia_rs/chia-protocol/coin_spend";
 import { PoolState } from "../../chia/pools/pool_wallet_info";
 
 export type FarmerRecord = {

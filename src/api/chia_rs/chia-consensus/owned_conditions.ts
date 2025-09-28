@@ -1,7 +1,7 @@
-import { bool, bytes, Optional } from "../../../chia/types/_python_types_";
-import { uint128, uint32, uint64 } from "../../wheel/python/sized_ints";
-import { bytes32 } from "../../wheel/python/sized_bytes";
-import { PublicKey } from "../../chia-bls/public_key";
+import { bool, bytes, Optional } from "../../chia/types/_python_types_";
+import { uint128, uint32, uint64 } from "../wheel/python/sized_ints";
+import { bytes32 } from "../wheel/python/sized_bytes";
+import { PublicKey } from "../chia-bls/public_key";
 
 export type SpendConditions = {
   coin_id: bytes32;
@@ -23,6 +23,9 @@ export type SpendConditions = {
   agg_sig_parent_amount: Array<[PublicKey, bytes]>;
   agg_sig_parent_puzzle: Array<[PublicKey, bytes]>;
   flags: uint32;
+  // per-spend execution and condition cost
+  execution_cost: uint64;
+  condition_cost: uint64;
 };
 
 export type SpendBundleConditions = {

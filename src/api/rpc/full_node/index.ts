@@ -1,5 +1,5 @@
-import { FullBlock } from "../../chia/types/full_block";
-import { BlockRecord } from "../../chia/consensus/block_record";
+import { FullBlock } from "../../chia_rs/chia-protocol/fullblock";
+import { BlockRecord } from "../../chia_rs/chia-protocol/block_record";
 import { bool, float, Optional, str } from "../../chia/types/_python_types_";
 import {
   int,
@@ -12,16 +12,14 @@ import {
   CoinRecord,
   CoinRecordBackwardCompatible,
 } from "../../chia/types/coin_record";
-import { SpendBundle } from "../../chia/types/spend_bundle";
+import { SpendBundle } from "../../chia_rs/chia-protocol/spend_bundle";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { MempoolItemInJsonDict } from "../../chia/types/mempool_item";
 import { TRPCAgent } from "../../../rpc";
-import { EndOfSubSlotBundle } from "../../chia/types/end_of_slot_bundle";
+import { EndOfSubSlotBundle } from "../../chia_rs/chia-protocol/end_of_sub_slot_bundle";
 import { SignagePoint } from "../../chia/full_node/signage_point";
-import {
-  CoinSpend,
-  CoinSpendWithConditions,
-} from "../../chia/types/coin_spend";
+import { CoinSpend } from "../../chia_rs/chia-protocol/coin_spend";
+import { CoinSpendWithConditions } from "../../chia/types/coin_spend";
 import { CLVMCost } from "../../chia/types/clvm_cost";
 import { GetMessageType, ResType } from "../../types";
 import { TDaemon } from "../../../daemon/index";
