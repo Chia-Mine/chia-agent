@@ -804,7 +804,7 @@ const response = await get_auto_farming(agent);
 ### response:
 ```typescript
 {
-  new_peak_height: uint64;
+  auto_farm_enabled: bool;
   success: bool;
 }
 ```

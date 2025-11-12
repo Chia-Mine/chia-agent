@@ -1,5 +1,10 @@
 # Changelog
 
+## [16.1.1]
+### Fixed
+- Fixed incorrect response type for [`get_auto_farming`](./src/api/rpc/full_node/README.md#get_auto_farmingagent)
+  - corrected from `{new_peak_height: uint64; success: bool}` to `{auto_farm_enabled: bool; success: bool}`
+
 ## [16.1.0]
 ### Added
 - [Farmer Protocol](./src/api/chia/protocols/farmer_protocol.ts)
