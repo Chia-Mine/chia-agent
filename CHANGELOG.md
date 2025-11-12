@@ -1,5 +1,10 @@
 # Changelog
 
+## [16.1.1]
+### Fixed
+- Fixed incorrect response type for [`get_auto_farming`](./src/api/rpc/full_node/README.md#get_auto_farmingagent)
+  - corrected from `{new_peak_height: uint64; success: bool}` to `{auto_farm_enabled: bool; success: bool}`
+
 ## [16.1.0]
 ### Added
 - [Farmer Protocol](./src/api/chia/protocols/farmer_protocol.ts)
@@ -1916,6 +1921,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[16.1.1]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.0...v16.1.1
 [16.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v16.0.2...v16.1.0
 [16.0.2]: https://github.com/Chia-Mine/chia-agent/compare/v16.0.1...v16.0.2
 [16.0.1]: https://github.com/Chia-Mine/chia-agent/compare/v16.0.0...v16.0.1

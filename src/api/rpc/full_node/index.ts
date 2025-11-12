@@ -928,7 +928,7 @@ export async function set_auto_farming<T extends TRPCAgent | TDaemon>(
 export const get_auto_farming_command = "get_auto_farming";
 export type get_auto_farming_command = typeof get_auto_farming_command;
 export type TGetAutoFarmingResponse = {
-  new_peak_height: uint64;
+  auto_farm_enabled: bool;
   success: bool;
 };
 export type WsGetAutoFarmingMessage = GetMessageType<
