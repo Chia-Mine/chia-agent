@@ -1,5 +1,10 @@
 # Changelog
 
+## [16.1.2]
+### Fixed
+- Fixed `TGetCoinRecordsByPuzzleHashRequest` type definition
+  - Made `start_height`, `end_height`, and `include_spent_coins` optional parameters
+
 ## [16.1.1]
 ### Fixed
 - Fixed incorrect response type for [`get_auto_farming`](./src/api/rpc/full_node/README.md#get_auto_farmingagent)
