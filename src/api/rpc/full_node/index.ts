@@ -495,9 +495,9 @@ export type get_coin_records_by_puzzle_hashes_command =
   typeof get_coin_records_by_puzzle_hashes_command;
 export type TGetCoinRecordsByPuzzleHashesRequest = {
   puzzle_hashes: str[];
-  start_height: uint32;
-  end_height: uint32;
-  include_spent_coins: bool;
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
 };
 export type TGetCoinRecordsByPuzzleHashesResponse = {
   coin_records: CoinRecordBackwardCompatible[];
