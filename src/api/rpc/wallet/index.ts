@@ -902,22 +902,18 @@ export type TSendTransactionMultiResponse = {
   transaction: TransactionRecordConvenience;
   transaction_id: TransactionRecordConvenience["name"];
   transactions: TransactionRecordConvenience[];
-  unsigned_transactions: UnsignedTransaction[];
 };
-export type WsSendTransactionMultiMessage = GetMessageType<
+export type WsSendTransactionMultiMessage<R> = GetMessageType<
   chia_wallet_service,
   send_transaction_multi_command,
-  TSendTransactionMultiResponse
+  R
 >;
-export async function send_transaction_multi<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TSendTransactionMultiRequest,
-) {
-  type R = ResType<
-    T,
-    TSendTransactionMultiResponse,
-    WsSendTransactionMultiMessage
-  >;
+export async function send_transaction_multi<
+  T extends TRPCAgent | TDaemon,
+  D extends TSendTransactionMultiRequest,
+>(agent: T, data: D) {
+  type TER = TxeResp<D, TSendTransactionMultiResponse>;
+  type R = ResType<T, TER, WsSendTransactionMultiMessage<TER>>;
   return agent.sendMessage<R>(
     chia_wallet_service,
     send_transaction_multi_command,

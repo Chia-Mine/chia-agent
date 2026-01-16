@@ -21,6 +21,9 @@ import { SignagePoint } from "../../chia/full_node/signage_point";
 import { CoinSpend } from "../../chia_rs/chia-protocol/coin_spend";
 import { CoinSpendWithConditions } from "../../chia/types/coin_spend";
 import { CLVMCost } from "../../chia/types/clvm_cost";
+import { Program } from "../../chia_rs/chia-protocol/program";
+import { Coin } from "../../chia/types/blockchain_format/coin";
+import { G2Element } from "../../chia_rs/chia-bls/lib";
 import { GetMessageType, ResType } from "../../types";
 import { TDaemon } from "../../../daemon/index";
 
@@ -195,6 +198,36 @@ export async function get_block_record<T extends TRPCAgent | TDaemon>(
     chia_full_node_service,
     get_block_record_command,
     data,
+  );
+}
+
+export const create_block_generator_command = "create_block_generator";
+export type create_block_generator_command =
+  typeof create_block_generator_command;
+export type TCreateBlockGeneratorResponse = {
+  generator: Program;
+  refs: uint32[];
+  additions: Coin[];
+  removals: Coin[];
+  sig: G2Element;
+  cost: uint64;
+};
+export type WsCreateBlockGeneratorMessage = GetMessageType<
+  chia_full_node_service,
+  create_block_generator_command,
+  TCreateBlockGeneratorResponse
+>;
+export async function create_block_generator<T extends TRPCAgent | TDaemon>(
+  agent: T,
+) {
+  type R = ResType<
+    T,
+    TCreateBlockGeneratorResponse,
+    WsCreateBlockGeneratorMessage
+  >;
+  return agent.sendMessage<R>(
+    chia_full_node_service,
+    create_block_generator_command,
   );
 }
 
