@@ -1,5 +1,10 @@
 # Changelog
 
+## [16.1.4]
+### Fixed
+- Fixed `TGetCoinRecordsByPuzzleHashesRequest` type definition
+  - Made `start_height`, `end_height`, and `include_spent_coins` optional parameters
+
 ## [16.1.3]
 ### Fixed
 - RPC failures now reject with a typed `RpcError` instead of a raw response object
