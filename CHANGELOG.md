@@ -5,7 +5,7 @@
 - Added `create_block_generator` to the Full Node RPC API
 
 ### Fixed
-- Fixed `CHIP0029UnsignedTransaction` conditional type to require `"CHIP-0029": True`
+- Fixed CHIP-0029 response typing by discriminating `TXEndpointRequest` variants
 
 ## [16.1.4]
 ### Fixed

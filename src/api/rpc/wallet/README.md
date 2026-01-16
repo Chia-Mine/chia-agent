@@ -732,7 +732,7 @@ const response = await send_transaction(agent, params);
   puzzle_decorator?: Array<{ decorator: str; clawback_timelock?: uint64 }>;
 } & TXEndpointRequest
 ```
-Optional: include `{"CHIP-0029": true}` in `TXEndpointRequest` to use marshalled responses (`unsigned_transactions` as hex strings).
+Optional: include `{"CHIP-0029": true}` in `TXEndpointRequest` to use marshalled responses (`unsigned_transactions` as hex strings). Omitting the flag (or setting `{"CHIP-0029": false}`) keeps the non-marshalled response typing.
 ### response:
 ```typescript
 {
