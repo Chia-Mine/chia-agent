@@ -66,6 +66,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_all_mempool_items`](./rpc/full_node/README.md#get_all_mempool_itemsagent)
 - [`get_mempool_item_by_tx_id`](./rpc/full_node/README.md#get_mempool_item_by_tx_idagent-params)
 - [`get_mempool_items_by_coin_name`](./rpc/full_node/README.md#get_mempool_items_by_coin_nameagent-params)
+- [`create_block_generator`](./rpc/full_node/README.md#create_block_generatoragent)
 - [`get_fee_estimate`](./rpc/full_node/README.md#get_fee_estimateagent-params)
 - [`get_all_blocks`](./rpc/full_node/README.md#get_all_blocksagent-params)
 - [`farm_block`](./rpc/full_node/README.md#farm_blockagent-params)

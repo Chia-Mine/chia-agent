@@ -54,6 +54,8 @@ export {
   TGetMempoolItemsByCoinNameRequest,
   TGetMempoolItemsByCoinNameResponse,
   get_mempool_items_by_coin_name,
+  TCreateBlockGeneratorResponse,
+  create_block_generator,
   TGetBlockRecordByHeightRequest,
   TGetBlockRecordByHeightResponse,
   get_block_record_by_height,

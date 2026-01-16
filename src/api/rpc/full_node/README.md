@@ -197,6 +197,34 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-proto
 
 ---
 
+## `create_block_generator(agent)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {create_block_generator} = require("chia-agent/api/rpc/full_node");
+const agent = new RPCAgent({service: "full_node"});
+const response = await create_block_generator(agent);
+```
+### response
+```typescript
+{
+  generator: Program;
+  refs: uint32[];
+  additions: Coin[];
+  removals: Coin[];
+  sig: G2Element;
+  cost: uint64;
+}
+```
+For content of `Program`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/program.ts  
+For content of `Coin`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/types/blockchain_format/coin.ts  
+For content of `G2Element`,  
+see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-bls/lib.ts
+
+---
+
 ## `get_block_records(agent, params)`
 ### Usage
 ```js

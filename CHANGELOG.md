@@ -1,6 +1,9 @@
 # Changelog
 
 ## [16.1.4]
+### Added
+- Added `create_block_generator` to the Full Node RPC API
+
 ### Fixed
 - Fixed `TGetCoinRecordsByPuzzleHashesRequest` type definition
   - Made `start_height`, `end_height`, and `include_spent_coins` optional parameters
