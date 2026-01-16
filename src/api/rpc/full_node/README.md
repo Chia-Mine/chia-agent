@@ -435,9 +435,9 @@ const response = await get_coin_records_by_puzzle_hashes(agent, params);
 ```typescript
 {
   puzzle_hashes: str[];
-  start_height: uint32;
-  end_height: uint32;
-  include_spent_coins: bool;
+  start_height?: uint32;
+  end_height?: uint32;
+  include_spent_coins?: bool;
 }
 ```
 ### response
