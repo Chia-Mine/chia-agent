@@ -1,5 +1,9 @@
 # Changelog
 
+## [16.1.3]
+### Fixed
+- RPC failures now reject with a typed `RpcError` instead of a raw response object
+
 ## [16.1.2]
 ### Fixed
 - Fixed `TGetCoinRecordsByPuzzleHashRequest` type definition
