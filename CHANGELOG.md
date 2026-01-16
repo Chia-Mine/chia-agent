@@ -1,10 +1,8 @@
 # Changelog
 
-## [16.1.5-beta.0]
-### Added
-- Added `create_block_generator` to the Full Node RPC API
-
+## [16.1.5]
 ### Fixed
+- Added missing `create_block_generator` to the Full Node RPC API
 - Fixed CHIP-0029 response typing by discriminating `TXEndpointRequest` variants
 
 ## [16.1.4]
