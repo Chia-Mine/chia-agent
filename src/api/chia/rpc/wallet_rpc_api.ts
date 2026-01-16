@@ -17,7 +17,7 @@ export type TXEndpointRequest = {
   Partial<ConditionValidTimes>;
 
 export type CHIP0029UnsignedTransaction<T extends TXEndpointRequest> =
-  T extends { "CHIP-0029"?: True } ? str[] : UnsignedTransaction[];
+  T extends { "CHIP-0029": True } ? str[] : UnsignedTransaction[];
 
 export type TxeResp<Req extends TXEndpointRequest, Res> = {
   unsigned_transactions: CHIP0029UnsignedTransaction<Req>;

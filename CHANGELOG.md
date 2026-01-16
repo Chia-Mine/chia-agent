@@ -1,9 +1,13 @@
 # Changelog
 
-## [16.1.4]
+## [16.1.5-beta.0]
 ### Added
 - Added `create_block_generator` to the Full Node RPC API
 
+### Fixed
+- Fixed `CHIP0029UnsignedTransaction` conditional type to require `"CHIP-0029": True`
+
+## [16.1.4]
 ### Fixed
 - Fixed `TGetCoinRecordsByPuzzleHashesRequest` type definition
   - Made `start_height`, `end_height`, and `include_spent_coins` optional parameters
