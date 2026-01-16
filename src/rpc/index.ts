@@ -25,6 +25,16 @@ const JSONbig = JSONbigBuilder({
   alwaysParseAsBig: false,
 });
 
+export class RpcError extends Error {
+  public response: unknown;
+
+  public constructor(message: string, response: unknown) {
+    super(message);
+    this.name = "RpcError";
+    this.response = response;
+  }
+}
+
 type TDestination =
   | "farmer"
   | "harvester"
@@ -471,8 +481,14 @@ export class RPCAgent implements APIAgent {
                 );
               }
               if (!d.success) {
-                getLogger().info(`API failure: ${d.error}`);
-                return reject(d);
+                const errorMessage =
+                  typeof d.error === "string"
+                    ? d.error
+                    : typeof d.error_message === "string"
+                      ? d.error_message
+                      : `RPC request failed: ${stringify(d)}`;
+                getLogger().info(`API failure: ${errorMessage}`);
+                return reject(new RpcError(errorMessage, d));
               }
 
               getLogger().debug(
