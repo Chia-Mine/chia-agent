@@ -281,6 +281,7 @@ const response = await get_height_info(agent); // or get_height_info(agent, {"CH
 ### params:
 ```typescript
 {
+  use_peak_height?: bool; // @chia-blockchain 2.7.1+
   "CHIP-0029"?: bool;
 }
 ```
@@ -288,6 +289,34 @@ const response = await get_height_info(agent); // or get_height_info(agent, {"CH
 ```typescript
 {
   height: uint32;
+  latest_timestamp: uint64; // @chia-blockchain 2.7.1+
+  is_transaction_block: Optional<bool>; // @chia-blockchain 2.7.1+
+  prev_transaction_block_height: Optional<uint32>; // @chia-blockchain 2.7.1+
+}
+```
+
+---
+
+## `get_puzzle_and_solution(agent, params)`
+Returns the puzzle reveal and solution of a spent coin. Available since chia-blockchain 2.7.1.
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {get_puzzle_and_solution} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await get_puzzle_and_solution(agent, params);
+```
+### params:
+```typescript
+{
+  coin_name: str;
+}
+```
+### response:
+```typescript
+{
+  puzzle_reveal: str; // hex without 0x prefix
+  solution: str; // hex without 0x prefix
 }
 ```
 

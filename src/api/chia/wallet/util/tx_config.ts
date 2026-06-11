@@ -7,6 +7,8 @@ export type CoinSelectionConfigLoader = {
   max_coin_amount?: Optional<uint64>;
   excluded_coin_amounts?: Optional<uint64[]>;
   excluded_coin_ids?: Optional<bytes32[]>;
+  included_coin_ids?: Optional<bytes32[]>; // @chia-blockchain 2.7.1+
+  primary_coin?: Optional<bytes32>; // @chia-blockchain 2.7.1+
 };
 
 export type TXEndpointForCompat = {
