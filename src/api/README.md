@@ -119,6 +119,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_wallets`](./rpc/wallet/README.md#get_walletsagent-params)
 - [`create_new_wallet`](./rpc/wallet/README.md#create_new_walletagent-params)
 - [`register_remote_coins`](./rpc/wallet/README.md#register_remote_coinsagent-params)
+- [`get_puzzle_and_solution`](./rpc/wallet/README.md#get_puzzle_and_solutionagent-params)
 - [`get_wallet_balance`](./rpc/wallet/README.md#get_wallet_balanceagent-params)
 - [`get_wallet_balances`](./rpc/wallet/README.md#get_wallet_balancesagent-params)
 - [`get_transaction`](./rpc/wallet/README.md#get_transactionagent-params)

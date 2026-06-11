@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `2.7.0` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
+Supports all RPC/Websocket API available at `2.7.1` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
@@ -22,10 +22,10 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`ab8090a653768d835f07cca106ea7602538a761b`](https://github.com/Chia-Network/chia-blockchain/tree/ab8090a653768d835f07cca106ea7602538a761b) of [chia-blockchain 2.7.0](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/ab8090a653768d835f07cca106ea7602538a761b...main)
-- [`1143ff126a63de7732c1ecb672dfe0aa734c078f`](https://github.com/Chia-Network/chia_rs/tree/1143ff126a63de7732c1ecb672dfe0aa734c078f) of [chia_rs 0.41.1](https://github.com/Chia-Network/chia_rs)
-  - [Diff to the main branch of chia_rs](https://github.com/Chia-Network/chia_rs/compare/1143ff126a63de7732c1ecb672dfe0aa734c078f...main)
+- [`560a4ab7a96b619bafd4efd5aa2f2e5c8cffea67`](https://github.com/Chia-Network/chia-blockchain/tree/560a4ab7a96b619bafd4efd5aa2f2e5c8cffea67) of [chia-blockchain 2.7.1](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/560a4ab7a96b619bafd4efd5aa2f2e5c8cffea67...main)
+- [`746c6888b685fec4827aacb942803022842ffe71`](https://github.com/Chia-Network/chia_rs/tree/746c6888b685fec4827aacb942803022842ffe71) of [chia_rs 0.42.1](https://github.com/Chia-Network/chia_rs)
+  - [Diff to the main branch of chia_rs](https://github.com/Chia-Network/chia_rs/compare/746c6888b685fec4827aacb942803022842ffe71...main)
 - [`ef49150171cc243b09c0e5d5cb27f2249ffa3793`](https://github.com/Chia-Network/pool-reference/tree/ef49150171cc243b09c0e5d5cb27f2249ffa3793) of [pool-reference](https://github.com/Chia-Network/pool-reference)  
   - [Diff to the main branch of pool-reference](https://github.com/Chia-Network/pool-reference/compare/ef49150171cc243b09c0e5d5cb27f2249ffa3793...main)
 

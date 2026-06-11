@@ -1,5 +1,29 @@
 # Changelog
 
+## [19.2.0]
+Support for [`chia-blockchain@2.7.1`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.7.1)
+
+### Added
+- New Wallet RPC API [`get_puzzle_and_solution`](./src/api/rpc/wallet/README.md#get_puzzle_and_solutionagent-params)
+  - exported as `get_puzzle_and_solution_of_wallet` from `chia-agent/api/rpc`
+    (the Full Node RPC API of the same name keeps the plain export)
+- `get_height_info`
+  - New optional request parameter `use_peak_height`
+  - Response now includes `latest_timestamp`, `is_transaction_block` and `prev_transaction_block_height`
+- `CoinSelectionConfig`: new optional `included_coin_ids` and `primary_coin` request fields,
+  accepted by all transaction endpoints as well as `select_coins` and `get_spendable_coins`
+- New optional `allow_unsynced` request field on all transaction endpoints,
+  `select_coins`, `get_spendable_coins` and `get_coin_records_by_names`
+- All transaction endpoint responses now include `sync_status`
+  (`0=SYNCED, 1=SLIGHTLY_BEHIND, 2=LONG_SYNC, 3=DISCONNECTED`)
+
+### Changed
+- Synchronized with `chia_rs@0.42.1` (no type definition changes were required)
+- Several integer fields were widened from `uint16` to `uint32` upstream
+  (`get_transaction_count.count`, `get_offers_count` counters, `nft_set_did_bulk` / `nft_transfer_bulk` `tx_num`,
+  `nft_mint_bulk` `mint_number_start` / `mint_total`, `get_all_offers` `start` / `end`)
+- `get_height_info` now sends its request body (previously the optional request object was ignored)
+
 ## [19.1.0]
 Support for [`chia-blockchain@2.7.0`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.7.0)
 
