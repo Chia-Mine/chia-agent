@@ -1,5 +1,12 @@
 # Changelog
 
+## [16.1.6]
+### Changed
+- Confirmed compatibility with [`chia-blockchain@2.5.6`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.6)
+  - chia-blockchain 2.5.6 does not introduce any RPC/Websocket API changes.
+    The only protocol-level change (`NewSignagePointHarvester2`) is a farmer-harvester internal network message
+    which is not part of the API surface covered by chia-agent.
+
 ## [16.1.5]
 ### Fixed
 - Added missing `create_block_generator` to the Full Node RPC API
