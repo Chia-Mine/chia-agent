@@ -1,7 +1,19 @@
-import { Optional, str } from "../types/_python_types_";
+import { bytes, Optional, str } from "../types/_python_types_";
 import { G1Element } from "../../chia_rs/chia-bls/lib";
 import { uint64, uint8 } from "../../chia_rs/wheel/python/sized_ints";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
+
+export type PartialProofsData = {
+  challenge_hash: bytes32;
+  sp_hash: bytes32;
+  plot_identifier: str;
+  partial_proofs: bytes[];
+  signage_point_index: uint8;
+  plot_size: uint8;
+  pool_public_key: Optional<G1Element>;
+  pool_contract_puzzle_hash: Optional<bytes32>;
+  plot_public_key: G1Element;
+};
 
 export type Plot = {
   filename: str;

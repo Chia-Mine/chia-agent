@@ -25,21 +25,28 @@ export type TransactionRecordOld = {
   trade_id: Optional<bytes32>;
   type: uint32; // # TransactionType
   name: bytes32;
-  memos: Array<[bytes32, bytes[]]>;
+  memos: Record<str, bytes[]>; // Dict[bytes32, List[bytes]] - keys are 0x-prefixed coin ids
 };
 
 export type TransactionRecord = TransactionRecordOld & {
+  to_address: str;
   valid_times: ConditionValidTimes;
 };
 
-export type TransactionRecordConvenience = {
-  to_address: str;
-  memos: Record<str, str>;
-} & TransactionRecord;
+// As of chia-blockchain 2.5.7, RPC responses serialize transaction records with
+// the plain streamable `to_json_dict()`; the previous "convenience" format was removed.
+/** @deprecated Use {@link TransactionRecord} instead */
+export type TransactionRecordConvenience = TransactionRecord;
 
-export type TransactionRecordConvenienceWithMetadata = {
-  metadata: ClawbackMetadata & {
-    coin_id: str;
-    spent: bool;
-  };
-} & TransactionRecordConvenience;
+export type TransactionRecordWithMetadata = TransactionRecord & {
+  metadata: Optional<
+    ClawbackMetadata & {
+      coin_id: str;
+      spent: bool;
+    }
+  >;
+};
+
+/** @deprecated Use {@link TransactionRecordWithMetadata} instead */
+export type TransactionRecordConvenienceWithMetadata =
+  TransactionRecordWithMetadata;
