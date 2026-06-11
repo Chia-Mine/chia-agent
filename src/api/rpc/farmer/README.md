@@ -400,3 +400,30 @@ const response = await get_pool_login_link(agent, params);
   login_link: str;
 }
 ```
+
+---
+
+## `connect_to_solver(agent, params)`
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {connect_to_solver} = require("chia-agent/api/rpc/farmer");
+const agent = new RPCAgent({service: "farmer"});
+const response = await connect_to_solver(agent, params);
+```
+### params:
+```typescript
+{
+  host: str;
+  port: int;
+}
+```
+### response:
+```typescript
+{
+  success: True;
+} | {
+  success: False;
+  error: str;
+}
+```

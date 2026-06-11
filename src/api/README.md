@@ -5,7 +5,7 @@ There are 2 kinds of APIs in chia.
 
 ### RPC API
 RPC API is used to send message directly to chia services like `farmer`, `harvester`, `full_node`,
-`wallet`, `data_layer`, `crawler`.
+`wallet`, `data_layer`, `crawler`, `solver`.
 
 RPC API is just an async function with a traditional request/response style.
 
@@ -37,6 +37,7 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`get_harvester_plots_keys_missing`](./rpc/farmer/README.md#get_harvester_plots_keys_missingagent-params)
 - [`get_harvester_plots_duplicates`](./rpc/farmer/README.md#get_harvester_plots_duplicatesagent-params)
 - [`get_pool_login_link`](./rpc/farmer/README.md#get_pool_login_linkagent-params)
+- [`connect_to_solver`](./rpc/farmer/README.md#connect_to_solveragent-params)
 
 #### [Full Node RPC API](./rpc/full_node/README.md#usage)
 - [`get_blockchain_state`](./rpc/full_node/README.md#get_blockchain_stateagent)
@@ -156,15 +157,10 @@ In order to keep description simple, the above error response is omitted in RPC 
 - [`cancel_offers`](./rpc/wallet/README.md#cancel_offersagent-params)
 - [`did_set_wallet_name`](./rpc/wallet/README.md#did_set_wallet_nameagent-params)
 - [`did_get_wallet_name`](./rpc/wallet/README.md#did_get_wallet_nameagent-params)
-- [`did_update_recovery_ids`](./rpc/wallet/README.md#did_update_recovery_idsagent-params)
 - [`did_update_metadata`](./rpc/wallet/README.md#did_update_metadataagent-params)
 - [`did_get_pubkey`](./rpc/wallet/README.md#did_get_pubkeyagent-params)
 - [`did_get_did`](./rpc/wallet/README.md#did_get_didagent-params)
-- [`did_recovery_spend`](./rpc/wallet/README.md#did_recovery_spendagent-params)
-- [`did_get_recovery_list`](./rpc/wallet/README.md#did_get_recovery_listagent-params)
 - [`did_get_metadata`](./rpc/wallet/README.md#did_get_metadataagent-params)
-- [`did_create_attest`](./rpc/wallet/README.md#did_create_attestagent-params)
-- [`did_get_information_needed_for_recovery`](./rpc/wallet/README.md#did_get_information_needed_for_recoveryagent-params)
 - [`did_get_current_coin_info`](./rpc/wallet/README.md#did_get_current_coin_infoagent-params)
 - [`did_create_backup_file`](./rpc/wallet/README.md#did_create_backup_fileagent-params)
 - [`did_transfer_did`](./rpc/wallet/README.md#did_transfer_didagent-params)
@@ -257,6 +253,9 @@ In order to keep description simple, the above error response is omitted in RPC 
 #### [Crawler RPC API](./rpc/crawler/README.md#usage)
 - [`get_peer_counts`](./rpc/crawler/README.md#get_peer_countsagent)
 - [`get_ips_after_timestamp`](./rpc/crawler/README.md#get_ips_after_timestampagent-params)
+
+#### [Solver RPC API](./rpc/solver/README.md#usage)
+- [`get_state`](./rpc/solver/README.md#get_stateagent)
 
 #### [Common RPC API](./rpc/common/README.md#usage)
 - [`get_network_info`](./rpc/common/README.md#get_network_infoagent)

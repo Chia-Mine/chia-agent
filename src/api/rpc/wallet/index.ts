@@ -22,7 +22,6 @@ import {
   TransactionRecordConvenience,
   TransactionRecordConvenienceWithMetadata,
 } from "../../chia/wallet/transaction_record";
-import { SpendBundle } from "../../chia_rs/chia-protocol/spend_bundle";
 import { TRPCAgent } from "../../../rpc";
 import { PoolWalletInfo } from "../../chia/pools/pool_wallet_info";
 import { TradeRecordConvenience } from "../../chia/wallet/trade_record";
@@ -529,9 +528,13 @@ export type TGetWalletsRequest = {
   type?: int;
   include_data?: bool;
 };
+export type WalletInfoResponse = WalletInfo & {
+  authorized_providers: bytes32[];
+  flags_needed: str[];
+};
 export type TGetWalletsResponse = {
-  wallets: WalletInfo[];
-  fingerprint?: int;
+  wallets: WalletInfoResponse[];
+  fingerprint: Optional<uint32>;
 };
 export type WsGetWalletsMessage = GetMessageType<
   chia_wallet_service,
@@ -574,8 +577,6 @@ export type TCreateNewDidWalletRequestNew = {
   fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "new";
-  backup_dids: str[];
-  num_of_backup_ids_needed: uint64;
   amount: int;
   metadata?: Record<str, str>;
   wallet_name?: str;
@@ -719,8 +720,9 @@ export async function create_new_wallet<
 export type WalletBalance = Balance & {
   wallet_id: uint32;
   wallet_type: int;
-  fingerprint?: int;
-  asset_id?: str;
+  fingerprint: Optional<uint32>;
+  asset_id: Optional<str>; // 0x-prefixed hex
+  pending_approval_balance: Optional<uint64>;
 };
 export const get_wallet_balance_command = "get_wallet_balance";
 export type get_wallet_balance_command = typeof get_wallet_balance_command;
@@ -802,8 +804,8 @@ export const get_transactions_command = "get_transactions";
 export type get_transactions_command = typeof get_transactions_command;
 export type TGetTransactionsRequest = {
   wallet_id: int;
-  start?: int;
-  end?: int;
+  start?: uint16;
+  end?: uint16;
   sort_key?: str;
   reverse?: bool;
   to_address?: str;
@@ -834,7 +836,7 @@ export async function get_transactions<T extends TRPCAgent | TDaemon>(
 export const get_next_address_command = "get_next_address";
 export type get_next_address_command = typeof get_next_address_command;
 export type TGetNextAddressRequest = {
-  new_address: bool;
+  new_address?: bool;
   wallet_id: int;
 };
 export type TGetNextAddressResponse = {
@@ -860,13 +862,17 @@ export async function get_next_address<T extends TRPCAgent | TDaemon>(
 
 export const send_transaction_command = "send_transaction";
 export type send_transaction_command = typeof send_transaction_command;
+export type ClawbackPuzzleDecoratorOverride = {
+  decorator: "CLAWBACK";
+  clawback_timelock: uint64;
+};
 export type TSendTransactionRequest = {
   wallet_id: uint32;
   amount: int;
   fee?: uint64;
   address: str;
   memos?: str[];
-  puzzle_decorator?: Array<{ decorator: str; clawback_timelock?: uint64 }>;
+  puzzle_decorator?: ClawbackPuzzleDecoratorOverride[];
 } & TXEndpointRequest;
 export type TSendTransactionResponse = {
   transaction: TransactionRecordConvenience;
@@ -926,7 +932,7 @@ export type spend_clawback_coins_command = typeof spend_clawback_coins_command;
 export type TSpendClawbackCoinsRequest = {
   coin_ids: str[];
   fee?: uint64;
-  batch_size: int;
+  batch_size?: uint16;
   force?: bool;
 } & TXEndpointRequest;
 export type TSpendClawbackCoinsResponse = {
@@ -1026,11 +1032,19 @@ export type WsGetFarmedAmountMessage = GetMessageType<
   get_farmed_amount_command,
   TGetFarmedAmountResponse
 >;
+export type TGetFarmedAmountRequest = {
+  include_pool_rewards?: bool;
+};
 export async function get_farmed_amount<T extends TRPCAgent | TDaemon>(
   agent: T,
+  data?: TGetFarmedAmountRequest,
 ) {
   type R = ResType<T, TGetFarmedAmountResponse, WsGetFarmedAmountMessage>;
-  return agent.sendMessage<R>(chia_wallet_service, get_farmed_amount_command);
+  return agent.sendMessage<R>(
+    chia_wallet_service,
+    get_farmed_amount_command,
+    data,
+  );
 }
 
 export type TAdditions = {
@@ -1312,7 +1326,7 @@ export type send_notification_command = typeof send_notification_command;
 export type TSendNotificationRequest = {
   target: str;
   message: str;
-  amount: uint64;
+  amount?: uint64; // defaults to 0
   fee?: uint64;
 } & TXEndpointRequest;
 export type TSendNotificationResponse = {
@@ -1350,6 +1364,7 @@ export type TVerifySignatureRequest = {
 export type TVerifySignatureResponse =
   | {
       isValid: True;
+      error: None;
     }
   | {
       isValid: False;
@@ -1563,7 +1578,7 @@ export type TCatAssetIdToNameRequest = {
 };
 export type TCatAssetIdToNameResponse = {
   wallet_id: Optional<uint32>;
-  name: str;
+  name: Optional<str>; // null when the asset id is unknown (no longer errors)
 };
 export type WsCatAssetIdToNameMessage = GetMessageType<
   chia_wallet_service,
@@ -1629,12 +1644,12 @@ export type cat_spend_command = typeof cat_spend_command;
 export type TCatSpendRequest = {
   wallet_id: uint32;
   additions?: TAdditions[];
-  fee: uint64;
-  amount: uint64;
-  inner_address: str;
+  fee?: uint64;
+  amount?: uint64;
+  inner_address?: str;
   memos?: str[];
   coins?: Coin[];
-  extra_delta?: int;
+  extra_delta?: str; // changed from int to str in chia-blockchain 2.5.7
   tail_reveal?: str;
   tail_solution?: str;
 } & TXEndpointRequest;
@@ -1999,37 +2014,6 @@ export async function did_get_wallet_name<T extends TRPCAgent | TDaemon>(
   );
 }
 
-export const did_update_recovery_ids_command = "did_update_recovery_ids";
-export type did_update_recovery_ids_command =
-  typeof did_update_recovery_ids_command;
-export type TDidUpdateRecoveryIdsRequest = {
-  wallet_id: uint32;
-  new_list: str[];
-  num_verifications_required?: uint64;
-} & TXEndpointRequest;
-export type TDidUpdateRecoveryIdsResponse = {
-  success: bool;
-  transactions: TransactionRecordConvenience[];
-  signing_responses?: str[];
-};
-export type WsDidUpdateRecoveryIdsMessage<R> = GetMessageType<
-  chia_wallet_service,
-  did_update_recovery_ids_command,
-  R
->;
-export async function did_update_recovery_ids<
-  T extends TRPCAgent | TDaemon,
-  D extends TDidUpdateRecoveryIdsRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDidUpdateRecoveryIdsResponse>;
-  type R = ResType<T, TER, WsDidUpdateRecoveryIdsMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    did_update_recovery_ids_command,
-    data,
-  );
-}
-
 export const did_update_metadata_command = "did_update_metadata";
 export type did_update_metadata_command = typeof did_update_metadata_command;
 export type TDidUpdateMetadataRequest = {
@@ -2133,71 +2117,6 @@ export async function did_get_did<T extends TRPCAgent | TDaemon>(
   return agent.sendMessage<R>(chia_wallet_service, did_get_did_command, data);
 }
 
-export const did_recovery_spend_command = "did_recovery_spend";
-export type did_recovery_spend_command = typeof did_recovery_spend_command;
-export type TDidRecoverySpendRequest = {
-  wallet_id: uint32;
-  attest_data: str[];
-  pubkey?: str;
-  puzhash?: str;
-  push?: bool;
-};
-export type TDidRecoverySpendResponse =
-  | {
-      success: True;
-      spend_bundle: SpendBundle;
-      transactions: TransactionRecordConvenience[];
-    }
-  | {
-      success: False;
-      reason: str;
-    };
-export type WsDidRecoverySpendMessage = GetMessageType<
-  chia_wallet_service,
-  did_recovery_spend_command,
-  TDidRecoverySpendResponse
->;
-export async function did_recovery_spend<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDidRecoverySpendRequest,
-) {
-  type R = ResType<T, TDidRecoverySpendResponse, WsDidRecoverySpendMessage>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    did_recovery_spend_command,
-    data,
-  );
-}
-
-export const did_get_recovery_list_command = "did_get_recovery_list";
-export type did_get_recovery_list_command =
-  typeof did_get_recovery_list_command;
-export type TDidGetRecoveryListRequest = {
-  wallet_id: uint32;
-};
-export type TDidGetRecoveryListResponse = {
-  success: bool;
-  wallet_id: uint32;
-  recovery_list: str[];
-  num_required: uint64;
-};
-export type WsDidGetRecoveryListMessage = GetMessageType<
-  chia_wallet_service,
-  did_get_recovery_list_command,
-  TDidGetRecoveryListResponse
->;
-export async function did_get_recovery_list<T extends TRPCAgent | TDaemon>(
-  agent: T,
-  data: TDidGetRecoveryListRequest,
-) {
-  type R = ResType<T, TDidGetRecoveryListResponse, WsDidGetRecoveryListMessage>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    did_get_recovery_list_command,
-    data,
-  );
-}
-
 export const did_get_metadata_command = "did_get_metadata";
 export type did_get_metadata_command = typeof did_get_metadata_command;
 export type TDidGetMetadataRequest = {
@@ -2221,79 +2140,6 @@ export async function did_get_metadata<T extends TRPCAgent | TDaemon>(
   return agent.sendMessage<R>(
     chia_wallet_service,
     did_get_metadata_command,
-    data,
-  );
-}
-
-export const did_create_attest_command = "did_create_attest";
-export type did_create_attest_command = typeof did_create_attest_command;
-export type TDidCreateAttestRequest = {
-  wallet_id: uint32;
-  coin_name: str;
-  puzhash: str;
-} & TXEndpointRequest;
-export type TDidCreateAttestResponse =
-  | {
-      success: True;
-      message_spend_bundle: str;
-      info: [str, str, uint64];
-      attest_data: str;
-      transactions: TransactionRecordConvenience[];
-      signing_responses?: str[];
-    }
-  | {
-      success: False;
-    };
-export type WsDidCreateAttestMessage<R> = GetMessageType<
-  chia_wallet_service,
-  did_create_attest_command,
-  R
->;
-export async function did_create_attest<
-  T extends TRPCAgent | TDaemon,
-  D extends TDidCreateAttestRequest,
->(agent: T, data: D) {
-  type TER = TxeResp<D, TDidCreateAttestResponse>;
-  type R = ResType<T, TER, WsDidCreateAttestMessage<TER>>;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    did_create_attest_command,
-    data,
-  );
-}
-
-export const did_get_information_needed_for_recovery_command =
-  "did_get_information_needed_for_recovery";
-export type did_get_information_needed_for_recovery_command =
-  typeof did_get_information_needed_for_recovery_command;
-export type TDidGetInformationNeededForRecoveryRequest = {
-  wallet_id: uint32;
-};
-export type TDidGetInformationNeededForRecoveryResponse = {
-  success: bool;
-  wallet_id: uint32;
-  my_did: str;
-  coin_name: str;
-  newpuzhash: Optional<bytes32>;
-  pubkey: Optional<bytes>;
-  backup_dids: bytes[];
-};
-export type WsDidGetInformationNeededForRecoveryMessage = GetMessageType<
-  chia_wallet_service,
-  did_get_information_needed_for_recovery_command,
-  TDidGetInformationNeededForRecoveryResponse
->;
-export async function did_get_information_needed_for_recovery<
-  T extends TRPCAgent | TDaemon,
->(agent: T, data: TDidGetInformationNeededForRecoveryRequest) {
-  type R = ResType<
-    T,
-    TDidGetInformationNeededForRecoveryResponse,
-    WsDidGetInformationNeededForRecoveryMessage
-  >;
-  return agent.sendMessage<R>(
-    chia_wallet_service,
-    did_get_information_needed_for_recovery_command,
     data,
   );
 }
@@ -3881,21 +3727,16 @@ export type RpcWalletMessage =
   | TCheckDeleteKeyResponse
   | TDidSetWalletNameResponse
   | TDidGetWalletNameResponse
-  | TDidCreateAttestResponse
   | TDidCreateBackupFileResponse
   | TDidTransferDidResponse
   | TDidMessageSpendResponse
   | TDidGetInfoResponse
   | TDidFindLostDidResponse
   | TDidGetDidResponse
-  | TDidGetInformationNeededForRecoveryResponse
   | TDidGetCurrentCoinInfoResponse
   | TDidGetPubkeyResponse
-  | TDidGetRecoveryListResponse
   | TDidGetMetadataResponse
-  | TDidRecoverySpendResponse
   | TDidSpendResponse
-  | TDidUpdateRecoveryIdsResponse
   | TDidUpdateMetadataResponse
   | TNftMintNftResponse
   | TNftCountNftsResponse

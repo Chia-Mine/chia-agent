@@ -44,7 +44,8 @@ export type TService =
   | "chia_introducer"
   | "chia_timelord"
   | "chia_timelord_launcher"
-  | "chia_full_node_simulator";
+  | "chia_full_node_simulator"
+  | "chia_solver";
 export const start_service_command = "start_service";
 export type start_service_command = typeof start_service_command;
 export type TStartServiceRequest = {

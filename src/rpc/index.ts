@@ -41,6 +41,7 @@ type TDestination =
   | "full_node"
   | "wallet"
   | "data_layer"
+  | "solver"
   | "daemon"
   | "pool";
 
@@ -62,6 +63,8 @@ export function getConnectionInfoFromConfig(
     port = +(config["/wallet/rpc_port"] as string);
   } else if (destination === "data_layer") {
     port = +(config["/data_layer/rpc_port"] as string);
+  } else if (destination === "solver") {
+    port = +(config["/solver/rpc_port"] as string);
   } else if (destination === "pool") {
     const poolUrl = config["/pool/pool_list/0/pool_url"] as string;
     const regex = /^(https?:\/\/)?([^/:]+):?(\d*)/;

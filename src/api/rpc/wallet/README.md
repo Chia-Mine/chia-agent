@@ -145,6 +145,7 @@ const response = await add_key(agent, params);
 ```typescript
 {
   mnemonic: str[];
+  label?: Optional<str>;
 }
 ```
 ### response:
@@ -870,13 +871,19 @@ see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/util/q
 
 ---
 
-## `get_farmed_amount(agent)`
+## `get_farmed_amount(agent, params)`
 ### Usage
 ```js
 const {RPCAgent} = require("chia-agent");
 const {get_farmed_amount} = require("chia-agent/api/rpc/wallet");
 const agent = new RPCAgent({service: "wallet"});
-const response = await get_farmed_amount(agent);
+const response = await get_farmed_amount(agent, params);
+```
+### params:
+```typescript
+{
+  include_pool_rewards?: bool;
+}
 ```
 ### response:
 ```typescript
@@ -2067,39 +2074,6 @@ const response = await did_get_wallet_name(agent, params);
 
 ---
 
-## `did_update_recovery_ids(agent, params)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {did_update_recovery_ids} = require("chia-agent/api/rpc/wallet");
-const agent = new RPCAgent({service: "wallet"});
-const response = await did_update_recovery_ids(agent, params);
-```
-### params:
-```typescript
-{
-  wallet_id: uint32;
-  new_list: str[];
-  num_verifications_required?: uint64;
-} & TXEndpointRequest
-```
-### response:
-```typescript
-{
-  success: bool;
-  transactions: TransactionRecordConvenience[];
-  unsigned_transactions: UnsignedTransaction[] | str[];
-  signing_responses?: str[];
-}
-```
-For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
-
-For content of `TXEndpointRequest` and `UnsignedTransaction`  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
-
----
-
 ## `did_update_metadata(agent, params)`
 ### Usage
 ```js
@@ -2190,68 +2164,6 @@ const response = await did_get_did(agent, params);
 
 ---
 
-## `did_recovery_spend(agent, params)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {did_recovery_spend} = require("chia-agent/api/rpc/wallet");
-const agent = new RPCAgent({service: "wallet"});
-const response = await did_recovery_spend(agent, params);
-```
-### params:
-```typescript
-{
-  wallet_id: uint32;
-  attest_data: str[];
-  pubkey?: str;
-  puzhash?: str;
-  push?: bool;
-}
-```
-### response:
-```typescript
-{
-  success: True;
-  spend_bundle: SpendBundle;
-  transactions: TransactionRecordConvenience[];
-} | {
-  success: False;
-  reason: str;
-}
-```
-For content of `SpendBundle`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/spend_bundle.ts
-
-For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
-
----
-
-## `did_get_recovery_list(agent, params)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {did_get_recovery_list} = require("chia-agent/api/rpc/wallet");
-const agent = new RPCAgent({service: "wallet"});
-const response = await did_get_recovery_list(agent, params);
-```
-### params:
-```typescript
-{
-  wallet_id: uint32;
-}
-```
-### response:
-```typescript
-{
-  wallet_id: uint32;
-  recovery_list: str[];
-  num_required: uint64;
-}
-```
-
----
-
 ## `did_get_metadata(agent, params)`
 ### Usage
 ```js
@@ -2272,72 +2184,6 @@ const response = await did_get_metadata(agent, params);
   success: True;
   wallet_id: uint32;
   metadata: Record<str, str>
-}
-```
-
----
-
-## `did_create_attest(agent, params)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {did_create_attest} = require("chia-agent/api/rpc/wallet");
-const agent = new RPCAgent({service: "wallet"});
-const response = await did_create_attest(agent, params);
-```
-### params:
-```typescript
-{
-  wallet_id: uint32;
-  coin_name: str;
-  puzhash: str;
-} & TXEndpointRequest
-```
-### response:
-```typescript
-{
-  success: True;
-  message_spend_bundle: str;
-  info: [str, str, uint64];
-  attest_data: str;
-  transactions: TransactionRecordConvenience[];
-  unsigned_transactions: UnsignedTransaction[] | str[];
-  signing_responses?: str[];
-} | {
-  success: False;
-}
-```
-For content of `TransactionRecordConvenience`,  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts
-
-For content of `TXEndpointRequest` and `UnsignedTransaction`  
-see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts
-
----
-
-## `did_get_information_needed_for_recovery(agent, params)`
-### Usage
-```js
-const {RPCAgent} = require("chia-agent");
-const {did_get_information_needed_for_recovery} = require("chia-agent/api/rpc/wallet");
-const agent = new RPCAgent({service: "wallet"});
-const response = await did_get_information_needed_for_recovery(agent, params);
-```
-### params:
-```typescript
-{
-  wallet_id: uint32;
-}
-```
-### response:
-```typescript
-{
-  wallet_id: uint32;
-  my_did: str;
-  coin_name: str;
-  newpuzhash: Optional<bytes32>;
-  pubkey: Optional<bytes>;
-  backup_dids: bytes[];
 }
 ```
 
