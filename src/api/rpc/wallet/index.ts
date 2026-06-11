@@ -656,6 +656,19 @@ export type TCreate_New_Pool_WalletResponse = {
   p2_singleton_puzzle_hash: str; // 0x-prefixed hex
 };
 
+export type TCreate_New_Remote_WalletRequest = {
+  fee?: uint64;
+  wallet_type: "remote_wallet";
+  name?: str;
+};
+
+export type TCreate_New_Remote_WalletResponse = {
+  success: True;
+  type: "REMOTE";
+  wallet_id: uint32;
+  transactions: TransactionRecordConvenience[];
+};
+
 export const create_new_wallet_command = "create_new_wallet";
 export type create_new_wallet_command = typeof create_new_wallet_command;
 export type TCreateNewWalletRequestWithTx =
@@ -663,7 +676,8 @@ export type TCreateNewWalletRequestWithTx =
   | TCreate_New_Pool_WalletRequest;
 export type TCreateNewWalletRequestWithoutTx =
   | TCreate_New_DID_WalletRequest
-  | TCreate_New_NFT_WalletRequest;
+  | TCreate_New_NFT_WalletRequest
+  | TCreate_New_Remote_WalletRequest;
 
 export type TCreateNewWalletRequest = (
   | TCreateNewWalletRequestWithTx
@@ -674,7 +688,8 @@ export type TCreateNewWalletResponse =
   | TCreate_New_CAT_WalletResponse
   | TCreate_New_DID_WalletResponse
   | TCreate_New_NFT_WalletResponse
-  | TCreate_New_Pool_WalletResponse;
+  | TCreate_New_Pool_WalletResponse
+  | TCreate_New_Remote_WalletResponse;
 
 export type GetCreateNewWalletResponse<REQ extends TCreateNewWalletRequest> =
   REQ extends TCreate_New_CAT_WalletRequest
@@ -685,7 +700,9 @@ export type GetCreateNewWalletResponse<REQ extends TCreateNewWalletRequest> =
         : TCreateNewDidWalletResponseRecovery
       : REQ extends TCreate_New_NFT_WalletRequest
         ? TCreate_New_NFT_WalletResponse
-        : TCreate_New_Pool_WalletResponse;
+        : REQ extends TCreate_New_Remote_WalletRequest
+          ? TCreate_New_Remote_WalletResponse
+          : TCreate_New_Pool_WalletResponse;
 
 export type WsCreateNewWalletMessage<R> = GetMessageType<
   chia_wallet_service,
@@ -3693,7 +3710,37 @@ export async function execute_signing_instructions<
   );
 }
 
+export const register_remote_coins_command = "register_remote_coins";
+export type register_remote_coins_command =
+  typeof register_remote_coins_command;
+export type TRegisterRemoteCoinsRequest = {
+  wallet_id: uint32;
+  coin_ids: str[]; // hex
+};
+export type TRegisterRemoteCoinsResponse = Record<string, never>;
+export type WsRegisterRemoteCoinsMessage = GetMessageType<
+  chia_wallet_service,
+  register_remote_coins_command,
+  TRegisterRemoteCoinsResponse
+>;
+export async function register_remote_coins<T extends TRPCAgent | TDaemon>(
+  agent: T,
+  data: TRegisterRemoteCoinsRequest,
+) {
+  type R = ResType<
+    T,
+    TRegisterRemoteCoinsResponse,
+    WsRegisterRemoteCoinsMessage
+  >;
+  return agent.sendMessage<R>(
+    chia_wallet_service,
+    register_remote_coins_command,
+    data,
+  );
+}
+
 export type RpcWalletMessage =
+  | TRegisterRemoteCoinsResponse
   | TAddKeyResponse
   | TAddRateLimitedFundsResponse
   | TCancelOfferResponse
