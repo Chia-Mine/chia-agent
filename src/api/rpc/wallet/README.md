@@ -502,18 +502,14 @@ type TCreate_New_Pool_WalletRequest = {
   };
   p2_singleton_delayed_ph?: str;
   p2_singleton_delay_time?: uint64;
-} | {
-  fee?: uint64;
-  wallet_type: "pool_wallet";
-  mode: "recovery";
 };
 ```
 ### response:
-One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`, `TCreateWalletErrorResponse`
+One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`
 ```typescript
 type TCreate_New_CAT_WalletResponse = {
-  type: uint8;
-  asset_id: str;
+  type: "CAT";
+  asset_id: str; // 0x-prefixed hex
   wallet_id: uint32;
   transactions: TransactionRecordConvenience[];
   unsigned_transactions: UnsignedTransaction[] | str[];
@@ -522,12 +518,14 @@ type TCreate_New_CAT_WalletResponse = {
 
 type TCreate_New_DID_WalletResponse = {
   success: true;
-  type: uint8;
+  type: "DECENTRALIZED_ID";
   my_did: str;
   wallet_id: uint32;
+  transactions: TransactionRecordConvenience[];
+  signing_responses?: str[];
 } | {
   success: true;
-  type: uint8;
+  type: "DECENTRALIZED_ID";
   my_did: str;
   wallet_id: uint32;
   coin_name: bytes32;
@@ -540,11 +538,12 @@ type TCreate_New_DID_WalletResponse = {
 
 type TCreate_New_NFT_WalletResponse = {
   success: True;
-  type: uint8;
+  type: "NFT";
   wallet_id: uint32;
 };
 
 type TCreate_New_Pool_WalletResponse = {
+  type: "POOLING_WALLET";
   total_fee: uint64;
   transaction: TransactionRecord;
   launcher_id: str;
@@ -554,10 +553,6 @@ type TCreate_New_Pool_WalletResponse = {
   signing_responses?: str[];
 };
 
-type TCreateWalletErrorResponse = {
-  success: False;
-  error: str;
-};
 ```
 For content of `Coin`,  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia_rs/chia-protocol/coin.ts  
@@ -917,7 +912,7 @@ const response = await create_signed_transaction(agent, params);
   coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
-  morph_bytes?: True;
+  morph_bytes?: str;
 } & TXEndpointRequest
 ```
 ### response:
@@ -1743,7 +1738,7 @@ const response = await create_offer_for_ids(agent, params);
 ### params:
 ```typescript
 {
-  offer: Record<int, int>;
+  offer: Record<str, str | int>;
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
@@ -1793,8 +1788,8 @@ const response = await get_offer_summary(agent, params);
 ```typescript
 {
   summary: {
-    offered: Record<str, int>;
-    requested: Record<str, int>;
+    offered: Record<str, str>;
+    requested: Record<str, str>;
     fees: int;
     infos: TDriverDict;
     additions: str[];

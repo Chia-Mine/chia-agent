@@ -1,5 +1,45 @@
 # Changelog
 
+## [18.0.0]
+Support for [`chia-blockchain@2.6.0`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.6.0)
+
+### Breaking change
+- `create_new_wallet`
+  - The response `type` is now the `WalletType` name string (`"CAT"`, `"DECENTRALIZED_ID"`, `"NFT"`, `"POOLING_WALLET"`)
+    instead of the integer enum value
+  - Pool wallet `mode: "recovery"` was removed
+  - Pool wallet response now includes `type`
+  - `asset_id`, `coin_name`, `newpuzhash`, `pubkey`, `launcher_id` and `p2_singleton_puzzle_hash` in responses
+    are now `0x`-prefixed hex
+  - The `{success: false, error: "invalid request"}` success-path variant was removed
+    (invalid requests now produce a standard RPC error response)
+- `get_offer_summary`
+  - `summary.offered` / `summary.requested` amounts are now JSON strings (were numbers)
+  - `additions` / `removals` are now `0x`-prefixed hex
+  - DataLayer offer summaries are now typed as `TDataLayerOfferSummary`
+- `create_signed_transaction` / `send_transaction_multi`
+  - Per-announcement `morph_bytes` was removed; only the top-level `morph_bytes` is applied
+- All transaction endpoints now require a fully synced wallet
+  (may fail with `"Wallet needs to be fully synced before making transactions."`)
+- `split_coins` with `number_of_coins == 0` and `combine_coins` with `number_of_coins < 2` now error
+
+### Added
+- [Harvester Protocol](./src/api/chia/protocols/harvester_protocol.ts)
+  - `PartialProofsData`: `partial_proofs` is now `PartialProof[]`; added `strength` and `plot_id`
+  - `Plot`: added `compression_level`; for v2 plots `size` now encodes `0x80 | strength`
+- [Solver Protocol](./src/api/chia/protocols/solver_protocol.ts)
+  - `SolverInfo` is now `{partial_proof: PartialProof, plot_id, strength, size}`
+  - `SolverResponse.partial_proof` is now `PartialProof`
+- Added `PartialProof` type (mirrors `chia_rs`)
+
+### Changed
+- Synchronized `chia_rs` type definitions with `chia_rs@0.35.2`
+  - `SubEpochSummary`: added `challenge_merkle_root`
+  - `RewardChainBlock`: added `header_mmr_root`
+- `create_offer_for_ids`: `offer` dictionary values are canonically strings now (`Record<str, str | int>`)
+- `get_transactions`: `start` / `end` widened to `uint32`
+- `get_all_offers`: `start` / `end` are now bounded to `uint16`
+
 ## [17.0.0]
 Support for [`chia-blockchain@2.5.7`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.7)
 

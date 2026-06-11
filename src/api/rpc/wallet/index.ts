@@ -14,7 +14,6 @@ import {
   uint16,
   uint32,
   uint64,
-  uint8,
 } from "../../chia_rs/wheel/python/sized_ints";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import {
@@ -566,8 +565,8 @@ export type TCreate_New_CAT_WalletRequest =
     };
 
 export type TCreate_New_CAT_WalletResponse = {
-  type: uint8;
-  asset_id: str;
+  type: "CAT"; // WalletType name string as of chia-blockchain 2.6.0 (was an int)
+  asset_id: str; // 0x-prefixed hex
   wallet_id: uint32;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
@@ -593,19 +592,21 @@ export type TCreate_New_DID_WalletRequest =
   | TCreateNewDidWalletRequestRecovery;
 export type TCreateNewDidWalletResponseNew = {
   success: True;
-  type: uint8;
+  type: "DECENTRALIZED_ID"; // WalletType name string as of chia-blockchain 2.6.0 (was an int)
   my_did: str;
   wallet_id: uint32;
+  transactions: TransactionRecordConvenience[];
+  signing_responses?: str[];
 };
 export type TCreateNewDidWalletResponseRecovery = {
   success: True;
-  type: uint8;
+  type: "DECENTRALIZED_ID"; // WalletType name string as of chia-blockchain 2.6.0 (was an int)
   my_did: str;
   wallet_id: uint32;
-  coin_name: str;
+  coin_name: str; // 0x-prefixed hex
   coin_list: [bytes32, bytes32, uint64]; // Not Coin[]. See as_list function implementation.
-  newpuzhash: str;
-  pubkey: str;
+  newpuzhash: str; // 0x-prefixed hex
+  pubkey: str; // 0x-prefixed hex
   backup_dids: bytes[];
   num_verifications_required: uint64;
 };
@@ -623,46 +624,36 @@ export type TCreate_New_NFT_WalletRequest = {
 
 export type TCreate_New_NFT_WalletResponse = {
   success: True;
-  type: uint8;
+  type: "NFT"; // WalletType name string as of chia-blockchain 2.6.0 (was an int)
   wallet_id: uint32;
 };
 
-export type TCreate_New_Pool_WalletRequest =
-  | {
-      fee?: uint64;
-      wallet_type: "pool_wallet";
-      mode: "new";
-      initial_target_state:
-        | {
-            state: "SELF_POOLING";
-          }
-        | {
-            state: "FARMING_TO_POOL";
-            target_puzzle_hash: str;
-            pool_url: str;
-            relative_lock_height: uint32;
-          };
-      p2_singleton_delayed_ph?: str;
-      p2_singleton_delay_time?: uint64;
-    }
-  | {
-      fee?: uint64;
-      wallet_type: "pool_wallet";
-      mode: "recovery";
-    };
+export type TCreate_New_Pool_WalletRequest = {
+  fee?: uint64;
+  wallet_type: "pool_wallet";
+  mode: "new"; // "recovery" mode was removed in chia-blockchain 2.6.0
+  initial_target_state:
+    | {
+        state: "SELF_POOLING";
+      }
+    | {
+        state: "FARMING_TO_POOL";
+        target_puzzle_hash: str;
+        pool_url: str;
+        relative_lock_height: uint32;
+      };
+  p2_singleton_delayed_ph?: str;
+  p2_singleton_delay_time?: uint64;
+};
 
 export type TCreate_New_Pool_WalletResponse = {
+  type: "POOLING_WALLET"; // WalletType name string as of chia-blockchain 2.6.0
   total_fee: uint64;
   transaction: TransactionRecord;
   transactions: TransactionRecordConvenience[];
   signing_responses?: str[];
-  launcher_id: str;
-  p2_singleton_puzzle_hash: str;
-};
-
-export type TCreateWalletErrorResponse = {
-  success: False;
-  error: str;
+  launcher_id: str; // 0x-prefixed hex
+  p2_singleton_puzzle_hash: str; // 0x-prefixed hex
 };
 
 export const create_new_wallet_command = "create_new_wallet";
@@ -683,8 +674,7 @@ export type TCreateNewWalletResponse =
   | TCreate_New_CAT_WalletResponse
   | TCreate_New_DID_WalletResponse
   | TCreate_New_NFT_WalletResponse
-  | TCreate_New_Pool_WalletResponse
-  | TCreateWalletErrorResponse;
+  | TCreate_New_Pool_WalletResponse;
 
 export type GetCreateNewWalletResponse<REQ extends TCreateNewWalletRequest> =
   REQ extends TCreate_New_CAT_WalletRequest
@@ -804,8 +794,8 @@ export const get_transactions_command = "get_transactions";
 export type get_transactions_command = typeof get_transactions_command;
 export type TGetTransactionsRequest = {
   wallet_id: int;
-  start?: uint16;
-  end?: uint16;
+  start?: uint32;
+  end?: uint32;
   sort_key?: str;
   reverse?: bool;
   to_address?: str;
@@ -1055,12 +1045,10 @@ export type TAdditions = {
 export type TCoinAnnouncement = {
   coin_id: str;
   message: str;
-  morph_bytes?: str;
 };
 export type TPuzzleAnnouncement = {
   puzzle_hash: str;
   message: str;
-  morph_bytes?: str;
 };
 export const create_signed_transaction_command = "create_signed_transaction";
 export type create_signed_transaction_command =
@@ -1072,7 +1060,7 @@ export type TCreateSignedTransactionRequest = {
   coins?: Coin[];
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
-  morph_bytes?: True;
+  morph_bytes?: str; // hex; applied to every announcement message
 } & TXEndpointRequest;
 export type TCreateSignedTransactionResponse = {
   signed_txs: TransactionRecordConvenience[];
@@ -1702,7 +1690,8 @@ export async function cat_get_asset_id<T extends TRPCAgent | TDaemon>(
 export const create_offer_for_ids_command = "create_offer_for_ids";
 export type create_offer_for_ids_command = typeof create_offer_for_ids_command;
 export type TCreateOfferForIdsRequest = {
-  offer: Record<int, int>;
+  offer: Record<str, str | int>; // values are canonically strings as of chia-blockchain 2.6.0
+
   fee?: uint64;
   validate_only?: bool;
   driver_dict?: TDriverDict;
@@ -1738,22 +1727,34 @@ export type TGetOfferSummaryRequest = {
   offer: str;
   advanced?: bool;
 };
+export type TOfferSummary = {
+  offered: Record<str, str>; // amounts are JSON strings as of chia-blockchain 2.6.0
+  requested: Record<str, str>; // amounts are JSON strings as of chia-blockchain 2.6.0
+  fees: int;
+  infos: TDriverDict;
+  additions: str[]; // 0x-prefixed hex
+  removals: str[]; // 0x-prefixed hex
+  valid_times: Omit<
+    ConditionValidTimes,
+    | "max_secs_after_created"
+    | "min_secs_since_created"
+    | "max_blocks_after_created"
+    | "min_blocks_since_created"
+  >;
+};
+// Returned for DataLayer offers
+export type TDataLayerOfferSummary = {
+  offered: Array<{
+    launcher_id: str; // 0x-prefixed hex
+    new_root: str; // 0x-prefixed hex
+    dependencies: Array<{
+      launcher_id: str; // 0x-prefixed hex
+      values_to_prove: str[]; // 0x-prefixed hex
+    }>;
+  }>;
+};
 export type TGetOfferSummaryResponse = {
-  summary: {
-    offered: Record<str, int>;
-    requested: Record<str, int>;
-    fees: int;
-    infos: TDriverDict;
-    additions: str[];
-    removals: str[];
-    valid_times: Omit<
-      ConditionValidTimes,
-      | "max_secs_after_created"
-      | "min_secs_since_created"
-      | "max_blocks_after_created"
-      | "min_blocks_since_created"
-    >;
-  };
+  summary: TOfferSummary | TDataLayerOfferSummary;
   id: bytes32;
 };
 export type WsGetOfferSummaryMessage = GetMessageType<
@@ -1852,8 +1853,8 @@ export async function get_offer<T extends TRPCAgent | TDaemon>(
 export const get_all_offers_command = "get_all_offers";
 export type get_all_offers_command = typeof get_all_offers_command;
 export type TGetAllOffersRequest = {
-  start?: int;
-  end?: int;
+  start?: uint16;
+  end?: uint16;
   exclude_my_offers?: bool;
   exclude_taken_offers?: bool;
   include_completed?: bool;
