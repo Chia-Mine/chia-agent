@@ -17,10 +17,18 @@ See how to instantiate RPCAgent before requesting RPC API [**>>here**](../rpc/RE
 If an exception is raised in RPC server, error response will be returned in the following format:
 ```typescript
 {
-  error: string;
+  error: string; // legacy human-readable message
   success: false;
+  traceback: string; // python traceback (HTTP RPC only)
+  structuredError: {
+    code: string; // one of the RpcErrorCodes strings introduced in chia-blockchain 2.6.1
+    message: string;
+    data: Record<string, unknown>;
+  };
 }
 ```
+`traceback` and `structuredError` were added in chia-blockchain 2.6.1.
+(`traceback` is not included when the request is routed through the daemon websocket)
 In order to keep description simple, the above error response is omitted in RPC API documents below.
 
 #### [Farmer RPC API](./rpc/farmer/README.md#usage)

@@ -1,5 +1,33 @@
 # Changelog
 
+## [19.0.0]
+Support for [`chia-blockchain@2.6.1`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.6.1)
+
+### Breaking change
+- `ProofOfSpace` type was updated for v2 proof-of-space (follows `chia_rs@0.38.2`)
+  - Added `version`, `plot_index`, `meta_group` and `strength` fields (between `plot_public_key` and `size`)
+  - `size` now only carries the v1 k-size (0 for v2 proofs)
+  - This affects every RPC response embedding a `ProofOfSpace` (e.g. block records)
+- `PartialProof`: `proof_fragments` was renamed to `fragments` (now 16 entries; follows `chia_rs@0.38.2`)
+
+### Added
+- Structured RPC errors (added in chia-blockchain 2.6.1)
+  - RPC error responses now always include `structuredError: {code, message, data}`
+    (and `traceback` on the HTTP RPC path)
+  - `RpcError` now exposes a `structuredError` property
+  - Added `TStructuredError` and `TRpcErrorCode` types
+- `create_signed_transaction`: new optional request parameters
+  `extra_delta`, `tail_reveal`, `tail_solution` (must be specified together) and `puzzle_decorator`
+- [Harvester Protocol](./src/api/chia/protocols/harvester_protocol.ts)
+  - `PartialProofsData`: added `plot_index` and `meta_group`
+
+### Changed
+- Synchronized `chia_rs` type definitions with `chia_rs@0.38.2`
+- `nft_mint_nft`: upstream reverted the `royalty_amount` rename back to `royalty_percentage`
+  (chia-agent already used `royalty_percentage`; no type change)
+- `take_offer`: the `sign` request parameter is now ignored by the wallet (signing is handled internally)
+- `did_find_lost_did`: `latest_coin_id` now echoes the requested coin id
+
 ## [18.0.0]
 Support for [`chia-blockchain@2.6.0`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.6.0)
 
