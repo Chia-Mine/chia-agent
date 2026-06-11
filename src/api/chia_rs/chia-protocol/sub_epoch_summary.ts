@@ -8,4 +8,5 @@ export type SubEpochSummary = {
   num_blocks_overflow: uint8; // uint8  # How many more blocks than 384*(N-1)
   new_difficulty: Optional<uint64>; // Optional[uint64]  # Only once per epoch (diff adjustment)
   new_sub_slot_iters: Optional<uint64>; // Optional[uint64]  # Only once per epoch (diff adjustment)
+  challenge_merkle_root: Optional<bytes32>; // Optional[bytes32]  # null until the corresponding fork activates
 };
