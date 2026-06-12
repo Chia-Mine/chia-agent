@@ -1,6 +1,13 @@
 # Changelog
 
 ## [16.1.6]
+### Security
+- Hardened the supply chain against compromised dependency releases
+  - All dependencies and devDependencies are now pinned to exact versions
+  - Added `minimumReleaseAge: 10080` (7 days) pnpm setting so newly published package versions
+    are not installed until they have aged, mitigating hijacked-release attacks
+  - GitHub Actions are now pinned to full commit SHAs
+
 ### Changed
 - Confirmed compatibility with [`chia-blockchain@2.5.6`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.6)
   - chia-blockchain 2.5.6 does not introduce any RPC/Websocket API changes.
