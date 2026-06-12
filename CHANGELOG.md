@@ -2106,6 +2106,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[19.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v19.1.0...v19.2.0
 [19.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v19.0.0...v19.1.0
 [19.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v18.0.0...v19.0.0
 [18.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v17.0.0...v18.0.0
