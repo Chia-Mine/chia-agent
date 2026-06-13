@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/chia-agent.svg)](https://badge.fury.io/js/chia-agent) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 chia rpc/websocket client library for NodeJS.  
-Supports all RPC/Websocket API available at `2.5.5` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
+Supports all RPC/Websocket API available at `2.5.6` of [`chia-blockchain`](https://github.com/Chia-Network/chia-blockchain/).  
 \(If you need previous version, search for the corresponding release [here](https://github.com/Chia-Mine/chia-agent/releases)\)
 
 you can develop your own nodejs script with `chia-agent` to:
@@ -22,8 +22,8 @@ yarn add chia-agent
 
 ## Compatibility
 This code is compatible with:  
-- [`c7aafcfb46ef1413b05cdd6486308e99ee4767df`](https://github.com/Chia-Network/chia-blockchain/tree/c7aafcfb46ef1413b05cdd6486308e99ee4767df) of [chia-blockchain 2.5.5](https://github.com/Chia-Network/chia-blockchain)  
-  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/c7aafcfb46ef1413b05cdd6486308e99ee4767df...main)
+- [`f546dfca6d68ec4b5df9b11a1ebcb56b32094e66`](https://github.com/Chia-Network/chia-blockchain/tree/f546dfca6d68ec4b5df9b11a1ebcb56b32094e66) of [chia-blockchain 2.5.6](https://github.com/Chia-Network/chia-blockchain)  
+  - [Diff to the main branch of chia-blockchain](https://github.com/Chia-Network/chia-blockchain/compare/f546dfca6d68ec4b5df9b11a1ebcb56b32094e66...main)
 - [`061bd6e192ceb90e3bb81ceff1fc69d674626eb7`](https://github.com/Chia-Network/chia_rs/tree/061bd6e192ceb90e3bb81ceff1fc69d674626eb7) of [chia_rs 0.27.0](https://github.com/Chia-Network/chia_rs)
   - [Diff to the main branch of chia_rs](https://github.com/Chia-Network/chia_rs/compare/061bd6e192ceb90e3bb81ceff1fc69d674626eb7...main)
 - [`ef49150171cc243b09c0e5d5cb27f2249ffa3793`](https://github.com/Chia-Network/pool-reference/tree/ef49150171cc243b09c0e5d5cb27f2249ffa3793) of [pool-reference](https://github.com/Chia-Network/pool-reference)  

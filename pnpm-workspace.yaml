@@ -1,0 +1,6 @@
+# pnpm settings (pnpm >= 10 reads settings from this file)
+
+# Supply chain attack mitigation:
+# refuse to install package versions published less than 7 days ago,
+# so hijacked releases are likely discovered and unpublished before they can be pulled in.
+minimumReleaseAge: 10080

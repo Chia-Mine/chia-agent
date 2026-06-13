@@ -1,5 +1,19 @@
 # Changelog
 
+## [16.1.6]
+### Security
+- Hardened the supply chain against compromised dependency releases
+  - All dependencies and devDependencies are now pinned to exact versions
+  - Added `minimumReleaseAge: 10080` (7 days) pnpm setting so newly published package versions
+    are not installed until they have aged, mitigating hijacked-release attacks
+  - GitHub Actions are now pinned to full commit SHAs
+
+### Changed
+- Confirmed compatibility with [`chia-blockchain@2.5.6`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.6)
+  - chia-blockchain 2.5.6 does not introduce any RPC/Websocket API changes.
+    The only protocol-level change (`NewSignagePointHarvester2`) is a farmer-harvester internal network message
+    which is not part of the API surface covered by chia-agent.
+
 ## [16.1.5]
 ### Fixed
 - Added missing `create_block_generator` to the Full Node RPC API
@@ -1940,6 +1954,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[16.1.6]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.5...v16.1.6
 [16.1.5]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.4...v16.1.5
 [16.1.4]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.3...v16.1.4
 [16.1.3]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.2...v16.1.3
