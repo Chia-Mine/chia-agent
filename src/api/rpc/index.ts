@@ -284,9 +284,6 @@ export {
   TDidGetWalletNameRequest,
   TDidGetWalletNameResponse,
   did_get_wallet_name,
-  TDidCreateAttestRequest,
-  TDidCreateAttestResponse,
-  did_create_attest,
   TDidCreateBackupFileRequest,
   TDidCreateBackupFileResponse,
   did_create_backup_file,
@@ -296,30 +293,18 @@ export {
   TDidGetDidRequest,
   TDidGetDidResponse,
   did_get_did,
-  TDidGetInformationNeededForRecoveryRequest,
-  TDidGetInformationNeededForRecoveryResponse,
-  did_get_information_needed_for_recovery,
   TDidGetCurrentCoinInfoRequest,
   TDidGetCurrentCoinInfoResponse,
   did_get_current_coin_info,
   TDidGetPubkeyRequest,
   TDidGetPubkeyResponse,
   did_get_pubkey,
-  TDidGetRecoveryListRequest,
-  TDidGetRecoveryListResponse,
-  did_get_recovery_list,
   TDidGetMetadataRequest,
   TDidGetMetadataResponse,
   did_get_metadata,
-  TDidRecoverySpendRequest,
-  TDidRecoverySpendResponse,
-  did_recovery_spend,
   TDidSpendRequest,
   TDidSpendResponse,
   did_spend,
-  TDidUpdateRecoveryIdsRequest,
-  TDidUpdateRecoveryIdsResponse,
-  did_update_recovery_ids,
   TDidUpdateMetadataRequest,
   TDidUpdateMetadataResponse,
   did_update_metadata,
@@ -648,6 +633,13 @@ export {
   get_peer_counts,
 } from "./crawler/index";
 
+import type { RpcSolverMessage } from "./solver/index";
+export {
+  chia_solver_service,
+  TGetStateResponse,
+  get_state,
+} from "./solver/index";
+
 import type { RpcCommonMessage } from "./common/index";
 export {
   chia_common_service,
@@ -685,4 +677,5 @@ export type RpcMessage =
   | RpcWalletMessage
   | RpcDataLayerMessage
   | RpcCrawlerMessage
+  | RpcSolverMessage
   | RpcCommonMessage;

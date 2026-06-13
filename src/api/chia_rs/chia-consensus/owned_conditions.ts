@@ -26,6 +26,9 @@ export type SpendConditions = {
   // per-spend execution and condition cost
   execution_cost: uint64;
   condition_cost: uint64;
+  // the spend's fingerprint. This is "0x" unless the
+  // ELIGIBLE_FOR_DEDUP flag is set
+  fingerprint: bytes;
 };
 
 export type SpendBundleConditions = {
@@ -51,4 +54,7 @@ export type SpendBundleConditions = {
   validated_signature: bool;
   execution_cost: uint64;
   condition_cost: uint64;
+  num_atoms: uint32;
+  num_pairs: uint32;
+  heap_size: uint32;
 };

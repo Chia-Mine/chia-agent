@@ -1,5 +1,11 @@
 import { ProofOfSpace } from "../../chia_rs/chia-protocol/proof_of_space";
-import { bool, Optional, str } from "../../chia/types/_python_types_";
+import {
+  bool,
+  False,
+  Optional,
+  str,
+  True,
+} from "../../chia/types/_python_types_";
 import {
   int,
   uint32,
@@ -386,6 +392,37 @@ export async function get_pool_login_link<T extends TRPCAgent | TDaemon>(
   );
 }
 
+export const connect_to_solver_command = "connect_to_solver";
+export type connect_to_solver_command = typeof connect_to_solver_command;
+export type TConnectToSolverRequest = {
+  host: str;
+  port: int;
+};
+export type TConnectToSolverResponse =
+  | {
+      success: True;
+    }
+  | {
+      success: False;
+      error: str;
+    };
+export type WsConnectToSolverMessage = GetMessageType<
+  chia_farmer_service,
+  connect_to_solver_command,
+  TConnectToSolverResponse
+>;
+export async function connect_to_solver<T extends TRPCAgent | TDaemon>(
+  agent: T,
+  params: TConnectToSolverRequest,
+) {
+  type R = ResType<T, TConnectToSolverResponse, WsConnectToSolverMessage>;
+  return agent.sendMessage<R>(
+    chia_farmer_service,
+    connect_to_solver_command,
+    params,
+  );
+}
+
 export type RpcFarmerMessage =
   | TGetRewardTargetResponse
   | TGetSignagePointResponse
@@ -399,7 +436,8 @@ export type RpcFarmerMessage =
   | TGetHarvesterPlotsDuplicatesResponse
   | TSetPayoutInstructionsResponse
   | TGetPoolStateResponse
-  | TGetPoolLinkResponse;
+  | TGetPoolLinkResponse
+  | TConnectToSolverResponse;
 
 export type RpcFarmerMessageOnWs =
   | WsGetRewardTargetsMessage
@@ -414,4 +452,5 @@ export type RpcFarmerMessageOnWs =
   | WsGetHarvesterPlotsDuplicatesMessage
   | WsSetPayoutInstructionsMessage
   | WsGetPoolStateMessage
-  | WsGetPoolLinkMessage;
+  | WsGetPoolLinkMessage
+  | WsConnectToSolverMessage;

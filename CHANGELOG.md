@@ -1,5 +1,53 @@
 # Changelog
 
+## [17.0.0]
+Support for [`chia-blockchain@2.5.7`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.7)
+
+### Breaking change
+- The following deprecated DID Wallet RPC APIs were removed (removed in chia-blockchain 2.5.7):
+  - `did_update_recovery_ids`
+  - `did_recovery_spend`
+  - `did_get_recovery_list`
+  - `did_create_attest`
+  - `did_get_information_needed_for_recovery`
+- `TransactionRecord` wire format changed (chia-blockchain 2.5.7 now serializes transaction records
+  with plain `to_json_dict()`; the previous "convenience" format was removed)
+  - `memos` is now `Record<str, bytes[]>` (`{"0x<coin_id>": ["0x<memo>", ...]}`), previously `Array<[bytes32, bytes[]]>`
+  - `to_address` is now a regular field of `TransactionRecord`
+  - `TransactionRecordConvenience` and `TransactionRecordConvenienceWithMetadata` are deprecated aliases of
+    `TransactionRecord` and the new `TransactionRecordWithMetadata`
+- [`get_block_spends_with_conditions`](./src/api/rpc/full_node/README.md#get_block_spends_with_conditionsagent-params)
+  - `conditions` are now serialized as `Array<[opcode: int, args: bytes[]]>` instead of `{opcode, vars}` objects
+- `create_new_wallet` with `wallet_type: "did_wallet"` and `did_type: "new"` no longer accepts
+  `backup_dids` / `num_of_backup_ids_needed`
+- `cat_spend`: `extra_delta` is now `str` (was `int`)
+- Wallet responses of `get_wallets` / `get_wallet_balance(s)` now always include previously-omitted keys
+  (`fingerprint`, `asset_id`, `pending_approval_balance`, `authorized_providers`, `flags_needed`) with `null` defaults,
+  and serialize `bytes`-like values as `0x`-prefixed hex
+
+### Added
+- New `solver` RPC service support (introduced in chia-blockchain 2.5.7)
+  - [`get_state`](./src/api/rpc/solver/README.md#get_stateagent)
+  - `RPCAgent` now accepts `service: "solver"`
+  - `chia_solver` was added to daemon `TService`
+- New Farmer RPC API [`connect_to_solver`](./src/api/rpc/farmer/README.md#connect_to_solveragent-params)
+- `add_key`: new optional `label` request parameter
+- `get_farmed_amount`: new optional `include_pool_rewards` request parameter
+- [Harvester Protocol](./src/api/chia/protocols/harvester_protocol.ts): added `PartialProofsData`
+- New [Solver Protocol](./src/api/chia/protocols/solver_protocol.ts): `SolverInfo`, `SolverResponse`
+- `NodeType`: added `SOLVER = 8`
+
+### Changed
+- Synchronized `chia_rs` type definitions with `chia_rs@0.30.0`
+  - `SpendConditions`: added `fingerprint`
+  - `SpendBundleConditions`: added `num_atoms`, `num_pairs`, `heap_size`
+- `send_notification`: `amount` is now optional (defaults to 0)
+- `spend_clawback_coins`: `batch_size` is now optional `uint16`
+- `get_transactions`: `start` / `end` are now `uint16`
+- `get_next_address`: `new_address` is now optional
+- `cat_asset_id_to_name`: unknown asset ids now resolve to `{wallet_id: null, name: null}` instead of an error
+- `verify_signature`: `error` key is now always present (`null` on success)
+
 ## [16.1.6]
 ### Security
 - Hardened the supply chain against compromised dependency releases
@@ -1954,6 +2002,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[17.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.6...v17.0.0
 [16.1.6]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.5...v16.1.6
 [16.1.5]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.4...v16.1.5
 [16.1.4]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.3...v16.1.4

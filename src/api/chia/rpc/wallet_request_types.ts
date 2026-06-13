@@ -263,6 +263,7 @@ export type GenerateMnemonicResponse = {
 
 export type AddKeyRequest = {
   mnemonic: str[];
+  label?: Optional<str>;
 };
 
 export type AddKeyResponse = {
