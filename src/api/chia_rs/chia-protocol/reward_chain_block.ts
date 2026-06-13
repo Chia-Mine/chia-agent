@@ -30,5 +30,6 @@ export type RewardChainBlock = {
   reward_chain_sp_signature: G2Element; // G2Element
   reward_chain_ip_vdf: VDFInfo; // VDFInfo
   infused_challenge_chain_ip_vdf: Optional<VDFInfo>; // Optional[VDFInfo]  # Iff deficit < 16
+  header_mmr_root: Optional<bytes32>; // Optional[bytes32]  # null until the corresponding fork activates
   is_transaction_block: bool; // bool
 };
