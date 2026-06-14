@@ -1003,7 +1003,7 @@ export type TGetTransactionCountRequest = {
   confirmed?: bool;
 };
 export type TGetTransactionCountResponse = {
-  count: int;
+  count: uint32;
   wallet_id: int;
 };
 export type WsGetTransactionCountMessage = GetMessageType<
@@ -1917,9 +1917,9 @@ export async function get_all_offers<T extends TRPCAgent | TDaemon>(
 export const get_offers_count_command = "get_offers_count";
 export type get_offers_count_command = typeof get_offers_count_command;
 export type TGetOffersCountResponse = {
-  total: int;
-  my_offers_count: int;
-  taken_offers_count: int;
+  total: uint32;
+  my_offers_count: uint32;
+  taken_offers_count: uint32;
 };
 export type WsGetOffersCountMessage = GetMessageType<
   chia_wallet_service,
@@ -2532,7 +2532,7 @@ export type TNftSetDidBulkResponse =
       success: True;
       wallet_id: uint32[];
       spend_bundle: WalletSpendBundle;
-      tx_num: int;
+      tx_num: uint32;
       transactions: TransactionRecordConvenience[];
       signing_responses?: str[];
     };
@@ -2570,7 +2570,7 @@ export type TNftTransferBulkResponse =
       success: True;
       wallet_id: uint32[];
       spend_bundle: WalletSpendBundle;
-      tx_num: int;
+      tx_num: uint32;
       transactions: TransactionRecordConvenience[];
       signing_responses?: str[];
     };
@@ -2862,8 +2862,8 @@ export type TNftMintBulkRequest = {
     license_hash?: str;
   }>;
   target_list?: str[];
-  mint_number_start?: int;
-  mint_total?: int;
+  mint_number_start?: uint32;
+  mint_total?: uint32;
   xch_coins?: Coin[];
   xch_change_target?: str;
   new_innerpuzhash?: str;
