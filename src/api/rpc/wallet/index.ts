@@ -32,7 +32,7 @@ import { SingletonRecord } from "../../chia/data_layer/singleton_record";
 import { TPushTxResponseOfWallet } from "../index";
 import { GetMessageType, ResType } from "../../types";
 import { TDaemon } from "../../../daemon/index";
-import { CoinRecord } from "../../chia/types/coin_record";
+import { CoinRecord } from "../../chia_rs/chia-protocol/coin_record";
 import { SigningMode } from "../../chia/types/signing_mode";
 import { Balance } from "../../chia/wallet/wallet_node";
 import {

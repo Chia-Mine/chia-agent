@@ -28,6 +28,10 @@ Support for [`chia-blockchain@2.7.1`](https://github.com/Chia-Network/chia-block
   - The `NPCResult` type it held moved to `chia/types/mempool_item` (its only consumer); import it
     from there instead of `chia-agent/api/chia/consensus/cost_calculator`
   - Corrected the mempool `npc_result` field name from `error` to `Error` to match the wire
+- Relocated `CoinRecord` / `CoinRecordBackwardCompatible` from `chia/types/coin_record` to
+  `chia_rs/chia-protocol/coin_record`, reflecting that `CoinRecord` moved into `chia_rs` upstream
+  (chia-blockchain deleted `chia/types/coin_record.py` in 2.6.0). The type shape is unchanged; only
+  the import path changed (`chia-agent/api/chia_rs/chia-protocol/coin_record`)
 
 ## [19.1.0]
 Support for [`chia-blockchain@2.7.0`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.7.0)
