@@ -23,6 +23,11 @@ Support for [`chia-blockchain@2.7.1`](https://github.com/Chia-Network/chia-block
   (`get_transaction_count.count`, `get_offers_count` counters, `nft_set_did_bulk` / `nft_transfer_bulk` `tx_num`,
   `nft_mint_bulk` `mint_number_start` / `mint_total`, `get_all_offers` `start` / `end`)
 - `get_height_info` now sends its request body (previously the optional request object was ignored)
+- Removed `chia/consensus/cost_calculator` to match chia-blockchain 2.7.1, which deleted
+  `chia/consensus/cost_calculator.py`
+  - The `NPCResult` type it held moved to `chia/types/mempool_item` (its only consumer); import it
+    from there instead of `chia-agent/api/chia/consensus/cost_calculator`
+  - Corrected the mempool `npc_result` field name from `error` to `Error` to match the wire
 
 ## [19.1.0]
 Support for [`chia-blockchain@2.7.0`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.7.0)
