@@ -1,6 +1,6 @@
 import { NodeType } from "./chia/protocols/outbound_message";
 import { float, str } from "./chia/types/_python_types_";
-import { int, uint16 } from "./chia_rs/wheel/python/sized_ints";
+import { int, uint16, uint64 } from "./chia_rs/wheel/python/sized_ints";
 import { bytes32 } from "./chia_rs/wheel/python/sized_bytes";
 import { TRPCAgent } from "../rpc/index";
 import { TDaemon } from "../daemon/index";
@@ -30,7 +30,7 @@ export type TConnectionGeneral = {
   peer_server_port?: uint16;
   node_id: bytes32;
   creation_time: float;
-  bytes_read: int;
-  bytes_written: int;
+  bytes_read: uint64;
+  bytes_written: uint64;
   last_message_time: float;
 };

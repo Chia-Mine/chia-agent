@@ -580,7 +580,7 @@ export type TCreateNewDidWalletRequestNew = {
   fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "new";
-  amount: int;
+  amount: uint64;
   metadata?: Record<str, str>;
   wallet_name?: str;
 };
@@ -879,7 +879,7 @@ export type ClawbackPuzzleDecoratorOverride = {
 };
 export type TSendTransactionRequest = {
   wallet_id: uint32;
-  amount: int;
+  amount: uint64;
   fee?: uint64;
   address: str;
   memos?: str[];
@@ -1030,10 +1030,10 @@ export async function get_transaction_count<T extends TRPCAgent | TDaemon>(
 export const get_farmed_amount_command = "get_farmed_amount";
 export type get_farmed_amount_command = typeof get_farmed_amount_command;
 export type TGetFarmedAmountResponse = {
-  farmed_amount: int;
-  pool_reward_amount: int;
-  farmer_reward_amount: int;
-  fee_amount: int;
+  farmed_amount: uint64;
+  pool_reward_amount: uint64;
+  farmer_reward_amount: uint64;
+  fee_amount: uint64;
   last_height_farmed: int;
   last_time_farmed: uint32;
   blocks_won: uint32;
@@ -1761,7 +1761,7 @@ export type TGetOfferSummaryRequest = {
 export type TOfferSummary = {
   offered: Record<str, str>; // amounts are JSON strings as of chia-blockchain 2.6.0
   requested: Record<str, str>; // amounts are JSON strings as of chia-blockchain 2.6.0
-  fees: int;
+  fees: uint64;
   infos: TDriverDict;
   additions: str[]; // 0x-prefixed hex
   removals: str[]; // 0x-prefixed hex
@@ -2936,7 +2936,7 @@ export type send_clawback_transaction_command =
   typeof send_clawback_transaction_command;
 export type TSendClawbackTransactionRequest = {
   wallet_id: uint32;
-  fee: int;
+  fee: uint64;
 };
 export type TSendClawbackTransactionResponse = {
   transaction: TransactionRecord;

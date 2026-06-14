@@ -1,5 +1,25 @@
 # Changelog
 
+## [20.0.0]
+### Breaking change
+- Fixed unsound `int` typing on numeric fields that can exceed `Number.MAX_SAFE_INTEGER` (`2^53 - 1`)
+  - The RPC JSON parser (`@chiamine/json-bigint`, `alwaysParseAsBig: false`) returns a `BigInt` for any
+    integer above `2^53 - 1` (≈ 9,007 XCH expressed in mojos). Fields that are `uint64` upstream had been
+    typed `int` (= `number`), which hid that a `BigInt` can be returned and could mistype values at runtime.
+  - Retyped 28 such fields from `int` to `uint64` (= `number | bigint`), matching upstream and the parser's
+    actual behavior. **Code performing arithmetic on these fields must now handle `bigint`** (e.g. coerce
+    with `BigInt(x)` or branch on `typeof`).
+  - Response fields affected:
+    - `get_farmed_amount`: `farmed_amount`, `pool_reward_amount`, `farmer_reward_amount`, `fee_amount`
+    - `get_offer_summary`: `fees`; `TradeRecord`: `fees`
+    - `get_blockchain_state`: `mempool_fees`, `mempool_max_total_cost`, `block_max_cost`, `node_time_utc`, `last_block_cost`
+    - Full Node WS mempool broadcast: `mempool_cost`, `mempool_max_total_cost`, `block_max_cost`, `transaction_generator_size_bytes`
+    - Data Layer: `total_bytes`
+    - Harvester `Plot`: `file_size`, `time_modified`; plot-sync: `total_plot_size`, `total_effective_plot_size`
+    - Connection info: `bytes_read`, `bytes_written`
+  - Request fields affected (now accept `number | bigint`):
+    - `send_transaction` `amount`, `create_new_wallet` (DID) `amount`, and `fee`
+
 ## [19.2.0]
 Support for [`chia-blockchain@2.7.1`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.7.1)
 
@@ -2115,6 +2135,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[20.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v19.2.0...v20.0.0
 [19.2.0]: https://github.com/Chia-Mine/chia-agent/compare/v19.1.0...v19.2.0
 [19.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v19.0.0...v19.1.0
 [19.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v18.0.0...v19.0.0

@@ -274,7 +274,7 @@ export type TGetKeysResponse =
   | {
       keys: str[];
       total_pages: int;
-      total_bytes: int;
+      total_bytes: uint64;
       root_hash: Optional<bytes32>;
     };
 export type WsGetKeysMessage = GetMessageType<
@@ -317,7 +317,7 @@ export type TGetKeysValuesResponse =
         value: str;
       }>;
       total_pages: int;
-      total_bytes: int;
+      total_bytes: uint64;
       root_hash: Optional<bytes32>;
     };
 export type WsGetKeysValuesMessage = GetMessageType<
@@ -696,7 +696,7 @@ export type TGetKvDiffResponse =
         value: str;
       }>;
       total_pages: int;
-      total_bytes: int;
+      total_bytes: uint64;
     };
 export type WsGetKvDiffMessage = GetMessageType<
   chia_data_layer_service,
