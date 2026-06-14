@@ -1721,7 +1721,7 @@ export async function cat_get_asset_id<T extends TRPCAgent | TDaemon>(
 export const create_offer_for_ids_command = "create_offer_for_ids";
 export type create_offer_for_ids_command = typeof create_offer_for_ids_command;
 export type TCreateOfferForIdsRequest = {
-  offer: Record<str, str | int>; // values are canonically strings as of chia-blockchain 2.6.0
+  offer: Record<str, str | uint64>; // values are canonically strings as of chia-blockchain 2.6.0
 
   fee?: uint64;
   validate_only?: bool;
