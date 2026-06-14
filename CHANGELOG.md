@@ -1,5 +1,17 @@
 # Changelog
 
+## [19.1.0]
+Support for [`chia-blockchain@2.7.0`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.7.0)
+
+### Added
+- Remote Wallet support (introduced in chia-blockchain 2.7.0)
+  - New Wallet RPC API [`register_remote_coins`](./src/api/rpc/wallet/README.md#register_remote_coinsagent-params)
+  - `create_new_wallet` now accepts `wallet_type: "remote_wallet"` (with optional `name`)
+  - `WalletType`: added `REMOTE: 205`
+
+### Changed
+- Synchronized with `chia_rs@0.41.1` (no type definition changes were required)
+
 ## [19.0.0]
 Support for [`chia-blockchain@2.6.1`](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.6.1)
 
@@ -2070,6 +2082,7 @@ daemon.sendMessage(destination, get_block_record_by_height_command, data);
 Initial release.
 
 <!-- [Unreleased]: https://github.com/Chia-Mine/chia-agent/compare/v0.0.1...v0.0.2 -->
+[19.1.0]: https://github.com/Chia-Mine/chia-agent/compare/v19.0.0...v19.1.0
 [19.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v18.0.0...v19.0.0
 [18.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v17.0.0...v18.0.0
 [17.0.0]: https://github.com/Chia-Mine/chia-agent/compare/v16.1.6...v17.0.0

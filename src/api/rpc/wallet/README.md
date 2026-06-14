@@ -448,7 +448,7 @@ const agent = new RPCAgent({service: "wallet"});
 const response = await create_new_wallet(agent, params);
 ```
 ### params:
-One of `TCreate_New_CAT_WalletRequest`, `TCreate_New_DID_WalletRequest`, `TCreate_New_NFT_WalletRequest`, `TCreate_New_Pool_WalletRequest`
+One of `TCreate_New_CAT_WalletRequest`, `TCreate_New_DID_WalletRequest`, `TCreate_New_NFT_WalletRequest`, `TCreate_New_Pool_WalletRequest`, `TCreate_New_Remote_WalletRequest`
 plus parameters from `TXEndpointRequest`
 ```typescript
 type TCreate_New_CAT_WalletRequest = {
@@ -469,8 +469,6 @@ type TCreate_New_DID_WalletRequest = {
   fee?: uint64;
   wallet_type: "did_wallet";
   did_type: "new";
-  backup_dids: str[];
-  num_of_backup_ids_needed: uint64;
   amount: int;
   metadata?: Record<str, str>;
   wallet_name?: str;
@@ -486,6 +484,12 @@ type TCreate_New_NFT_WalletRequest = {
   wallet_type: "nft_wallet";
   did_id?: str;
   name?: str;
+};
+
+type TCreate_New_Remote_WalletRequest = {
+  fee?: uint64;
+  wallet_type: "remote_wallet";
+  name?: str; // defaults to "Remote Wallet #1"
 };
 
 type TCreate_New_Pool_WalletRequest = {
@@ -505,7 +509,7 @@ type TCreate_New_Pool_WalletRequest = {
 };
 ```
 ### response:
-One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`
+One of `TCreate_New_CAT_WalletResponse`, `TCreate_New_DID_WalletResponse`, `TCreate_New_NFT_WalletResponse`, `TCreate_New_Pool_WalletResponse`, `TCreate_New_Remote_WalletResponse`
 ```typescript
 type TCreate_New_CAT_WalletResponse = {
   type: "CAT";
@@ -542,6 +546,13 @@ type TCreate_New_NFT_WalletResponse = {
   wallet_id: uint32;
 };
 
+type TCreate_New_Remote_WalletResponse = {
+  success: True;
+  type: "REMOTE";
+  wallet_id: uint32;
+  transactions: TransactionRecordConvenience[];
+};
+
 type TCreate_New_Pool_WalletResponse = {
   type: "POOLING_WALLET";
   total_fee: uint64;
@@ -560,6 +571,29 @@ For content of `TransactionRecord`,
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/wallet/transaction_record.ts  
 For content of `TXEndpointRequest` and `UnsignedTransaction`  
 see https://github.com/Chia-Mine/chia-agent/blob/main/src/api/chia/rpc/util.ts  
+
+---
+
+## `register_remote_coins(agent, params)`
+Registers coin ids to be tracked by a Remote Wallet. Available since chia-blockchain 2.7.0.
+### Usage
+```js
+const {RPCAgent} = require("chia-agent");
+const {register_remote_coins} = require("chia-agent/api/rpc/wallet");
+const agent = new RPCAgent({service: "wallet"});
+const response = await register_remote_coins(agent, params);
+```
+### params:
+```typescript
+{
+  wallet_id: uint32;
+  coin_ids: str[];
+}
+```
+### response:
+```typescript
+{}
+```
 
 ---
 

@@ -18,6 +18,7 @@ export const WalletType = {
   VC: 13,
   CRCAT: 57,
   RCAT: 132,
+  REMOTE: 205,
 } as const;
 
 export const CoinType = {
