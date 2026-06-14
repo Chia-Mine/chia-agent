@@ -25,13 +25,78 @@ const JSONbig = JSONbigBuilder({
   alwaysParseAsBig: false,
 });
 
+// One of the `RpcErrorCodes` values introduced in chia-blockchain 2.6.1
+export type TRpcErrorCode =
+  | "API_ERROR"
+  | "BLOCK_DOES_NOT_EXIST"
+  | "BLOCK_HASH_NOT_FOUND"
+  | "BLOCK_HEIGHT_NOT_FOUND"
+  | "BLOCK_IN_FORK"
+  | "BLOCK_NOT_FOUND"
+  | "COIN_RECORD_NOT_FOUND"
+  | "CONSENSUS_ERROR"
+  | "EOS_NOT_IN_CACHE"
+  | "HEADER_HASH_NOT_IN_REQUEST"
+  | "HEIGHT_NOT_IN_BLOCKCHAIN"
+  | "HINT_NOT_IN_REQUEST"
+  | "INTERNAL_ERROR"
+  | "INVALID_BLOCK_OR_GENERATOR"
+  | "INVALID_COST"
+  | "INVALID_HEIGHT_FOR_COIN"
+  | "INVALID_NETWORK_SPACE_REQUEST"
+  | "NAME_NOT_IN_REQUEST"
+  | "NAMES_NOT_IN_REQUEST"
+  | "NEW_AND_OLD_MUST_DIFFER"
+  | "NEWER_BLOCK_NOT_FOUND"
+  | "NO_BLOCKS_IN_CHAIN"
+  | "NO_COIN_NAME_IN_REQUEST"
+  | "NO_END_IN_REQUEST"
+  | "NO_HEADER_HASH_IN_REQUEST"
+  | "NO_HEIGHT_IN_REQUEST"
+  | "NO_START_IN_REQUEST"
+  | "NO_TX_ID_IN_REQUEST"
+  | "OLDER_BLOCK_NOT_FOUND"
+  | "PARENT_IDS_NOT_IN_REQUEST"
+  | "PEAK_IS_NONE"
+  | "PROTOCOL_ERROR"
+  | "PUZZLE_HASH_NOT_IN_REQUEST"
+  | "PUZZLE_HASHES_NOT_IN_REQUEST"
+  | "PUZZLE_SOLUTION_FAILED"
+  | "REQUEST_MUST_CONTAIN_EXACTLY_ONE"
+  | "SP_NOT_IN_CACHE"
+  | "SPEND_BUNDLE_NOT_IN_REQUEST"
+  | "TARGET_TIMES_NON_NEGATIVE"
+  | "TARGET_TIMES_REQUIRED"
+  | "TIMESTAMP_ERROR"
+  | "TRANSACTION_FAILED"
+  | "TX_NOT_IN_MEMPOOL"
+  | "UNKNOWN"
+  | "VALIDATION_ERROR";
+
+// Structured error attached to RPC error responses as of chia-blockchain 2.6.1
+export type TStructuredError = {
+  code: TRpcErrorCode | string;
+  message: string;
+  data: Record<string, unknown>;
+};
+
 export class RpcError extends Error {
   public response: unknown;
+  public structuredError?: TStructuredError;
 
   public constructor(message: string, response: unknown) {
     super(message);
     this.name = "RpcError";
     this.response = response;
+    if (
+      response &&
+      typeof response === "object" &&
+      "structuredError" in response
+    ) {
+      this.structuredError = (
+        response as { structuredError: TStructuredError }
+      ).structuredError;
+    }
   }
 }
 

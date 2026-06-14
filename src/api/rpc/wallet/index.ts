@@ -1061,6 +1061,11 @@ export type TCreateSignedTransactionRequest = {
   coin_announcements?: TCoinAnnouncement[];
   puzzle_announcements?: TPuzzleAnnouncement[];
   morph_bytes?: str; // hex; applied to every announcement message
+  // The following three must be specified together or not at all
+  extra_delta?: str;
+  tail_reveal?: str; // hex
+  tail_solution?: str; // hex
+  puzzle_decorator?: ClawbackPuzzleDecoratorOverride[];
 } & TXEndpointRequest;
 export type TCreateSignedTransactionResponse = {
   signed_txs: TransactionRecordConvenience[];
