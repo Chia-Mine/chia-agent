@@ -11,7 +11,7 @@ import { UnfinishedHeaderBlock } from "../../chia/types/unfinished_header_block"
 import {
   CoinRecord,
   CoinRecordBackwardCompatible,
-} from "../../chia/types/coin_record";
+} from "../../chia_rs/chia-protocol/coin_record";
 import { SpendBundle } from "../../chia_rs/chia-protocol/spend_bundle";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { MempoolItemInJsonDict } from "../../chia/types/mempool_item";

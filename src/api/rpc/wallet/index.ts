@@ -32,7 +32,7 @@ import { SingletonRecord } from "../../chia/data_layer/singleton_record";
 import { TPushTxResponseOfWallet } from "../index";
 import { GetMessageType, ResType } from "../../types";
 import { TDaemon } from "../../../daemon/index";
-import { CoinRecord } from "../../chia/types/coin_record";
+import { CoinRecord } from "../../chia_rs/chia-protocol/coin_record";
 import { SigningMode } from "../../chia/types/signing_mode";
 import { Balance } from "../../chia/wallet/wallet_node";
 import {
@@ -365,7 +365,11 @@ export async function get_height_info<
     GetHeightInfoResponse,
     WsGetHeightInfoMessage<GetHeightInfoResponse>
   >;
-  return agent.sendMessage<R>(chia_wallet_service, get_height_info_command);
+  return agent.sendMessage<R>(
+    chia_wallet_service,
+    get_height_info_command,
+    data,
+  );
 }
 
 export const push_tx_command = "push_tx";
@@ -999,7 +1003,7 @@ export type TGetTransactionCountRequest = {
   confirmed?: bool;
 };
 export type TGetTransactionCountResponse = {
-  count: int;
+  count: uint32;
   wallet_id: int;
 };
 export type WsGetTransactionCountMessage = GetMessageType<
@@ -1143,6 +1147,7 @@ export type TSelectCoinsRequest = {
   wallet_id: uint32;
   exclude_coins?: Optional<Coin[]>;
   excluded_coins?: Optional<Coin[]>;
+  allow_unsynced?: bool; // @chia-blockchain 2.7.1+
 } & TXConfigLoader;
 export type TSelectCoinsResponse = {
   coins: Coin[];
@@ -1169,6 +1174,9 @@ export type TGetSpendableCoinsRequest = {
   excluded_coin_amounts?: Optional<uint64[]>;
   excluded_coins?: Coin[];
   excluded_coin_ids?: str[];
+  included_coin_ids?: str[]; // @chia-blockchain 2.7.1+
+  primary_coin?: str; // @chia-blockchain 2.7.1+
+  allow_unsynced?: bool; // @chia-blockchain 2.7.1+
 };
 export type TGetSpendableCoinsResponse = {
   confirmed_records: CoinRecord[];
@@ -1200,6 +1208,7 @@ export type TGetCoinRecordsByNamesRequest = {
   start_height?: uint32;
   end_height?: uint32;
   include_spent_coins?: bool;
+  allow_unsynced?: bool; // @chia-blockchain 2.7.1+
 };
 export type TGetCoinRecordsByNamesResponse = {
   coin_records: CoinRecord[];
@@ -1875,8 +1884,8 @@ export async function get_offer<T extends TRPCAgent | TDaemon>(
 export const get_all_offers_command = "get_all_offers";
 export type get_all_offers_command = typeof get_all_offers_command;
 export type TGetAllOffersRequest = {
-  start?: uint16;
-  end?: uint16;
+  start?: uint32;
+  end?: uint32;
   exclude_my_offers?: bool;
   exclude_taken_offers?: bool;
   include_completed?: bool;
@@ -1908,9 +1917,9 @@ export async function get_all_offers<T extends TRPCAgent | TDaemon>(
 export const get_offers_count_command = "get_offers_count";
 export type get_offers_count_command = typeof get_offers_count_command;
 export type TGetOffersCountResponse = {
-  total: int;
-  my_offers_count: int;
-  taken_offers_count: int;
+  total: uint32;
+  my_offers_count: uint32;
+  taken_offers_count: uint32;
 };
 export type WsGetOffersCountMessage = GetMessageType<
   chia_wallet_service,
@@ -2523,7 +2532,7 @@ export type TNftSetDidBulkResponse =
       success: True;
       wallet_id: uint32[];
       spend_bundle: WalletSpendBundle;
-      tx_num: int;
+      tx_num: uint32;
       transactions: TransactionRecordConvenience[];
       signing_responses?: str[];
     };
@@ -2561,7 +2570,7 @@ export type TNftTransferBulkResponse =
       success: True;
       wallet_id: uint32[];
       spend_bundle: WalletSpendBundle;
-      tx_num: int;
+      tx_num: uint32;
       transactions: TransactionRecordConvenience[];
       signing_responses?: str[];
     };
@@ -2853,8 +2862,8 @@ export type TNftMintBulkRequest = {
     license_hash?: str;
   }>;
   target_list?: str[];
-  mint_number_start?: int;
-  mint_total?: int;
+  mint_number_start?: uint32;
+  mint_total?: uint32;
   xch_coins?: Coin[];
   xch_change_target?: str;
   new_innerpuzhash?: str;
@@ -3710,6 +3719,37 @@ export async function execute_signing_instructions<
   );
 }
 
+export const get_puzzle_and_solution_command = "get_puzzle_and_solution";
+export type get_puzzle_and_solution_command =
+  typeof get_puzzle_and_solution_command;
+export type TGetPuzzleAndSolutionRequest = {
+  coin_name: str;
+};
+export type TGetPuzzleAndSolutionResponse = {
+  puzzle_reveal: str; // hex without 0x prefix
+  solution: str; // hex without 0x prefix
+};
+export type WsGetPuzzleAndSolutionMessage = GetMessageType<
+  chia_wallet_service,
+  get_puzzle_and_solution_command,
+  TGetPuzzleAndSolutionResponse
+>;
+export async function get_puzzle_and_solution<T extends TRPCAgent | TDaemon>(
+  agent: T,
+  data: TGetPuzzleAndSolutionRequest,
+) {
+  type R = ResType<
+    T,
+    TGetPuzzleAndSolutionResponse,
+    WsGetPuzzleAndSolutionMessage
+  >;
+  return agent.sendMessage<R>(
+    chia_wallet_service,
+    get_puzzle_and_solution_command,
+    data,
+  );
+}
+
 export const register_remote_coins_command = "register_remote_coins";
 export type register_remote_coins_command =
   typeof register_remote_coins_command;
@@ -3740,6 +3780,7 @@ export async function register_remote_coins<T extends TRPCAgent | TDaemon>(
 }
 
 export type RpcWalletMessage =
+  | TGetPuzzleAndSolutionResponse
   | TRegisterRemoteCoinsResponse
   | TAddKeyResponse
   | TAddRateLimitedFundsResponse

@@ -1,7 +1,12 @@
 import { bool, Optional, str } from "../types/_python_types_";
 import { PrivateKey } from "../../chia_rs/chia-bls/secret_key";
 import { G1Element } from "../../chia_rs/chia-bls/lib";
-import { uint16, uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
+import {
+  int,
+  uint16,
+  uint32,
+  uint64,
+} from "../../chia_rs/wheel/python/sized_ints";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { Notification } from "../wallet/notification_store";
 import {
@@ -101,14 +106,17 @@ export type ExecuteSigningInstructionsResponseCHIP0029 = {
 export type TransactionEndpointRequest = {
   fee: uint64;
   push?: bool;
+  allow_unsynced?: bool; // @chia-blockchain 2.7.1+
 };
 
 export type TransactionEndpointResponse = {
+  sync_status: int; // 0=SYNCED, 1=SLIGHTLY_BEHIND, 2=LONG_SYNC, 3=DISCONNECTED. @chia-blockchain 2.7.1+
   unsigned_transactions: UnsignedTransaction[];
   transactions: TransactionRecord[];
 };
 
 export type TransactionEndpointResponseCHIP0029 = {
+  sync_status: int; // 0=SYNCED, 1=SLIGHTLY_BEHIND, 2=LONG_SYNC, 3=DISCONNECTED. @chia-blockchain 2.7.1+
   unsigned_transactions: str[];
   transactions: TransactionRecord[];
 };
@@ -301,10 +309,15 @@ export type GetSyncStatusResponse = {
   genesis_initialized: bool;
 };
 
-export type GetHeightInfo = Marshall;
+export type GetHeightInfo = {
+  use_peak_height?: bool; // @chia-blockchain 2.7.1+
+} & Marshall;
 
 export type GetHeightInfoResponse = {
   height: uint32;
+  latest_timestamp: uint64; // @chia-blockchain 2.7.1+
+  is_transaction_block: Optional<bool>; // @chia-blockchain 2.7.1+
+  prev_transaction_block_height: Optional<uint32>; // @chia-blockchain 2.7.1+
 };
 
 export type PushTX = {

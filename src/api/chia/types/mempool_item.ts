@@ -1,11 +1,19 @@
 import { Coin } from "./blockchain_format/coin";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
-import { NPCResult } from "../consensus/cost_calculator";
 import { bool, Optional } from "./_python_types_";
-import { uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
+import { uint16, uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
 import { CoinSpend } from "../../chia_rs/chia-protocol/coin_spend";
 import { SpendBundle } from "../../chia_rs/chia-protocol/spend_bundle";
 import { SpendBundleConditions } from "../../chia_rs/chia-consensus/owned_conditions";
+
+// chia-blockchain 2.7.1 removed `chia/consensus/cost_calculator.py` (which defined
+// `NPCResult`); the mempool item's `npc_result` field is now built inline upstream.
+// The type is kept here, next to its only consumer (`MempoolItemInJsonDict`).
+// On the wire the key is `Error` (always null) and `conds`.
+export type NPCResult = {
+  Error: Optional<uint16>;
+  conds: Optional<SpendBundleConditions>;
+};
 
 export type UnspentLineageInfo = {
   coin_id: bytes32;

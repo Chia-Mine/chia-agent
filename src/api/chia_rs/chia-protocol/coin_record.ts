@@ -1,6 +1,6 @@
-import { Coin } from "./blockchain_format/coin";
-import { bool } from "./_python_types_";
-import { uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
+import { Coin } from "./coin";
+import { bool } from "../../chia/types/_python_types_";
+import { uint32, uint64 } from "../wheel/python/sized_ints";
 
 export type CoinRecord = {
   coin: Coin;
