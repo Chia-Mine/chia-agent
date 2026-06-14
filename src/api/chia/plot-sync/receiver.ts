@@ -1,6 +1,6 @@
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { bool, float, None, Optional, str } from "../types/_python_types_";
-import { int, uint32 } from "../../chia_rs/wheel/python/sized_ints";
+import { int, uint32, uint64 } from "../../chia_rs/wheel/python/sized_ints";
 import { Plot } from "../protocols/harvester_protocol";
 import { HarvestingMode } from "../plotting/util";
 
@@ -19,8 +19,8 @@ export type Receiver<SUMMARY extends boolean = false> = {
   failed_to_open_filenames: MayBeSummary<SUMMARY, str[]>;
   no_key_filenames: MayBeSummary<SUMMARY, str[]>;
   duplicates: MayBeSummary<SUMMARY, str[]>;
-  total_plot_size: int;
-  total_effective_plot_size: int;
+  total_plot_size: uint64;
+  total_effective_plot_size: uint64;
   syncing:
     | {
         initial: bool;

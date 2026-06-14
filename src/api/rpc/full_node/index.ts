@@ -48,12 +48,12 @@ export type TGetBlockchainStateResponse = {
     average_block_time: Optional<uint32>;
     mempool_size: int;
     mempool_cost: CLVMCost;
-    mempool_fees: int;
+    mempool_fees: uint64;
     mempool_min_fees: {
       cost_5000000: float;
     };
-    mempool_max_total_cost: int;
-    block_max_cost: int;
+    mempool_max_total_cost: uint64;
+    block_max_cost: uint64;
     node_id: str;
   };
 };
@@ -862,14 +862,14 @@ export type TGetFeeEstimateResponse = {
   target_times: int[];
   current_fee_rate: uint64;
   mempool_size: CLVMCost;
-  mempool_fees: int;
+  mempool_fees: uint64;
   num_spends: int;
   mempool_max_size: CLVMCost;
   full_node_synced: bool;
   peak_height: uint32;
   last_peak_timestamp: uint64;
-  node_time_utc: int;
-  last_block_cost: int;
+  node_time_utc: uint64;
+  last_block_cost: uint64;
   fees_last_block: uint64;
   fee_rate_last_block: float;
   last_tx_block_height: int;

@@ -79,12 +79,12 @@ export type TGetBlockchainStateBroadCast = {
     sub_slot_iters: uint64;
     space: uint128;
     mempool_size: int;
-    mempool_cost: int;
+    mempool_cost: uint64;
     mempool_min_fees: {
       cost_5000000: float;
     };
-    mempool_max_total_cost: int;
-    block_max_cost: int;
+    mempool_max_total_cost: uint64;
+    block_max_cost: uint64;
     node_id: str;
   };
 };
@@ -121,7 +121,7 @@ export type TBlockBroadCast =
       block_cost?: uint64;
       block_fees?: uint64;
       timestamp?: uint64;
-      transaction_generator_size_bytes?: int;
+      transaction_generator_size_bytes?: uint64;
       transaction_generator_ref_list: uint32[];
       receive_block_result?: AddBlockResult;
     };

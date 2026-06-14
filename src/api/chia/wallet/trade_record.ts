@@ -1,12 +1,7 @@
 // dependency: TradeRecord, by: `get_trade` of Wallet RPC API
 
 import { bool, bytes, Optional, str } from "../types/_python_types_";
-import {
-  int,
-  uint32,
-  uint64,
-  uint8,
-} from "../../chia_rs/wheel/python/sized_ints";
+import { uint32, uint64, uint8 } from "../../chia_rs/wheel/python/sized_ints";
 import { Coin } from "../types/blockchain_format/coin";
 import { bytes32 } from "../../chia_rs/wheel/python/sized_bytes";
 import { TDriverDict } from "./puzzle_drivers";
@@ -33,10 +28,10 @@ export type TradeRecord = TradeRecordOld & {
 export type TradeRecordConvenience = {
   status: str;
   summary: {
-    offered: Record<str, int>; // {[asset_id]: amount}
-    requested: Record<str, int>; // {[asset_id]: amount}
+    offered: Record<str, str>; // {[asset_id]: amount (mojos as string, since chia 2.6.0)}
+    requested: Record<str, str>; // {[asset_id]: amount (mojos as string, since chia 2.6.0)}
     infos: TDriverDict;
-    fees: int;
+    fees: uint64;
   };
-  pending: Record<str, int>; // {[asset_id]: amount}
+  pending: Record<str, uint64>; // {[asset_id]: amount (mojos)}
 } & Omit<TradeRecord, "offer">;
